@@ -1,0 +1,20 @@
+@startuml
+
+interface Lexer {
+    + lex(String code): List<Token>
+}
+interface SyntaxAnalyzer {
+    + analyze(List<Token> tokens): List<Ast>
+}
+interface SemanticAnalyzer {
+    + analyze(List<Ast> tokens): List<Ast>
+}
+interface Interpreter {
+    + interpret(List<Ast>)
+}
+interface Runner {
+    + run(String code)
+}
+
+
+@enduml

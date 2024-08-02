@@ -1,0 +1,126 @@
+@startuml
+'interface Lexer {
+'+ lex(char[]): List<Token>
+'}
+'interface Parser
+'interface Interpreter {
+'}
+
+'class Runner
+
+'class Token {
+'TokenType type
+'Integer start
+'Integer end
+'String value
+'}
+
+'interface Token {
+'getStart(): Integer
+'getEnd(): Integer
+'getValue(): String
+'}
+'
+'class StringToken implements Token {
+'
+'}
+'
+'class NumberToken implements Token {
+'
+'}
+
+class Token {
+- type: TokenType
+- start
+- end
+- value
+}
+interface TokenType {
+}
+enum TokenTypes implements TokenType {
+LET_KEYWORD
+TYPE
+ASSIGNATION
+IDENTIFIER
+SEMICOLON
+COLON
+IF
+ELSE
+LITERAL
+BINARY_OPERATOR
+
+etc.
+}
+Token -> TokenType
+
+'class Ast {
+'    AstType type
+'    List<Ast> children
+'}
+'
+'Ast --> AstType
+'
+'interface AstType {
+'
+'}
+
+'enum AstTypes implements AstType {
+'    DECLARATION
+'    ASSIGNATION
+'    LITERAL
+'    VALUE
+'    STRING_TYPE
+'    NUMBER_TYPE
+'    IDENTIFIER
+'    IF_STATEMENT
+'    BINARY_EXPRESSION
+'    BLOCK_STATEMENT
+'
+'}
+
+'Ast *-> Ast
+
+'Runner --> Lexer
+'Runner --> Parser
+'Runner --> Interpreter
+
+'Ast *-> Token
+'
+'Lexer --> Token
+'Parser --> Token
+'Parser --> Ast
+'Interpreter --> Ast
+
+interface AstComponent {
+
+}
+
+class StringType implements AstComponent {
+
+}
+class Declaration implements AstComponent, Composite {
+- children: List<AstComponent>
+}
+class IfStatement implements AstComponent, Composite {
+- children: List<AstComponent>
+}
+
+interface Composite {
++ getChildren(): List<AstComponent>
+}
+
+enum AstTypes2 implements AstComponent {
+    DECLARATION
+    ASSIGNATION
+    LITERAL
+    VALUE
+    STRING_TYPE
+    NUMBER_TYPE
+    IDENTIFIER
+    IF_STATEMENT
+    BINARY_EXPRESSION
+    BLOCK_STATEMENT
+
+}
+
+@enduml
