@@ -104,13 +104,15 @@ class Declaration implements AstComponent, Composite {
 class IfStatement implements AstComponent, Composite {
 - children: List<AstComponent>
 }
+class Assignation implements AstComponent, Composite {
+- children: List<AstComponent>
+}
 
 interface Composite {
 + getChildren(): List<AstComponent>
 }
 
 enum PlainAstComponent implements AstComponent {
-    ASSIGNATION
     STRING_TYPE
     NUMBER_TYPE
 }
