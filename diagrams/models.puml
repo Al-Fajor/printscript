@@ -95,9 +95,9 @@ interface AstComponent {
 
 }
 
-class StringType implements AstComponent {
+class Literal implements AstComponent
+class Identifier implements AstComponent
 
-}
 class Declaration implements AstComponent, Composite {
 - children: List<AstComponent>
 }
@@ -109,18 +109,10 @@ interface Composite {
 + getChildren(): List<AstComponent>
 }
 
-enum AstTypes2 implements AstComponent {
-    DECLARATION
+enum PlainAstComponent implements AstComponent {
     ASSIGNATION
-    LITERAL
-    VALUE
     STRING_TYPE
     NUMBER_TYPE
-    IDENTIFIER
-    IF_STATEMENT
-    BINARY_EXPRESSION
-    BLOCK_STATEMENT
-
 }
 
 @enduml
