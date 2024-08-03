@@ -1,6 +1,6 @@
 package model;
 
-public enum BaseTokenTypes {
+public enum BaseTokenTypes implements TokenType {
     LET_KEYWORD,
     TYPE,
     ASSIGNATION,
