@@ -1,16 +1,25 @@
 package model;
 
-import java.util.List;
+public class IfStatement implements AstComponent {
+    private final AstComponent conditional;
+    private final AstComponent trueClause;
+    private final AstComponent falseClause;
 
-public class IfStatement implements AstComponent, AstComposite {
-    private final List<AstComponent> children;
-
-    public IfStatement(List<AstComponent> children) {
-        this.children = children;
+    public IfStatement(AstComponent conditional, AstComponent trueClause, AstComponent falseClause) {
+        this.conditional = conditional;
+        this.trueClause = trueClause;
+        this.falseClause = falseClause;
     }
 
-    @Override
-    public List<AstComponent> getChildren() {
-        return children;
+    public AstComponent getConditional() {
+        return conditional;
+    }
+
+    public AstComponent getFalseClause() {
+        return falseClause;
+    }
+
+    public AstComponent getTrueClause() {
+        return trueClause;
     }
 }

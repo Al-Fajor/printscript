@@ -1,16 +1,19 @@
 package model;
 
-import java.util.List;
+public class Assignation implements AstComponent {
+    private final AstComponent leftComponent;
+    private final AstComponent rightComponent;
 
-public class Assignation implements AstComponent, AstComposite {
-    private final List<AstComponent> children;
-
-    public Assignation(List<AstComponent> children) {
-        this.children = children;
+    public Assignation(AstComponent leftComponent, AstComponent rightComponent) {
+        this.leftComponent = leftComponent;
+        this.rightComponent = rightComponent;
     }
 
-    @Override
-    public List<AstComponent> getChildren() {
-        return children;
+    public AstComponent getLeftComponent() {
+        return leftComponent;
+    }
+
+    public AstComponent getRightComponent() {
+        return rightComponent;
     }
 }

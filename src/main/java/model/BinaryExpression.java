@@ -1,16 +1,25 @@
 package model;
 
-import java.util.List;
+public class BinaryExpression implements AstComponent {
+    private final BinaryOperator operator;
+    private final AstComponent leftComponent;
+    private final AstComponent rightComponent;
 
-public class BinaryExpression implements AstComponent, AstComposite {
-    private final List<AstComponent> children;
-
-    public BinaryExpression(List<AstComponent> children) {
-        this.children = children;
+    public BinaryExpression(BinaryOperator operator, AstComponent leftComponent, AstComponent rightComponent) {
+        this.operator = operator;
+        this.leftComponent = leftComponent;
+        this.rightComponent = rightComponent;
     }
 
-    @Override
-    public List<AstComponent> getChildren() {
-        return children;
+    public BinaryOperator getOperator() {
+        return operator;
+    }
+
+    public AstComponent getLeftComponent() {
+        return leftComponent;
+    }
+
+    public AstComponent getRightComponent() {
+        return rightComponent;
     }
 }
