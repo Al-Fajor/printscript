@@ -10,15 +10,6 @@ import java.util.Map;
 
 public class PrintScriptLexer implements Lexer{
 
-    private final Map<String, TokenType> keywords = Map.of(
-            "let", BaseTokenTypes.LET_KEYWORD,
-            "if", BaseTokenTypes.IF,
-            "else", BaseTokenTypes.ELSE,
-            "println", BaseTokenTypes.PRINTLN_KEYWORD,
-            "int", BaseTokenTypes.TYPE,
-            "string", BaseTokenTypes.TYPE
-    );
-
     @Override
     public List<Token> lex(String input) {
         List<Token> tokens = new ArrayList<>(List.of());
@@ -73,7 +64,7 @@ public class PrintScriptLexer implements Lexer{
 //            check for keywords
             switch (sb.toString()) {
                 case "let":
-                    tokens.add(new Token(BaseTokenTypes.LET_KEYWORD, i, i + 2, sb.toString()));
+                    tokens.add(new Token(BaseTokenTypes.LET, i, i + 2, sb.toString()));
                     sb = new StringBuilder();
                     break;
                 case "if":
@@ -85,7 +76,7 @@ public class PrintScriptLexer implements Lexer{
                     sb = new StringBuilder();
                     break;
                 case "println":
-                    tokens.add(new Token(BaseTokenTypes.PRINTLN_KEYWORD, i, i + 6, sb.toString()));
+                    tokens.add(new Token(BaseTokenTypes.PRINTLN, i, i + 6, sb.toString()));
                     sb = new StringBuilder();
                     break;
                 case "int":
