@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegexLexer implements Lexer{
-    @Override
-    public List<Token> lex(String input) {
+public class Tokenizer{
+    public List<Token> tokenize(String input) {
         List<Token> tokens = new ArrayList<>(List.of());
         Pattern pattern = TokenPatternFactory.createPattern(TokenRegex.getRegexMap());
 

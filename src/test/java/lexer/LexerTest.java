@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LexerTest {
-    Lexer lexer = new RegexLexer();
+    Lexer lexer = new PrintScriptLexer();
 
     @Test
     void integerInlineAssignation() {
@@ -66,6 +66,40 @@ class LexerTest {
         assertEquals(BaseTokenTypes.OPERATOR, tokens.get(6).getType());
         assertEquals(BaseTokenTypes.LITERAL, tokens.get(7).getType());
         assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(8).getType());
+    }
+
+    @Test
+    void assignToExistingVariable() {
+        String input = "x = 5;";
+        var tokens = lexer.lex(input);
+        System.out.println(tokens);
+        assertEquals(4, tokens.size());
+        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(0).getType());
+        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(1).getType());
+        assertEquals(BaseTokenTypes.LITERAL, tokens.get(2).getType());
+        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(3).getType());
+    }
+
+    @Test
+    void multiLineAssignation() {
+        String input = "let name: string = \"Joe\"; let lastName: string = \"Doe\";";
+        var tokens = lexer.lex(input);
+        System.out.println(tokens);
+        assertEquals(14, tokens.size());
+        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
+        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
+        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
+        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
+        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
+        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
+        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
+        assertEquals(BaseTokenTypes.LET, tokens.get(7).getType());
+        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(8).getType());
+        assertEquals(BaseTokenTypes.COLON, tokens.get(9).getType());
+        assertEquals(BaseTokenTypes.TYPE, tokens.get(10).getType());
+        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(11).getType());
+        assertEquals(BaseTokenTypes.LITERAL, tokens.get(12).getType());
+        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(13).getType());
     }
 
     @Test
