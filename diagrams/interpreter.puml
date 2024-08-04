@@ -1,0 +1,57 @@
+@startuml
+interface Interpreter {
+    +void interpret(List<AstComponent> astList)
+}
+class PrintScriptInterpreter implements Interpreter {
+    -InterpreterState state
+}
+class InterpreterState {
+    setters y getters
+
+}
+PrintScriptInterpreter *-- InterpreterState
+
+class Variable<T> {
+    -VariableType type
+    -String name
+    -T value
+    setters y getters
+}
+enum VariableType {
+    NUMBER
+    STRING
+}
+Variable *-- VariableType
+InterpreterState o- Variable
+
+class Function {
+    +executeFunction
+}
+
+InterpreterState o- Function
+
+class InnerState
+
+interface InterpreterStrategy {
+    +void execute(AstComponent astComponent)
+}
+class StrategySelector {
+    -InterpreterState state
+    -Map<AstComponent, InterpreterStrategy> strategyMap
+    +void execute(AstComponent astComponent)
+}
+StrategySelector *- InterpreterState
+class DeclarationStrategy implements InterpreterStrategy
+class AssignationStrategy implements InterpreterStrategy
+class BinaryExpressionStrategy implements InterpreterStrategy
+class ConditionalStrategy implements InterpreterStrategy
+class FunctionCallStrategy implements InterpreterStrategy
+class IdentifierStrategy implements InterpreterStrategy
+class IfStatementStrategy implements InterpreterStrategy
+class LiteralStrategy implements InterpreterStrategy
+class ParametersStrategy implements InterpreterStrategy
+Function -* FunctionCallStrategy
+
+PrintScriptInterpreter *-- StrategySelector
+StrategySelector *- InterpreterStrategy
+@enduml
