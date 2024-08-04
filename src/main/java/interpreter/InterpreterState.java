@@ -1,44 +1,58 @@
 package interpreter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InterpreterState {
-    private List<Variable<Double>> numericVariables;
-    private List<Variable<String>> stringVariables;
-    private List<Function> functions;
+    private Map<String, Variable<Double>> numericVariables;
+    private Map<String, Variable<String>> stringVariables;
+    private Map<String, Function> functions;
 
     public InterpreterState() {
-        numericVariables = new ArrayList<>();
-        stringVariables = new ArrayList<>();
-        functions = new ArrayList<>();
+        numericVariables = new HashMap<>();
+        stringVariables = new HashMap<>();
+        functions = new HashMap<>();
     }
 
-    void addNumericVariable(Variable<Double> numericVariable) {
-        numericVariables.add(numericVariable);
+    public void addNumericVariable(Variable<Double> numericVariable) {
+        numericVariables.put(numericVariable.getName(), numericVariable);
     }
 
-    void addStringVariable(Variable<String> stringVariable) {
-        stringVariables.add(stringVariable);
+    public Variable<Double> getNumericVariable(String name) {
+        return numericVariables.get(name);
     }
 
-    void addFunction(Function function) {
-        functions.add(function);
+    public void setNumericVariable(String name, Double value) {
+        numericVariables.get(name).setValue(value);
     }
 
-    VariableType getVariableType(String name) {
-        return null;
+    public void addStringVariable(Variable<String> stringVariable) {
+        stringVariables.put(stringVariable.getName(), stringVariable);
     }
 
-    Variable<Double> getNumericVariable(String name) {
-        return null;
+    public Variable<String> getStringVariable(String name) {
+        return stringVariables.get(name);
     }
 
-    Variable<String> getStringVariable(String name) {
-        return null;
+    public void setStringVariable(String name, String value) {
+        stringVariables.get(name).setValue(value);
     }
 
-    Function getFunction(String name) {
-        return null;
+    public VariableType getVariableType(String name) {
+        if (numericVariables.get(name) != null) {
+            return VariableType.NUMBER;
+        } else {
+            return VariableType.STRING;
+        }
+    }
+
+    public Function getFunction(String name) {
+        return functions.get(name);
+    }
+
+    public void addFunction(Function function) {
+        functions.put(function.getName(), function);
     }
 }
