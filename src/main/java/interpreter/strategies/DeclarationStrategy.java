@@ -1,6 +1,8 @@
 package interpreter.strategies;
 
 import interpreter.InterpreterState;
+import interpreter.Variable;
+import interpreter.VariableType;
 import model.*;
 
 public class DeclarationStrategy implements InterpreterStrategy {
@@ -11,7 +13,15 @@ public class DeclarationStrategy implements InterpreterStrategy {
     }
 
     @Override
-    public void execute(AstComponent astComponent) {
+    public StrategyResult execute(AstComponent astComponent) {
         Declaration declaration = (Declaration) astComponent;
+        switch (declaration.getType()) {
+            case STRING ->
+                    state.addStringVariable(new Variable<>(VariableType.STRING, declaration.getName(), null));
+            case NUMBER ->
+                    state.addStringVariable(new Variable<>(VariableType.NUMBER, declaration.getName(), null));
+            case FUNCTION -> {}
+        }
+        return null;
     }
 }

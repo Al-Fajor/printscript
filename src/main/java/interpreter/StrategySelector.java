@@ -15,8 +15,8 @@ public class StrategySelector {
         this.strategyMap = createStrategyMap();
     }
 
-    public void execute(AstComponent astComponent) {
-        strategyMap.get(astComponent.getClass()).execute(astComponent);
+    public StrategyResult execute(AstComponent astComponent) {
+        return strategyMap.get(astComponent.getClass()).execute(astComponent);
     }
 
     private Map<Class<? extends AstComponent>, InterpreterStrategy> createStrategyMap() {
