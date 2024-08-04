@@ -5,8 +5,19 @@ interface SyntaxAnalyzer{
 }
 class SyntaxAnalyzerImpl implements SyntaxAnalyzer
 
+interface SentenceStrategy{
+    +buildSentenceFromFirstToken(List<Token> tokens): AstComponent
+}
+
+class LetStrategy implements SentenceStrategy
+class IfStrategy implements SentenceStrategy
+class SimpleAssignationStrategy implements SentenceStrategy
+class ElseStrategy implements SentenceStrategy
+class PrintLineStrategy implements SentenceStrategy
+
 interface AstComponent
 
 'Relations
 SyntaxAnalyzer -> AstComponent
+SyntaxAnalyzer --> SentenceStrategy
 @enduml
