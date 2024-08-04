@@ -4,6 +4,7 @@ import model.Assignation;
 import model.AstBuilder;
 import model.AstComponent;
 import model.BinaryExpression;
+import model.DeclarationType;
 import model.Identifier;
 import model.Literal;
 import org.junit.jupiter.api.DynamicTest;
@@ -14,8 +15,10 @@ import org.junit.jupiter.api.function.Executable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,14 +29,21 @@ class AnalyzerImplTest {
     public static final String TEST_CASE_DIRECTORY = "C:\\Users\\tomas\\projects\\ingsis\\src\\test\\resources\\semantic_test_cases";
     AstBuilder builder = new AstBuilder();
     AstValidityChecker checker = new AstValidityChecker();
-    SemanticAnalyzer semanticAnalyzer = new AnalyzerImpl(
-            Map.of(
-                    Assignation.class, new AssignationResolver(),
-                    BinaryExpression.class, new BinaryExpressionResolver(),
-                    Literal.class, new LiteralResolver(),
-                    Identifier.class, new IdentifierResolver()
-            )
-    );
+    SemanticAnalyzer semanticAnalyzer;
+
+    {
+        Map<Class<? extends AstComponent>, Resolver> resolverMap = Map.of(
+                Assignation.class, new AssignationResolver(),
+                BinaryExpression.class, new BinaryExpressionResolver(),
+                Literal.class, new LiteralResolver(),
+                Identifier.class, new IdentifierResolver()
+        );
+        MapEnvironment env = new MapEnvironment(
+                new HashMap<>(),
+                Set.of(new Signature("println", List.of(DeclarationType.NUMBER)))
+        );
+        semanticAnalyzer = new AnalyzerImpl(resolverMap, env);
+    }
 
     @TestFactory
     Stream<DynamicTest> semanticTests() {

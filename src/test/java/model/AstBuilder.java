@@ -38,15 +38,15 @@ public class AstBuilder {
         return result;
     }
 
-    private AstComponent mapToAstComponent(JSONObject astComponent, String astComponentName) {
-        astComponentName = deleteNumbersInName(astComponentName);
-        switch (astComponentName) {
+    private AstComponent mapToAstComponent(JSONObject astComponentJson, String astComponentJsonName) {
+        astComponentJsonName = deleteNumbersInName(astComponentJsonName);
+        switch (astComponentJsonName) {
             case "assignation":
-                Iterator<String> subComponentNames = astComponent.keys();
+                Iterator<String> subComponentNames = astComponentJson.keys();
                 String firstComponentName = subComponentNames.next();
-                JSONObject firstComponent = astComponent.getJSONObject(firstComponentName);
+                JSONObject firstComponent = astComponentJson.getJSONObject(firstComponentName);
                 String secondComponentName = subComponentNames.next();
-                JSONObject secondComponent = astComponent.getJSONObject(secondComponentName);
+                JSONObject secondComponent = astComponentJson.getJSONObject(secondComponentName);
 
                 if (subComponentNames.hasNext()) {
                     throw new IllegalArgumentException("Cannot parse JSON: Received an assignation with too many parameters");
@@ -58,11 +58,11 @@ public class AstBuilder {
                 );
             case "declaration":
                 return new Declaration(
-                        mapToDeclarationType(astComponent.getString("declarationType")),
-                        astComponent.getString("name")
+                        mapToDeclarationType(astComponentJson.getString("declarationType")),
+                        astComponentJson.getString("name")
                 );
             case "literal":
-                Object value = astComponent.get("value");
+                Object value = astComponentJson.get("value");
                 if (value instanceof String) {
                     return new Literal<String>((String) value);
                 }
@@ -72,25 +72,44 @@ public class AstBuilder {
                 else throw new IllegalArgumentException("Cannot parse JSON: Unsupported value " + value + " for literal");
             case "identifier":
                 return new Identifier(
-                        astComponent.getString("name"),
-                        mapToIdentifierType(astComponent.getString("identifierType"))
+                        astComponentJson.getString("name"),
+                        mapToIdentifierType(astComponentJson.getString("identifierType"))
                 );
             case "binaryExpression":
-                Iterator<String> operandNames = astComponent.keys();
+                Iterator<String> operandNames = astComponentJson.keys();
                 operandNames.next();
 
                 String firstOperandName = operandNames.next();
-                JSONObject firstOperand = astComponent.getJSONObject(firstOperandName);
+                JSONObject firstOperand = astComponentJson.getJSONObject(firstOperandName);
                 String secondOperandName = operandNames.next();
-                JSONObject secondOperand = astComponent.getJSONObject(secondOperandName);
+                JSONObject secondOperand = astComponentJson.getJSONObject(secondOperandName);
 
                 return new BinaryExpression(
-                    mapToOperator(astComponent.getString("op")),
+                    mapToOperator(astComponentJson.getString("op")),
                     mapToAstComponent(firstOperand, firstOperandName),
                     mapToAstComponent(secondOperand, secondOperandName)
                 );
+            case "functionCall":
+                return new FunctionCall(
+                        (Identifier) mapToAstComponent(
+                                astComponentJson.getJSONObject("identifier"),
+                                "identifier"
+                        ),
+                        (Parameters) mapToAstComponent(
+                                astComponentJson.getJSONObject("params"),
+                                "params"
+                        )
+                );
+            case "parameters":
+                List<AstComponent> parameters = new ArrayList<>();
+                for (String key: astComponentJson.keySet()){
+                    parameters.add(mapToAstComponent(astComponentJson.getJSONObject(key), key));
+                }
+
+                return new Parameters(parameters);
+
             default:
-                throw new IllegalArgumentException(astComponentName + " is not a valid ast component");
+                throw new IllegalArgumentException(astComponentJsonName + " is not a valid ast component");
         }
     }
 

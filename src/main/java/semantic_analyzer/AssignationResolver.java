@@ -17,7 +17,7 @@ public class AssignationResolver implements Resolver {
     @Override
     public Resolution resolve(
             AstComponent ast,
-            Map<String, DeclarationType> previousDeclarations,
+            Environment env,
             Map<Class<? extends AstComponent>, Resolver> resolvers
     ) {
         // TODO: should actually avoid casting, but idk how to pass the AST
@@ -30,7 +30,7 @@ public class AssignationResolver implements Resolver {
         var rightResolution =
                 resolvers
                 .get(right.getClass())
-                .resolve(right, previousDeclarations, resolvers);
+                .resolve(right, env, resolvers);
 
         if (rightResolution.result().isFailure()) return rightResolution;
         if (!(rightResolution.resolvedAst() instanceof Literal<?> literal)) {
@@ -39,7 +39,7 @@ public class AssignationResolver implements Resolver {
 
         if (left instanceof Declaration declaration) {
             String identifierName = declaration.getName();
-            if (previousDeclarations.containsKey(identifierName)) {
+            if (env.isVariableDeclared(identifierName)) {
                 return Resolution.failure(identifierName + " is already declared");
             }
 
@@ -48,22 +48,23 @@ public class AssignationResolver implements Resolver {
                 return Resolution.failure(error);
             }
 
-            return new Resolution(new SemanticSuccess(), assignation, Map.of(declaration.getName(), declaration.getType()));
+            env.declareVariable(declaration.getName(), declaration.getType());
+            return new Resolution(new SemanticSuccess(), assignation);
         }
 
         else if (left instanceof Identifier identifier) {
             String identifierName = identifier.getName();
-            if (!previousDeclarations.containsKey(identifierName)) {
+            if (!env.isVariableDeclared(identifierName)) {
                 return Resolution.failure( "Cannot reassign " + identifierName + " because it has not been declared");
             }
 
-            var declarationType = previousDeclarations.get(identifierName);
+            var declarationType = env.getDeclarationType(identifierName);
             String error = getErrorOnTypeMismatch(declarationType, literal);
             if (!error.isEmpty()) {
                 return Resolution.failure(error);
             }
 
-            return new Resolution(new SemanticSuccess(), assignation, Collections.emptyMap());
+            return new Resolution(new SemanticSuccess(), assignation);
         }
 
         else {

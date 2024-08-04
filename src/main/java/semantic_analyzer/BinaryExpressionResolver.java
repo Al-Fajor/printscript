@@ -19,7 +19,8 @@ public class BinaryExpressionResolver implements Resolver {
 
     @Override
     public Resolution resolve(
-            AstComponent ast, Map<String, DeclarationType> previousDeclarations,
+            AstComponent ast, 
+            Environment env,
             Map<Class<? extends AstComponent>, Resolver> resolvers
     ) {
         var binaryExpression = (BinaryExpression) ast;
@@ -27,7 +28,7 @@ public class BinaryExpressionResolver implements Resolver {
         var rightResolution =
                 resolvers
                         .get(binaryExpression.getRightComponent().getClass())
-                        .resolve(binaryExpression.getRightComponent(), previousDeclarations, resolvers);
+                        .resolve(binaryExpression.getRightComponent(), env, resolvers);
 
         if (rightResolution.result().isFailure()) {
             return rightResolution;
@@ -36,7 +37,7 @@ public class BinaryExpressionResolver implements Resolver {
         var leftResolution =
                 resolvers
                         .get(binaryExpression.getRightComponent().getClass())
-                        .resolve(binaryExpression.getRightComponent(), previousDeclarations, resolvers);
+                        .resolve(binaryExpression.getRightComponent(), env, resolvers);
 
         if (leftResolution.result().isFailure()) {
             return leftResolution;
@@ -49,14 +50,12 @@ public class BinaryExpressionResolver implements Resolver {
             if (bothLiteralsAreNumbers(rightLiteral, leftLiteral)) {
                 return new Resolution(
                         new SemanticSuccess(),
-                        new Literal<Number>(NUMBER_PLACEHOLDER),
-                        Collections.emptyMap()
+                        new Literal<Number>(NUMBER_PLACEHOLDER)
                 );
             } else {
                 return new Resolution(
                         new SemanticSuccess(),
-                        new Literal<String>(STRING_PLACEHOLDER),
-                        Collections.emptyMap()
+                        new Literal<String>(STRING_PLACEHOLDER)
                 );
             }
         }
@@ -72,8 +71,7 @@ public class BinaryExpressionResolver implements Resolver {
             } else {
                 return new Resolution(
                         new SemanticSuccess(),
-                        leftLiteral,
-                        Collections.emptyMap()
+                        leftLiteral
                 );
             }
         }
