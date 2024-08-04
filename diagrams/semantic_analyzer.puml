@@ -4,7 +4,8 @@ interface SemanticAnalyzer {
     + analyze(List<AstComponent> tokens): SemanticResult
 }
 
-class InOrderAnalyzer implements SemanticAnalyzer {
+class AnalyzerImpl implements SemanticAnalyzer {
+    - resolvers: Map<Class<? extends AstComponent>, Resolver<?>>
     + analyze(List<AstComponent> tokens): SemanticResult
 }
 
@@ -21,12 +22,12 @@ interface Resolver {
 
 class Resolution {
     - result: SemanticResult
-    - resolvedType: Class<T extends AstComponent>
+    - resolvedAst: AstComponent
     - resolvedDeclarations: Set<Declaration>
 }
 
 SemanticAnalyzer -> SemanticResult
-InOrderAnalyzer --> Resolver
+AnalyzerImpl --> Resolver
 Resolver -> Resolution
 
 @enduml
