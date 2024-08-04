@@ -30,11 +30,11 @@ public class AssignationStrategy implements InterpreterStrategy {
         new DeclarationStrategy(state).execute(declaration);
         switch (declaration.getType()) {
             case STRING -> {
-                ExpressionResult rightComponentResult = new ComponentEvaluator().evaluate(rightComponent);
+                ExpressionResult rightComponentResult = new ComponentEvaluator(state).evaluate(rightComponent);
                 state.setStringVariable(declaration.getName(), rightComponentResult.getStringResult());
             }
             case NUMBER -> {
-                ExpressionResult rightComponentResult = new ComponentEvaluator().evaluate(rightComponent);
+                ExpressionResult rightComponentResult = new ComponentEvaluator(state).evaluate(rightComponent);
                 state.setNumericVariable(declaration.getName(), rightComponentResult.getNumericResult());
             }
             case FUNCTION -> throw new RuntimeException("Implement function declaration");
@@ -43,7 +43,7 @@ public class AssignationStrategy implements InterpreterStrategy {
 
     private void assignValueToExistingVariable(Identifier identifier, AstComponent rightComponent) {
         if (identifier.getType() == IdentifierType.VARIABLE) {
-            ExpressionResult rightComponentResult = new ComponentEvaluator().evaluate(rightComponent);
+            ExpressionResult rightComponentResult = new ComponentEvaluator(state).evaluate(rightComponent);
             String variableName = identifier.getName();
             assignResultToVariable(variableName, rightComponentResult);
         }

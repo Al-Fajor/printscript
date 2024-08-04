@@ -1,5 +1,6 @@
 package interpreter.strategies.evaluators;
 
+import interpreter.InterpreterState;
 import interpreter.VariableType;
 import model.*;
 
@@ -7,6 +8,11 @@ import static interpreter.VariableType.NUMBER;
 import static interpreter.VariableType.STRING;
 
 public class BinaryExpressionEvaluator implements ExpressionEvaluator {
+    private final InterpreterState state;
+
+    public BinaryExpressionEvaluator(InterpreterState state) {
+        this.state = state;
+    }
 
     @Override
     public ExpressionResult evaluate(AstComponent component) {
@@ -38,7 +44,7 @@ public class BinaryExpressionEvaluator implements ExpressionEvaluator {
     }
 
     private ExpressionResult getResult(AstComponent component) {
-        return new ComponentEvaluator().evaluate(component);
+        return new ComponentEvaluator(state).evaluate(component);
     }
 
     private ExpressionResult sumResults(ExpressionResult leftTerm, ExpressionResult rightTerm) {
