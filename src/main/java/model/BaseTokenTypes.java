@@ -1,7 +1,7 @@
 package model;
 
 public enum BaseTokenTypes implements TokenType {
-    LET_KEYWORD,
+    LET,
     TYPE,
     ASSIGNATION,
     IDENTIFIER,
@@ -10,5 +10,5 @@ public enum BaseTokenTypes implements TokenType {
     IF,
     ELSE,
     LITERAL,
-    BINARY_OPERATOR
+    OPERATOR
 }

@@ -1,13 +1,13 @@
 package model;
 
-public class Literal implements AstComponent {
-    private final String value;
+public class Literal<T> implements AstComponent {
+    private final T value;
 
-    public Literal(String value) {
+    public Literal(T value) {
         this.value = value;
     }
 
-    public String getValue() {
+    public T getValue() {
         return value;
     }
 }

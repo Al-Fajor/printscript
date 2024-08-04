@@ -91,30 +91,85 @@ Token -> TokenType
 'Parser --> Ast
 'Interpreter --> Ast
 
-interface AstComponent {
+'interface AstComponent {
+'
+'}
+'
+'class Literal implements AstComponent
+'class Identifier implements AstComponent
+'
+'class Declaration implements AstComponent, Composite {
+'- children: List<AstComponent>
+'}
+'class IfStatement implements AstComponent, Composite {
+'- children: List<AstComponent>
+'}
+'class Assignation implements AstComponent, Composite {
+'- children: List<AstComponent>
+'}
+'
+'interface Composite {
+'+ getChildren(): List<AstComponent>
+'}
+'
+'enum PlainAstComponent implements AstComponent {
+'    STRING_TYPE
+'    NUMBER_TYPE
+'}
+enum DeclarationType {
+    NUMBER
+    STRING
+    FUNCTION
+}
+enum IdentifierType {
+    VARIABLE
+    FUNCTION
+}
+enum BinaryOperator {
+    SUM
+    SUBTRACTION
+    DIVISION
+    MULTIPLICATION
+}
+interface AstComponent
+class Assignation implements AstComponent {
+    -leftComponent: AstComponent
+    -rightComponent: AstComponent
+}
+class Declaration implements AstComponent {
+    -type: DeclarationType
+    -name: String
+}
+class Identifier implements AstComponent {
+    -type: IdentifierType
+    -name: String
+}
+class BinaryExpression implements AstComponent {
+    -operator: BinaryOperator
+    -leftComponent: AstComponent
+    -rightComponent: AstComponent
+}
+class Literal<T> implements AstComponent {
+    -value: T
+}
+class IfStatement implements AstComponent {
+    -conditional: Conditional
+    -trueClause: AstComponent
+    -falseClause: AstComponent
+}
+class Conditional implements AstComponent {
+    -condition: AstComponent
+}
+class FunctionCall implements AstComponent {
+    -identifier: Identifier
+    -parameters: Parameters
+}
+class Parameters implements AstComponent {
+    -parameters: AstComponent
+}
+Declaration *-- DeclarationType
+Identifier *-- IdentifierType
+BinaryExpression *-- BinaryOperator
 
-}
-
-class Literal implements AstComponent
-class Identifier implements AstComponent
-
-class Declaration implements AstComponent, Composite {
-- children: List<AstComponent>
-}
-class IfStatement implements AstComponent, Composite {
-- children: List<AstComponent>
-}
-class Assignation implements AstComponent, Composite {
-- children: List<AstComponent>
-}
-
-interface Composite {
-+ getChildren(): List<AstComponent>
-}
-
-enum PlainAstComponent implements AstComponent {
-    STRING_TYPE
-    NUMBER_TYPE
-}
 
 @enduml

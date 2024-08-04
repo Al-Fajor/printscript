@@ -1,16 +1,19 @@
 package model;
 
-import java.util.List;
+public class Declaration implements AstComponent {
+    private final DeclarationType type;
+    private final String name;
 
-public class Declaration implements AstComponent, AstComposite {
-    private final List<AstComponent> children;
-
-    public Declaration(List<AstComponent> children) {
-        this.children = children;
+    public Declaration(DeclarationType type, String name) {
+        this.type = type;
+        this.name = name;
     }
 
-    @Override
-    public List<AstComponent> getChildren() {
-        return children;
+    public DeclarationType getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
     }
 }
