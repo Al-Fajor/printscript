@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class TokenRegex {
 
-
     public static Map<TokenType, String> getRegexMap() {
         Map<TokenType, String> regexMap = new LinkedHashMap<>();
         regexMap.put(BaseTokenTypes.LET, "let");
@@ -20,7 +19,7 @@ public class TokenRegex {
         regexMap.put(BaseTokenTypes.COLON, ":");
         regexMap.put(BaseTokenTypes.ASSIGNATION, "=");
         regexMap.put(BaseTokenTypes.IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*");
-        regexMap.put(BaseTokenTypes.LITERAL, "([0-9]+|[0-9]+.[0-9]+)|([\"'].*['\"])");
+        regexMap.put(BaseTokenTypes.LITERAL, "([0-9]+|[0-9]+.[0-9]+)|(\"[^\"]*\"|'[^']*')");
         regexMap.put(BaseTokenTypes.OPERATOR, "[-+*/]");
         regexMap.put(BaseTokenTypes.PRINTLN, "println");
         return regexMap;
