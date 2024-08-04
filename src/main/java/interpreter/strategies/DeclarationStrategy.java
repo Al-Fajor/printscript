@@ -13,7 +13,7 @@ public class DeclarationStrategy implements InterpreterStrategy {
     }
 
     @Override
-    public StrategyResult execute(AstComponent astComponent) {
+    public void execute(AstComponent astComponent) {
         Declaration declaration = (Declaration) astComponent;
         switch (declaration.getType()) {
             case STRING ->
@@ -22,6 +22,5 @@ public class DeclarationStrategy implements InterpreterStrategy {
                     state.addStringVariable(new Variable<>(VariableType.NUMBER, declaration.getName(), null));
             case FUNCTION -> {}
         }
-        return null;
     }
 }

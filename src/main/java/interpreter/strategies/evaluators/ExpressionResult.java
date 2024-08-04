@@ -1,11 +1,11 @@
-package interpreter.strategies;
+package interpreter.strategies.evaluators;
 
-public class StrategyResult {
+public class ExpressionResult {
     private final String stringResult;
     private final Double numericResult;
     private final Boolean boolResult;
 
-    public StrategyResult(String stringResult, Double numericResult, Boolean boolResult) {
+    public ExpressionResult(String stringResult, Double numericResult, Boolean boolResult) {
         this.stringResult = stringResult;
         this.numericResult = numericResult;
         this.boolResult = boolResult;

@@ -11,7 +11,7 @@ public class ParametersStrategy implements InterpreterStrategy {
     }
 
     @Override
-    public StrategyResult execute(AstComponent astComponent) {
-        return null;
+    public void execute(AstComponent astComponent) {
+
     }
 }
