@@ -10,5 +10,7 @@ public enum BaseTokenTypes implements TokenType {
     IF,
     ELSE,
     LITERAL,
-    OPERATOR
+    OPERATOR,
+    PRINTLN,
+    FUNCTION,
 }
