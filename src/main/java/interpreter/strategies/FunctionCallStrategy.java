@@ -12,6 +12,6 @@ public class FunctionCallStrategy implements InterpreterStrategy {
 
     @Override
     public void execute(AstComponent astComponent) {
-
+        // TODO implement
     }
 }
