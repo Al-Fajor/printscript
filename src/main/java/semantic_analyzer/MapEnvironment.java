@@ -27,8 +27,8 @@ public class MapEnvironment implements Environment {
     }
 
     @Override
-    public boolean isFunctionDeclared(String name, DeclarationType... parameters) {
-        return funDeclarations.contains(new Signature(name, List.of(parameters)));
+    public boolean isFunctionDeclared(String name, List<DeclarationType> parameters) {
+        return funDeclarations.contains(new Signature(name, parameters));
     }
 
     @Override

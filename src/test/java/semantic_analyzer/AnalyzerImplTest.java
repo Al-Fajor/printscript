@@ -5,8 +5,10 @@ import model.AstBuilder;
 import model.AstComponent;
 import model.BinaryExpression;
 import model.DeclarationType;
+import model.FunctionCall;
 import model.Identifier;
 import model.Literal;
+import model.Parameters;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -36,11 +38,16 @@ class AnalyzerImplTest {
                 Assignation.class, new AssignationResolver(),
                 BinaryExpression.class, new BinaryExpressionResolver(),
                 Literal.class, new LiteralResolver(),
-                Identifier.class, new IdentifierResolver()
+                Identifier.class, new IdentifierResolver(),
+                FunctionCall.class, new FunctionCallResolver(),
+                Parameters.class, new ParametersResolver()
         );
         MapEnvironment env = new MapEnvironment(
                 new HashMap<>(),
-                Set.of(new Signature("println", List.of(DeclarationType.NUMBER)))
+                Set.of(
+                        new Signature("println", List.of(DeclarationType.NUMBER)),
+                        new Signature("println", List.of(DeclarationType.STRING))
+                )
         );
         semanticAnalyzer = new AnalyzerImpl(resolverMap, env);
     }

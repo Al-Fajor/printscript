@@ -12,12 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class AstBuilder {
-    public static void main(String[] args) throws IOException {
-        System.out.println(
-                new AstBuilder().buildFromJson("C:\\Users\\tomas\\projects\\ingsis\\src\\test\\java\\model\\assignationExample.json")
-        );
-    }
-
     public List<AstComponent> buildFromJson(String filePath) throws IOException {
         File file = new File(filePath);
         String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
@@ -100,7 +94,7 @@ public class AstBuilder {
                                 "params"
                         )
                 );
-            case "parameters":
+            case "params":
                 List<AstComponent> parameters = new ArrayList<>();
                 for (String key: astComponentJson.keySet()){
                     parameters.add(mapToAstComponent(astComponentJson.getJSONObject(key), key));
