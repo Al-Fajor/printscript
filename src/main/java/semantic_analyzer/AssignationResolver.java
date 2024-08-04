@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class AssignationResolver implements Resolver {
     //TODO: modularize
+    //TODO: maybe some things could be moved to an IdentifierResolver and a DeclarationResolver
+    //TODO: identifiers may not be variables, but functions, so this should be checked
     @Override
     public Resolution resolve(
             AstComponent ast,
@@ -44,7 +46,7 @@ public class AssignationResolver implements Resolver {
                 return Resolution.failure(error);
             }
 
-            return new Resolution(new SemanticSuccess(), declaration, Map.of(declaration.getName(), declaration.getType()));
+            return new Resolution(new SemanticSuccess(), assignation, Map.of(declaration.getName(), declaration.getType()));
         }
 
         else if (left instanceof Identifier identifier) {
@@ -59,7 +61,7 @@ public class AssignationResolver implements Resolver {
                 return Resolution.failure(error);
             }
 
-            return new Resolution(new SemanticSuccess(), identifier, null);
+            return new Resolution(new SemanticSuccess(), assignation, null);
         }
 
         else {
@@ -80,9 +82,6 @@ public class AssignationResolver implements Resolver {
         if (notString || notNumber) {
             return "Cannot assign " + literal.getValue() + " to type " + declarationType;
         }
-        Boolean stringMatches =
-                declarationType == DeclarationType.STRING
-                        && literal.getValue() instanceof String;
 
         return "";
     }
