@@ -21,6 +21,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnalyzerImplTest {
+    private static final String RUN_ONLY = "";
+
     public static final String TEST_CASE_DIRECTORY = "C:\\Users\\tomas\\projects\\ingsis\\src\\test\\resources\\semantic_test_cases";
     AstBuilder builder = new AstBuilder();
     AstValidityChecker checker = new AstValidityChecker();
@@ -34,10 +36,17 @@ class AnalyzerImplTest {
     );
 
     @TestFactory
-    Stream<DynamicTest> generateTests() {
-        File directory = new File(TEST_CASE_DIRECTORY);
-        return Arrays.stream(directory.listFiles())
-                .map((File testFile) ->
+    Stream<DynamicTest> semanticTests() {
+        Stream<File> files;
+
+        if (RUN_ONLY.isEmpty()) {
+            File directory = new File(TEST_CASE_DIRECTORY);
+            files = Arrays.stream(directory.listFiles());
+        }
+
+        else files = Stream.of(new File(TEST_CASE_DIRECTORY + File.separator + RUN_ONLY));
+
+        return files.map((File testFile) ->
                         DynamicTest.dynamicTest(
                                 testFile.getName(),
                                 getTestExecutable(testFile)

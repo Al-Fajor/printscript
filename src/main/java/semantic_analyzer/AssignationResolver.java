@@ -7,6 +7,7 @@ import model.DeclarationType;
 import model.Identifier;
 import model.Literal;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class AssignationResolver implements Resolver {
@@ -25,6 +26,7 @@ public class AssignationResolver implements Resolver {
         AstComponent right = assignation.getRightComponent();
         AstComponent left = assignation.getLeftComponent();
 
+        System.out.println(right.getClass());
         var rightResolution =
                 resolvers
                 .get(right.getClass())
@@ -61,7 +63,7 @@ public class AssignationResolver implements Resolver {
                 return Resolution.failure(error);
             }
 
-            return new Resolution(new SemanticSuccess(), assignation, null);
+            return new Resolution(new SemanticSuccess(), assignation, Collections.emptyMap());
         }
 
         else {

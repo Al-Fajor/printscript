@@ -7,8 +7,14 @@
           "declarationType": "String",
           "name": "a"
         },
-        "2_literal": {
-          "value": "Hi"
+        "2_binaryExpression": {
+          "op": "+",
+          "1_literal": {
+            "value": 2
+          },
+          "2_literal": {
+            "value": " words"
+          }
         }
       }
     }

@@ -14,12 +14,12 @@
     },
     {
       "assignation": {
-        "declaration": {
-          "declarationType": "String",
-          "name": "a"
+        "identifier": {
+          "name": "a",
+          "identifierType": "variable"
         },
         "literal": {
-          "value": "Hi"
+          "value": 9
         }
       }
     }

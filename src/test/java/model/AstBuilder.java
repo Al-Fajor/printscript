@@ -39,6 +39,7 @@ public class AstBuilder {
     }
 
     private AstComponent mapToAstComponent(JSONObject astComponent, String astComponentName) {
+        astComponentName = deleteNumbersInName(astComponentName);
         switch (astComponentName) {
             case "assignation":
                 Iterator<String> subComponentNames = astComponent.keys();
@@ -69,15 +70,65 @@ public class AstBuilder {
                     return new Literal<Integer>((Integer) value);
                 }
                 else throw new IllegalArgumentException("Cannot parse JSON: Unsupported value " + value + " for literal");
+            case "identifier":
+                return new Identifier(
+                        astComponent.getString("name"),
+                        mapToIdentifierType(astComponent.getString("identifierType"))
+                );
+            case "binaryExpression":
+                Iterator<String> operandNames = astComponent.keys();
+                operandNames.next();
+
+                String firstOperandName = operandNames.next();
+                JSONObject firstOperand = astComponent.getJSONObject(firstOperandName);
+                String secondOperandName = operandNames.next();
+                JSONObject secondOperand = astComponent.getJSONObject(secondOperandName);
+
+                return new BinaryExpression(
+                    mapToOperator(astComponent.getString("op")),
+                    mapToAstComponent(firstOperand, firstOperandName),
+                    mapToAstComponent(secondOperand, secondOperandName)
+                );
             default:
                 throw new IllegalArgumentException(astComponentName + " is not a valid ast component");
+        }
+    }
+
+    private BinaryOperator mapToOperator(String op) {
+        switch (op) {
+            case "+":
+                return BinaryOperator.SUM;
+            case "-":
+                return BinaryOperator.SUBTRACTION;
+            case "/":
+                return BinaryOperator.DIVISION;
+            case "*":
+                return BinaryOperator.MULTIPLICATION;
+            default:
+                throw new IllegalArgumentException("Invalid operator: " + op);
+        }
+    }
+
+    private static String deleteNumbersInName(String astComponentName) {
+        String[] split = astComponentName.split("_");
+        return split[split.length - 1];
+    }
+
+    private IdentifierType mapToIdentifierType(String identifierType) {
+        switch (identifierType) {
+            case "variable":
+                return IdentifierType.VARIABLE;
+            case "function":
+                return IdentifierType.FUNCTION;
+            default:
+                throw new IllegalArgumentException("Invalid identifierType: " + identifierType);
         }
     }
 
     private DeclarationType mapToDeclarationType(String declarationType) {
         switch (declarationType) {
             case "String": return DeclarationType.STRING;
-            case "Num": return DeclarationType.NUMBER;
+            case "Number": return DeclarationType.NUMBER;
             default: throw new IllegalArgumentException("Invalid declarationType " + declarationType);
         }
     }
