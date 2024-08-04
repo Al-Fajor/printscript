@@ -14,7 +14,7 @@ public class LetStrategy implements SentenceStrategy{
     //AST (INORDER) SHOULD BE:
     // Number, Identifier(a), Declaration, Assignation, Literal(5)
 
-//    if(tokens.get(0).getType() != LET || !isValidSentence(tokens)) return null;
+    if(tokens.get(0).getType() != LET || !isValidSentence(tokens)) return null;
     int assignationIndex = getIndexByTokenType(ASSIGNATION, tokens);
     int i = assignationIndex;
     while (i>0){
