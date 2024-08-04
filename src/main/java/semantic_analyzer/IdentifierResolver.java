@@ -1,9 +1,9 @@
-package model;
+package semantic_analyzer;
 
-import jdk.jshell.spi.ExecutionControl;
-import semantic_analyzer.Resolution;
-import semantic_analyzer.Resolver;
-import semantic_analyzer.SemanticSuccess;
+import model.AstComponent;
+import model.DeclarationType;
+import model.Identifier;
+import model.Literal;
 
 import java.util.Collections;
 import java.util.Map;

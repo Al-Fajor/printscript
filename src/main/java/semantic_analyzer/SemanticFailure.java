@@ -13,6 +13,6 @@ public class SemanticFailure implements SemanticResult {
 
     @Override
     public boolean isFailure() {
-        return false;
+        return true;
     }
 }
