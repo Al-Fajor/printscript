@@ -10,7 +10,7 @@ class LexerTest {
 
     @Test
     void integerInlineAssignation() {
-        String input = "let x: int = 5;";
+        String input = "let x: number = 5;";
         var tokens = lexer.lex(input);
         System.out.println(tokens);
         assertEquals(7, tokens.size());
@@ -40,7 +40,7 @@ class LexerTest {
 
     @Test
     void inlineVariableCreation() {
-        String input = "let x: int;";
+        String input = "let x: number;";
         var tokens = lexer.lex(input);
         System.out.println(tokens);
         assertEquals(5, tokens.size());
@@ -53,7 +53,7 @@ class LexerTest {
 
     @Test
     void assignationWithSum() {
-        String input = "let x: int = 5 + 3;";
+        String input = "let x: number = 5 + 3;";
         var tokens = lexer.lex(input);
         System.out.println(tokens);
         assertEquals(9, tokens.size());
@@ -70,7 +70,7 @@ class LexerTest {
 
     @Test
     void invalidIdentifiers() {
-        String input = "let 1x: int = 5;";
+        String input = "let 1x: number = 5;";
         assertThrows(IllegalArgumentException.class, () -> lexer.lex(input));
     }
 
@@ -82,7 +82,7 @@ class LexerTest {
 
     @Test
     void invalidNumberFormats() {
-        String input = "let x: int = 5a5;";
+        String input = "let x: number = 5a5;";
         assertThrows(IllegalArgumentException.class, () -> lexer.lex(input));
     }
 }

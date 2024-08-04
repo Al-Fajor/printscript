@@ -15,19 +15,6 @@ public class RegexLexer implements Lexer{
     public List<Token> lex(String input) {
         List<Token> tokens = new ArrayList<>(List.of());
         Pattern pattern = TokenPatternFactory.createPattern(TokenRegex.getRegexMap());
-//            Pattern pattern = Pattern.compile(
-//          "(?<LET>let)|" +
-//                "(?<TYPE>int|string)|" +
-//                "(?<IF>if)|" +
-//                "(?<ELSE>else)|" +
-//                "(?<SEMICOLON>;)|" +
-//                "(?<COLON>:)|" +
-//                "(?<ASSIGNATION>=)|" +
-//                "(?<IDENTIFIER>[a-zA-Z_][a-zA-Z0-9_]*)|" +
-//                "(?<LITERAL>([0-9]+)|([\"'].*['\"]))|" +
-//                "(?<BINARYOPERATOR>[-+*/])|" +
-//                "(?<PRINTLN>println)|"
-//        );
 
         Matcher matcher = pattern.matcher(input);
         while (matcher.find()) {
