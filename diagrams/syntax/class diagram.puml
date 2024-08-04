@@ -1,0 +1,12 @@
+@startuml
+
+interface SyntaxAnalyzer{
+    +analyze(List<Token> tokens): List<AstComponent>
+}
+class SyntaxAnalyzerImpl implements SyntaxAnalyzer
+
+interface AstComponent
+
+'Relations
+SyntaxAnalyzer -> AstComponent
+@enduml

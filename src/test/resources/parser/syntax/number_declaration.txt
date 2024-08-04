@@ -1,0 +1,20 @@
+Tokens: LET -> IDENTIFIER("a") -> COLON -> TYPE("number") -> ASSIGNATION -> LITERAL(5) -> SEMICOLON
+Expected: {"type": "VariableDeclaration",
+              "declarations": [
+              {
+                  "type": "VariableDeclarator",
+                  "id": {
+                      "type": "Identifier",
+                      "name": "a"
+                  }
+                  },
+              {
+                  "type": "TypeDeclaration",
+                  "value": "number"
+              ,
+              "init": {
+              "type": "Literal",
+                  "value": 5}}
+          ],
+              "kind": "let"
+          }
