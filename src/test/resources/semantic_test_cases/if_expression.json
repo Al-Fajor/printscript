@@ -1,0 +1,46 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "assignation": {
+        "1_declaration": {
+          "declarationType": "Number",
+          "name": "a"
+        },
+        "2_literal": {
+          "value": 40
+        }
+      }
+    },
+    {
+      "if": {
+        "conditional": {
+          "binaryExpression": {
+            "op": ">",
+            "1_identifier": {
+              "name": "a",
+              "identifierType": "variable"
+            },
+            "2_literal": {
+              "val": 5
+            }
+          }
+        },
+        "trueClause": {
+          "functionCall": {
+            "identifier": {
+              "name": "params",
+              "identifierType": "function"
+            },
+            "params": {
+              "1_identifier": {
+                "name": "a",
+                "identifierType": "variable"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
