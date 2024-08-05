@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class FunctionCall implements AstComponent {
     private final Identifier identifier;
     private final Parameters parameters;
@@ -16,4 +18,17 @@ public class FunctionCall implements AstComponent {
     public Parameters getParameters() {
         return parameters;
     }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    FunctionCall that = (FunctionCall) o;
+    return Objects.equals(identifier, that.identifier) && Objects.equals(parameters, that.parameters);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(identifier, parameters);
+  }
 }

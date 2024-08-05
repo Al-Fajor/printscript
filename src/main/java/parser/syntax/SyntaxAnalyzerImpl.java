@@ -13,7 +13,6 @@ import static model.BaseTokenTypes.*;
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
   @Override
   public List<AstComponent> analyze(List<Token> tokens) {
-    //TODO
     if(tokens.isEmpty()) return new ArrayList<>();
     return buildSentences(tokens);
   }
@@ -30,8 +29,9 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
     List<List<Token>> sentences = new ArrayList<>();
     while(i < tokens.size()){
       while(tokens.get(j).getType() != SEMICOLON) ++j;
-      sentences.add(tokens.subList(i,j));
+      sentences.add(tokens.subList(i,++j));
       i = j;
+      if(i == tokens.size()) break;
     }
     return sentences;
   }
@@ -45,20 +45,6 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
       PRINTLN, new PrintLineStrategy()
     );
   }
-//  private Map<TokenType, Class<? extends AstComponent>> buildTokenMap() {
-//    Map<TokenType, Class<? extends AstComponent>> map = new HashMap<>();
-//    map.put(LET, Declaration.class);
-//    map.put(TYPE, Declaration.class);
-//    map.put(ASSIGNATION, Assignation.class);
-//    map.put(IDENTIFIER, Identifier.class);
-//    map.put(SEMICOLON, Identifier.class);
-//    map.put(COLON, Identifier.class);
-//    map.put(IF, IfStatement.class);
-//    map.put(ELSE, IfStatement.class);
-//    map.put(LITERAL, Literal.class);
-//    map.put(OPERATOR, Parameters.class);
-//    return map;
-//  }
 
 
 }
