@@ -19,7 +19,7 @@ public class DeclarationStrategy implements InterpreterStrategy {
             case STRING ->
                     state.addStringVariable(new Variable<>(VariableType.STRING, declaration.getName(), null));
             case NUMBER ->
-                    state.addStringVariable(new Variable<>(VariableType.NUMBER, declaration.getName(), null));
+                    state.addNumericVariable(new Variable<>(VariableType.NUMBER, declaration.getName(), null));
             case FUNCTION -> {}
         }
     }
