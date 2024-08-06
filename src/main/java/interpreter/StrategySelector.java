@@ -24,7 +24,7 @@ public class StrategySelector {
         map.put(Assignation.class, new AssignationStrategy(state));
         map.put(IfStatement.class, new IfStatementStrategy(state));
         map.put(Parameters.class, new ParametersStrategy(state));
-        map.put(Declaration.class, new ParametersStrategy(state));
+        map.put(Declaration.class, new DeclarationStrategy(state));
         map.put(FunctionCall.class, new FunctionCallStrategy(state));
         return map;
     }

@@ -1,0 +1,10 @@
+{
+  "ast_list": [
+    {
+      "declaration": {
+        "declarationType": "Number",
+        "name": "num"
+      }
+    }
+  ]
+}

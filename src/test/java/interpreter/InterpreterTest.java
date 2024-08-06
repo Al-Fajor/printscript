@@ -3,15 +3,44 @@ package interpreter;
 import model.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.io.IOException;
 
 public class InterpreterTest {
-    @Test
-    public void testTest() {
-        Interpreter interpreter = new PrintScriptInterpreter();
-        AstComponent ast1 = new Assignation(new Declaration(DeclarationType.STRING, "a"), new BinaryExpression(BinaryOperator.SUM, new Literal<>(3.0), new Literal<>("hola")));
-        AstComponent ast2 = new Assignation(new Identifier("a", IdentifierType.VARIABLE), new Literal<>("hello"));
-        interpreter.interpret(List.of(ast1, ast2));
+    private final AstBuilder astBuilder = new AstBuilder();
 
+    @Test
+    public void testNumericVariableDeclaration() throws IOException {
+        Interpreter interpreter = new PrintScriptInterpreter();
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/declare_numeric_variable.json"));
+    }
+
+    @Test
+    public void testStringVariableDeclaration() throws IOException {
+        Interpreter interpreter = new PrintScriptInterpreter();
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/declare_string_variable.json"));
+    }
+
+    @Test
+    public void testAssignNumericVariable() throws IOException {
+        Interpreter interpreter = new PrintScriptInterpreter();
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/assign_numeric_variable.json"));
+    }
+
+    @Test
+    public void testAssignStringVariable() throws IOException {
+        Interpreter interpreter = new PrintScriptInterpreter();
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/assign_string_variable.json"));
+    }
+
+    @Test
+    public void testNumberOperations() throws IOException {
+        Interpreter interpreter = new PrintScriptInterpreter();
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/number_operations.json"));
+    }
+
+    @Test
+    public void testStringConcatenation() throws IOException {
+        Interpreter interpreter = new PrintScriptInterpreter();
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/string_concatenation.json"));
     }
 }

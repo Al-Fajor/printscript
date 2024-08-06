@@ -11,8 +11,8 @@ public class LiteralEvaluator implements ExpressionEvaluator {
             case String s -> {
                 return new ExpressionResult(s);
             }
-            case Double d -> {
-                return new ExpressionResult(d);
+            case Number n -> {
+                return new ExpressionResult(n.doubleValue());
             }
             default ->
                 throw new IllegalArgumentException("invalidComponent");
