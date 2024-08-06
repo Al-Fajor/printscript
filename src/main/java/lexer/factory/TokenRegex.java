@@ -15,13 +15,13 @@ public class TokenRegex {
         regexMap.put(BaseTokenTypes.TYPE, "number|string");
         regexMap.put(BaseTokenTypes.IF, "if");
         regexMap.put(BaseTokenTypes.ELSE, "else");
+        regexMap.put(BaseTokenTypes.PRINTLN, "println");
         regexMap.put(BaseTokenTypes.SEMICOLON, ";");
         regexMap.put(BaseTokenTypes.COLON, ":");
         regexMap.put(BaseTokenTypes.ASSIGNATION, "=");
         regexMap.put(BaseTokenTypes.IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*");
         regexMap.put(BaseTokenTypes.LITERAL, "([0-9]+|[0-9]+.[0-9]+)|(\"[^\"]*\"|'[^']*')");
         regexMap.put(BaseTokenTypes.OPERATOR, "[-+*/]");
-        regexMap.put(BaseTokenTypes.PRINTLN, "println");
         return regexMap;
     };
 
