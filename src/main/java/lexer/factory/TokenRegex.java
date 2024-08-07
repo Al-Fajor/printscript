@@ -16,6 +16,7 @@ public class TokenRegex {
         regexMap.put(BaseTokenTypes.IF, "if");
         regexMap.put(BaseTokenTypes.ELSE, "else");
         regexMap.put(BaseTokenTypes.PRINTLN, "println");
+        regexMap.put(BaseTokenTypes.FUNCTION, "function");
         regexMap.put(BaseTokenTypes.SEMICOLON, ";");
         regexMap.put(BaseTokenTypes.COLON, ":");
         regexMap.put(BaseTokenTypes.ASSIGNATION, "=");
