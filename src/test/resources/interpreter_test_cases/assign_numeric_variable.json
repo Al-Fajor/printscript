@@ -1,0 +1,21 @@
+{
+  "ast_list": [
+    {
+      "declaration": {
+        "declarationType": "Number",
+        "name": "num"
+      }
+    },
+    {
+      "assignation": {
+        "identifier": {
+          "identifierType": "variable",
+          "name": "num"
+        },
+        "literal": {
+          "value": 7
+        }
+      }
+    }
+  ]
+}
