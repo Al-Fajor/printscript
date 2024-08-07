@@ -33,9 +33,6 @@ public class TokenMapper {
         if(token.getValue().equals("\"(\"") || token.getValue().equals("(")){
           return buildFunctionArgument(tokens.subList(i+1, findFirstClosingSeparator(tokens)));
         }
-        else if(token.getValue().equals("\")\"") || token.getValue().equals(")")){
-          continue;
-        }
       }
       //TODO: REEVALUATE FUNCTION CASE, MAY NEED TO ADD BRACKETS AND BRACES
     }
@@ -68,9 +65,9 @@ public class TokenMapper {
 
   private Literal<?> translateToLiteral(String value){
     if(value.contains("\"") || !isNumeric(value)){
-        return new Literal<String>(clearInvCommas(value));
+        return new Literal<>(clearInvCommas(value));
       }
-      return new Literal<Integer>(Integer.valueOf(value));
+      return new Literal<>(Integer.valueOf(value));
   }
 
   private boolean isNumeric(String value) {

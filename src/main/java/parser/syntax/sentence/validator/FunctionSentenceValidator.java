@@ -40,7 +40,7 @@ public class FunctionSentenceValidator implements SentenceValidator{
           if(matchesSeparatorType(token, "closing")) {
             if(nextToken == null) return false;
             break;
-          };
+          }
         case LITERAL:
         case IDENTIFIER:
           if(nextToken == null) return false;

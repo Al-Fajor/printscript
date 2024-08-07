@@ -1,7 +1,6 @@
 package parser.syntax;
 
 
-import model.AstComponent;
 import model.Token;
 import parser.syntax.result.SyntaxResult;
 
