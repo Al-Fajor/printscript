@@ -20,7 +20,8 @@ public class TokenRegex {
         regexMap.put(BaseTokenTypes.COLON, ":");
         regexMap.put(BaseTokenTypes.ASSIGNATION, "=");
         regexMap.put(BaseTokenTypes.IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*");
-        regexMap.put(BaseTokenTypes.LITERAL, "([0-9]+|[0-9]+.[0-9]+)|(\"[^\"]*\"|'[^']*')");
+        // detects numbers (whole or decimal) or Strings
+        regexMap.put(BaseTokenTypes.LITERAL, "(-?(0|[1-9]\\d*)(\\.\\d+)?)|(\"[^\"]*\"|'[^']*')");
         regexMap.put(BaseTokenTypes.OPERATOR, "[-+*/]");
         return regexMap;
     };
