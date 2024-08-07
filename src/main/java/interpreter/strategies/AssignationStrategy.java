@@ -2,8 +2,8 @@ package interpreter.strategies;
 
 import interpreter.InterpreterState;
 import interpreter.VariableType;
-import interpreter.strategies.evaluators.ComponentEvaluator;
-import interpreter.strategies.evaluators.ExpressionResult;
+import interpreter.evaluators.ComponentEvaluator;
+import interpreter.evaluators.ExpressionResult;
 import model.*;
 
 public class AssignationStrategy implements InterpreterStrategy {

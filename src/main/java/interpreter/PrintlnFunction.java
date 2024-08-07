@@ -1,7 +1,7 @@
 package interpreter;
 
-import interpreter.strategies.evaluators.ComponentEvaluator;
-import interpreter.strategies.evaluators.ExpressionResult;
+import interpreter.evaluators.ComponentEvaluator;
+import interpreter.evaluators.ExpressionResult;
 import model.AstComponent;
 import model.Parameters;
 
