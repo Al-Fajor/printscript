@@ -60,8 +60,8 @@ public class AstBuilder {
                 if (value instanceof String) {
                     return new Literal<String>((String) value);
                 }
-                else if (value instanceof Integer) {
-                    return new Literal<Integer>((Integer) value);
+                else if (value instanceof Number) {
+                    return new Literal<Number>((Number) value);
                 }
                 else throw new IllegalArgumentException("Cannot parse JSON: Unsupported value " + value + " for literal");
             case "identifier":
