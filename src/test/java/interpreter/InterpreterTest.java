@@ -43,4 +43,10 @@ public class InterpreterTest {
         Interpreter interpreter = new PrintScriptInterpreter();
         interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/string_concatenation.json"));
     }
+
+    @Test
+    public void testPrint() throws IOException {
+        Interpreter interpreter = new PrintScriptInterpreter();
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/print_variables.json"));
+    }
 }

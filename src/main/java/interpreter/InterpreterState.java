@@ -12,6 +12,7 @@ public class InterpreterState {
         numericVariables = new HashMap<>();
         stringVariables = new HashMap<>();
         functions = new HashMap<>();
+        functions.put("println", new PrintlnFunction(this));
     }
 
     public void addNumericVariable(Variable<Double> numericVariable) {

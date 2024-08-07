@@ -44,4 +44,20 @@ public class ExpressionResult {
     public Boolean getBoolResult() {
         return boolResult;
     }
+
+    @Override
+    public String toString() {
+        switch(getType()) {
+            case STRING -> {
+                return getStringResult();
+            }
+            case NUMBER -> {
+                return getNumericResult().toString();
+            }
+            case BOOLEAN -> {
+                return getBoolResult().toString();
+            }
+            default -> throw new IllegalArgumentException("Implement " + getType() + " toString");
+        }
+    }
 }
