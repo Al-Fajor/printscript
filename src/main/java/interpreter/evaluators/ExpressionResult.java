@@ -1,4 +1,4 @@
-package interpreter.strategies.evaluators;
+package interpreter.evaluators;
 
 import interpreter.VariableType;
 
