@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class InvalidChainDetector implements LexicalErrorDetector{
     @Override
-    public ScanResult verify(String input) {
+    public ScanResult detect(String input) {
 //        Detects cases like: "int 1a = 5;" or "int a = 5adf4;"
         String regex = "(?<!\")\\b\\d[a-zA-Z]\\w*\\b(?!\")";
         Pattern pattern = Pattern.compile(regex);

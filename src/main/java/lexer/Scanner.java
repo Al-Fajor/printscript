@@ -2,7 +2,6 @@ package lexer;
 
 import lexer.detectors.LexicalErrorDetector;
 import lexer.factory.ErrorDetectorFactory;
-import lexer.scanresult.FailedScanResult;
 import lexer.scanresult.ScanResult;
 import lexer.scanresult.SuccessfulScanResult;
 
@@ -12,7 +11,7 @@ public class Scanner {
     public ScanResult scan(String input) {
         List<LexicalErrorDetector> detectors = ErrorDetectorFactory.create();
         for (LexicalErrorDetector detector : detectors) {
-            ScanResult result = detector.verify(input);
+            ScanResult result = detector.detect(input);
             if (!result.isSuccessful()) {
                 return result;
             }

@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
     @Override
-    public ScanResult verify(String input) {
+    public ScanResult detect(String input) {
         Stack<Character> stack = new Stack<>();
         char[] openingChars = new char[]{'(', '{', '[', '\"'};
         char[] closingChars = new char[]{')', '}', ']', '\"'};

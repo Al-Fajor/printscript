@@ -24,6 +24,21 @@ class LexerTest {
     }
 
     @Test
+    void decimalInlineAssignation() {
+        String input = "let x: number = 5.19;";
+        var tokens = lexer.lex(input);
+        System.out.println(tokens);
+        assertEquals(7, tokens.size());
+        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
+        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
+        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
+        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
+        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
+        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
+        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
+    }
+
+    @Test
     void stringInlineAssignation() {
         String input = "let x: string = \"hello\";";
         var tokens = lexer.lex(input);
