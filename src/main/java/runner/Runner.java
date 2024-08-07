@@ -7,6 +7,8 @@ import lexer.PrintScriptLexer;
 import model.*;
 import parser.syntax.SyntaxAnalyzer;
 import parser.syntax.SyntaxAnalyzerImpl;
+import parser.syntax.result.SyntaxError;
+import parser.syntax.result.SyntaxResult;
 import semantic_analyzer.*;
 
 import java.util.HashMap;
@@ -40,10 +42,15 @@ public class Runner {
     }
     Interpreter interpreter = new PrintScriptInterpreter();
 
-    List<AstComponent> components = syntaxAnalyzer.analyze(lexer.lex(code));
+    SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexer.lex(code));
+    if(syntaxResult.isFailure() && syntaxResult instanceof SyntaxError){
+      System.out.println(((SyntaxError) syntaxResult).getReason());
+      return;
+    }
+    List<AstComponent> components = syntaxResult.getComponents();
     SemanticResult result = semanticAnalyzer.analyze(components);
     if(result.isFailure()){
-      System.out.println("Failure");
+      System.out.println("Semantic error");
     }
     else{
       interpreter.interpret(components);

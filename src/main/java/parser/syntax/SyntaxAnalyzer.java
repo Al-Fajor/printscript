@@ -3,6 +3,7 @@ package parser.syntax;
 
 import model.AstComponent;
 import model.Token;
+import parser.syntax.result.SyntaxResult;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ public interface SyntaxAnalyzer {
     * @param tokens: Token List received from the previously done lexical analysis
    * @return AST List
    */
-  List<AstComponent> analyze(List<Token> tokens);
+  SyntaxResult analyze(List<Token> tokens);
 
 }

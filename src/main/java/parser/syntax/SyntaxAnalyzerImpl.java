@@ -1,6 +1,9 @@
 package parser.syntax;
 
 import model.*;
+import parser.syntax.result.SyntaxError;
+import parser.syntax.result.SyntaxResult;
+import parser.syntax.result.SyntaxSuccess;
 import parser.syntax.sentence.strategy.*;
 
 import java.util.ArrayList;
@@ -12,21 +15,25 @@ import static model.BaseTokenTypes.*;
 
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
   @Override
-  public List<AstComponent> analyze(List<Token> tokens) {
-    if(tokens.isEmpty()) return new ArrayList<>();
+  public SyntaxResult analyze(List<Token> tokens) {
+    if(tokens.isEmpty()) return new SyntaxSuccess(List.of());
     return buildSentences(tokens);
   }
 
-  private List<AstComponent> buildSentences(List<Token> tokens) {
+  private SyntaxResult buildSentences(List<Token> tokens) {
     try{
       List<AstComponent> components;
       List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
 //      replaceRepeatedIdentifiers(tokenSentences);
       components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.getFirst().getType()).buildSentence(sentence)).collect(Collectors.toList());
 
-      return components.contains(null) ? List.of() : components;
+      return components.contains(null) ?
+        new SyntaxError("Invalid sentence at index: " + components.indexOf(null) + ";\n" +
+          " Starting token: " + tokenSentences.get(components.indexOf(null)).getFirst()) :
+        new SyntaxSuccess(components);
+
     } catch (NullPointerException e){
-      return List.of();
+      return new SyntaxError("Invalid tokens");
     }
   }
 
@@ -35,7 +42,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
     int i = 0;
     for (int j = 0; j < tokens.size() ; j++) {
       if(tokens.get(j).getType() ==SEMICOLON) {
-        sentences.add(tokens.subList(i,j));
+        sentences.add(tokens.subList(i,j+1));
         i=j+1;
         if(i>=tokens.size()) break;
       }
@@ -49,7 +56,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
       LET, new LetStrategy(),
       IF, new IfStrategy(),
       ELSE, new ElseStrategy(),
-      PRINTLN, new PrintLineStrategy()
+      PRINTLN, new FunctionCallStrategy()
     );
   }
 
