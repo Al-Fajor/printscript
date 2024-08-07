@@ -35,6 +35,18 @@ class Scanner {
     + scan(String input) : ScanResult
 }
 
+interface LexicalErrorDetector {
+    + verify(String input) : ScanResult
+}
+
+class InvalidChainDetector implements LexicalErrorDetector {
+    + verify(String input) : ScanResult
+}
+
+class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
+    + verify(String input) : ScanResult
+}
+
 class Tokenizer {
     + tokenize(String input) : List<Token>
 }
@@ -57,6 +69,8 @@ Scanner --> ScanResult
 
 PrintScriptLexer o--> Scanner
 PrintScriptLexer o--> Tokenizer
+Scanner o--> LexicalErrorDetector
+LexicalErrorDetector -> ScanResult
 
 Lexer -> Token
 
