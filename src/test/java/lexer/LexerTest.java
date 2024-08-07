@@ -15,12 +15,19 @@ class LexerTest {
         System.out.println(tokens);
         assertEquals(7, tokens.size());
         assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
+        assertEquals("let", tokens.get(0).getValue());
         assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
+        assertEquals("x", tokens.get(1).getValue());
         assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
+        assertEquals(":", tokens.get(2).getValue());
         assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
+        assertEquals("number", tokens.get(3).getValue());
         assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
+        assertEquals("=", tokens.get(4).getValue());
         assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
+        assertEquals("5", tokens.get(5).getValue());
         assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
+        assertEquals(";", tokens.get(6).getValue());
     }
 
     @Test
@@ -122,10 +129,12 @@ class LexerTest {
         String input = "println(\"Hello, World!\");";
         var tokens = lexer.lex(input);
         System.out.println(tokens);
-        assertEquals(3, tokens.size());
+        assertEquals(5, tokens.size());
         assertEquals(BaseTokenTypes.PRINTLN, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(2).getType());
+        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(1).getType());
+        assertEquals(BaseTokenTypes.LITERAL, tokens.get(2).getType());
+        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(3).getType());
+        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(4).getType());
     }
 
     @Test
@@ -133,10 +142,12 @@ class LexerTest {
         String input = "println(x);";
         var tokens = lexer.lex(input);
         System.out.println(tokens);
-        assertEquals(3, tokens.size());
+        assertEquals(5, tokens.size());
         assertEquals(BaseTokenTypes.PRINTLN, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(2).getType());
+        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(1).getType());
+        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(2).getType());
+        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(3).getType());
+        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(4).getType());
     }
 
     @Test
@@ -144,7 +155,7 @@ class LexerTest {
         String input = "let my_cool_variable: string = \"ciclon\";\nprintln(my_cool_variable);";
         var tokens = lexer.lex(input);
         System.out.println(tokens);
-        assertEquals(10, tokens.size());
+        assertEquals(12, tokens.size());
         assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
         assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
         assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
@@ -153,8 +164,10 @@ class LexerTest {
         assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
         assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
         assertEquals(BaseTokenTypes.PRINTLN, tokens.get(7).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(8).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(9).getType());
+        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(8).getType());
+        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(9).getType());
+        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(10).getType());
+        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(11).getType());
     }
     @Test
     void invalidIdentifiers() {

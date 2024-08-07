@@ -23,6 +23,7 @@ public class TokenRegex {
         // detects numbers (whole or decimal) or Strings
         regexMap.put(BaseTokenTypes.LITERAL, "(-?(0|[1-9]\\d*)(\\.\\d+)?)|(\"[^\"]*\"|'[^']*')");
         regexMap.put(BaseTokenTypes.OPERATOR, "[-+*/]");
+        regexMap.put(BaseTokenTypes.SEPARATOR, "[\\(\\)\\{\\}]");
         return regexMap;
     };
 
