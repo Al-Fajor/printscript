@@ -1,57 +1,21 @@
 package interpreter;
 
-import java.util.HashMap;
-import java.util.Map;
+public interface InterpreterState {
+    void addNumericVariable(Variable<Double> numericVariable);
 
-public class InterpreterState {
-    private Map<String, Variable<Double>> numericVariables;
-    private Map<String, Variable<String>> stringVariables;
-    private Map<String, Function> functions;
+    Variable<Double> getNumericVariable(String name);
 
-    public InterpreterState() {
-        numericVariables = new HashMap<>();
-        stringVariables = new HashMap<>();
-        functions = new HashMap<>();
-        functions.put("println", new PrintlnFunction(this));
-    }
+    void setNumericVariable(String name, Double value);
 
-    public void addNumericVariable(Variable<Double> numericVariable) {
-        numericVariables.put(numericVariable.getName(), numericVariable);
-    }
+    void addStringVariable(Variable<String> stringVariable);
 
-    public Variable<Double> getNumericVariable(String name) {
-        return numericVariables.get(name);
-    }
+    Variable<String> getStringVariable(String name);
 
-    public void setNumericVariable(String name, Double value) {
-        numericVariables.get(name).setValue(value);
-    }
+    void setStringVariable(String name, String value);
 
-    public void addStringVariable(Variable<String> stringVariable) {
-        stringVariables.put(stringVariable.getName(), stringVariable);
-    }
+    VariableType getVariableType(String name);
 
-    public Variable<String> getStringVariable(String name) {
-        return stringVariables.get(name);
-    }
+    Function getFunction(String name);
 
-    public void setStringVariable(String name, String value) {
-        stringVariables.get(name).setValue(value);
-    }
-
-    public VariableType getVariableType(String name) {
-        if (numericVariables.get(name) != null) {
-            return VariableType.NUMBER;
-        } else {
-            return VariableType.STRING;
-        }
-    }
-
-    public Function getFunction(String name) {
-        return functions.get(name);
-    }
-
-    public void addFunction(Function function) {
-        functions.put(function.getName(), function);
-    }
+    void addFunction(Function function);
 }
