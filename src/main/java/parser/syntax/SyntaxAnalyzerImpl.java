@@ -22,22 +22,23 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
       List<AstComponent> components;
       List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
 //      replaceRepeatedIdentifiers(tokenSentences);
-      components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.get(0).getType()).buildSentence(sentence)).collect(Collectors.toList());
+      components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.getFirst().getType()).buildSentence(sentence)).collect(Collectors.toList());
 
-      return components.contains(null) ? null : components;
+      return components.contains(null) ? List.of() : components;
     } catch (NullPointerException e){
-      return null;
+      return List.of();
     }
   }
 
   private List<List<Token>> getSentencesWithTokens(List<Token> tokens) {
-    int i = 0, j = 0;
     List<List<Token>> sentences = new ArrayList<>();
-    while(i < tokens.size()){
-      while(tokens.get(j).getType() != SEMICOLON) ++j;
-      sentences.add(tokens.subList(i,++j));
-      i = j;
-      if(i == tokens.size()) break;
+    int i = 0;
+    for (int j = 0; j < tokens.size() ; j++) {
+      if(tokens.get(j).getType() == SEMICOLON) {
+        sentences.add(tokens.subList(i,j));
+        i=j+1;
+        if(i>=tokens.size()) break;
+      }
     }
     return sentences;
   }
