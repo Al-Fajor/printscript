@@ -1,0 +1,2 @@
+{"tokens": "LET -> IDENTIFIER(\"a\") -> IDENTIFIER(\"b\") -> TYPE(\"number\") -> ASSIGNATION -> LITERAL(5) -> SEMICOLON",
+  "ast_list":[]}
