@@ -6,7 +6,7 @@
           "name": "println",
           "identifierType": "function"
         },
-        "parameters": {
+        "params": {
           "1_literal": {
             "value": 5
           }

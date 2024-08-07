@@ -6,7 +6,7 @@
           "name": "println",
           "identifierType": "function"
         },
-        "parameters": {
+        "params": {
           "binaryExpression": {
             "op": "+",
             "1_literal": {
