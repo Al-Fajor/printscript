@@ -9,7 +9,12 @@ public class PrintScriptInterpreter implements Interpreter {
     private final StrategySelector strategySelector;
 
     public PrintScriptInterpreter() {
-        state = new InterpreterState();
+        state = new PrintScriptState();
+        strategySelector = new StrategySelector(state);
+    }
+
+    public PrintScriptInterpreter(InterpreterState state) {
+        this.state = state;
         strategySelector = new StrategySelector(state);
     }
 

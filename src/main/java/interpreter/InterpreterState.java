@@ -3,55 +3,23 @@ package interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InterpreterState {
-    private Map<String, Variable<Double>> numericVariables;
-    private Map<String, Variable<String>> stringVariables;
-    private Map<String, Function> functions;
+public interface InterpreterState {
 
-    public InterpreterState() {
-        numericVariables = new HashMap<>();
-        stringVariables = new HashMap<>();
-        functions = new HashMap<>();
-        functions.put("println", new PrintlnFunction(this));
-    }
+    void addNumericVariable(Variable<Double> numericVariable);
 
-    public void addNumericVariable(Variable<Double> numericVariable) {
-        numericVariables.put(numericVariable.getName(), numericVariable);
-    }
+    Variable<Double> getNumericVariable(String name);
 
-    public Variable<Double> getNumericVariable(String name) {
-        return numericVariables.get(name);
-    }
+    void setNumericVariable(String name, Double value);
 
-    public void setNumericVariable(String name, Double value) {
-        numericVariables.get(name).setValue(value);
-    }
+    void addStringVariable(Variable<String> stringVariable);
 
-    public void addStringVariable(Variable<String> stringVariable) {
-        stringVariables.put(stringVariable.getName(), stringVariable);
-    }
+    Variable<String> getStringVariable(String name);
 
-    public Variable<String> getStringVariable(String name) {
-        return stringVariables.get(name);
-    }
+    void setStringVariable(String name, String value);
 
-    public void setStringVariable(String name, String value) {
-        stringVariables.get(name).setValue(value);
-    }
+    VariableType getVariableType(String name);
 
-    public VariableType getVariableType(String name) {
-        if (numericVariables.get(name) != null) {
-            return VariableType.NUMBER;
-        } else {
-            return VariableType.STRING;
-        }
-    }
+    Function getFunction(String name);
 
-    public Function getFunction(String name) {
-        return functions.get(name);
-    }
-
-    public void addFunction(Function function) {
-        functions.put(function.getName(), function);
-    }
+    void addFunction(Function function);
 }
