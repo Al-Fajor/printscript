@@ -28,15 +28,23 @@ public class TestBuilder {
   }
 
   private boolean equalLists(List<AstComponent> expectedList, List<AstComponent> actualList) {
-    for(int i = 0; i < expectedList.size(); i++){
-      if(!expectedList.get(i).equals(actualList.get(i))){
-        System.out.println("Expected: " + printWholeList(expectedList));
-        System.out.println("Actual: " + printWholeList(actualList));
-        return false;
+      if(expectedList.size() != actualList.size()) return error(expectedList, actualList);
+      for(int i = 0; i < expectedList.size(); i++){
+        if(!expectedList.get(i).equals(actualList.get(i))){
+          return error(expectedList, actualList);
+        }
       }
-    }
-    return true;
+      return true;
+
+
   }
+
+  private boolean error(List<AstComponent> expectedList, List<AstComponent> actualList){
+    System.out.println("Expected: " + printWholeList(expectedList));
+    System.out.println("Actual: " + printWholeList(actualList));
+    return false;
+  }
+
 
   private String printWholeList(List<AstComponent> expectedList) {
     StringBuilder builder = new StringBuilder();

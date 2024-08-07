@@ -17,7 +17,7 @@ public class LetStrategy implements SentenceStrategy{
   @Override
   public AstComponent buildSentence(List<Token> tokens) {
     final SentenceValidator validator = new LetSentenceValidator();
-    if(tokens.get(0).getType() != LET || !validator.isValidSentence(tokens)) return null;
+    if(tokens.getFirst().getType() != LET || !validator.isValidSentence(tokens)) return null;
     return getFinalSentence(tokens);
   }
 
@@ -25,11 +25,12 @@ public class LetStrategy implements SentenceStrategy{
     TokenMapper mapper = new TokenMapper();
     //May need to change method
     Token type = tokens.get(3), identifier = tokens.get(1);
+    System.out.println("Type: " + type.getValue());
+    DeclarationType declarationType = mapper.getDeclarationType(mapper.clearInvCommas(type.getValue()));
 
-    DeclarationType declarationType = mapper.getDeclarationType(type.getValue().substring(1, type.getValue().length() - 1));
-
-    AstComponent declaration = new Declaration(declarationType, identifier.getValue().substring(1, identifier.getValue().length() - 1));
-    return new Assignation(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).get(0));
+    System.out.println("Identifier: " + identifier.getValue());
+    AstComponent declaration = new Declaration(declarationType, mapper.clearInvCommas(identifier.getValue()));
+    return new Assignation(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).getFirst());
   }
 
 //  private int getIndexByTokenType(TokenType type, List<Token> tokens) {
