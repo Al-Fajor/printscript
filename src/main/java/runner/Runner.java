@@ -20,6 +20,32 @@ public class Runner {
   public void run(String code){
     Lexer lexer = new PrintScriptLexer();
     SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
+    SemanticAnalyzer semanticAnalyzer = getSemanticAnalyzer();
+    Interpreter interpreter = new PrintScriptInterpreter();
+
+    SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexer.lex(code));
+
+    if(syntaxResult.isFailure() && syntaxResult instanceof SyntaxError){
+      System.out.println(((SyntaxError) syntaxResult).getReason());
+      return;
+    }
+
+    List<AstComponent> components = syntaxResult.getComponents();
+    SemanticResult result = semanticAnalyzer.analyze(components);
+
+    if(result.isFailure()){
+      System.out.println("Semantic error");
+    }
+    else{
+      interpreter.interpret(components);
+    }
+
+
+
+
+  }
+
+  private static SemanticAnalyzer getSemanticAnalyzer() {
     SemanticAnalyzer semanticAnalyzer;
 
     {
@@ -40,24 +66,6 @@ public class Runner {
       );
       semanticAnalyzer = new AnalyzerImpl(resolverMap, env);
     }
-    Interpreter interpreter = new PrintScriptInterpreter();
-
-    SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexer.lex(code));
-    if(syntaxResult.isFailure() && syntaxResult instanceof SyntaxError){
-      System.out.println(((SyntaxError) syntaxResult).getReason());
-      return;
-    }
-    List<AstComponent> components = syntaxResult.getComponents();
-    SemanticResult result = semanticAnalyzer.analyze(components);
-    if(result.isFailure()){
-      System.out.println("Semantic error");
-    }
-    else{
-      interpreter.interpret(components);
-    }
-
-
-
-
+    return semanticAnalyzer;
   }
 }

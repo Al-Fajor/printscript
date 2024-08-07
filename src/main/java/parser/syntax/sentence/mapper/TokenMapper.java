@@ -61,8 +61,6 @@ public class TokenMapper {
     return map.get(token.getType());
   }
 
-
-
   private Literal<?> translateToLiteral(String value){
     if(value.contains("\"") || !isNumeric(value)){
         return new Literal<>(clearInvCommas(value));
@@ -71,7 +69,7 @@ public class TokenMapper {
   }
 
   private boolean isNumeric(String value) {
-    Pattern pattern = Pattern.compile("\\d");
+    Pattern pattern = Pattern.compile("[0-9]+");
     return pattern.matcher(value).matches();
   }
 
@@ -81,6 +79,8 @@ public class TokenMapper {
   }
 
   private BinaryOperator mapOperator(String value) {
+    System.out.println("Operator: " + value);
+
     Map<String, BinaryOperator> map = Map.of(
       "+", BinaryOperator.SUM,
       "-", BinaryOperator.SUBTRACTION,
