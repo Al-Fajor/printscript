@@ -27,16 +27,15 @@ public class FileParser {
 
     if(tempTokenList.size() == 1) return List.of();
 
-    return tempTokenList.stream().map(this::getTokenType).map(pair -> new Token(pair.first, 0, 0, pair.second)).collect(Collectors.toList());
+    return tempTokenList.stream().map(this::getToken).map(pair -> new Token(pair.first, 0, 0, pair.second)).collect(Collectors.toList());
   }
 
-  private Pair<BaseTokenTypes, String> getTokenType(String token) {
-    if(token.lastIndexOf('(') == -1){
+  private Pair<BaseTokenTypes, String> getToken(String token) {
+    if(token.indexOf('(') == -1){
       return new Pair<>(BaseTokenTypes.valueOf(token), "");
     }
-    String tokenName = token.substring(0, token.lastIndexOf('('));
-    String tokenValue = token.substring(token.lastIndexOf('(') + 1, token.lastIndexOf(')'));
-
+    String tokenName = token.substring(0, token.indexOf('('));
+    String tokenValue = token.substring(token.indexOf('(') + 1, token.lastIndexOf(')'));
     return new Pair<>(BaseTokenTypes.valueOf(tokenName), tokenValue);
 
   }

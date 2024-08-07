@@ -3,6 +3,8 @@ package parser.syntax;
 import model.AstBuilder;
 import model.AstComponent;
 import model.Token;
+import parser.syntax.result.SyntaxError;
+import parser.syntax.result.SyntaxResult;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,9 +18,14 @@ public class TestBuilder {
     FileParser parser = new FileParser();
     List<Token> tokens = parser.getTokens(filePath);
 
-    List<AstComponent> actualList = new SyntaxAnalyzerImpl().analyze(tokens);
+    SyntaxResult result = new SyntaxAnalyzerImpl().analyze(tokens);
     List<AstComponent> expectedList = getASTFromJSON(filePath);
 
+    if(result instanceof SyntaxError) {
+      return expectedList.isEmpty();
+    }
+
+    List<AstComponent> actualList = result.getComponents();
 
     return compareASTs(expectedList, actualList);
   }

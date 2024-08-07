@@ -25,12 +25,12 @@ public class LetStrategy implements SentenceStrategy{
     TokenMapper mapper = new TokenMapper();
     //May need to change method
     Token type = tokens.get(3), identifier = tokens.get(1);
-    System.out.println("Type: " + type.getValue());
+//    System.out.println("Type: " + type.getValue());
     DeclarationType declarationType = mapper.getDeclarationType(mapper.clearInvCommas(type.getValue()));
 
-    System.out.println("Identifier: " + identifier.getValue());
+//    System.out.println("Identifier: " + identifier.getValue());
     AstComponent declaration = new Declaration(declarationType, mapper.clearInvCommas(identifier.getValue()));
-    return new Assignation(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).getFirst());
+    return new Assignation(declaration, mapper.buildFunctionArgument(tokens.subList(5, tokens.size())).getFirst());
   }
 
 //  private int getIndexByTokenType(TokenType type, List<Token> tokens) {
