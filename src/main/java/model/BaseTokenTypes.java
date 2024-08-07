@@ -13,4 +13,5 @@ public enum BaseTokenTypes implements TokenType {
     OPERATOR,
     PRINTLN,
     SEPARATOR,
+    FUNCTION,
 }

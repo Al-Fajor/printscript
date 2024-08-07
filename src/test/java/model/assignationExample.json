@@ -1,0 +1,26 @@
+{
+  "ast_list": [
+    {
+      "assignation": {
+        "declaration": {
+          "declarationType": "String",
+          "name": "a"
+        },
+        "literal": {
+          "value": "Hi"
+        }
+      }
+    },
+    {
+      "assignation": {
+        "declaration": {
+          "declarationType": "String",
+          "name": "a"
+        },
+        "literal": {
+          "value": "Hi"
+        }
+      }
+    }
+  ]
+}
