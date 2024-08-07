@@ -14,12 +14,12 @@ public class PrintLineStrategy implements SentenceStrategy {
   public AstComponent buildSentence(List<Token> tokens) {
     SentenceValidator validator = new PrintLineSentenceValidator();
     
-    if(tokens.get(0).getType() != PRINTLN || !validator.isValidSentence(tokens)) return null;
+    if(tokens.getFirst().getType() != PRINTLN || !validator.isValidSentence(tokens)) return null;
     return getFinalSentence(tokens);
   }
 
   private AstComponent getFinalSentence(List<Token> tokens) {
     return new FunctionCall(new Identifier("println", IdentifierType.FUNCTION),
-      new Parameters(new TokenMapper().buildArgument(tokens.subList(1, tokens.size()-1))));
+      new Parameters(new TokenMapper().buildArgument(tokens.subList(1, tokens.size()))));
   }
 }

@@ -22,6 +22,7 @@ public class TokenMapper {
         arguments.add(mapToken(token));
       }
       if(token.getType() == OPERATOR){
+        if(i+1>=tokens.size() || i-1<0) continue;
         arguments.add(new BinaryExpression(mapOperator(token.getValue()),
           mapToken(tokens.get(i-1)),mapToken(tokens.get(i+1))));
       }
@@ -33,7 +34,7 @@ public class TokenMapper {
   public AstComponent mapToken(Token token) {
     Map<TokenType, AstComponent> map = Map.of(
       LITERAL, translateToLiteral(token.getValue()),
-      IDENTIFIER, new Identifier(cleanInvCommas(token.getValue()), IdentifierType.VARIABLE)
+      IDENTIFIER, new Identifier(clearInvCommas(token.getValue()), IdentifierType.VARIABLE)
     );
     return map.get(token.getType());
   }
@@ -42,7 +43,7 @@ public class TokenMapper {
 
   private Literal<?> translateToLiteral(String value){
     if(value.contains("\"")){
-        return new Literal<>(cleanInvCommas(value));
+        return new Literal<>(clearInvCommas(value));
       }
       return new Literal<>(Integer.valueOf(value));
   }
@@ -71,10 +72,12 @@ public class TokenMapper {
     return declarationTypeMap.get(type.toLowerCase());
   }
 
-  private String cleanInvCommas(String value){
+  public String clearInvCommas(String value){
     if(value.charAt(0) == '\"' && value.charAt(value.length()-1) == '\"'){
       return value.substring(1, value.length()-1);
     }
     return value;
   }
+
+
 }

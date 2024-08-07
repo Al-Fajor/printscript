@@ -34,7 +34,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
     List<List<Token>> sentences = new ArrayList<>();
     int i = 0;
     for (int j = 0; j < tokens.size() ; j++) {
-      if(tokens.get(j).getType() == SEMICOLON) {
+      if(tokens.get(j).getType() ==SEMICOLON) {
         sentences.add(tokens.subList(i,j));
         i=j+1;
         if(i>=tokens.size()) break;
