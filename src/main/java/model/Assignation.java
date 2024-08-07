@@ -31,4 +31,13 @@ public class Assignation implements AstComponent {
   public int hashCode() {
     return Objects.hash(leftComponent, rightComponent);
   }
+
+  @Override
+  public String
+  toString() {
+    return "Assignation{" +
+      "leftComponent=" + leftComponent +
+      ", rightComponent=" + rightComponent +
+      '}';
+  }
 }

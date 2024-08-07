@@ -95,7 +95,7 @@ public class ASTBuilder {
             "params"
           )
         );
-      case "parameters":
+      case "params":
         List<AstComponent> parameters = new ArrayList<>();
         for (String key: astComponentJson.keySet()){
           parameters.add(mapToAstComponent(astComponentJson.getJSONObject(key), key));

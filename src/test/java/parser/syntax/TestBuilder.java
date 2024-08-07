@@ -12,31 +12,38 @@ public class TestBuilder {
     return new ASTBuilder().buildFromJson(filePath);
   }
 
-  public boolean testSyntax(String filePath, ExpectedResult expectedResult) throws IOException {
+  public boolean testSyntax(String filePath) throws IOException {
     FileParser parser = new FileParser();
     List<Token> tokens = parser.getTokens(filePath);
-    System.out.println(tokens);
 
     List<AstComponent> actualList = new SyntaxAnalyzerImpl().analyze(tokens);
     List<AstComponent> expectedList = getASTFromJSON(filePath);
 
 
-    return expectedResult == compareASTs(expectedList, actualList);
+    return compareASTs(expectedList, actualList);
   }
 
-  private ExpectedResult compareASTs(List<AstComponent> expectedList, List<AstComponent> actualList) {
-    if(expectedList == null || actualList == null){
-      return ExpectedResult.ERROR;
-    }
-    return equalLists(expectedList, actualList)? ExpectedResult.SUCCESS : ExpectedResult.FAILURE;
+  private boolean compareASTs(List<AstComponent> expectedList, List<AstComponent> actualList) {
+    return equalLists(expectedList, actualList);
   }
 
   private boolean equalLists(List<AstComponent> expectedList, List<AstComponent> actualList) {
     for(int i = 0; i < expectedList.size(); i++){
       if(!expectedList.get(i).equals(actualList.get(i))){
+        System.out.println("Expected: " + printWholeList(expectedList));
+        System.out.println("Actual: " + printWholeList(actualList));
         return false;
       }
     }
     return true;
+  }
+
+  private String printWholeList(List<AstComponent> expectedList) {
+    StringBuilder builder = new StringBuilder();
+    for (AstComponent astComponent : expectedList) {
+      builder.append(astComponent);
+    }
+    return builder.toString();
+
   }
 }

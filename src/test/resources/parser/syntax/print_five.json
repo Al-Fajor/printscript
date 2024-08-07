@@ -1,0 +1,16 @@
+{"tokens": "PRINTLN -> LITERAL(5) -> SEMICOLON" ,
+  "ast_list":[
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
+        },
+        "parameters": {
+          "1_literal": {
+            "value": 5
+          }
+        }
+      }
+    }
+  ]}

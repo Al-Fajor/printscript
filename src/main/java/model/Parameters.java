@@ -26,4 +26,11 @@ public class Parameters implements AstComponent {
   public int hashCode() {
     return Objects.hashCode(parameters);
   }
+
+  @Override
+  public String toString() {
+    return "Parameters{" +
+      "parameters=" + parameters +
+      '}';
+  }
 }

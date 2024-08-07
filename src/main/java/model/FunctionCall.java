@@ -31,4 +31,12 @@ public class FunctionCall implements AstComponent {
   public int hashCode() {
     return Objects.hash(identifier, parameters);
   }
+
+  @Override
+  public String toString() {
+    return "FunctionCall{" +
+      "identifier=" + identifier +
+      ", parameters=" + parameters +
+      '}';
+  }
 }

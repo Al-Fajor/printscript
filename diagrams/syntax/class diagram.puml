@@ -6,7 +6,7 @@ interface SyntaxAnalyzer{
 class SyntaxAnalyzerImpl implements SyntaxAnalyzer
 
 interface SentenceStrategy{
-    +buildSentenceFromFirstToken(List<Token> tokens): AstComponent
+    +buildSentence(List<Token> tokens): AstComponent
 }
 
 class LetStrategy implements SentenceStrategy
@@ -17,7 +17,12 @@ class PrintLineStrategy implements SentenceStrategy
 
 interface AstComponent
 
+interface SentenceValidator{
+    +isValidSentence(List<Token> tokens): boolean
+}
+
 'Relations
 SyntaxAnalyzer -> AstComponent
 SyntaxAnalyzer --> SentenceStrategy
+SentenceValidator <- SentenceStrategy
 @enduml

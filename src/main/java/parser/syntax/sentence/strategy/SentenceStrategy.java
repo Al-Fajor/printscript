@@ -1,4 +1,4 @@
-package parser.syntax.sentence;
+package parser.syntax.sentence.strategy;
 
 import model.AstComponent;
 import model.Token;

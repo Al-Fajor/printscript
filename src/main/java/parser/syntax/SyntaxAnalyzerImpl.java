@@ -1,7 +1,7 @@
 package parser.syntax;
 
 import model.*;
-import parser.syntax.sentence.*;
+import parser.syntax.sentence.strategy.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,16 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
   }
 
   private List<AstComponent> buildSentences(List<Token> tokens) {
-    List<AstComponent> components;
-    List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
-    components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.get(0).getType()).buildSentence(sentence)).collect(Collectors.toList());
-    return components;
+    try{
+      List<AstComponent> components;
+      List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
+//      replaceRepeatedIdentifiers(tokenSentences);
+      components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.get(0).getType()).buildSentence(sentence)).collect(Collectors.toList());
+
+      return components.contains(null) ? null : components;
+    } catch (NullPointerException e){
+      return null;
+    }
   }
 
   private List<List<Token>> getSentencesWithTokens(List<Token> tokens) {
