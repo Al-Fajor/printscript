@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class BinaryExpression implements AstComponent {
     private final BinaryOperator operator;
     private final AstComponent leftComponent;
@@ -22,4 +24,17 @@ public class BinaryExpression implements AstComponent {
     public AstComponent getRightComponent() {
         return rightComponent;
     }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    BinaryExpression that = (BinaryExpression) o;
+    return operator == that.operator && Objects.equals(leftComponent, that.leftComponent) && Objects.equals(rightComponent, that.rightComponent);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(operator, leftComponent, rightComponent);
+  }
 }
