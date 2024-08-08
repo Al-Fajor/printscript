@@ -1,4 +1,4 @@
-{"tokens": "PRINTLN -> LITERAL(2) -> OPERATOR(+) -> LITERAL(2) -> SEMICOLON" ,
+{"tokens": "PRINTLN -> SEPARATOR(\"(\") ->LITERAL(2) -> OPERATOR(+) -> LITERAL(2) -> SEPARATOR(\")\") -> SEMICOLON" ,
   "ast_list": [
     {
       "functionCall": {

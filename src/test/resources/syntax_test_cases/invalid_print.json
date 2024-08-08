@@ -1,2 +1,2 @@
-{"tokens": "PRINTLN -> OPERATOR(+) -> SEMICOLON" ,
+{"tokens": "PRINTLN -> SEPARATOR(\"(\") -> OPERATOR(+) -> SEPARATOR(\")\") -> SEMICOLON" ,
   "ast_list":[]}
