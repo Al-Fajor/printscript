@@ -1,8 +1,5 @@
 package interpreter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public interface InterpreterState {
 
     void addNumericVariable(Variable<Double> numericVariable);

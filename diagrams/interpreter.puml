@@ -1,57 +1,71 @@
 @startuml
-interface Interpreter {
-    +void interpret(List<AstComponent> astList)
-}
-class PrintScriptInterpreter implements Interpreter {
-    -InterpreterState state
-}
-class InterpreterState {
-    setters y getters
-
-}
 PrintScriptInterpreter *-- InterpreterState
+PrintScriptInterpreter *-- StrategySelector
+InterpreterState o-- Function
+InterpreterState o-- Variable
+Variable *-- VariableType
+ExpressionEvaluator *- ExpressionResult
+StrategySelector o-- InterpreterStrategy
+InterpreterStrategy o--- ExpressionEvaluator
+interface Interpreter {
+    +interpret(AstComponent[]): void
+}
+interface Function {
+    +executeFunction(Parameters): void
 
+}
+interface InterpreterState {
+    +addNumericVariable(Variable<Double>): void
+    +getNumericVariable(String name): Variable<Double>
+    +setNumericVariable(String name, Double value): void
+    +addStringVariable(Variable<String>): void
+    +getStringVariable(String name): Variable<String>
+    +setStringVariable(String name, String value): void
+    +getVariableType(String name): VariableType
+    +getFunction(String name): Function
+    +addFunction(Function): void
+}
+class AstFunction implements Function
+class PrintlnFunction implements Function
+class PrintScriptInterpreter implements Interpreter
+class PrintScriptState implements InterpreterState {
+    -Map<String, Variable<Double>> numVariables
+    -Map<String, Variable<String>> strVariables
+    -Map<String, Function> functions
+}
+class StrategySelector {
+    +execute(AstComponent): void
+}
 class Variable<T> {
-    -VariableType type
-    -String name
+    -VariableType
     -T value
-    setters y getters
+    -String name
 }
 enum VariableType {
     NUMBER
     STRING
+    BOOLEAN
 }
-Variable *-- VariableType
-InterpreterState o- Variable
-
-class Function {
-    +executeFunction
+class BinaryExpressionEvaluator implements ExpressionEvaluator
+class ComponentEvaluator implements ExpressionEvaluator
+class ConditionalEvaluator implements ExpressionEvaluator
+class ExpressionResult {
+    -VariableType
+    -String stringResult
+    -Double numericResult
+    -Boolean boolResult
 }
-
-InterpreterState o- Function
-
-class InnerState
-
-interface InterpreterStrategy {
-    +void execute(AstComponent astComponent)
+class IdentifierEvaluator implements ExpressionEvaluator
+class LiteralEvaluator implements ExpressionEvaluator
+interface ExpressionEvaluator {
+    +evaluate(AstComponent): ExpressionResult
 }
-class StrategySelector {
-    -InterpreterState state
-    -Map<AstComponent, InterpreterStrategy> strategyMap
-    +void execute(AstComponent astComponent)
-}
-StrategySelector *- InterpreterState
-class DeclarationStrategy implements InterpreterStrategy
 class AssignationStrategy implements InterpreterStrategy
-class BinaryExpressionStrategy implements InterpreterStrategy
-class ConditionalStrategy implements InterpreterStrategy
+class DeclarationStrategy implements InterpreterStrategy
 class FunctionCallStrategy implements InterpreterStrategy
-class IdentifierStrategy implements InterpreterStrategy
 class IfStatementStrategy implements InterpreterStrategy
-class LiteralStrategy implements InterpreterStrategy
 class ParametersStrategy implements InterpreterStrategy
-Function -* FunctionCallStrategy
-
-PrintScriptInterpreter *-- StrategySelector
-StrategySelector *- InterpreterStrategy
+interface InterpreterStrategy {
+    +execute(AstComponent): void
+}
 @enduml
