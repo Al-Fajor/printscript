@@ -1,7 +1,6 @@
 package interpreter;
 
 public interface InterpreterState {
-
     void addNumericVariable(Variable<Double> numericVariable);
 
     Variable<Double> getNumericVariable(String name);

@@ -15,7 +15,7 @@ public class PrintScriptInterpreter implements Interpreter {
 
     public PrintScriptInterpreter(InterpreterState state) {
         this.state = state;
-        strategySelector = new StrategySelector(state);
+        this.strategySelector = new StrategySelector(state);
     }
 
     @Override
