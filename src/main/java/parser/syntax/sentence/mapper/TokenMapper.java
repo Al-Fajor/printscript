@@ -11,7 +11,7 @@ import static model.BaseTokenTypes.*;
 import static model.BaseTokenTypes.OPERATOR;
 
 public class TokenMapper {
-  public List<AstComponent> buildFunctionArgument(List<Token> tokens) {
+  public List<AstComponent> buildArgument(List<Token> tokens) {
     List<AstComponent> arguments = new ArrayList<>();
     for (int i = 0; i < tokens.size(); i++) {
       Token token = tokens.get(i);
@@ -31,16 +31,15 @@ public class TokenMapper {
 
       if(token.getType() == SEPARATOR){
         if(token.getValue().equals("\"(\"") || token.getValue().equals("(")){
-          return buildFunctionArgument(tokens.subList(i+1, findFirstClosingSeparator(tokens)));
+          return buildArgument(tokens.subList(i+1, findLastClosingSeparator(tokens)));
         }
       }
-      //TODO: REEVALUATE FUNCTION CASE, MAY NEED TO ADD BRACKETS AND BRACES
     }
     return arguments;
   }
 
-  private int findFirstClosingSeparator(List<Token> tokens) {
-    for (int i = 0; i < tokens.size(); i++) {
+  private int findLastClosingSeparator(List<Token> tokens) {
+    for (int i = tokens.size()-1; i >0; i--) {
       Token token = tokens.get(i);
       if (token.getType() == SEPARATOR && (token.getValue().equals(")") || token.getValue().equals("\")\""))) {
         return i;
@@ -79,7 +78,7 @@ public class TokenMapper {
   }
 
   private BinaryOperator mapOperator(String value) {
-    System.out.println("Operator: " + value);
+//    System.out.println("Operator: " + value);
 
     Map<String, BinaryOperator> map = Map.of(
       "+", BinaryOperator.SUM,
@@ -88,15 +87,6 @@ public class TokenMapper {
       "/", BinaryOperator.DIVISION
     );
     return map.get(value);
-  }
-
-  public DeclarationType getDeclarationType(String type) {
-    Map<String, DeclarationType> declarationTypeMap = Map.of(
-      "number", DeclarationType.NUMBER,
-      "string", DeclarationType.STRING,
-      "function", DeclarationType.FUNCTION
-    );
-    return declarationTypeMap.get(type.toLowerCase());
   }
 
   public String clearInvCommas(String value){

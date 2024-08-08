@@ -4,7 +4,7 @@ import model.*;
 import parser.syntax.result.SyntaxError;
 import parser.syntax.result.SyntaxResult;
 import parser.syntax.result.SyntaxSuccess;
-import parser.syntax.sentence.strategy.*;
+import parser.syntax.sentence.builder.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,22 +22,31 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
 
   private SyntaxResult buildSentences(List<Token> tokens) {
     try{
-      List<AstComponent> components;
       List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
 //      replaceRepeatedIdentifiers(tokenSentences);
-      components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.getFirst().getType()).buildSentence(sentence)).collect(Collectors.toList());
+      List<AstComponent> components = getComponents(tokenSentences);
 
-      return components.contains(null) ?
-        new SyntaxError("Invalid sentence at index: " + components.indexOf(null) + ";\n" +
-          " Starting token: " + tokenSentences.get(components.indexOf(null)).getFirst()) :
-        new SyntaxSuccess(components);
+      return getResult(components, tokenSentences);
 
     } catch (NullPointerException e){
       return new SyntaxError("Invalid tokens");
     }
   }
 
-  private List<List<Token>> getSentencesWithTokens(List<Token> tokens) {
+    private SyntaxResult getResult(List<AstComponent> components, List<List<Token>> tokenSentences) {
+        return components.contains(null) ?
+                new SyntaxError("Invalid sentence at index: " + components.indexOf(null) + ";\n" +
+                        " Starting token: " + tokenSentences.get(components.indexOf(null)).getFirst()) :
+                new SyntaxSuccess(components);
+    }
+
+    private List<AstComponent> getComponents(List<List<Token>> tokenSentences) {
+        return tokenSentences.stream().map(sentence ->
+                initialTokenMap().get(sentence.getFirst().getType()).
+                        buildSentence(sentence)).collect(Collectors.toList());
+    }
+
+    private List<List<Token>> getSentencesWithTokens(List<Token> tokens) {
     List<List<Token>> sentences = new ArrayList<>();
     int i = 0;
     for (int j = 0; j < tokens.size() ; j++) {
@@ -51,12 +60,12 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
   }
 
 
-  private Map<? extends TokenType, ? extends SentenceStrategy> initialTokenMap(){
+  private Map<? extends TokenType, ? extends SentenceBuilder> initialTokenMap(){
     return Map.of(
-      LET, new LetStrategy(),
-      IF, new IfStrategy(),
-      ELSE, new ElseStrategy(),
-      PRINTLN, new FunctionCallStrategy()
+      LET, new LetBuilder(),
+      IF, new IfBuilder(),
+      ELSE, new ElseBuilder(),
+      PRINTLN, new FunctionCallBuilder()
     );
   }
 
