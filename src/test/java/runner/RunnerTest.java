@@ -19,4 +19,12 @@ class RunnerTest {
       "println(x - 1);"+
       "println(x + 1);");
   }
+
+    @Test
+    public void testRunner3(){
+        runner.run("let x: number = 1 + (2 + (3 + 4)); " +
+                "println(x);"+
+                "println(x + 1);");
+    }
+
 }

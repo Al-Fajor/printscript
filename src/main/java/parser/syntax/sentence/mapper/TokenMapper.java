@@ -96,5 +96,17 @@ public class TokenMapper {
     return value;
   }
 
+    public boolean matchesSeparatorType(Token token, String separatorType){
+        if(token.getType() != SEPARATOR){
+            return false;
+        }
+        if(separatorType.equals("opening")){
+            return List.of("(", "{").contains(new TokenMapper().clearInvCommas(token.getValue()));
+        }
+        if(separatorType.equals("closing")){
+            return List.of(")", "}").contains(new TokenMapper().clearInvCommas(token.getValue()));
+        }
+        return false;
+    }
 
 }
