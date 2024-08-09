@@ -34,9 +34,22 @@ interface SentenceValidator{
 class LetSentenceValidator implements SentenceValidator
 class FunctionSentenceValidator implements SentenceValidator
 
+class TokenMapper {
++ buildArgument(List<Token> tokens): List<AstComponent>
++ matchesSeparatorType(Token token, String separatorType): boolean
++ mapToken(Token token): AstComponent
+}
+
 'Relations
 SyntaxAnalyzer --> AstComponent
 SyntaxAnalyzer --> SentenceBuilder
 SentenceValidator <- SentenceBuilder
 SyntaxAnalyzer --> SyntaxResult
+
+TokenMapper <-- FunctionCallBuilder
+TokenMapper <-- LetBuilder
+TokenMapper <-- ReassignationBuilder
+TokenMapper <-- LetSentenceValidator
+TokenMapper <-- FunctionSentenceValidator
+
 @enduml
