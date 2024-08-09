@@ -4,7 +4,6 @@ import model.AstBuilder;
 import model.AstComponent;
 import model.Token;
 import parser.syntax.analyzer.SyntaxAnalyzerImpl;
-import parser.syntax.result.SyntaxError;
 import parser.syntax.result.SyntaxResult;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class TestBuilder {
     SyntaxResult result = new SyntaxAnalyzerImpl().analyze(tokens);
     List<AstComponent> expectedList = getASTFromJSON(filePath);
 
-    if(result instanceof SyntaxError) {
+    if(result.isFailure()) {
       return expectedList.isEmpty();
     }
 
