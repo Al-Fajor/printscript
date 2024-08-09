@@ -38,14 +38,6 @@ public class TokenMapper {
     return arguments;
   }
 
-  public String clearInvCommas(String value){
-    if(value.isEmpty()) return value;
-    if(value.charAt(0) == '\"' && value.charAt(value.length()-1) == '\"'){
-      return value.substring(1, value.length()-1);
-    }
-    return value;
-  }
-
   public boolean matchesSeparatorType(Token token, String separatorType){
     if(token.getType() != SEPARATOR){
       return false;
@@ -111,6 +103,14 @@ public class TokenMapper {
       "/", BinaryOperator.DIVISION
     );
     return map.get(value);
+  }
+
+  private String clearInvCommas(String value){
+    if(value.isEmpty()) return value;
+    if(value.charAt(0) == '\"' && value.charAt(value.length()-1) == '\"'){
+      return value.substring(1, value.length()-1);
+    }
+    return value;
   }
 
 }
