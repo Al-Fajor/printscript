@@ -1,19 +1,29 @@
 @startuml
 
 interface SyntaxAnalyzer{
-    +analyze(List<Token> tokens): List<AstComponent>
+    +analyze(List<Token> tokens): SyntaxResult
 }
 class SyntaxAnalyzerImpl implements SyntaxAnalyzer
 
-interface SentenceStrategy{
+interface SentenceBuilder{
     +buildSentence(List<Token> tokens): AstComponent
 }
 
-class LetStrategy implements SentenceStrategy
-class IfStrategy implements SentenceStrategy
-class SimpleAssignationStrategy implements SentenceStrategy
-class ElseStrategy implements SentenceStrategy
-class PrintLineStrategy implements SentenceStrategy
+class LetBuilder implements SentenceBuilder
+class IfBuilder implements SentenceBuilder
+class ReassignationBuilder implements SentenceBuilder
+class ElseBuilder implements SentenceBuilder
+class FunctionCallBuilder implements SentenceBuilder
+
+interface SyntaxResult{
+    +isFailure(): boolean
+    +getComponents(): List<AstComponent>
+}
+
+class SyntaxError implements SyntaxResult
+class SyntaxSuccess implements SyntaxResult{
+-components: List<AstComponent>
+}
 
 interface AstComponent
 
@@ -21,8 +31,12 @@ interface SentenceValidator{
     +isValidSentence(List<Token> tokens): boolean
 }
 
+class LetSentenceValidator implements SentenceValidator
+class FunctionSentenceValidator implements SentenceValidator
+
 'Relations
-SyntaxAnalyzer -> AstComponent
-SyntaxAnalyzer --> SentenceStrategy
-SentenceValidator <- SentenceStrategy
+SyntaxAnalyzer --> AstComponent
+SyntaxAnalyzer --> SentenceBuilder
+SentenceValidator <- SentenceBuilder
+SyntaxAnalyzer --> SyntaxResult
 @enduml

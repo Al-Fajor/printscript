@@ -38,6 +38,38 @@ public class TokenMapper {
     return arguments;
   }
 
+  public String clearInvCommas(String value){
+    if(value.isEmpty()) return value;
+    if(value.charAt(0) == '\"' && value.charAt(value.length()-1) == '\"'){
+      return value.substring(1, value.length()-1);
+    }
+    return value;
+  }
+
+  public boolean matchesSeparatorType(Token token, String separatorType){
+    if(token.getType() != SEPARATOR){
+      return false;
+    }
+    if(separatorType.equals("opening")){
+      return List.of("(", "{").contains(new TokenMapper().clearInvCommas(token.getValue()));
+    }
+    if(separatorType.equals("closing")){
+      return List.of(")", "}").contains(new TokenMapper().clearInvCommas(token.getValue()));
+    }
+    return false;
+  }
+
+  public AstComponent mapToken(Token token) {
+    Map<TokenType, AstComponent> map = Map.of(
+      LITERAL, translateToLiteral(token.getValue()),
+      IDENTIFIER, new Identifier(token.getValue(), IdentifierType.VARIABLE)
+    );
+    return map.get(token.getType());
+  }
+
+
+
+// Private methods
   private int findLastClosingSeparator(List<Token> tokens) {
     for (int i = tokens.size()-1; i >0; i--) {
       Token token = tokens.get(i);
@@ -50,14 +82,6 @@ public class TokenMapper {
 
   private boolean allTokensAreAtomic(List<Token> tokens) {
     return tokens.stream().allMatch(tk -> notCompoundComponent(tk.getType()));
-  }
-
-  public AstComponent mapToken(Token token) {
-    Map<TokenType, AstComponent> map = Map.of(
-      LITERAL, translateToLiteral(token.getValue()),
-      IDENTIFIER, new Identifier(clearInvCommas(token.getValue()), IdentifierType.VARIABLE)
-    );
-    return map.get(token.getType());
   }
 
   private Literal<?> translateToLiteral(String value){
@@ -88,26 +112,5 @@ public class TokenMapper {
     );
     return map.get(value);
   }
-
-  public String clearInvCommas(String value){
-    if(value.isEmpty()) return value;
-    if(value.charAt(0) == '\"' && value.charAt(value.length()-1) == '\"'){
-      return value.substring(1, value.length()-1);
-    }
-    return value;
-  }
-
-    public boolean matchesSeparatorType(Token token, String separatorType){
-        if(token.getType() != SEPARATOR){
-            return false;
-        }
-        if(separatorType.equals("opening")){
-            return List.of("(", "{").contains(new TokenMapper().clearInvCommas(token.getValue()));
-        }
-        if(separatorType.equals("closing")){
-            return List.of(")", "}").contains(new TokenMapper().clearInvCommas(token.getValue()));
-        }
-        return false;
-    }
 
 }

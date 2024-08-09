@@ -20,7 +20,7 @@ public class ReassignationBuilder implements SentenceBuilder{
     TokenMapper mapper = new TokenMapper();
     AstComponent rightHandSide = mapper.buildArgument(tokensFromAssignation).getFirst();
 
-    return new Assignation(new Identifier(mapper.clearInvCommas(identifier.getValue()), IdentifierType.VARIABLE), rightHandSide );
+    return new Assignation(new Identifier(identifier.getValue(), IdentifierType.VARIABLE), rightHandSide );
   }
 
   private int getFirstAssignationIndex(List<Token> tokens) {

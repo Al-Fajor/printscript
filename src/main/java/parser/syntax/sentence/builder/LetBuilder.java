@@ -27,9 +27,9 @@ public class LetBuilder implements SentenceBuilder {
     //May need to change method
     Token type = tokens.get(3), identifier = tokens.get(1);
 
-    DeclarationType declarationType = getDeclarationType(mapper.clearInvCommas(type.getValue()));
+    DeclarationType declarationType = getDeclarationType(type.getValue());
 
-    AstComponent declaration = new Declaration(declarationType, mapper.clearInvCommas(identifier.getValue()));
+    AstComponent declaration = new Declaration(declarationType, identifier.getValue());
     return new Assignation(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).getFirst());
   }
 

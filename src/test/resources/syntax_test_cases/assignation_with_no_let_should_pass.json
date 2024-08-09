@@ -1,4 +1,4 @@
-{"tokens": "IDENTIFIER(\"a\") -> ASSIGNATION -> LITERAL(1) -> SEMICOLON",
+{"tokens": "IDENTIFIER(a) -> ASSIGNATION -> LITERAL(1) -> SEMICOLON",
   "ast_list":[
     {
       "assignation":{
