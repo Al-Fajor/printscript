@@ -3,6 +3,7 @@ package parser.syntax;
 import model.AstBuilder;
 import model.AstComponent;
 import model.Token;
+import parser.syntax.analyzer.SyntaxAnalyzerImpl;
 import parser.syntax.result.SyntaxError;
 import parser.syntax.result.SyntaxResult;
 

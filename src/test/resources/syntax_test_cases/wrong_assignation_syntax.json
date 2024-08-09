@@ -1,0 +1,2 @@
+{"tokens":  "ASSIGNATION -> IDENTIFIER(a)-> SEMICOLON -> LET -> IDENTIFIER(a) -> COLON -> TYPE(number) -> ASSIGNATION -> LITERAL(1) -> SEMICOLON",
+"ast_list":  []}

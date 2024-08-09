@@ -73,7 +73,7 @@ public class TokenMapper {
   }
 
   private boolean notCompoundComponent(TokenType type) {
-    List<TokenType> compoundTypes = List.of(FUNCTION, OPERATOR, SEPARATOR);
+    List<TokenType> compoundTypes = List.of(FUNCTION, OPERATOR, SEPARATOR, ASSIGNATION);
     return !compoundTypes.contains(type);
   }
 
@@ -90,6 +90,7 @@ public class TokenMapper {
   }
 
   public String clearInvCommas(String value){
+    if(value.isEmpty()) return value;
     if(value.charAt(0) == '\"' && value.charAt(value.length()-1) == '\"'){
       return value.substring(1, value.length()-1);
     }

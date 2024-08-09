@@ -1,4 +1,4 @@
-package parser.syntax;
+package parser.syntax.analyzer;
 
 import model.*;
 import parser.syntax.result.SyntaxError;
@@ -23,7 +23,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
   private SyntaxResult buildSentences(List<Token> tokens) {
     try{
       List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
-//      replaceRepeatedIdentifiers(tokenSentences);
+
       List<AstComponent> components = getComponents(tokenSentences);
 
       return getResult(components, tokenSentences);
@@ -36,7 +36,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
     private SyntaxResult getResult(List<AstComponent> components, List<List<Token>> tokenSentences) {
         return components.contains(null) ?
                 new SyntaxError("Invalid sentence at index: " + components.indexOf(null) + ";\n" +
-                        " Starting token: " + tokenSentences.get(components.indexOf(null)).getFirst()) :
+                        "Starting token: " + tokenSentences.get(components.indexOf(null)).getFirst()) :
                 new SyntaxSuccess(components);
     }
 
@@ -50,7 +50,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
     List<List<Token>> sentences = new ArrayList<>();
     int i = 0;
     for (int j = 0; j < tokens.size() ; j++) {
-      if(tokens.get(j).getType() ==SEMICOLON) {
+      if(tokens.get(j).getType() == SEMICOLON) {
         sentences.add(tokens.subList(i,j+1));
         i=j+1;
         if(i>=tokens.size()) break;
@@ -65,7 +65,8 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
       LET, new LetBuilder(),
       IF, new IfBuilder(),
       ELSE, new ElseBuilder(),
-      PRINTLN, new FunctionCallBuilder()
+      PRINTLN, new FunctionCallBuilder(),
+      IDENTIFIER, new ReassignationBuilder()
     );
   }
 

@@ -1,0 +1,14 @@
+{"tokens": "IDENTIFIER(\"a\") -> ASSIGNATION -> LITERAL(1) -> SEMICOLON",
+  "ast_list":[
+    {
+      "assignation":{
+        "1_identifier": {
+          "name": "a",
+          "identifierType": "variable"
+        },
+        "2_literal": {
+          "value": 1
+        }
+      }
+    }
+  ]}
