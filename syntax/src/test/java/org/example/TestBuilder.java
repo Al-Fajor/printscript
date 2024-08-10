@@ -1,8 +1,5 @@
 package org.example;
 
-import model.AstBuilder;
-import model.AstComponent;
-import model.Token;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 

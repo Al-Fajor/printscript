@@ -1,11 +1,5 @@
 package org.example;
 
-import interpreter.Interpreter;
-import interpreter.PrintScriptInterpreter;
-import lexer.Lexer;
-import lexer.PrintScriptLexer;
-import parser.syntax.SyntaxAnalyzer;
-import parser.syntax.SyntaxAnalyzerImpl;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
@@ -56,7 +50,7 @@ public class Runner {
         Parameters.class, new ParametersResolver()
       );
       MapEnvironment env = new MapEnvironment(
-        new HashMap<>(),
+        new HashMap<String, DeclarationType>(),
         Set.of(
           new Signature("println", List.of(DeclarationType.NUMBER)),
           new Signature("println", List.of(DeclarationType.STRING))

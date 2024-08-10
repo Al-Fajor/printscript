@@ -6,6 +6,8 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -15,18 +17,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SyntaxTest {
   String RUN_ONLY = "";
   TestBuilder testBuilder = new TestBuilder();
-  String TEST_CASE_DIRECTORY = "src/test/resources/syntax_test_cases";
+  String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
 
   @TestFactory
   Stream<DynamicTest> syntaxTests() {
     Stream<File> files;
 
-    if (RUN_ONLY.isEmpty()) {
-      File directory = new File(TEST_CASE_DIRECTORY);
-      files = Arrays.stream(Objects.requireNonNull(directory.listFiles()));
+      if (RUN_ONLY.isEmpty()) {
+          Path resourcePath = Paths.get(TEST_CASE_DIRECTORY);
+          File directory = resourcePath.toFile();
+
+          files = Arrays.stream(Objects.requireNonNull(directory.listFiles()));
     }
 
-    else files = Stream.of(new File(TEST_CASE_DIRECTORY + File.separator + RUN_ONLY));
+    else {
+          Path resourcePath = Paths.get(TEST_CASE_DIRECTORY + File.separator + RUN_ONLY);
+          File singleFile = resourcePath.toFile();
+
+          files = Stream.of(singleFile);
+    }
 
     return files.map((File testFile) ->
       DynamicTest.dynamicTest(

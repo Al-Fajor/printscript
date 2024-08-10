@@ -1,8 +1,5 @@
 package org.example;
 
-import model.DeclarationType;
-import model.Identifier;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

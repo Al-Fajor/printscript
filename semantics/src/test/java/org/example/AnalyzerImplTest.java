@@ -6,17 +6,24 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class AnalyzerImplTest {
+//    private static final String RUN_ONLY = "assign_and_print_number.json";
     private static final String RUN_ONLY = "";
 
-    public static final String TEST_CASE_DIRECTORY = "C:\\Users\\tomas\\projects\\ingsis\\src\\test\\resources\\semantic_test_cases";
+    public static final String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
     AstBuilder builder = new AstBuilder();
     AstValidityChecker checker = new AstValidityChecker();
     SemanticAnalyzer semanticAnalyzer;
@@ -45,11 +52,19 @@ class AnalyzerImplTest {
         Stream<File> files;
 
         if (RUN_ONLY.isEmpty()) {
-            File directory = new File(TEST_CASE_DIRECTORY);
-            files = Arrays.stream(directory.listFiles());
+//            File directory = new File(TEST_CASE_DIRECTORY);
+
+            Path resourcePath = Paths.get(TEST_CASE_DIRECTORY);
+            File directory = resourcePath.toFile();
+
+            files = Arrays.stream(Objects.requireNonNull(directory.listFiles()));
         }
 
-        else files = Stream.of(new File(TEST_CASE_DIRECTORY + File.separator + RUN_ONLY));
+        else {
+            Path resourcePath = Paths.get(TEST_CASE_DIRECTORY + File.separator + RUN_ONLY);
+            File singleFile = resourcePath.toFile();
+            files = Stream.of(singleFile);
+        }
 
         return files.map((File testFile) ->
                         DynamicTest.dynamicTest(

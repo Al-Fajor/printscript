@@ -1,8 +1,5 @@
 package org.example;
 
-import model.AstComponent;
-import model.DeclarationType;
-
 public record Resolution(
         SemanticResult result,
         AstComponent resolvedAst

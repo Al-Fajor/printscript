@@ -15,7 +15,7 @@ public class InterpreterTest {
     public void testNumericVariableDeclaration() throws IOException {
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
-        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/declare_numeric_variable.json"));
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/declare_numeric_variable.json"));
         variableExists(state, "num", (Double) null);
     }
 
@@ -23,7 +23,7 @@ public class InterpreterTest {
     public void testStringVariableDeclaration() throws IOException {
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
-        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/declare_string_variable.json"));
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/declare_string_variable.json"));
         variableExists(state, "string", (String) null);
     }
 
@@ -31,7 +31,7 @@ public class InterpreterTest {
     public void testAssignNumericVariable() throws IOException {
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
-        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/assign_numeric_variable.json"));
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/assign_numeric_variable.json"));
         variableExists(state, "num", 7.0);
     }
 
@@ -39,7 +39,7 @@ public class InterpreterTest {
     public void testAssignStringVariable() throws IOException {
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
-        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/assign_string_variable.json"));
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/assign_string_variable.json"));
         variableExists(state, "string", "This is a string");
     }
 
@@ -47,7 +47,7 @@ public class InterpreterTest {
     public void testNumberOperations() throws IOException {
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
-        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/number_operations.json"));
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/number_operations.json"));
         variableExists(state, "num", 46.0);
     }
 
@@ -55,7 +55,7 @@ public class InterpreterTest {
     public void testStringConcatenation() throws IOException {
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
-        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/string_concatenation.json"));
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/string_concatenation.json"));
         variableExists(state, "numberString", "5.0 Cars");
         variableExists(state, "stringString", "Hello World");
     }
@@ -65,7 +65,7 @@ public class InterpreterTest {
         setUpStreams(); // Magic to allow testing of console output
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
-        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/interpreter_test_cases/print_variables.json"));
+        interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/print_variables.json"));
         assertPrints("Ronal Macdonal :D\r\n7.0\r\n"); // using only \n makes the test fail because windows uses different line separators
         restoreStreams(); // More magic for console output testing
     }

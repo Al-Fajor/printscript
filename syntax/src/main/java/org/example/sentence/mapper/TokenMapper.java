@@ -2,14 +2,25 @@ package org.example.sentence.mapper;
 
 import org.example.AstComponent;
 import org.example.BinaryExpression;
+import org.example.BinaryOperator;
+import org.example.DeclarationType;
+import org.example.Identifier;
+import org.example.IdentifierType;
+import org.example.Literal;
 import org.example.Token;
+import org.example.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static org.example.BaseTokenTypes.FUNCTION;
+import static org.example.BaseTokenTypes.IDENTIFIER;
+import static org.example.BaseTokenTypes.LITERAL;
 import static org.example.BaseTokenTypes.OPERATOR;
+import static org.example.BaseTokenTypes.SEMICOLON;
+import static org.example.BaseTokenTypes.SEPARATOR;
 
 public class TokenMapper {
   public List<AstComponent> buildFunctionArgument(List<Token> tokens) {

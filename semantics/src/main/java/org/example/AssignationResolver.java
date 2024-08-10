@@ -1,12 +1,5 @@
 package org.example;
 
-import model.Assignation;
-import model.AstComponent;
-import model.Declaration;
-import model.DeclarationType;
-import model.Identifier;
-import model.Literal;
-
 import java.util.Map;
 
 public class AssignationResolver implements Resolver {
