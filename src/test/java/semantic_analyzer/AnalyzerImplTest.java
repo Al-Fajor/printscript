@@ -10,7 +10,6 @@ import model.Identifier;
 import model.Literal;
 import model.Parameters;
 import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
@@ -28,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AnalyzerImplTest {
     private static final String RUN_ONLY = "";
 
-    public static final String TEST_CASE_DIRECTORY = "C:\\Users\\tomas\\projects\\ingsis\\src\\test\\resources\\semantic_test_cases";
+    public static final String TEST_CASE_DIRECTORY = "src/test/resources/semantic_test_cases";
     AstBuilder builder = new AstBuilder();
     AstValidityChecker checker = new AstValidityChecker();
     SemanticAnalyzer semanticAnalyzer;
@@ -52,6 +51,7 @@ class AnalyzerImplTest {
         semanticAnalyzer = new AnalyzerImpl(resolverMap, env);
     }
 
+    //TODO: Change repeated code between this test implementation and Syntax
     @TestFactory
     Stream<DynamicTest> semanticTests() {
         Stream<File> files;

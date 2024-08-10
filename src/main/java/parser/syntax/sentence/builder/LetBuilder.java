@@ -1,4 +1,4 @@
-package parser.syntax.sentence.strategy;
+package parser.syntax.sentence.builder;
 
 import model.*;
 import parser.syntax.sentence.mapper.TokenMapper;
@@ -6,10 +6,11 @@ import parser.syntax.sentence.validator.LetSentenceValidator;
 import parser.syntax.sentence.validator.SentenceValidator;
 
 import java.util.List;
+import java.util.Map;
 
 import static model.BaseTokenTypes.*;
 
-public class LetStrategy implements SentenceStrategy{
+public class LetBuilder implements SentenceBuilder {
 
   //LET -> IDENTIFIER("anything") -> COLON-> TYPE("anyType") -> ASSIGNATION -> ANYTHING -> SEMICOLON
   //AST (INORDER) SHOULD BE:
@@ -25,21 +26,20 @@ public class LetStrategy implements SentenceStrategy{
     TokenMapper mapper = new TokenMapper();
     //May need to change method
     Token type = tokens.get(3), identifier = tokens.get(1);
-//    System.out.println("Type: " + type.getValue());
-    DeclarationType declarationType = mapper.getDeclarationType(mapper.clearInvCommas(type.getValue()));
 
-//    System.out.println("Identifier: " + identifier.getValue());
-    AstComponent declaration = new Declaration(declarationType, mapper.clearInvCommas(identifier.getValue()));
-    return new Assignation(declaration, mapper.buildFunctionArgument(tokens.subList(5, tokens.size())).getFirst());
+    DeclarationType declarationType = getDeclarationType(type.getValue());
+
+    AstComponent declaration = new Declaration(declarationType, identifier.getValue());
+    return new Assignation(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).getFirst());
   }
 
-//  private int getIndexByTokenType(TokenType type, List<Token> tokens) {
-//    for(Token token : tokens) {
-//      if(token.getType() == type) {
-//        return tokens.indexOf(token);
-//      }
-//    }
-//    return -1;
-//  }
+    private DeclarationType getDeclarationType(String type) {
+        Map<String, DeclarationType> declarationTypeMap = Map.of(
+                "number", DeclarationType.NUMBER,
+                "string", DeclarationType.STRING,
+                "function", DeclarationType.FUNCTION
+        );
+        return declarationTypeMap.get(type.toLowerCase());
+    }
 
 }

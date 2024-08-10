@@ -1,4 +1,4 @@
-package parser.syntax.sentence.strategy;
+package parser.syntax.sentence.builder;
 
 import model.*;
 import parser.syntax.sentence.mapper.TokenMapper;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import static model.BaseTokenTypes.*;
 
-public class FunctionCallStrategy implements SentenceStrategy {
+public class FunctionCallBuilder implements SentenceBuilder {
   // FUNCTION -> SEPARATOR("(") -> ANYTHING -> SEPARATOR(")") -> ANYTHING -> SEMICOLON
 
   @Override
@@ -20,7 +20,7 @@ public class FunctionCallStrategy implements SentenceStrategy {
   }
 
   private AstComponent getFinalSentence(List<Token> tokens) {
-    List<AstComponent> parameters = new TokenMapper().buildFunctionArgument(tokens.subList(1, tokens.size()));
+    List<AstComponent> parameters = new TokenMapper().buildArgument(tokens.subList(1, tokens.size()));
     System.out.println(parameters);
 
     return new FunctionCall(new Identifier("println", IdentifierType.FUNCTION),

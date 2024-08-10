@@ -1,4 +1,4 @@
-package parser.syntax;
+package parser.syntax.analyzer;
 
 
 import model.Token;

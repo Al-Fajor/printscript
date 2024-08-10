@@ -19,6 +19,7 @@ public class FunctionSentenceValidator implements SentenceValidator{
   private boolean checkValidity(List<Token> tokens) {
     // FUNCTION | PRINTLN -> SEPARATOR("(") -> ANYTHING -> SEPARATOR(")") -> ANYTHING -> SEMICOLON
     Iterator<Token> iterator = tokens.iterator();
+    TokenMapper mapper = new TokenMapper();
     while(iterator.hasNext()){
       Token token = iterator.next();
       TokenType tokenType = token.getType();
@@ -28,16 +29,16 @@ public class FunctionSentenceValidator implements SentenceValidator{
         case PRINTLN:
         case FUNCTION:
           if(nextToken == null) return false;
-          if (!matchesSeparatorType(nextToken, "opening")) return false;
+          if (!mapper.matchesSeparatorType(nextToken, "opening")) return false;
           break;
         case SEPARATOR:
-          if(matchesSeparatorType(token, "opening")){
+          if(mapper.matchesSeparatorType(token, "opening")){
             if(nextToken == null) return false;
             if (!List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType())
-              || !matchesSeparatorType(nextToken, "closing")) return false;
+              && !mapper.matchesSeparatorType(nextToken, "closing")) return false;
             break;
           }
-          if(matchesSeparatorType(token, "closing")) {
+          if(mapper.matchesSeparatorType(token, "closing")) {
             if(nextToken == null) return false;
             break;
           }
@@ -56,18 +57,5 @@ public class FunctionSentenceValidator implements SentenceValidator{
       }
     }
     return true;
-  }
-
-  private boolean matchesSeparatorType(Token token, String separatorType){
-    if(token.getType() != SEPARATOR){
-      return false;
-    }
-    if(separatorType.equals("opening")){
-      return List.of("(", "{").contains(new TokenMapper().clearInvCommas(token.getValue()));
-    }
-    if(separatorType.equals("closing")){
-      return List.of(")", "}").contains(new TokenMapper().clearInvCommas(token.getValue()));
-    }
-    return false;
   }
 }
