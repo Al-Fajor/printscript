@@ -5,12 +5,12 @@ import org.example.ast.visitor.Visitor;
 
 import java.util.Objects;
 
-public class BinaryExpression implements AstComponent {
+public class BinaryExpression implements EvaluableComponent {
     private final BinaryOperator operator;
-    private final AstComponent leftComponent;
-    private final AstComponent rightComponent;
+    private final EvaluableComponent leftComponent;
+    private final EvaluableComponent rightComponent;
 
-    public BinaryExpression(BinaryOperator operator, AstComponent leftComponent, AstComponent rightComponent) {
+    public BinaryExpression(BinaryOperator operator, EvaluableComponent leftComponent, EvaluableComponent rightComponent) {
         this.operator = operator;
         this.leftComponent = leftComponent;
         this.rightComponent = rightComponent;
@@ -28,31 +28,31 @@ public class BinaryExpression implements AstComponent {
         return rightComponent;
     }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    BinaryExpression that = (BinaryExpression) o;
-    return operator == that.operator && Objects.equals(leftComponent, that.leftComponent) && Objects.equals(rightComponent, that.rightComponent);
-  }
+	@Override
+	public Pair<Integer, Integer> getStart() {
+		return null;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(operator, leftComponent, rightComponent);
-  }
+	@Override
+	public Pair<Integer, Integer> getEnd() {
+		return null;
+	}
 
-  @Override
-  public Pair<Integer, Integer> getStart() {
-    return null;
-  }
+	@Override
+	public <T> T accept(Visitor<T> visitor) {
+		return visitor.visit(this);
+	}
 
-  @Override
-  public Pair<Integer, Integer> getEnd() {
-    return null;
-  }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BinaryExpression that = (BinaryExpression) o;
+		return operator == that.operator && Objects.equals(leftComponent, that.leftComponent) && Objects.equals(rightComponent, that.rightComponent);
+	}
 
-  @Override
-  public <T> T accept(Visitor<T> visitor) {
-    return visitor.visit(this);
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(operator, leftComponent, rightComponent);
+	}
 }

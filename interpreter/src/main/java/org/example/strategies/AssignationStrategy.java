@@ -3,7 +3,6 @@ package org.example.strategies;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.AstComponent;
 import org.example.ast.statement.DeclarationStatement;
-import org.example.ast.Identifier;
 import org.example.ast.IdentifierType;
 import org.example.InterpreterState;
 import org.example.VariableType;

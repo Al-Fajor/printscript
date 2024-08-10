@@ -5,7 +5,7 @@ import org.example.ast.visitor.Visitor;
 
 import java.util.Objects;
 
-public class Conditional implements AstComponent {
+public class Conditional implements EvaluableComponent {
     private final AstComponent condition;
 
     public Conditional(AstComponent condition) {
@@ -16,31 +16,31 @@ public class Conditional implements AstComponent {
         return condition;
     }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Conditional that = (Conditional) o;
-    return Objects.equals(condition, that.condition);
-  }
+	@Override
+	public Pair<Integer, Integer> getStart() {
+		return null;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(condition);
-  }
+	@Override
+	public Pair<Integer, Integer> getEnd() {
+		return null;
+	}
 
-  @Override
-  public Pair<Integer, Integer> getStart() {
-    return null;
-  }
+	@Override
+	public <T> T accept(Visitor<T> visitor) {
+		return visitor.visit(this);
+	}
 
-  @Override
-  public Pair<Integer, Integer> getEnd() {
-    return null;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(condition);
+	}
 
-  @Override
-  public <T> T accept(Visitor<T> visitor) {
-    return visitor.visit(this);
-  }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Conditional that = (Conditional) o;
+		return Objects.equals(condition, that.condition);
+	}
 }

@@ -1,175 +1,240 @@
 @startuml
-'interface Lexer {
-'+ lex(char[]): List<Token>
-'}
-'interface Parser
-'interface Interpreter {
-'}
-
-'class Runner
-
+''interface Lexer {
+''+ lex(char[]): List<Token>
+''}
+''interface Parser
+''interface Interpreter {
+''}
+'
+''class Runner
+'
+''class Token {
+''TokenType type
+''Integer start
+''Integer end
+''String value
+''}
+'
+''interface Token {
+''getStart(): Integer
+''getEnd(): Integer
+''getValue(): String
+''}
+''
+''class StringToken implements Token {
+''
+''}
+''
+''class NumberToken implements Token {
+''
+''}
+'
 'class Token {
-'TokenType type
-'Integer start
-'Integer end
-'String value
+'- type: TokenType
+'- start
+'- end
+'- value
 '}
+'interface TokenType {
+'}
+'enum TokenTypes implements TokenType {
+'LET_KEYWORD
+'TYPE
+'ASSIGNATION
+'IDENTIFIER
+'SEMICOLON
+'COLON
+'IF
+'ELSE
+'LITERAL
+'BINARY_OPERATOR
+'
+'etc.
+'}
+'Token -> TokenType
+'
+''class Ast {
+''    AstType type
+''    List<Ast> children
+''}
+''
+''Ast --> AstType
+''
+''interface AstType {
+''
+''}
+'
+''enum AstTypes implements AstType {
+''    DECLARATION
+''    ASSIGNATION
+''    LITERAL
+''    VALUE
+''    STRING_TYPE
+''    NUMBER_TYPE
+''    IDENTIFIER
+''    IF_STATEMENT
+''    BINARY_EXPRESSION
+''    BLOCK_STATEMENT
+''
+''}
+'
+''Ast *-> Ast
+'
+''Runner --> Lexer
+''Runner --> Parser
+''Runner --> Interpreter
+'
+''Ast *-> Token
+''
+''Lexer --> Token
+''Parser --> Token
+''Parser --> Ast
+''Interpreter --> Ast
+'
+''interface AstComponent {
+''
+''}
+''
+''class Literal implements AstComponent
+''class Identifier implements AstComponent
+''
+''class Declaration implements AstComponent, Composite {
+''- children: List<AstComponent>
+''}
+''class IfStatement implements AstComponent, Composite {
+''- children: List<AstComponent>
+''}
+''class Assignation implements AstComponent, Composite {
+''- children: List<AstComponent>
+''}
+''
+''interface Composite {
+''+ getChildren(): List<AstComponent>
+''}
+''
+''enum PlainAstComponent implements AstComponent {
+''    STRING_TYPE
+''    NUMBER_TYPE
+''}
+'enum DeclarationType {
+'    NUMBER
+'    STRING
+'    FUNCTION
+'}
+'enum IdentifierType {
+'    VARIABLE
+'    FUNCTION
+'}
+'enum BinaryOperator {
+'    SUM
+'    SUBTRACTION
+'    DIVISION
+'    MULTIPLICATION
+'}
+'interface AstComponent
+'class Assignation implements AstComponent {
+'    -leftComponent: AstComponent
+'    -rightComponent: AstComponent
+'}
+'class Declaration implements AstComponent {
+'    -type: DeclarationType
+'    -name: String
+'}
+'class Identifier implements AstComponent {
+'    -type: IdentifierType
+'    -name: String
+'}
+'class BinaryExpression implements AstComponent {
+'    -operator: BinaryOperator
+'    -leftComponent: AstComponent
+'    -rightComponent: AstComponent
+'}
+'class Literal<T> implements AstComponent {
+'    -value: T
+'}
+'class IfStatement implements AstComponent {
+'    -conditional: Conditional
+'    -trueClause: AstComponent
+'    -falseClause: AstComponent
+'}
+'class Conditional implements AstComponent {
+'    -condition: AstComponent
+'}
+'class FunctionCall implements AstComponent {
+'    -identifier: Identifier
+'    -parameters: Parameters
+'}
+'class Parameters implements AstComponent {
+'    -parameters: AstComponent
+'}
+'Declaration *-- DeclarationType
+'Identifier *-- IdentifierType
+'BinaryExpression *-- BinaryOperator
 
-'interface Token {
-'getStart(): Integer
-'getEnd(): Integer
-'getValue(): String
-'}
-'
-'class StringToken implements Token {
-'
-'}
-'
-'class NumberToken implements Token {
-'
-'}
+interface Visitable {
+    +accept(Visitor visitor): <T>
+}
 
-class Token {
-- type: TokenType
-- start
-- end
-- value
-}
-interface TokenType {
-}
-enum TokenTypes implements TokenType {
-LET_KEYWORD
-TYPE
-ASSIGNATION
-IDENTIFIER
-SEMICOLON
-COLON
-IF
-ELSE
-LITERAL
-BINARY_OPERATOR
+'function func(params) {}
+'let func = (params) => {}
 
-etc.
-}
-Token -> TokenType
+interface AstComponent extends Visitable
 
-'class Ast {
-'    AstType type
-'    List<Ast> children
-'}
-'
-'Ast --> AstType
-'
-'interface AstType {
-'
-'}
+interface EvaluableComponent extends AstComponent
 
-'enum AstTypes implements AstType {
-'    DECLARATION
-'    ASSIGNATION
-'    LITERAL
-'    VALUE
-'    STRING_TYPE
-'    NUMBER_TYPE
-'    IDENTIFIER
-'    IF_STATEMENT
-'    BINARY_EXPRESSION
-'    BLOCK_STATEMENT
-'
-'}
+interface IdentifierComponent extends AstComponent
 
-'Ast *-> Ast
+class Declaration implements IdentifierComponent
 
-'Runner --> Lexer
-'Runner --> Parser
-'Runner --> Interpreter
+class VariableIdentifier implements IdentifierComponent, EvaluableComponent
 
-'Ast *-> Token
-'
-'Lexer --> Token
-'Parser --> Token
-'Parser --> Ast
-'Interpreter --> Ast
+class FunctionIdentifier implements IdentifierComponent
 
-'interface AstComponent {
-'
-'}
-'
-'class Literal implements AstComponent
-'class Identifier implements AstComponent
-'
-'class Declaration implements AstComponent, Composite {
-'- children: List<AstComponent>
-'}
-'class IfStatement implements AstComponent, Composite {
-'- children: List<AstComponent>
-'}
-'class Assignation implements AstComponent, Composite {
-'- children: List<AstComponent>
-'}
-'
-'interface Composite {
-'+ getChildren(): List<AstComponent>
-'}
-'
-'enum PlainAstComponent implements AstComponent {
-'    STRING_TYPE
-'    NUMBER_TYPE
-'}
-enum DeclarationType {
-    NUMBER
-    STRING
-    FUNCTION
+class Literal implements EvaluableComponent
+
+class BinaryExpression implements EvaluableComponent {
+    -BinaryOperator operator
+    -EvaluableComponent leftComponent
+    -EvaluableComponent rightComponent
 }
-enum IdentifierType {
-    VARIABLE
-    FUNCTION
+
+class Conditional implements EvaluableComponent
+
+class StatementBlock implements AstComponent {
+    -Statement[] statements
 }
-enum BinaryOperator {
-    SUM
-    SUBTRACTION
-    DIVISION
-    MULTIPLICATION
-}
-interface AstComponent
-class Assignation implements AstComponent {
-    -leftComponent: AstComponent
-    -rightComponent: AstComponent
-}
-class Declaration implements AstComponent {
-    -type: DeclarationType
-    -name: String
-}
-class Identifier implements AstComponent {
-    -type: IdentifierType
-    -name: String
-}
-class BinaryExpression implements AstComponent {
-    -operator: BinaryOperator
-    -leftComponent: AstComponent
-    -rightComponent: AstComponent
-}
-class Literal<T> implements AstComponent {
-    -value: T
-}
-class IfStatement implements AstComponent {
-    -conditional: Conditional
-    -trueClause: AstComponent
-    -falseClause: AstComponent
-}
-class Conditional implements AstComponent {
-    -condition: AstComponent
-}
-class FunctionCall implements AstComponent {
-    -identifier: Identifier
-    -parameters: Parameters
-}
+
 class Parameters implements AstComponent {
-    -parameters: AstComponent
+    -EvaluableComponent[] parameters
 }
-Declaration *-- DeclarationType
-Identifier *-- IdentifierType
-BinaryExpression *-- BinaryOperator
+
+class IfClauses implements AstComponent {
+    -StatementBlock trueClause
+    -StatementBlock falseClause
+}
+
+interface Statement extends AstComponent {
+    +getLeft(): AstComponent
+    +getRight(): AstComponent
+}
+
+'Ejemplo Interpreter:
+'Declaration: al visitarlo, se crea la variable y se devuelve el nombre
+'Identifier: al visitarlo, solo devuelve el nombre
+class AssignationStatement implements Statement {
+    -IdentifierComponent leftComponent
+    -EvaluableComponent rightComponent
+}
+
+class FunctionCallStatement implements Statement, EvaluableComponent {
+    -IdentifierComponent leftComponent
+    -Parameters rightComponent
+}
+
+class IfStatement implements Statement {
+    -Conditional conditional
+    -IfClauses clauses
+}
 
 
 @enduml

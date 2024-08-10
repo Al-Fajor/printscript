@@ -5,7 +5,7 @@ import org.example.ast.visitor.Visitor;
 
 import java.util.Objects;
 
-public class Literal<K> implements AstComponent {
+public class Literal<K> implements EvaluableComponent {
     private final K value;
 
     public Literal(K value) {

@@ -4,7 +4,6 @@ import org.example.ast.AstComponent;
 import org.example.ast.BinaryExpression;
 import org.example.ast.BinaryOperator;
 import org.example.ast.DeclarationType;
-import org.example.ast.Identifier;
 import org.example.ast.IdentifierType;
 import org.example.ast.Literal;
 import org.example.token.Token;

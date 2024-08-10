@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,7 +54,7 @@ public class AstBuilder {
                         mapToAstComponent(secondComponent, secondComponentName)
                 );
             case "declaration":
-                return new DeclarationStatement(
+                return new Declaration(
                         mapToDeclarationType(astComponentJson.getString("declarationType")),
                         astComponentJson.getString("name")
                 );

@@ -2,7 +2,6 @@ package org.example.sentence.strategy;
 
 import org.example.ast.AstComponent;
 import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.Identifier;
 import org.example.ast.IdentifierType;
 import org.example.ast.Parameters;
 import org.example.token.Token;

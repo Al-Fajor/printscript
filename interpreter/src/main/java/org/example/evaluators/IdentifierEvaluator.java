@@ -1,7 +1,6 @@
 package org.example.evaluators;
 
 import org.example.ast.AstComponent;
-import org.example.ast.Identifier;
 import org.example.InterpreterState;
 import org.example.VariableType;
 
