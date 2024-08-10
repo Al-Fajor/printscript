@@ -1,8 +1,7 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 import model.AstComponent;
 
-import java.util.Collections;
 import java.util.Map;
 
 public class LiteralResolver implements Resolver {

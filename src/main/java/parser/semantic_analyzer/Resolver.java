@@ -1,11 +1,8 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 import model.AstComponent;
-import model.Declaration;
-import model.DeclarationType;
 
 import java.util.Map;
-import java.util.Set;
 
 public interface Resolver {
     Resolution resolve(

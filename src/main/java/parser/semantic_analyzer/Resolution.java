@@ -1,9 +1,6 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 import model.AstComponent;
-import model.DeclarationType;
-
-import java.util.Map;
 
 public record Resolution(
         SemanticResult result,

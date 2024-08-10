@@ -1,12 +1,10 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 import model.AstComponent;
 import model.BinaryExpression;
 import model.BinaryOperator;
-import model.DeclarationType;
 import model.Literal;
 
-import java.util.Collections;
 import java.util.Map;
 
 public class BinaryExpressionResolver implements Resolver {

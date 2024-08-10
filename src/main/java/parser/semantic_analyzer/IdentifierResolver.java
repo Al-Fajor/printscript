@@ -1,15 +1,11 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 import model.AstComponent;
 import model.DeclarationType;
 import model.Identifier;
 import model.Literal;
 
-import java.util.Collections;
 import java.util.Map;
-
-import static semantic_analyzer.BinaryExpressionResolver.NUMBER_PLACEHOLDER;
-import static semantic_analyzer.BinaryExpressionResolver.STRING_PLACEHOLDER;
 
 public class IdentifierResolver implements Resolver {
     @Override
@@ -36,9 +32,9 @@ public class IdentifierResolver implements Resolver {
 
         switch (type) {
             case NUMBER:
-                return new Literal<>(NUMBER_PLACEHOLDER);
+                return new Literal<>(BinaryExpressionResolver.NUMBER_PLACEHOLDER);
             case STRING:
-                return new Literal<>(STRING_PLACEHOLDER);
+                return new Literal<>(BinaryExpressionResolver.STRING_PLACEHOLDER);
             case FUNCTION:
                 throw new RuntimeException("Yet to implement");
             default:

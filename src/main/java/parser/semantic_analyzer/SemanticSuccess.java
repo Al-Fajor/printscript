@@ -1,4 +1,4 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 public class SemanticSuccess implements SemanticResult {
     @Override

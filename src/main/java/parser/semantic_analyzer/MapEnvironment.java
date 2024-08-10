@@ -1,7 +1,6 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 import model.DeclarationType;
-import model.Identifier;
 
 import java.util.HashMap;
 import java.util.HashSet;

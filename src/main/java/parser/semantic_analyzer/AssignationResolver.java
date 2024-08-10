@@ -1,4 +1,4 @@
-package semantic_analyzer;
+package parser.semantic_analyzer;
 
 import model.Assignation;
 import model.AstComponent;
@@ -7,7 +7,6 @@ import model.DeclarationType;
 import model.Identifier;
 import model.Literal;
 
-import java.util.Collections;
 import java.util.Map;
 
 public class AssignationResolver implements Resolver {
