@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SyntaxTest {
   String RUN_ONLY = "";
-  TestBuilder testBuilder = new TestBuilder();
+  SyntaxTestBuilder syntaxTestBuilder = new SyntaxTestBuilder();
   String TEST_CASE_DIRECTORY = "src/test/resources/syntax_test_cases";
 
   @TestFactory
@@ -39,7 +39,7 @@ public class SyntaxTest {
   private Executable getTestExecutable(File testFile) {
     return ()->{
       try{
-        assertTrue(testBuilder.testSyntax(testFile.getPath()));
+        assertTrue(syntaxTestBuilder.testSyntax(testFile.getPath()));
       }
       catch (IOException e) {
         throw new RuntimeException("Error getting test file");

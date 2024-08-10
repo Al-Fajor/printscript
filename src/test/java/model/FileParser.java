@@ -1,7 +1,5 @@
-package parser.syntax;
+package model;
 
-import model.BaseTokenTypes;
-import model.Token;
 import org.json.JSONObject;
 
 import java.io.File;

@@ -2,6 +2,7 @@ package parser.syntax;
 
 import model.AstBuilder;
 import model.AstComponent;
+import model.FileParser;
 import model.Token;
 import parser.syntax.analyzer.SyntaxAnalyzerImpl;
 import parser.syntax.result.SyntaxResult;
@@ -9,7 +10,7 @@ import parser.syntax.result.SyntaxResult;
 import java.io.IOException;
 import java.util.List;
 
-public class TestBuilder {
+public class SyntaxTestBuilder {
   private List<AstComponent> getASTFromJSON(String filePath) throws IOException {
     return new AstBuilder().buildFromJson(filePath);
   }
