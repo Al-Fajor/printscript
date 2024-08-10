@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.ast.*;
+import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.FunctionCallStatement;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
@@ -30,11 +33,11 @@ class AnalyzerImplTest {
 
     {
         Map<Class<? extends AstComponent>, Resolver> resolverMap = Map.of(
-                Assignation.class, new AssignationResolver(),
+                AssignationStatement.class, new AssignationResolver(),
                 BinaryExpression.class, new BinaryExpressionResolver(),
                 Literal.class, new LiteralResolver(),
                 Identifier.class, new IdentifierResolver(),
-                FunctionCall.class, new FunctionCallResolver(),
+                FunctionCallStatement.class, new FunctionCallResolver(),
                 Parameters.class, new ParametersResolver()
         );
         MapEnvironment env = new MapEnvironment(

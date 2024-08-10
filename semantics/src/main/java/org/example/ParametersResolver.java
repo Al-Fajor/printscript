@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.ast.AstComponent;
+import org.example.ast.Parameters;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

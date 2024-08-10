@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.scanresult.ScanResult;
+import org.example.token.Token;
 
 import java.util.List;
 

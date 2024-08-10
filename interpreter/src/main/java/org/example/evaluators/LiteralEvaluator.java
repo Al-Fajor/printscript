@@ -1,6 +1,6 @@
 package org.example.evaluators;
-import org.example.AstComponent;
-import org.example.Literal;
+import org.example.ast.AstComponent;
+import org.example.ast.Literal;
 
 public class LiteralEvaluator implements ExpressionEvaluator {
     @Override

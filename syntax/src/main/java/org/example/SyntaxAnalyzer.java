@@ -2,6 +2,7 @@ package org.example;
 
 
 import org.example.result.SyntaxResult;
+import org.example.token.Token;
 
 import java.util.List;
 

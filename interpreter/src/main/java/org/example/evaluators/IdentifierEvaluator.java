@@ -1,11 +1,9 @@
 package org.example.evaluators;
 
-import org.example.AstComponent;
-import org.example.Identifier;
+import org.example.ast.AstComponent;
+import org.example.ast.Identifier;
 import org.example.InterpreterState;
 import org.example.VariableType;
-
-import static org.example.BaseTokenTypes.FUNCTION;
 
 public class IdentifierEvaluator implements ExpressionEvaluator {
     private final InterpreterState state;

@@ -1,6 +1,6 @@
 package org.example.factory;
 
-import org.example.TokenType;
+import org.example.token.TokenType;
 
 import java.util.Map;
 import java.util.regex.Pattern;

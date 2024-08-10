@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.ast.*;
+import org.example.ast.statement.FunctionCallStatement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +14,7 @@ public class FunctionCallResolver implements Resolver {
             Environment env,
             Map<Class<? extends AstComponent>, Resolver> resolvers
     ) {
-        var functionCall = (FunctionCall) ast;
+        var functionCall = (FunctionCallStatement) ast;
 
         Resolution parameterResolution =
                 resolvers

@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.ast.*;
+import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.DeclarationStatement;
+import org.example.ast.statement.FunctionCallStatement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,12 +50,12 @@ public class AstBuilder {
                     throw new IllegalArgumentException("Cannot parse JSON: Received an assignation with too many parameters");
                 }
 
-                return new Assignation(
+                return new AssignationStatement(
                         mapToAstComponent(firstComponent, firstComponentName),
                         mapToAstComponent(secondComponent, secondComponentName)
                 );
             case "declaration":
-                return new Declaration(
+                return new DeclarationStatement(
                         mapToDeclarationType(astComponentJson.getString("declarationType")),
                         astComponentJson.getString("name")
                 );
@@ -84,7 +88,7 @@ public class AstBuilder {
                     mapToAstComponent(secondOperand, secondOperandName)
                 );
             case "functionCall":
-                return new FunctionCall(
+                return new FunctionCallStatement(
                         (Identifier) mapToAstComponent(
                                 astComponentJson.getJSONObject("identifier"),
                                 "identifier"

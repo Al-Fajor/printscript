@@ -1,7 +1,9 @@
 package org.example;
 
+import org.example.ast.AstComponent;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
+import org.example.token.Token;
 
 import java.io.IOException;
 import java.util.List;

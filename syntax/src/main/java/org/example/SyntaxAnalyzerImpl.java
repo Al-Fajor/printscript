@@ -1,9 +1,13 @@
 package org.example;
 
+import org.example.ast.AstComponent;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
 import org.example.sentence.strategy.*;
+import org.example.token.BaseTokenTypes;
+import org.example.token.Token;
+import org.example.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;

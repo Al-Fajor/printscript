@@ -1,11 +1,11 @@
 package org.example.evaluators;
 
-import org.example.AstComponent;
-import org.example.BinaryExpression;
-import org.example.Conditional;
-import org.example.Identifier;
+import org.example.ast.AstComponent;
+import org.example.ast.BinaryExpression;
+import org.example.ast.Conditional;
+import org.example.ast.Identifier;
 import org.example.InterpreterState;
-import org.example.Literal;
+import org.example.ast.Literal;
 
 public class ComponentEvaluator implements ExpressionEvaluator {
     private final InterpreterState state;

@@ -1,6 +1,6 @@
 package org.example.evaluators;
 
-import org.example.AstComponent;
+import org.example.ast.AstComponent;
 
 public interface ExpressionEvaluator {
     ExpressionResult evaluate(AstComponent component);

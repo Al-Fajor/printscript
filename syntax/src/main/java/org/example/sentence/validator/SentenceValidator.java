@@ -1,6 +1,6 @@
 package org.example.sentence.validator;
 
-import org.example.Token;
+import org.example.token.Token;
 
 import java.util.List;
 

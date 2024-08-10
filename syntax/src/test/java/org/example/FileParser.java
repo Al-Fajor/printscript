@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.token.BaseTokenTypes;
+import org.example.token.Token;
 import org.json.JSONObject;
 
 import java.io.File;

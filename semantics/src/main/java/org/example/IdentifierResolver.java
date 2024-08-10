@@ -1,5 +1,10 @@
 package org.example;
 
+import org.example.ast.AstComponent;
+import org.example.ast.DeclarationType;
+import org.example.ast.Identifier;
+import org.example.ast.Literal;
+
 import java.util.Map;
 
 import static org.example.BinaryExpressionResolver.NUMBER_PLACEHOLDER;

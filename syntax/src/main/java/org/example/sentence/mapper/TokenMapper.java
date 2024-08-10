@@ -1,26 +1,26 @@
 package org.example.sentence.mapper;
 
-import org.example.AstComponent;
-import org.example.BinaryExpression;
-import org.example.BinaryOperator;
-import org.example.DeclarationType;
-import org.example.Identifier;
-import org.example.IdentifierType;
-import org.example.Literal;
-import org.example.Token;
-import org.example.TokenType;
+import org.example.ast.AstComponent;
+import org.example.ast.BinaryExpression;
+import org.example.ast.BinaryOperator;
+import org.example.ast.DeclarationType;
+import org.example.ast.Identifier;
+import org.example.ast.IdentifierType;
+import org.example.ast.Literal;
+import org.example.token.Token;
+import org.example.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static org.example.BaseTokenTypes.FUNCTION;
-import static org.example.BaseTokenTypes.IDENTIFIER;
-import static org.example.BaseTokenTypes.LITERAL;
-import static org.example.BaseTokenTypes.OPERATOR;
-import static org.example.BaseTokenTypes.SEMICOLON;
-import static org.example.BaseTokenTypes.SEPARATOR;
+import static org.example.token.BaseTokenTypes.FUNCTION;
+import static org.example.token.BaseTokenTypes.IDENTIFIER;
+import static org.example.token.BaseTokenTypes.LITERAL;
+import static org.example.token.BaseTokenTypes.OPERATOR;
+import static org.example.token.BaseTokenTypes.SEMICOLON;
+import static org.example.token.BaseTokenTypes.SEPARATOR;
 
 public class TokenMapper {
   public List<AstComponent> buildFunctionArgument(List<Token> tokens) {

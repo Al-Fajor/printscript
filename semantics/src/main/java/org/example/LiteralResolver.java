@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.ast.AstComponent;
+
 import java.util.Map;
 
 public class LiteralResolver implements Resolver {

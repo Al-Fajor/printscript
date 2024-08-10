@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.factory.TokenPatternFactory;
 import org.example.factory.TokenRegex;
+import org.example.token.BaseTokenTypes;
+import org.example.token.Token;
 
 import java.util.ArrayList;
 import java.util.List;

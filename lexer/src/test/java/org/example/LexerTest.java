@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.token.BaseTokenTypes;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

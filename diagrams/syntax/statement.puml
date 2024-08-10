@@ -1,0 +1,40 @@
+@startuml
+
+interface Visitor<T>{
+' // We use generics to solve the "no return" problem of Visitor
++ visit(BinaryExpression): T
++ visit(Conditional): T
++ visit(FunctionCall): T
++ visit(IfStatement): T
++ visit(Literal): T
++ visit(Parameters): T
+}
+
+interface Visitable{
++accept(Visitor visitor): T
+}
+
+interface SentenceStatement<K, W> extends AstComponent{
+    +getLeft(): K
+    +getRight(): W
+
+}
+
+interface AstComponent extends Visitable
+
+'Transform Declaration and Assignation to their respective Statements
+
+class DeclarationStatement implements SentenceStatement
+class AssignationStatement implements SentenceStatement
+class FunctionCallStatement implements SentenceStatement
+
+' let x: number = 5;
+' Assignation(Declaration(VARIABLE,x), Literal(number, 5))
+' let x: number;
+' Assignation(Declaration(VARIABLE,x), Literal(number, null))
+
+
+'Relations
+Visitor --> Visitable
+
+@enduml

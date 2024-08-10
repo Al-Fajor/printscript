@@ -1,7 +1,7 @@
 package org.example.strategies;
 
-import org.example.AstComponent;
-import org.example.Declaration;
+import org.example.ast.AstComponent;
+import org.example.ast.statement.DeclarationStatement;
 import org.example.InterpreterState;
 import org.example.Variable;
 import org.example.VariableType;
@@ -15,7 +15,7 @@ public class DeclarationStrategy implements InterpreterStrategy {
 
     @Override
     public void execute(AstComponent astComponent) {
-        Declaration declaration = (Declaration) astComponent;
+        DeclarationStatement declaration = (DeclarationStatement) astComponent;
         switch (declaration.getType()) {
             case STRING ->
                     state.addStringVariable(new Variable<>(VariableType.STRING, declaration.getName(), null));

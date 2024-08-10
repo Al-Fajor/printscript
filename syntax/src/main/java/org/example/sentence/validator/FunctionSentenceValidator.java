@@ -1,19 +1,19 @@
 package org.example.sentence.validator;
 
-import org.example.BaseTokenTypes;
-import org.example.Token;
-import org.example.TokenType;
+import org.example.token.BaseTokenTypes;
+import org.example.token.Token;
+import org.example.token.TokenType;
 import org.example.sentence.mapper.TokenMapper;
 
 import java.util.Iterator;
 import java.util.List;
 
-import static org.example.BaseTokenTypes.FUNCTION;
-import static org.example.BaseTokenTypes.IDENTIFIER;
-import static org.example.BaseTokenTypes.LITERAL;
-import static org.example.BaseTokenTypes.OPERATOR;
-import static org.example.BaseTokenTypes.SEMICOLON;
-import static org.example.BaseTokenTypes.SEPARATOR;
+import static org.example.token.BaseTokenTypes.FUNCTION;
+import static org.example.token.BaseTokenTypes.IDENTIFIER;
+import static org.example.token.BaseTokenTypes.LITERAL;
+import static org.example.token.BaseTokenTypes.OPERATOR;
+import static org.example.token.BaseTokenTypes.SEMICOLON;
+import static org.example.token.BaseTokenTypes.SEPARATOR;
 
 public class FunctionSentenceValidator implements SentenceValidator{
   @Override

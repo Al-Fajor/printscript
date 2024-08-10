@@ -1,7 +1,7 @@
 package org.example.strategies;
 
 import org.example.InterpreterState;
-import org.example.AstComponent;
+import org.example.ast.AstComponent;
 
 public class IfStatementStrategy implements InterpreterStrategy {
     private final InterpreterState state;

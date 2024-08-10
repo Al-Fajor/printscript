@@ -1,10 +1,10 @@
 package org.example.strategies;
 
-import org.example.Assignation;
-import org.example.AstComponent;
-import org.example.Declaration;
-import org.example.Identifier;
-import org.example.IdentifierType;
+import org.example.ast.statement.AssignationStatement;
+import org.example.ast.AstComponent;
+import org.example.ast.statement.DeclarationStatement;
+import org.example.ast.Identifier;
+import org.example.ast.IdentifierType;
 import org.example.InterpreterState;
 import org.example.VariableType;
 import org.example.evaluators.ComponentEvaluator;
@@ -19,18 +19,18 @@ public class AssignationStrategy implements InterpreterStrategy {
 
     @Override
     public void execute(AstComponent astComponent) {
-        Assignation assignation = (Assignation) astComponent;
+        AssignationStatement assignation = (AssignationStatement) astComponent;
         AstComponent leftComponent = assignation.getLeftComponent();
         AstComponent rightComponent = assignation.getRightComponent();
         switch (leftComponent) {
-            case Declaration declaration -> assignValueToNewDeclaration(declaration, rightComponent);
+            case DeclarationStatement declaration -> assignValueToNewDeclaration(declaration, rightComponent);
             case Identifier identifier -> assignValueToExistingVariable(identifier, rightComponent);
             default -> throw new IllegalArgumentException("Wrong left component type");
         }
 
     }
 
-    private void assignValueToNewDeclaration(Declaration declaration, AstComponent rightComponent) {
+    private void assignValueToNewDeclaration(DeclarationStatement declaration, AstComponent rightComponent) {
         new DeclarationStrategy(state).execute(declaration);
         switch (declaration.getType()) {
             case STRING -> {

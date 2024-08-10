@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.ast.AstComponent;
+import org.example.ast.Parameters;
 import org.example.evaluators.ComponentEvaluator;
 import org.example.evaluators.ExpressionResult;
 

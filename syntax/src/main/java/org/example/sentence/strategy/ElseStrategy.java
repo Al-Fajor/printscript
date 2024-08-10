@@ -1,7 +1,7 @@
 package org.example.sentence.strategy;
 
-import org.example.AstComponent;
-import org.example.Token;
+import org.example.ast.AstComponent;
+import org.example.token.Token;
 
 import java.util.List;
 

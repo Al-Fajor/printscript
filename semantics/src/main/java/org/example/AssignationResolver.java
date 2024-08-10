@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.ast.*;
+import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.DeclarationStatement;
+
 import java.util.Map;
 
 public class AssignationResolver implements Resolver {
@@ -14,7 +18,7 @@ public class AssignationResolver implements Resolver {
     ) {
         // TODO: should actually avoid casting, but idk how to pass the AST
         //  with its real type
-        var assignation = (Assignation) ast;
+        var assignation = (AssignationStatement) ast;
         AstComponent right = assignation.getRightComponent();
         AstComponent left = assignation.getLeftComponent();
 
@@ -29,7 +33,7 @@ public class AssignationResolver implements Resolver {
             return Resolution.failure("Cannot assign variable: need an expression which resolves into a literal");
         }
 
-        if (left instanceof Declaration declaration) {
+        if (left instanceof DeclarationStatement declaration) {
             String identifierName = declaration.getName();
             if (env.isVariableDeclared(identifierName)) {
                 return Resolution.failure(identifierName + " is already declared");

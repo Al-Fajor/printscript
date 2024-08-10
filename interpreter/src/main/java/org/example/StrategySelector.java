@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.ast.*;
+import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.DeclarationStatement;
+import org.example.ast.statement.FunctionCallStatement;
 import org.example.strategies.*;
 
 import java.util.HashMap;
@@ -20,11 +24,11 @@ public class StrategySelector {
 
     private Map<Class<? extends AstComponent>, InterpreterStrategy> createStrategyMap() {
         Map<Class<? extends AstComponent>, InterpreterStrategy> map = new HashMap<>();
-        map.put(Assignation.class, new AssignationStrategy(state));
+        map.put(AssignationStatement.class, new AssignationStrategy(state));
         map.put(IfStatement.class, new IfStatementStrategy(state));
         map.put(Parameters.class, new ParametersStrategy(state));
-        map.put(Declaration.class, new DeclarationStrategy(state));
-        map.put(FunctionCall.class, new FunctionCallStrategy(state));
+        map.put(DeclarationStatement.class, new DeclarationStrategy(state));
+        map.put(FunctionCallStatement.class, new FunctionCallStrategy(state));
         return map;
     }
 }

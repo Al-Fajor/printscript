@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.ast.AstComponent;
+
 public record Resolution(
         SemanticResult result,
         AstComponent resolvedAst

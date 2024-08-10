@@ -1,5 +1,10 @@
 package org.example;
 
+import org.example.ast.AstComponent;
+import org.example.ast.BinaryExpression;
+import org.example.ast.BinaryOperator;
+import org.example.ast.Literal;
+
 import java.util.Map;
 
 public class BinaryExpressionResolver implements Resolver {
@@ -12,7 +17,7 @@ public class BinaryExpressionResolver implements Resolver {
 
     @Override
     public Resolution resolve(
-            AstComponent ast, 
+            AstComponent ast,
             Environment env,
             Map<Class<? extends AstComponent>, Resolver> resolvers
     ) {

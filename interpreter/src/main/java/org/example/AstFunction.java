@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.ast.AstComponent;
+import org.example.ast.Parameters;
+
 public class AstFunction implements Function {
     private final String name;
     private final AstComponent ast;

@@ -1,7 +1,7 @@
 package org.example.factory;
 
-import org.example.BaseTokenTypes;
-import org.example.TokenType;
+import org.example.token.BaseTokenTypes;
+import org.example.token.TokenType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

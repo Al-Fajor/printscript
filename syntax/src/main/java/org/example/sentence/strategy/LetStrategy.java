@@ -1,17 +1,17 @@
 package org.example.sentence.strategy;
 
-import org.example.Assignation;
-import org.example.AstComponent;
-import org.example.Declaration;
-import org.example.DeclarationType;
-import org.example.Token;
+import org.example.ast.statement.AssignationStatement;
+import org.example.ast.AstComponent;
+import org.example.ast.statement.DeclarationStatement;
+import org.example.ast.DeclarationType;
+import org.example.token.Token;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.LetSentenceValidator;
 import org.example.sentence.validator.SentenceValidator;
 
 import java.util.List;
 
-import static org.example.BaseTokenTypes.LET;
+import static org.example.token.BaseTokenTypes.LET;
 
 public class LetStrategy implements SentenceStrategy{
 
@@ -33,8 +33,8 @@ public class LetStrategy implements SentenceStrategy{
     DeclarationType declarationType = mapper.getDeclarationType(mapper.clearInvCommas(type.getValue()));
 
 //    System.out.println("Identifier: " + identifier.getValue());
-    AstComponent declaration = new Declaration(declarationType, mapper.clearInvCommas(identifier.getValue()));
-    return new Assignation(declaration, mapper.buildFunctionArgument(tokens.subList(5, tokens.size())).getFirst());
+    AstComponent declaration = new DeclarationStatement(declarationType, mapper.clearInvCommas(identifier.getValue()));
+    return new AssignationStatement(declaration, mapper.buildFunctionArgument(tokens.subList(5, tokens.size())).getFirst());
   }
 
 //  private int getIndexByTokenType(TokenType type, List<Token> tokens) {

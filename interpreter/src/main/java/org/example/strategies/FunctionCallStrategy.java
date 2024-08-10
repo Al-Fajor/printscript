@@ -1,10 +1,10 @@
 package org.example.strategies;
 
 import org.example.Function;
-import org.example.FunctionCall;
+import org.example.ast.statement.FunctionCallStatement;
 import org.example.InterpreterState;
-import org.example.AstComponent;
-import org.example.Parameters;
+import org.example.ast.AstComponent;
+import org.example.ast.Parameters;
 
 public class FunctionCallStrategy implements InterpreterStrategy {
     private final InterpreterState state;
@@ -15,7 +15,7 @@ public class FunctionCallStrategy implements InterpreterStrategy {
 
     @Override
     public void execute(AstComponent astComponent) {
-        FunctionCall functionCall = (FunctionCall) astComponent;
+        FunctionCallStatement functionCall = (FunctionCallStatement) astComponent;
         Function function = state.getFunction(functionCall.getIdentifier().getName());
         Parameters parameters = functionCall.getParameters();
         function.executeFunction(parameters);

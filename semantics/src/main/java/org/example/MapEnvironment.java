@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.ast.DeclarationType;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

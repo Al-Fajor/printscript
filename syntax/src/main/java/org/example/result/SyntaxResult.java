@@ -1,6 +1,6 @@
 package org.example.result;
 
-import org.example.AstComponent;
+import org.example.ast.AstComponent;
 
 import java.util.List;
 
