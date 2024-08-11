@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class AnalyzerImplTest {
+class SemanticAnalyzerImplTest {
 //    private static final String RUN_ONLY = "assign_and_print_number.json";
     private static final String RUN_ONLY = "";
 
@@ -32,14 +32,6 @@ class AnalyzerImplTest {
     SemanticAnalyzer semanticAnalyzer;
 
     {
-        Map<Class<? extends AstComponent>, Resolver> resolverMap = Map.of(
-                AssignationStatement.class, new AssignationResolver(),
-                BinaryExpression.class, new BinaryExpressionResolver(),
-                Literal.class, new LiteralResolver(),
-                Identifier.class, new IdentifierResolver(),
-                FunctionCallStatement.class, new FunctionCallResolver(),
-                Parameters.class, new ParametersResolver()
-        );
         MapEnvironment env = new MapEnvironment(
                 new HashMap<>(),
                 Set.of(
@@ -47,7 +39,7 @@ class AnalyzerImplTest {
                         new Signature("println", List.of(DeclarationType.STRING))
                 )
         );
-        semanticAnalyzer = new AnalyzerImpl(resolverMap, env);
+        semanticAnalyzer = new SemanticAnalyzerImpl(env);
     }
 
     @TestFactory
@@ -92,10 +84,10 @@ class AnalyzerImplTest {
     }
 
     private static void assertAndPrintError(SemanticResult analyticResult, boolean validity) {
-        if (analyticResult.isFailure()) {
-            System.out.println("Semantic Error: " + ((SemanticFailure) analyticResult).getReason());
+        if (!analyticResult.isSuccessful()) {
+            System.out.println("Semantic Error: " + analyticResult.errorMessage());
         }
-        if (validity) assertFalse(analyticResult.isFailure());
-        else assertTrue(analyticResult.isFailure());
+        if (validity) assertTrue(analyticResult.isSuccessful());
+        else assertFalse(analyticResult.isSuccessful());
     }
 }

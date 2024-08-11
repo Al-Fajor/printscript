@@ -5,11 +5,11 @@ import org.example.ast.visitor.Visitor;
 
 import java.util.Objects;
 
-public class VariableIdentifier implements IdentifierComponent, EvaluableComponent {
+public class Identifier implements IdentifierComponent, EvaluableComponent {
 	private final IdentifierType type;
 	private final String name;
 
-	public VariableIdentifier(String name, IdentifierType type) {
+	public Identifier(String name, IdentifierType type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -36,7 +36,7 @@ public class VariableIdentifier implements IdentifierComponent, EvaluableCompone
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		VariableIdentifier that = (VariableIdentifier) o;
+		Identifier that = (Identifier) o;
 		return Objects.equals(name, that.name) && type == that.type;
 	}
 

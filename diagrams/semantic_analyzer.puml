@@ -1,33 +1,55 @@
 @startuml
 
-interface SemanticAnalyzer {
-    + analyze(List<AstComponent> tokens): SemanticResult
+interface Visitor<Resolution> {
+    + visit(statement: AssignationStatement): Resolution
+    + visit(statement: Literal): Resolution
+    ... ()
+}
+
+interface SemanticAnalyzer extends Visitor<Resolution> {
+    + analyze(List<AstComponent> asts): SemanticResult
 }
 
 class AnalyzerImpl implements SemanticAnalyzer {
-    - resolvers: Map<Class<? extends AstComponent>, Resolver<?>>
-    + analyze(List<AstComponent> tokens): SemanticResult
+    + analyze(List<AstComponent> asts): SemanticResult
 }
 
-interface SemanticResult
+interface SemanticResult {
+    + isSuccessful(): boolean
+    + getErrorMessage(): String
+}
 
-class SemanticSuccess implements SemanticResult
+class SemanticSuccess implements SemanticResult {
+    + isSuccessful(): boolean
+    + getErrorMessage(): String
+}
 class SemanticFailure implements SemanticResult {
-    - reason: String
-}
-
-interface Resolver {
-    + resolve(Ast ast, Set<Declaration> previousDeclarations): Resolution
+    - errorMessage: String
+    + isSuccessful(): boolean
+    + getErrorMessage(): String
 }
 
 class Resolution {
     - result: SemanticResult
-    - resolvedAst: AstComponent
+    - evaluatedType: Optional<DeclarationType>
+    - identifierName: Optional<String>
     - resolvedDeclarations: Set<Declaration>
 }
 
+interface ResolutionValidator {
+    + analyze(resolution: Resolution, environment: Environment): Resolution
+}
+
+abstract ConditionalValidator implements ResolutionValidator {
+    - ResolutionValidator trueCaseValidator;
+    - ResolutionValidator falseCaseValidator;
+    + analyze(Resolution resolution, Environment environment): Resolution
+    protected abstract boolean meetsCondition(Resolution resolution, Environment environment);
+}
+
 SemanticAnalyzer -> SemanticResult
-AnalyzerImpl --> Resolver
-Resolver -> Resolution
+AnalyzerImpl --> ResolutionValidator
+ResolutionValidator *-> ResolutionValidator
+Visitor -> Resolution
 
 @enduml

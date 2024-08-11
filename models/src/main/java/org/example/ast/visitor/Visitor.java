@@ -15,6 +15,5 @@ public interface Visitor <T>{
 	T visit(Declaration statement);
 	T visit(FunctionCallStatement statement);
 	T visit(StatementBlock statementBlock);
-	T visit(VariableIdentifier variableIdentifier);
-	T visit(FunctionIdentifier functionIdentifier);
+	T visit(Identifier identifier);
 }

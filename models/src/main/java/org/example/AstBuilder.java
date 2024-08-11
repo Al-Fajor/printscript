@@ -70,8 +70,8 @@ public class AstBuilder {
 					return new Literal<>(null);
 				}
                 else throw new IllegalArgumentException("Cannot parse JSON: Unsupported value " + value + " for literal");
-            case "varIdentifier":
-                return new VariableIdentifier(
+            case "identifier":
+                return new Identifier(
                         astComponentJson.getString("name"),
                         mapToIdentifierType(astComponentJson.getString("identifierType"))
                 );
@@ -92,8 +92,8 @@ public class AstBuilder {
             case "functionCall":
                 return new FunctionCallStatement(
                         (IdentifierComponent) mapToAstComponent(
-                                astComponentJson.getJSONObject("funIdentifier"),
-                                "funIdentifier"
+                                astComponentJson.getJSONObject("identifier"),
+                                "identifier"
                         ),
                         (Parameters) mapToAstComponent(
                                 astComponentJson.getJSONObject("params"),
@@ -107,8 +107,6 @@ public class AstBuilder {
                 }
 
                 return new Parameters(parameters);
-			case "funIdentifier":
-				return new FunctionIdentifier(astComponentJson.getString("name"));
             case "conditional", "if", "ifClauses", "statementBlock":
                 throw new RuntimeException("Not implemented yet: case '" + astComponentJsonName + "'");
             default:
