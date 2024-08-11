@@ -3,8 +3,9 @@
   "ast_list": [
     {
       "functionCall": {
-        "funIdentifier": {
-          "name": "println"
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
         },
         "params": {
           "binaryExpression": {
