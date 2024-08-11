@@ -14,6 +14,13 @@ import java.util.stream.Collectors;
 
 public class FileParser {
 
+  public String getCode(String filePath) throws IOException {
+    File file = new File(filePath);
+    String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
+    JSONObject json = new JSONObject(content);
+    return json.get("code").toString();
+  }
+
   //Need to define the correct format of expected results, should be a JSON
   public List<Token> getTokens(String filePath) throws IOException {
     //Change to a method to correctly get all the code
