@@ -1,173 +1,63 @@
 package org.example;
 
-import org.example.token.BaseTokenTypes;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LexerTest {
     Lexer lexer = new PrintScriptLexer();
+    LexerTestBuilder lexerTestBuilder = new LexerTestBuilder();
 
     @Test
-    void integerInlineAssignation() {
-        String input = "let x: number = 5;";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(7, tokens.size());
-        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
-        assertEquals("let", tokens.get(0).getValue());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals("x", tokens.get(1).getValue());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
-        assertEquals(":", tokens.get(2).getValue());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
-        assertEquals("number", tokens.get(3).getValue());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
-        assertEquals("=", tokens.get(4).getValue());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
-        assertEquals("5", tokens.get(5).getValue());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
-        assertEquals(";", tokens.get(6).getValue());
+    void integerInlineAssignation() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/integer_inline_assignation.json");
     }
 
     @Test
-    void decimalInlineAssignation() {
-        String input = "let x: number = 5.19;";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(7, tokens.size());
-        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
+    void decimalInlineAssignation() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/decimal_inline_assignation.json");
     }
 
     @Test
-    void stringInlineAssignation() {
-        String input = "let x: string = \"hello\";";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(7, tokens.size());
-        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
+    void stringInlineAssignation() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/string_inline_assignation.json");
     }
 
     @Test
-    void inlineVariableCreation() {
-        String input = "let x: number;";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(5, tokens.size());
-        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(4).getType());
+    void variableCreation() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/variable_creation.json");
     }
 
     @Test
-    void assignationWithSum() {
-        String input = "let x: number = 5 + 3;";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(9, tokens.size());
-        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
-        assertEquals(BaseTokenTypes.OPERATOR, tokens.get(6).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(7).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(8).getType());
+    void integerSumInlineAssignation() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/integer_sum_inline_assignation.json");
     }
 
     @Test
-    void assignToExistingVariable() {
-        String input = "x = 5;";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(4, tokens.size());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(3).getType());
+    void integerAssignation() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/integer_assignation.json");
     }
 
     @Test
-    void multiLineAssignation() {
-        String input = "let name: string = \"Joe\"; \n let lastName: string = \"Doe\";";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(14, tokens.size());
-        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
-        assertEquals(BaseTokenTypes.LET, tokens.get(7).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(8).getType());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(9).getType());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(10).getType());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(11).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(12).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(13).getType());
+    void stringMultilineInlineAssignations() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/string_multiline_inline_assignations.json");
     }
 
     @Test
-    void printlnStringTest() {
-        String input = "println(\"Hello, World!\");";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(5, tokens.size());
-        assertEquals(BaseTokenTypes.PRINTLN, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(4).getType());
+    void printlnString() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/println_string.json");
     }
 
     @Test
-    void printlnVariableTest() {
-        String input = "println(x);";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(5, tokens.size());
-        assertEquals(BaseTokenTypes.PRINTLN, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(4).getType());
+    void printlnVariableTest() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/println_variable.json");
     }
 
     @Test
-    void printCreatedVariable() {
-        String input = "let my_cool_variable: string = \"ciclon\";\nprintln(my_cool_variable);";
-        var tokens = lexer.lex(input);
-        System.out.println(tokens);
-        assertEquals(12, tokens.size());
-        assertEquals(BaseTokenTypes.LET, tokens.get(0).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(1).getType());
-        assertEquals(BaseTokenTypes.COLON, tokens.get(2).getType());
-        assertEquals(BaseTokenTypes.TYPE, tokens.get(3).getType());
-        assertEquals(BaseTokenTypes.ASSIGNATION, tokens.get(4).getType());
-        assertEquals(BaseTokenTypes.LITERAL, tokens.get(5).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(6).getType());
-        assertEquals(BaseTokenTypes.PRINTLN, tokens.get(7).getType());
-        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(8).getType());
-        assertEquals(BaseTokenTypes.IDENTIFIER, tokens.get(9).getType());
-        assertEquals(BaseTokenTypes.SEPARATOR, tokens.get(10).getType());
-        assertEquals(BaseTokenTypes.SEMICOLON, tokens.get(11).getType());
+    void printCreatedVariable() throws IOException {
+        lexerTestBuilder.testLexer("src/test/resources/test_cases/print_created_variable.json");
     }
     @Test
     void invalidIdentifiers() {

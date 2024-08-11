@@ -1,0 +1,4 @@
+{
+  "code": "x = 5;",
+  "tokens": "IDENTIFIER(x) -> ASSIGNATION(=) -> LITERAL(5) -> SEMICOLON(;)"
+}

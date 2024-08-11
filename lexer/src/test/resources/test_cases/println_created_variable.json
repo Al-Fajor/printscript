@@ -1,0 +1,4 @@
+{
+  "code": "let my_cool_variable: string = \"ciclon\";\nprintln(my_cool_variable);",
+  "tokens": "LET(let) -> IDENTIFIER(my_cool_variable) -> COLON(:) -> TYPE(string) -> ASSIGNATION(=) -> LITERAL(\"ciclon\") -> SEMICOLON(;) -> PRINTLN(println) -> SEPARATOR(() -> IDENTIFIER(my_cool_variable) -> SEPARATOR()) -> SEMICOLON(;)"
+}

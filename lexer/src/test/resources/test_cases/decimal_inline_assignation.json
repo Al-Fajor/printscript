@@ -1,0 +1,4 @@
+{
+  "code" : "let x: number = 5.19;",
+  "tokens" : "LET(let) -> IDENTIFIER(x) -> COLON(:) -> TYPE(number) -> ASSIGNATION(=) -> LITERAL(5.19) -> SEMICOLON(;)"
+}
