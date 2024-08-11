@@ -1,0 +1,26 @@
+{
+  "ast_list": [
+    {
+      "assignation": {
+        "1_declaration": {
+          "declarationType": "String",
+          "name": "string"
+        },
+        "2_literal": {
+          "value": ""
+        }
+      }
+    },
+    {
+      "assignation": {
+        "1_varIdentifier": {
+          "identifierType": "variable",
+          "name": "string"
+        },
+        "2_literal": {
+          "value": "This is a string"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "ast_list": [
+    {
+      "assignation": {
+        "declaration": {
+          "declarationType": "Number",
+          "name": "num"
+        },
+        "literal": {
+          "value": 7
+        }
+      }
+    },
+    {
+      "assignation": {
+        "declaration": {
+          "declarationType": "String",
+          "name": "string"
+        },
+        "literal": {
+          "value": "Ronal Macdonal :D"
+        }
+      }
+    },
+    {
+      "functionCall": {
+        "funIdentifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": {
+          "varIdentifier": {
+            "identifierType": "variable",
+            "name": "string"
+          }
+        }
+      }
+    },
+    {
+      "functionCall": {
+        "funIdentifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": {
+          "varIdentifier": {
+            "identifierType": "variable",
+            "name": "num"
+          }
+        }
+      }
+    }
+  ]
+}
