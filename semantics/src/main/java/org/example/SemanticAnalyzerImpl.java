@@ -15,7 +15,7 @@ import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.resolution_validators.AssigningToValidValue;
 import org.example.resolution_validators.IdentifierExists;
-import org.example.resolution_validators.IsDeclarationElseReassignation;
+import org.example.resolution_validators.IsDeclarationElseAssignation;
 import org.example.resolution_validators.IsSimpleDeclaration;
 import org.example.resolution_validators.IsSuccessful;
 
@@ -27,6 +27,7 @@ import java.util.Set;
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
     // TODO: may define externally, such as in a config file
     private final Environment baseEnvironment;
+    private Environment env;
 
     public SemanticAnalyzerImpl(Environment baseEnvironment) {
         this.baseEnvironment = baseEnvironment;
@@ -34,7 +35,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     @Override
     public SemanticResult analyze(List<AstComponent> asts) {
-        Environment env = baseEnvironment.copy();
+        env = baseEnvironment.copy();
         
         for (AstComponent ast : asts) {
             var resolution = ast.accept(this);
@@ -46,12 +47,12 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     @Override
     public Resolution visit(BinaryExpression expression) {
-        var leftResolution = expression.accept(this);
+        var leftResolution = expression.getLeftComponent().accept(this);
 
         if (!leftResolution.result().isSuccessful()) {
             return leftResolution;
         }
-        var rightResolution = expression.accept(this);
+        var rightResolution = expression.getRightComponent().accept(this);
 
         if (!rightResolution.result().isSuccessful()) {
             return rightResolution;
@@ -135,7 +136,21 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     @Override
     public Resolution visit(Literal<?> literal) {
-        return null;
+        return new Resolution(
+                new SemanticSuccess(),
+                Optional.of(mapToDeclarationType(literal)),
+                true,
+                Optional.empty(),
+                Collections.emptySet()
+        );
+    }
+
+    private DeclarationType mapToDeclarationType(Literal<?> literal) {
+        return switch(literal.getValue()) {
+            case String ignoredString -> DeclarationType.STRING;
+            case Number ignoredNumber -> DeclarationType.NUMBER;
+            default -> throw new IllegalStateException("Unexpected value: " + literal.getValue());
+        };
     }
 
     @Override
@@ -149,47 +164,49 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
         Resolution rightResolution = statement.getRight().accept(this);
 
         return new IsSuccessful(
-                leftResolution,
-                new IsSuccessful(
-                        rightResolution,
-                        new IsDeclarationElseReassignation(
+                rightResolution,
+                new IsDeclarationElseAssignation(
+                        leftResolution,
+                        new IdentifierExists(
                                 leftResolution,
-                                new IdentifierExists(
-                                        leftResolution,
-                                        (env) -> Resolution.failure("Variable has already been declared"),
-                                        new IsSimpleDeclaration(
-                                                rightResolution,
-                                                (env) -> Resolution.success(leftResolution.resolvedDeclarations()),
-                                                new AssigningToValidValue(
-                                                        leftResolution,
-                                                        rightResolution,
-                                                        (env) -> Resolution.success(leftResolution.resolvedDeclarations()),
-                                                        (env) -> Resolution.failure(
-                                                                "Cannot assign type " + rightResolution.evaluatedType().get()
-                                                                        + " to " + leftResolution.evaluatedType().get()
-                                                        )
-                                                )
-
-                                        )
-                                ),
-                                new IdentifierExists(
+                                (env) -> Resolution.failure("Variable has already been declared"),
+                                new IsSimpleDeclaration(
                                         rightResolution,
+                                        (env) -> {
+                                            env.declareVariable(leftResolution.identifierName().get(), leftResolution.evaluatedType().get());
+                                            return Resolution.success(leftResolution.resolvedDeclarations());
+                                        },
                                         new AssigningToValidValue(
                                                 leftResolution,
                                                 rightResolution,
-                                                (env) -> Resolution.success(leftResolution.resolvedDeclarations()),
+                                                (env) -> {
+                                                    env.declareVariable(leftResolution.identifierName().get(), leftResolution.evaluatedType().get());
+                                                    return Resolution.success(leftResolution.resolvedDeclarations());
+                                                },
                                                 (env) -> Resolution.failure(
                                                         "Cannot assign type " + rightResolution.evaluatedType().get()
                                                                 + " to " + leftResolution.evaluatedType().get()
                                                 )
-                                        ),
-                                        (env) -> Resolution.failure("Cannot assign non-existing identifier")
+                                        )
+
                                 )
                         ),
-                        (env) -> rightResolution
+                        new IdentifierExists(
+                                leftResolution,
+                                new AssigningToValidValue(
+                                        leftResolution,
+                                        rightResolution,
+                                        (env) -> Resolution.success(leftResolution.resolvedDeclarations()),
+                                        (env) -> Resolution.failure(
+                                                "Cannot assign type " + rightResolution.evaluatedType().get()
+                                                        + " to " + leftResolution.evaluatedType().get()
+                                        )
+                                ),
+                                (env) -> Resolution.failure("Cannot assign non-existing identifier")
+                        )
                 ),
-                (env) -> leftResolution
-        ).analyze(baseEnvironment);
+                (env) -> rightResolution
+        ).analyze(env);
     }
 
     @Override
@@ -216,7 +233,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
     @Override
     public Resolution visit(VariableIdentifier variableIdentifier) {
         // TODO: convert to validator
-        if (!baseEnvironment.isVariableDeclared(variableIdentifier.getName())) {
+        if (!env.isVariableDeclared(variableIdentifier.getName())) {
             return new Resolution(
                     new SemanticFailure("Cannot find identifier " + variableIdentifier.getName()),
                     Optional.empty(),
@@ -228,7 +245,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
         else {
             return new Resolution(
                     new SemanticSuccess(),
-                    Optional.of(baseEnvironment.getDeclarationType(variableIdentifier.getName())),
+                    Optional.of(env.getDeclarationType(variableIdentifier.getName())),
                     false,
                     Optional.of(variableIdentifier.getName()),
                     Collections.emptySet()

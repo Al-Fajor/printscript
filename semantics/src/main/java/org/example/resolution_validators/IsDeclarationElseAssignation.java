@@ -3,10 +3,10 @@ package org.example.resolution_validators;
 import org.example.Environment;
 import org.example.Resolution;
 
-public class IsDeclarationElseReassignation extends ConditionalValidator {
+public class IsDeclarationElseAssignation extends ConditionalValidator {
     private final Resolution leftResolution;
 
-    public IsDeclarationElseReassignation(
+    public IsDeclarationElseAssignation(
             Resolution leftResolution,
             ResolutionValidator trueCaseValidator,
             ResolutionValidator falseCaseValidator

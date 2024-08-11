@@ -4,6 +4,6 @@ public record SemanticFailure(String errorMessage) implements SemanticResult {
 
     @Override
     public boolean isSuccessful() {
-        return true;
+        return false;
     }
 }

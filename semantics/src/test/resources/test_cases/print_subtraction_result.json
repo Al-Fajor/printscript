@@ -3,7 +3,7 @@
   "ast_list": [
     {
       "functionCall": {
-        "identifier": {
+        "funIdentifier": {
           "name": "println",
           "identifierType": "function"
         },

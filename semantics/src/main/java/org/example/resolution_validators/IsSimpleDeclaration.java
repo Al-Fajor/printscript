@@ -17,6 +17,6 @@ public class IsSimpleDeclaration extends ConditionalValidator {
 
     @Override
     protected boolean meetsCondition(Environment environment) {
-        return rightResolution.isValuePresent();
+        return !rightResolution.isValuePresent();
     }
 }
