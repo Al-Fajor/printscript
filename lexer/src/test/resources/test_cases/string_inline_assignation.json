@@ -1,0 +1,4 @@
+{
+  "code": "let x: string = \"hello\";",
+  "tokens": "LET(let) -> IDENTIFIER(x) -> COLON(:) -> TYPE(string) -> ASSIGNATION(=) -> LITERAL(\"hello\") -> SEMICOLON(;)"
+}
