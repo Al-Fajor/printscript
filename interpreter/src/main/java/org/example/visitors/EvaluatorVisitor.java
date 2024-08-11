@@ -47,6 +47,9 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	@Override
 	public EvaluationResult visit(Literal<?> literal) {
 		switch (literal.getValue()) {
+			case null -> {
+				return new EvaluationResult((String) null);
+			}
 			case String s -> {
 				return new EvaluationResult(s);
 			}

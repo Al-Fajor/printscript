@@ -1,9 +1,14 @@
 {
   "ast_list": [
     {
-      "declaration": {
-        "declarationType": "String",
-        "name": "string"
+      "assignation": {
+        "1_declaration": {
+          "declarationType": "String",
+          "name": "string"
+        },
+        "literal": {
+          "value": null
+        }
       }
     }
   ]

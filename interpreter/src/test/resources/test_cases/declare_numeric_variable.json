@@ -1,9 +1,14 @@
 {
   "ast_list": [
     {
-      "declaration": {
-        "declarationType": "Number",
-        "name": "num"
+      "assignation": {
+        "1_declaration": {
+          "declarationType": "Number",
+          "name": "num"
+        },
+        "literal": {
+          "value": null
+        }
       }
     }
   ]

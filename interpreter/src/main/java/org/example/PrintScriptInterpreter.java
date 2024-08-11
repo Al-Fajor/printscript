@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.ast.AstComponent;
 import org.example.ast.statement.SentenceStatement;
 import org.example.ast.visitor.Visitor;
 import org.example.visitors.StatementVisitor;
@@ -21,8 +22,8 @@ public class PrintScriptInterpreter implements Interpreter {
     }
 
     @Override
-    public void interpret(List<SentenceStatement> astList) {
-        for (SentenceStatement statement : astList) {
+    public void interpret(List<AstComponent> astList) {
+        for (AstComponent statement : astList) {
             statement.accept(statementVisitor);
         }
     }

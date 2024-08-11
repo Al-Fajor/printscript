@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PrintScriptState implements InterpreterState {
-    private Map<String, Variable<Double>> numericVariables;
-    private Map<String, Variable<String>> stringVariables;
-    private Map<String, Function> functions;
+    private final Map<String, Variable<Double>> numericVariables;
+    private final Map<String, Variable<String>> stringVariables;
+    private final Map<String, Function> functions;
 
     public PrintScriptState() {
         numericVariables = new HashMap<>();

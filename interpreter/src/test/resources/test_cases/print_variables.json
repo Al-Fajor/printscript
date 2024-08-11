@@ -14,7 +14,7 @@
     },
     {
       "assignation": {
-        "identifier": {
+        "varIdentifier": {
           "identifierType": "variable",
           "name": "num"
         },
@@ -25,7 +25,7 @@
     },
     {
       "assignation": {
-        "identifier": {
+        "varIdentifier": {
           "identifierType": "variable",
           "name": "string"
         },
@@ -36,12 +36,12 @@
     },
     {
       "functionCall": {
-        "identifier": {
+        "funIdentifier": {
           "identifierType": "function",
           "name": "println"
         },
         "params": {
-          "identifier": {
+          "varIdentifier": {
             "identifierType": "variable",
             "name": "string"
           }
@@ -50,12 +50,12 @@
     },
     {
       "functionCall": {
-        "identifier": {
+        "funIdentifier": {
           "identifierType": "function",
           "name": "println"
         },
         "params": {
-          "identifier": {
+          "varIdentifier": {
             "identifierType": "variable",
             "name": "num"
           }
