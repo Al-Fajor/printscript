@@ -14,6 +14,8 @@ public record Resolution(
         Optional<String> identifierName,
         Set<Declaration> resolvedDeclarations
 ) {
+    //TODO: failure should not be empty. For instance, if an identifier cannot be found,
+    // we should return its name anyway, since we need it for the visit to AssignationStatement
     public static Resolution failure(String reason) {
         return new Resolution(
                 new SemanticFailure(reason),

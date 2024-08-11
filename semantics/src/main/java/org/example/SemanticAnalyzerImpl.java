@@ -2,8 +2,10 @@ package org.example;
 
 import org.example.ast.AstComponent;
 import org.example.ast.BinaryExpression;
+import org.example.ast.BinaryOperator;
 import org.example.ast.Conditional;
 import org.example.ast.Declaration;
+import org.example.ast.DeclarationType;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
 import org.example.ast.StatementBlock;
@@ -20,6 +22,7 @@ import org.example.resolution_validators.IsSuccessful;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
     // TODO: may define externally, such as in a config file
@@ -43,7 +46,81 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     @Override
     public Resolution visit(BinaryExpression expression) {
-        return null;
+        var leftResolution = expression.accept(this);
+
+        if (!leftResolution.result().isSuccessful()) {
+            return leftResolution;
+        }
+        var rightResolution = expression.accept(this);
+
+        if (!rightResolution.result().isSuccessful()) {
+            return rightResolution;
+        }
+
+        if (expression.getOperator() == BinaryOperator.SUM) {
+            if (bothAreNumbers(leftResolution, rightResolution)) {
+                return new Resolution(
+                        new SemanticSuccess(),
+                        Optional.of(DeclarationType.NUMBER),
+                        true,
+                        Optional.empty(),
+                        Collections.emptySet()
+                );
+            } else {
+                return new Resolution(
+                        new SemanticSuccess(),
+                        Optional.of(DeclarationType.STRING),
+                        true,
+                        Optional.empty(),
+                        Collections.emptySet()
+                );
+            }
+        }
+
+        else {
+            if (differentTypes(rightResolution, leftResolution)) {
+                return Resolution.failure(
+                        "Cannot perform operation because types are incompatible: "
+                                + rightResolution.evaluatedType().get() + " "
+                                + getSymbol(expression.getOperator()) + " "
+                                + leftResolution.evaluatedType().get() + " "
+                );
+            } else {
+                return new Resolution(
+                        new SemanticSuccess(),
+                        Optional.of(rightResolution.evaluatedType().get()),
+                        true,
+                        Optional.empty(),
+                        Collections.emptySet()
+                );
+            }
+        }
+    }
+
+    private String getSymbol(BinaryOperator operator) {
+        // TODO: could move to BinaryOperator
+        switch (operator) {
+            case SUM:
+                return "+";
+            case SUBTRACTION:
+                return "-";
+            case MULTIPLICATION:
+                return "*";
+            case DIVISION:
+                return "/";
+            default:
+                // Unreachable
+                throw new RuntimeException("Invalid operator: " + operator + "(Resolution return for this type yet to be implemented)");
+        }
+    }
+
+    private static boolean differentTypes(Resolution rightResolution, Resolution leftResolution) {
+        return rightResolution.evaluatedType().get() != leftResolution.evaluatedType().get();
+    }
+
+    private static boolean bothAreNumbers(Resolution rightResolution, Resolution leftResolution) {
+        return rightResolution.evaluatedType().get() == DeclarationType.NUMBER
+                && leftResolution.evaluatedType().get() == DeclarationType.NUMBER;
     }
 
     @Override
@@ -117,7 +194,13 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     @Override
     public Resolution visit(Declaration statement) {
-        return null;
+        return new Resolution(
+                new SemanticSuccess(),
+                Optional.of(statement.getType()),
+                false,
+                Optional.of(statement.getName()),
+                Set.of(statement)
+        );
     }
 
     @Override
@@ -134,7 +217,13 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
     public Resolution visit(VariableIdentifier variableIdentifier) {
         // TODO: convert to validator
         if (!baseEnvironment.isVariableDeclared(variableIdentifier.getName())) {
-            return Resolution.failure("Cannot find identifier " + variableIdentifier.getName());
+            return new Resolution(
+                    new SemanticFailure("Cannot find identifier " + variableIdentifier.getName()),
+                    Optional.empty(),
+                    false,
+                    Optional.of(variableIdentifier.getName()),
+                    Collections.emptySet()
+            );
         }
         else {
             return new Resolution(
