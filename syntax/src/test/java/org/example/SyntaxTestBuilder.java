@@ -1,14 +1,13 @@
 package org.example;
-
 import org.example.ast.AstComponent;
-import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.token.Token;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class TestBuilder {
+public class SyntaxTestBuilder {
   private List<AstComponent> getASTFromJSON(String filePath) throws IOException {
     return new AstBuilder().buildFromJson(filePath);
   }
@@ -20,7 +19,7 @@ public class TestBuilder {
     SyntaxResult result = new SyntaxAnalyzerImpl().analyze(tokens);
     List<AstComponent> expectedList = getASTFromJSON(filePath);
 
-    if(result instanceof SyntaxError) {
+    if(result.isFailure()) {
       return expectedList.isEmpty();
     }
 
@@ -52,12 +51,8 @@ public class TestBuilder {
   }
 
 
-  private String printWholeList(List<AstComponent> expectedList) {
-    StringBuilder builder = new StringBuilder();
-    for (AstComponent astComponent : expectedList) {
-      builder.append(astComponent);
-    }
-    return builder.toString();
+  private String printWholeList(List<AstComponent> list) {
+    return list.stream().map(String::valueOf).collect(Collectors.joining());
 
   }
 }

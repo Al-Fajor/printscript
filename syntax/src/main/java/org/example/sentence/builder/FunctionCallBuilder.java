@@ -1,9 +1,7 @@
-package org.example.sentence.strategy;
+package org.example.sentence.builder;
 
-import org.example.ast.AstComponent;
+import org.example.ast.*;
 import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.IdentifierType;
-import org.example.ast.Parameters;
 import org.example.token.Token;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.FunctionSentenceValidator;
@@ -13,7 +11,7 @@ import java.util.List;
 
 import static org.example.token.BaseTokenTypes.PRINTLN;
 
-public class FunctionCallStrategy implements SentenceStrategy {
+public class FunctionCallBuilder implements SentenceBuilder {
   // FUNCTION -> SEPARATOR("(") -> ANYTHING -> SEPARATOR(")") -> ANYTHING -> SEMICOLON
 
   @Override
@@ -24,10 +22,10 @@ public class FunctionCallStrategy implements SentenceStrategy {
   }
 
   private AstComponent getFinalSentence(List<Token> tokens) {
-    List<AstComponent> parameters = new TokenMapper().buildFunctionArgument(tokens.subList(1, tokens.size()));
+    List<EvaluableComponent> parameters = new TokenMapper().buildArgument(tokens.subList(1, tokens.size()));
     System.out.println(parameters);
 
-    return new FunctionCallStatement(new Identifier("println", IdentifierType.FUNCTION),
+    return new FunctionCallStatement(new FunctionIdentifier("println"),
       new Parameters(parameters));
   }
 }

@@ -4,7 +4,7 @@ import org.example.ast.AstComponent;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
-import org.example.sentence.strategy.*;
+import org.example.sentence.builder.*;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 import org.example.token.TokenType;
@@ -23,10 +23,9 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
 
   private SyntaxResult buildSentences(List<Token> tokens) {
     try{
-      List<AstComponent> components;
+
       List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
-//      replaceRepeatedIdentifiers(tokenSentences);
-      components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.getFirst().getType()).buildSentence(sentence)).collect(Collectors.toList());
+      List<AstComponent> components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.getFirst().getType()).buildSentence(sentence)).collect(Collectors.toList());
 
       return components.contains(null) ?
         new SyntaxError("Invalid sentence at index: " + components.indexOf(null) + ";\n" +
@@ -52,12 +51,12 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
   }
 
 
-  private Map<? extends TokenType, ? extends SentenceStrategy> initialTokenMap(){
+  private Map<? extends TokenType, ? extends SentenceBuilder> initialTokenMap(){
     return Map.of(
-      BaseTokenTypes.LET, new LetStrategy(),
-      BaseTokenTypes.IF, new IfStrategy(),
-      BaseTokenTypes.ELSE, new ElseStrategy(),
-      BaseTokenTypes.PRINTLN, new FunctionCallStrategy()
+      BaseTokenTypes.LET, new LetBuilder(),
+      BaseTokenTypes.IF, new IfBuilder(),
+      BaseTokenTypes.ELSE, new ElseBuilder(),
+      BaseTokenTypes.PRINTLN, new FunctionCallBuilder()
     );
   }
 

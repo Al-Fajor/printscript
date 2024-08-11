@@ -1,8 +1,9 @@
-package org.example.sentence.strategy;
+package org.example.sentence.builder;
 
+import org.example.ast.Declaration;
+import org.example.ast.IdentifierComponent;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.AstComponent;
-import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.DeclarationType;
 import org.example.token.Token;
 import org.example.sentence.mapper.TokenMapper;
@@ -10,10 +11,11 @@ import org.example.sentence.validator.LetSentenceValidator;
 import org.example.sentence.validator.SentenceValidator;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.example.token.BaseTokenTypes.LET;
 
-public class LetStrategy implements SentenceStrategy{
+public class LetBuilder implements SentenceBuilder {
 
   //LET -> IDENTIFIER("anything") -> COLON-> TYPE("anyType") -> ASSIGNATION -> ANYTHING -> SEMICOLON
   //AST (INORDER) SHOULD BE:
@@ -29,21 +31,20 @@ public class LetStrategy implements SentenceStrategy{
     TokenMapper mapper = new TokenMapper();
     //May need to change method
     Token type = tokens.get(3), identifier = tokens.get(1);
-//    System.out.println("Type: " + type.getValue());
-    DeclarationType declarationType = mapper.getDeclarationType(mapper.clearInvCommas(type.getValue()));
 
-//    System.out.println("Identifier: " + identifier.getValue());
-    AstComponent declaration = new DeclarationStatement(declarationType, mapper.clearInvCommas(identifier.getValue()));
-    return new AssignationStatement(declaration, mapper.buildFunctionArgument(tokens.subList(5, tokens.size())).getFirst());
+    DeclarationType declarationType = getDeclarationType(type.getValue());
+
+    IdentifierComponent declaration = new Declaration(declarationType, identifier.getValue());
+    return new AssignationStatement(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).getFirst());
   }
 
-//  private int getIndexByTokenType(TokenType type, List<Token> tokens) {
-//    for(Token token : tokens) {
-//      if(token.getType() == type) {
-//        return tokens.indexOf(token);
-//      }
-//    }
-//    return -1;
-//  }
+    private DeclarationType getDeclarationType(String type) {
+        Map<String, DeclarationType> declarationTypeMap = Map.of(
+                "number", DeclarationType.NUMBER,
+                "string", DeclarationType.STRING,
+                "function", DeclarationType.FUNCTION
+        );
+        return declarationTypeMap.get(type.toLowerCase());
+    }
 
 }

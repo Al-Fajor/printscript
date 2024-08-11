@@ -1,2 +1,2 @@
-{"tokens": "LET -> IDENTIFIER(\"a\") -> IDENTIFIER(\"b\") -> TYPE(\"string\") -> ASSIGNATION -> LITERAL(\"5\") -> SEMICOLON",
+{"tokens": "LET -> IDENTIFIER(a) -> IDENTIFIER(b) -> TYPE(string) -> ASSIGNATION -> LITERAL(\"5\") -> SEMICOLON",
   "ast_list":[]}

@@ -1,2 +1,2 @@
-{"tokens": "LET -> COLON -> TYPE(\"number\") -> ASSIGNATION -> LITERAL(5) -> SEMICOLON",
+{"tokens": "LET -> COLON -> TYPE(number) -> ASSIGNATION -> LITERAL(5) -> SEMICOLON",
   "ast_list":[]}

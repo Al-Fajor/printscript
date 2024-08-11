@@ -1,11 +1,11 @@
-package org.example.sentence.strategy;
+package org.example.sentence.builder;
 
 import org.example.ast.AstComponent;
 import org.example.token.Token;
 
 import java.util.List;
 
-public class ElseStrategy implements SentenceStrategy {
+public class ElseBuilder implements SentenceBuilder {
   @Override
   public AstComponent buildSentence(List<Token> tokens) {
     return null;

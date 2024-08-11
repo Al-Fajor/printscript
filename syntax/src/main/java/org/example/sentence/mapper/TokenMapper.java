@@ -1,11 +1,6 @@
 package org.example.sentence.mapper;
 
-import org.example.ast.AstComponent;
-import org.example.ast.BinaryExpression;
-import org.example.ast.BinaryOperator;
-import org.example.ast.DeclarationType;
-import org.example.ast.IdentifierType;
-import org.example.ast.Literal;
+import org.example.ast.*;
 import org.example.token.Token;
 import org.example.token.TokenType;
 
@@ -14,16 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static org.example.token.BaseTokenTypes.FUNCTION;
-import static org.example.token.BaseTokenTypes.IDENTIFIER;
-import static org.example.token.BaseTokenTypes.LITERAL;
-import static org.example.token.BaseTokenTypes.OPERATOR;
-import static org.example.token.BaseTokenTypes.SEMICOLON;
-import static org.example.token.BaseTokenTypes.SEPARATOR;
+import static org.example.token.BaseTokenTypes.*;
 
 public class TokenMapper {
-  public List<AstComponent> buildFunctionArgument(List<Token> tokens) {
-    List<AstComponent> arguments = new ArrayList<>();
+  public List<EvaluableComponent> buildArgument(List<Token> tokens) {
+    List<EvaluableComponent> arguments = new ArrayList<>();
     for (int i = 0; i < tokens.size(); i++) {
       Token token = tokens.get(i);
 
@@ -42,16 +32,39 @@ public class TokenMapper {
 
       if(token.getType() == SEPARATOR){
         if(token.getValue().equals("\"(\"") || token.getValue().equals("(")){
-          return buildFunctionArgument(tokens.subList(i+1, findFirstClosingSeparator(tokens)));
+          return buildArgument(tokens.subList(i+1, findLastClosingSeparator(tokens)));
         }
       }
-      //TODO: REEVALUATE FUNCTION CASE, MAY NEED TO ADD BRACKETS AND BRACES
     }
     return arguments;
   }
 
-  private int findFirstClosingSeparator(List<Token> tokens) {
-    for (int i = 0; i < tokens.size(); i++) {
+  public boolean matchesSeparatorType(Token token, String separatorType){
+    if(token.getType() != SEPARATOR){
+      return false;
+    }
+    if(separatorType.equals("opening")){
+      return List.of("(", "{").contains(new TokenMapper().clearInvCommas(token.getValue()));
+    }
+    if(separatorType.equals("closing")){
+      return List.of(")", "}").contains(new TokenMapper().clearInvCommas(token.getValue()));
+    }
+    return false;
+  }
+
+  public EvaluableComponent mapToken(Token token) {
+    Map<TokenType, EvaluableComponent> map = Map.of(
+      LITERAL, translateToLiteral(token.getValue()),
+      IDENTIFIER, new VariableIdentifier(token.getValue(), IdentifierType.VARIABLE)
+    );
+    return map.get(token.getType());
+  }
+
+
+
+// Private methods
+  private int findLastClosingSeparator(List<Token> tokens) {
+    for (int i = tokens.size()-1; i >0; i--) {
       Token token = tokens.get(i);
       if (token.getType() == SEPARATOR && (token.getValue().equals(")") || token.getValue().equals("\")\""))) {
         return i;
@@ -62,14 +75,6 @@ public class TokenMapper {
 
   private boolean allTokensAreAtomic(List<Token> tokens) {
     return tokens.stream().allMatch(tk -> notCompoundComponent(tk.getType()));
-  }
-
-  public AstComponent mapToken(Token token) {
-    Map<TokenType, AstComponent> map = Map.of(
-      LITERAL, translateToLiteral(token.getValue()),
-      IDENTIFIER, new Identifier(clearInvCommas(token.getValue()), IdentifierType.VARIABLE)
-    );
-    return map.get(token.getType());
   }
 
   private Literal<?> translateToLiteral(String value){
@@ -85,12 +90,12 @@ public class TokenMapper {
   }
 
   private boolean notCompoundComponent(TokenType type) {
-    List<TokenType> compoundTypes = List.of(FUNCTION, OPERATOR, SEPARATOR);
+    List<TokenType> compoundTypes = List.of(FUNCTION, OPERATOR, SEPARATOR, ASSIGNATION);
     return !compoundTypes.contains(type);
   }
 
   private BinaryOperator mapOperator(String value) {
-    System.out.println("Operator: " + value);
+//    System.out.println("Operator: " + value);
 
     Map<String, BinaryOperator> map = Map.of(
       "+", BinaryOperator.SUM,
@@ -101,21 +106,12 @@ public class TokenMapper {
     return map.get(value);
   }
 
-  public DeclarationType getDeclarationType(String type) {
-    Map<String, DeclarationType> declarationTypeMap = Map.of(
-      "number", DeclarationType.NUMBER,
-      "string", DeclarationType.STRING,
-      "function", DeclarationType.FUNCTION
-    );
-    return declarationTypeMap.get(type.toLowerCase());
-  }
-
-  public String clearInvCommas(String value){
+  private String clearInvCommas(String value){
+    if(value.isEmpty()) return value;
     if(value.charAt(0) == '\"' && value.charAt(value.length()-1) == '\"'){
       return value.substring(1, value.length()-1);
     }
     return value;
   }
-
 
 }
