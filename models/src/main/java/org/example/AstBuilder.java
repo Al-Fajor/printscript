@@ -50,8 +50,8 @@ public class AstBuilder {
                 }
 
                 return new AssignationStatement(
-                        mapToAstComponent(firstComponent, firstComponentName),
-                        mapToAstComponent(secondComponent, secondComponentName)
+                        (IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
+                        (EvaluableComponent) mapToAstComponent(secondComponent, secondComponentName)
                 );
             case "declaration":
                 return new Declaration(
@@ -61,14 +61,14 @@ public class AstBuilder {
             case "literal":
                 Object value = astComponentJson.get("value");
                 if (value instanceof String) {
-                    return new Literal<String>((String) value);
+                    return new Literal<>((String) value);
                 }
                 else if (value instanceof Number) {
-                    return new Literal<Number>((Number) value);
+                    return new Literal<>((Number) value);
                 }
                 else throw new IllegalArgumentException("Cannot parse JSON: Unsupported value " + value + " for literal");
-            case "identifier":
-                return new Identifier(
+            case "varIdentifier":
+                return new VariableIdentifier(
                         astComponentJson.getString("name"),
                         mapToIdentifierType(astComponentJson.getString("identifierType"))
                 );
@@ -83,14 +83,14 @@ public class AstBuilder {
 
                 return new BinaryExpression(
                     mapToOperator(astComponentJson.getString("op")),
-                    mapToAstComponent(firstOperand, firstOperandName),
-                    mapToAstComponent(secondOperand, secondOperandName)
+                    (EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
+                    (EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName)
                 );
             case "functionCall":
                 return new FunctionCallStatement(
-                        (Identifier) mapToAstComponent(
-                                astComponentJson.getJSONObject("identifier"),
-                                "identifier"
+                        (IdentifierComponent) mapToAstComponent(
+                                astComponentJson.getJSONObject("funIdentifier"),
+                                "funIdentifier"
                         ),
                         (Parameters) mapToAstComponent(
                                 astComponentJson.getJSONObject("params"),
@@ -98,13 +98,14 @@ public class AstBuilder {
                         )
                 );
             case "params":
-                List<AstComponent> parameters = new ArrayList<>();
+                List<EvaluableComponent> parameters = new ArrayList<>();
                 for (String key: astComponentJson.keySet()){
-                    parameters.add(mapToAstComponent(astComponentJson.getJSONObject(key), key));
+                    parameters.add((EvaluableComponent) mapToAstComponent(astComponentJson.getJSONObject(key), key));
                 }
 
                 return new Parameters(parameters);
-
+            case "funIdentifier", "conditional", "if", "ifClauses", "statementBlock":
+                throw new RuntimeException("Not implemented yet: case '" + astComponentJsonName + "'");
             default:
                 throw new IllegalArgumentException(astComponentJsonName + " is not a valid ast component");
         }
