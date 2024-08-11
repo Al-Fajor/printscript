@@ -31,13 +31,20 @@ class SemanticFailure implements SemanticResult {
 
 class Resolution {
     - result: SemanticResult
-    - evaluatedType: DeclarationType
-    - identifierName: String
+    - evaluatedType: Optional<DeclarationType>
+    - identifierName: Optional<String>
     - resolvedDeclarations: Set<Declaration>
 }
 
-class ResolutionValidator {
+interface ResolutionValidator {
     + analyze(resolution: Resolution, environment: Environment): Resolution
+}
+
+abstract ConditionalValidator implements ResolutionValidator {
+    - ResolutionValidator trueCaseValidator;
+    - ResolutionValidator falseCaseValidator;
+    + analyze(Resolution resolution, Environment environment): Resolution
+    protected abstract boolean meetsCondition(Resolution resolution, Environment environment);
 }
 
 SemanticAnalyzer -> SemanticResult

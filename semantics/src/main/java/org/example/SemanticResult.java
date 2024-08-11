@@ -1,5 +1,6 @@
 package org.example;
 
 public interface SemanticResult {
-    boolean isFailure();
+    boolean isSuccessful();
+    String errorMessage();
 }

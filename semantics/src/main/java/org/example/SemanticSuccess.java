@@ -2,7 +2,12 @@ package org.example;
 
 public class SemanticSuccess implements SemanticResult {
     @Override
-    public boolean isFailure() {
-        return false;
+    public boolean isSuccessful() {
+        return true;
+    }
+
+    @Override
+    public String errorMessage() {
+        return "";
     }
 }

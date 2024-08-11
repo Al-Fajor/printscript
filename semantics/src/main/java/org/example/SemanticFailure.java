@@ -1,18 +1,9 @@
 package org.example;
 
-public class SemanticFailure implements SemanticResult {
-    private final String reason;
-
-    public SemanticFailure(String reason) {
-        this.reason = reason;
-    }
-
-    public String getReason() {
-        return reason;
-    }
+public record SemanticFailure(String errorMessage) implements SemanticResult {
 
     @Override
-    public boolean isFailure() {
+    public boolean isSuccessful() {
         return true;
     }
 }
