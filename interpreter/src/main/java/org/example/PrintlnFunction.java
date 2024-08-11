@@ -1,9 +1,9 @@
 package org.example;
 
-import org.example.ast.AstComponent;
+import org.example.ast.EvaluableComponent;
 import org.example.ast.Parameters;
-import org.example.evaluators.ComponentEvaluator;
-import org.example.evaluators.ExpressionResult;
+import org.example.ast.visitor.Visitor;
+import org.example.visitors.EvaluatorVisitor;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ public class PrintlnFunction implements Function {
 
     @Override
     public void executeFunction(Parameters parameters) {
-        List<AstComponent> components = parameters.getParameters();
-        for (AstComponent component : components) {
+        List<EvaluableComponent> components = parameters.getParameters();
+        for (EvaluableComponent component : components) {
             printComponent(component);
         }
     }
@@ -27,9 +27,9 @@ public class PrintlnFunction implements Function {
         return "println";
     }
 
-    private void printComponent(AstComponent component) {
-        ComponentEvaluator evaluator = new ComponentEvaluator(state);
-        ExpressionResult result = evaluator.evaluate(component);
+    private void printComponent(EvaluableComponent component) {
+		Visitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
+        EvaluationResult result = component.accept(evaluatorVisitor);
         System.out.println(result);
     }
 }

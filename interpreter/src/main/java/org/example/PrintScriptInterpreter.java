@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.ast.AstComponent;
 import org.example.ast.statement.SentenceStatement;
 import org.example.ast.visitor.Visitor;
 import org.example.visitors.StatementVisitor;
