@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/parser/syntax/analyzer/SyntaxAnalyzer.java
-package parser.syntax.analyzer;
-========
 package org.example;
->>>>>>>> 6035302c02e585b433224c294c5bf11a88e57129:syntax/src/main/java/org/example/SyntaxAnalyzer.java
 
 
 import org.example.result.SyntaxResult;

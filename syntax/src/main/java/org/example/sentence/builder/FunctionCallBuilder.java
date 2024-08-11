@@ -1,13 +1,7 @@
-<<<<<<<< HEAD:src/main/java/parser/syntax/sentence/builder/FunctionCallBuilder.java
-package parser.syntax.sentence.builder;
-========
-package org.example.sentence.strategy;
->>>>>>>> 6035302c02e585b433224c294c5bf11a88e57129:syntax/src/main/java/org/example/sentence/strategy/FunctionCallStrategy.java
+package org.example.sentence.builder;
 
-import org.example.ast.AstComponent;
+import org.example.ast.*;
 import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.IdentifierType;
-import org.example.ast.Parameters;
 import org.example.token.Token;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.FunctionSentenceValidator;
@@ -28,10 +22,10 @@ public class FunctionCallBuilder implements SentenceBuilder {
   }
 
   private AstComponent getFinalSentence(List<Token> tokens) {
-    List<AstComponent> parameters = new TokenMapper().buildArgument(tokens.subList(1, tokens.size()));
+    List<EvaluableComponent> parameters = new TokenMapper().buildArgument(tokens.subList(1, tokens.size()));
     System.out.println(parameters);
 
-    return new FunctionCallStatement(new Identifier("println", IdentifierType.FUNCTION),
+    return new FunctionCallStatement(new FunctionIdentifier("println"),
       new Parameters(parameters));
   }
 }

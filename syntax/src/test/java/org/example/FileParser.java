@@ -1,12 +1,7 @@
-<<<<<<<< HEAD:src/test/java/model/FileParser.java
-package model;
-
-========
 package org.example;
 
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
->>>>>>>> 6035302c02e585b433224c294c5bf11a88e57129:syntax/src/test/java/org/example/FileParser.java
 import org.json.JSONObject;
 
 import java.io.File;

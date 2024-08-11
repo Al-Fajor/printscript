@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SyntaxTest {
   String RUN_ONLY = "";
-  TestBuilder testBuilder = new TestBuilder();
+  SyntaxTestBuilder testBuilder = new SyntaxTestBuilder();
   String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
 
   @TestFactory

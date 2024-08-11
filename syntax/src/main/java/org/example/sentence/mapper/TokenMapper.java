@@ -1,11 +1,6 @@
 package org.example.sentence.mapper;
 
-import org.example.ast.AstComponent;
-import org.example.ast.BinaryExpression;
-import org.example.ast.BinaryOperator;
-import org.example.ast.DeclarationType;
-import org.example.ast.IdentifierType;
-import org.example.ast.Literal;
+import org.example.ast.*;
 import org.example.token.Token;
 import org.example.token.TokenType;
 
@@ -14,16 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static org.example.token.BaseTokenTypes.FUNCTION;
-import static org.example.token.BaseTokenTypes.IDENTIFIER;
-import static org.example.token.BaseTokenTypes.LITERAL;
-import static org.example.token.BaseTokenTypes.OPERATOR;
-import static org.example.token.BaseTokenTypes.SEMICOLON;
-import static org.example.token.BaseTokenTypes.SEPARATOR;
+import static org.example.token.BaseTokenTypes.*;
 
 public class TokenMapper {
-  public List<AstComponent> buildArgument(List<Token> tokens) {
-    List<AstComponent> arguments = new ArrayList<>();
+  public List<EvaluableComponent> buildArgument(List<Token> tokens) {
+    List<EvaluableComponent> arguments = new ArrayList<>();
     for (int i = 0; i < tokens.size(); i++) {
       Token token = tokens.get(i);
 
@@ -62,10 +52,10 @@ public class TokenMapper {
     return false;
   }
 
-  public AstComponent mapToken(Token token) {
-    Map<TokenType, AstComponent> map = Map.of(
+  public EvaluableComponent mapToken(Token token) {
+    Map<TokenType, EvaluableComponent> map = Map.of(
       LITERAL, translateToLiteral(token.getValue()),
-      IDENTIFIER, new Identifier(token.getValue(), IdentifierType.VARIABLE)
+      IDENTIFIER, new VariableIdentifier(token.getValue(), IdentifierType.VARIABLE)
     );
     return map.get(token.getType());
   }

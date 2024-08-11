@@ -1,12 +1,9 @@
-<<<<<<<< HEAD:src/main/java/parser/syntax/sentence/builder/LetBuilder.java
-package parser.syntax.sentence.builder;
-========
-package org.example.sentence.strategy;
->>>>>>>> 6035302c02e585b433224c294c5bf11a88e57129:syntax/src/main/java/org/example/sentence/strategy/LetStrategy.java
+package org.example.sentence.builder;
 
+import org.example.ast.Declaration;
+import org.example.ast.IdentifierComponent;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.AstComponent;
-import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.DeclarationType;
 import org.example.token.Token;
 import org.example.sentence.mapper.TokenMapper;
@@ -35,16 +32,10 @@ public class LetBuilder implements SentenceBuilder {
     //May need to change method
     Token type = tokens.get(3), identifier = tokens.get(1);
 
-<<<<<<<< HEAD:src/main/java/parser/syntax/sentence/builder/LetBuilder.java
     DeclarationType declarationType = getDeclarationType(type.getValue());
 
-    AstComponent declaration = new Declaration(declarationType, identifier.getValue());
-    return new Assignation(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).getFirst());
-========
-//    System.out.println("Identifier: " + identifier.getValue());
-    AstComponent declaration = new DeclarationStatement(declarationType, mapper.clearInvCommas(identifier.getValue()));
-    return new AssignationStatement(declaration, mapper.buildFunctionArgument(tokens.subList(5, tokens.size())).getFirst());
->>>>>>>> 6035302c02e585b433224c294c5bf11a88e57129:syntax/src/main/java/org/example/sentence/strategy/LetStrategy.java
+    IdentifierComponent declaration = new Declaration(declarationType, identifier.getValue());
+    return new AssignationStatement(declaration, mapper.buildArgument(tokens.subList(5, tokens.size())).getFirst());
   }
 
     private DeclarationType getDeclarationType(String type) {
