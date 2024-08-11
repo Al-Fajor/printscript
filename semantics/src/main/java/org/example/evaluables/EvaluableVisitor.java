@@ -77,7 +77,7 @@ public class EvaluableVisitor implements Visitor<Resolution> {
 
         else {
             if (differentTypes(rightResolution, leftResolution)) {
-                return Resolution.failure(
+                return Resolution.emptyFailure(
                         "Cannot perform operation because types are incompatible: "
                                 + rightResolution.evaluatedType().get() + " "
                                 + getSymbol(expression.getOperator()) + " "
@@ -159,7 +159,7 @@ public class EvaluableVisitor implements Visitor<Resolution> {
                         leftResolution,
                         new IdentifierExists(
                                 leftResolution,
-                                (env) -> Resolution.failure("Variable has already been declared"),
+                                (env) -> Resolution.emptyFailure("Variable has already been declared"),
                                 new IsSimpleDeclaration(
                                         rightResolution,
                                         (env) -> {
@@ -173,7 +173,7 @@ public class EvaluableVisitor implements Visitor<Resolution> {
                                                     env.declareVariable(leftResolution.name(), leftResolution.type().get());
                                                     return Resolution.emptySuccess();
                                                 },
-                                                (env) -> Resolution.failure(
+                                                (env) -> Resolution.emptyFailure(
                                                         "Cannot assign value of type " + rightResolution.evaluatedType().get()
                                                                 + " to variable of type" + leftResolution.type().get()
                                                 )
@@ -187,12 +187,12 @@ public class EvaluableVisitor implements Visitor<Resolution> {
                                         leftResolution,
                                         rightResolution,
                                         (env) -> Resolution.emptySuccess(),
-                                        (env) -> Resolution.failure(
+                                        (env) -> Resolution.emptyFailure(
                                                 "Cannot assign type " + rightResolution.evaluatedType().get()
                                                         + " to " + env.getDeclarationType(leftResolution.name())
                                         )
                                 ),
-                                (env) -> Resolution.failure("Cannot assign non-existing identifier")
+                                (env) -> Resolution.emptyFailure("Cannot assign non-existing identifier")
                         )
                 ),
                 (env) -> rightResolution
@@ -210,18 +210,18 @@ public class EvaluableVisitor implements Visitor<Resolution> {
         ParametersResolution parameterResolution = statement.getRight().accept(parametersVisitor);
 
         if (!functionCallResolution.result().isSuccessful()) {
-            return Resolution.failure(functionCallResolution.result().errorMessage());
+            return Resolution.emptyFailure(functionCallResolution.result().errorMessage());
         }
 
         if (!parameterResolution.result().isSuccessful()) {
-            return Resolution.failure(parameterResolution.result().errorMessage());
+            return Resolution.emptyFailure(parameterResolution.result().errorMessage());
         }
 
         List<DeclarationType> types = parameterResolution.types();
 
         String functionName = functionCallResolution.name();
         if (!env.isFunctionDeclared(functionName, types)) {
-            return Resolution.failure("Cannot resolve " + functionName + "(" + types + ").");
+            return Resolution.emptyFailure("Cannot resolve " + functionName + "(" + types + ").");
         }
         // TODO: resolve into Literal if not void
         return Resolution.emptySuccess();

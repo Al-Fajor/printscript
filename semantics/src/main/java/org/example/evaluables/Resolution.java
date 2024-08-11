@@ -13,9 +13,7 @@ public record Resolution(
         boolean isValuePresent,
         Optional<String> identifierName
 ) {
-    //TODO: failure should not be empty. For instance, if an identifier cannot be found,
-    // we should return its name anyway, since we need it for the visit to AssignationStatement
-    public static Resolution failure(String reason) {
+    public static Resolution emptyFailure(String reason) {
         return new Resolution(
                 new SemanticFailure(reason),
                 Optional.empty(),
