@@ -1,5 +1,8 @@
-package org.example;
+package org.example.parameters;
 
+import org.example.evaluables.Resolution;
+import org.example.SemanticResult;
+import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
 import org.example.ast.Conditional;
 import org.example.ast.Declaration;
@@ -13,16 +16,17 @@ import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.Visitor;
+import org.example.evaluables.EvaluableVisitor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ParametersVisitor implements Visitor<ParametersResolution> {
-    private SemanticAnalyzerImpl mainVisitor;
+    private EvaluableVisitor evaluableVisitor;
 
-    public ParametersVisitor(SemanticAnalyzerImpl mainVisitor) {
-        this.mainVisitor = mainVisitor;
+    public void setEvaluableVisitor(EvaluableVisitor evaluableVisitor) {
+        this.evaluableVisitor = evaluableVisitor;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class ParametersVisitor implements Visitor<ParametersResolution> {
         List<DeclarationType> types = new ArrayList<>();
 
         for (EvaluableComponent component: parameters.getParameters()) {
-            Resolution resolution = component.accept(mainVisitor);
+            Resolution resolution = component.accept(evaluableVisitor);
             SemanticResult result = resolution.result();
 
             if (!result.isSuccessful()) return new ParametersResolution(result, Collections.emptyList());

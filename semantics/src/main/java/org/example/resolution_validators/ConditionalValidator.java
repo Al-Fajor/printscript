@@ -1,7 +1,7 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
-import org.example.Resolution;
+import org.example.evaluables.Resolution;
 
 // The Template Method pattern will be more readable than Strategy, in this case
 public abstract class ConditionalValidator implements ResolutionValidator {

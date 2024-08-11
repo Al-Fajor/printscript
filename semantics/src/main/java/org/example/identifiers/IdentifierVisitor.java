@@ -1,5 +1,6 @@
-package org.example;
+package org.example.identifiers;
 
+import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
 import org.example.ast.Conditional;
 import org.example.ast.Declaration;

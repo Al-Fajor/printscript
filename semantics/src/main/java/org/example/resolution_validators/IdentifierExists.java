@@ -1,8 +1,7 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
-import org.example.IdentifierResolution;
-import org.example.Resolution;
+import org.example.identifiers.IdentifierResolution;
 
 public class IdentifierExists extends ConditionalValidator {
     private final IdentifierResolution leftResolution;

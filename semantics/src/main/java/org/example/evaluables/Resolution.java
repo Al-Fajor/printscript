@@ -1,11 +1,11 @@
-package org.example;
+package org.example.evaluables;
 
-import org.example.ast.Declaration;
+import org.example.SemanticFailure;
+import org.example.SemanticResult;
+import org.example.SemanticSuccess;
 import org.example.ast.DeclarationType;
 
-import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 public record Resolution(
         SemanticResult result,

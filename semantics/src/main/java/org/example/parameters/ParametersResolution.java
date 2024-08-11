@@ -1,5 +1,6 @@
-package org.example;
+package org.example.parameters;
 
+import org.example.SemanticResult;
 import org.example.ast.DeclarationType;
 
 import java.util.List;
