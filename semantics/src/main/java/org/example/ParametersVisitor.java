@@ -8,7 +8,7 @@ import org.example.ast.EvaluableComponent;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
 import org.example.ast.StatementBlock;
-import org.example.ast.VariableIdentifier;
+import org.example.ast.Identifier;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
@@ -81,7 +81,7 @@ public class ParametersVisitor implements Visitor<ParametersResolution> {
     }
 
     @Override
-    public ParametersResolution visit(VariableIdentifier variableIdentifier) {
+    public ParametersResolution visit(Identifier identifier) {
         return null;
     }
 }

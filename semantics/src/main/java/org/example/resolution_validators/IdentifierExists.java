@@ -1,13 +1,14 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
+import org.example.IdentifierResolution;
 import org.example.Resolution;
 
 public class IdentifierExists extends ConditionalValidator {
-    private final Resolution leftResolution;
+    private final IdentifierResolution leftResolution;
 
     public IdentifierExists(
-            Resolution leftResolution,
+            IdentifierResolution leftResolution,
             ResolutionValidator trueCaseValidator,
             ResolutionValidator falseCaseValidator
     ) {
@@ -17,8 +18,6 @@ public class IdentifierExists extends ConditionalValidator {
 
     @Override
     protected boolean meetsCondition(Environment environment) {
-        return leftResolution.identifierName()
-                .map(environment::isVariableDeclared)
-                .orElse(false);
+        return environment.isVariableDeclared(leftResolution.name());
     }
 }

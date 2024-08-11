@@ -14,7 +14,7 @@
     },
     {
       "functionCall": {
-        "funIdentifier": {
+        "identifier": {
           "name": "println",
           "identifierType": "function"
         },

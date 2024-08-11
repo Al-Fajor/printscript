@@ -1,13 +1,13 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
-import org.example.Resolution;
+import org.example.IdentifierResolution;
 
 public class IsDeclarationElseAssignation extends ConditionalValidator {
-    private final Resolution leftResolution;
+    private final IdentifierResolution leftResolution;
 
     public IsDeclarationElseAssignation(
-            Resolution leftResolution,
+            IdentifierResolution leftResolution,
             ResolutionValidator trueCaseValidator,
             ResolutionValidator falseCaseValidator
     ) {
@@ -17,6 +17,6 @@ public class IsDeclarationElseAssignation extends ConditionalValidator {
 
     @Override
     protected boolean meetsCondition(Environment environment) {
-        return !leftResolution.resolvedDeclarations().isEmpty();
+        return leftResolution.type().isPresent();
     }
 }

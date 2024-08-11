@@ -9,7 +9,7 @@ import org.example.ast.DeclarationType;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
 import org.example.ast.StatementBlock;
-import org.example.ast.VariableIdentifier;
+import org.example.ast.Identifier;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
@@ -19,15 +19,15 @@ import org.example.resolution_validators.IsDeclarationElseAssignation;
 import org.example.resolution_validators.IsSimpleDeclaration;
 import org.example.resolution_validators.IsSuccessful;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
     // TODO: may define externally, such as in a config file
     private final Environment baseEnvironment;
     private Environment env;
+    private final ParametersVisitor parametersVisitor = new ParametersVisitor(this);
+    private final IdentifierVisitor identifierVisitor = new IdentifierVisitor();
 
     public SemanticAnalyzerImpl(Environment baseEnvironment) {
         this.baseEnvironment = baseEnvironment;
@@ -64,16 +64,14 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
                         new SemanticSuccess(),
                         Optional.of(DeclarationType.NUMBER),
                         true,
-                        Optional.empty(),
-                        Collections.emptySet()
+                        Optional.empty()
                 );
             } else {
                 return new Resolution(
                         new SemanticSuccess(),
                         Optional.of(DeclarationType.STRING),
                         true,
-                        Optional.empty(),
-                        Collections.emptySet()
+                        Optional.empty()
                 );
             }
         }
@@ -91,8 +89,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
                         new SemanticSuccess(),
                         Optional.of(rightResolution.evaluatedType().get()),
                         true,
-                        Optional.empty(),
-                        Collections.emptySet()
+                        Optional.empty()
                 );
             }
         }
@@ -100,19 +97,14 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     private String getSymbol(BinaryOperator operator) {
         // TODO: could move to BinaryOperator
-        switch (operator) {
-            case SUM:
-                return "+";
-            case SUBTRACTION:
-                return "-";
-            case MULTIPLICATION:
-                return "*";
-            case DIVISION:
-                return "/";
-            default:
-                // Unreachable
-                throw new RuntimeException("Invalid operator: " + operator + "(Resolution return for this type yet to be implemented)");
-        }
+        return switch (operator) {
+            case SUM -> "+";
+            case SUBTRACTION -> "-";
+            case MULTIPLICATION -> "*";
+            case DIVISION -> "/";
+            default ->
+                    throw new RuntimeException("Invalid operator: " + operator + "(Resolution return for this type yet to be implemented)");
+        };
     }
 
     private static boolean differentTypes(Resolution rightResolution, Resolution leftResolution) {
@@ -140,8 +132,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
                 new SemanticSuccess(),
                 Optional.of(mapToDeclarationType(literal)),
                 true,
-                Optional.empty(),
-                Collections.emptySet()
+                Optional.empty()
         );
     }
 
@@ -160,7 +151,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     @Override
     public Resolution visit(AssignationStatement statement) {
-        Resolution leftResolution = statement.getLeft().accept(this);
+        IdentifierResolution leftResolution = statement.getLeft().accept(identifierVisitor);
         Resolution rightResolution = statement.getRight().accept(this);
 
         return new IsSuccessful(
@@ -173,19 +164,19 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
                                 new IsSimpleDeclaration(
                                         rightResolution,
                                         (env) -> {
-                                            env.declareVariable(leftResolution.identifierName().get(), leftResolution.evaluatedType().get());
-                                            return Resolution.success(leftResolution.resolvedDeclarations());
+                                            env.declareVariable(leftResolution.name(), leftResolution.type().get());
+                                            return Resolution.emptySuccess();
                                         },
                                         new AssigningToValidValue(
                                                 leftResolution,
                                                 rightResolution,
                                                 (env) -> {
-                                                    env.declareVariable(leftResolution.identifierName().get(), leftResolution.evaluatedType().get());
-                                                    return Resolution.success(leftResolution.resolvedDeclarations());
+                                                    env.declareVariable(leftResolution.name(), leftResolution.type().get());
+                                                    return Resolution.emptySuccess();
                                                 },
                                                 (env) -> Resolution.failure(
-                                                        "Cannot assign type " + rightResolution.evaluatedType().get()
-                                                                + " to " + leftResolution.evaluatedType().get()
+                                                        "Cannot assign value of type " + rightResolution.evaluatedType().get()
+                                                                + " to variable of type" + leftResolution.type().get()
                                                 )
                                         )
 
@@ -196,10 +187,10 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
                                 new AssigningToValidValue(
                                         leftResolution,
                                         rightResolution,
-                                        (env) -> Resolution.success(leftResolution.resolvedDeclarations()),
+                                        (env) -> Resolution.emptySuccess(),
                                         (env) -> Resolution.failure(
                                                 "Cannot assign type " + rightResolution.evaluatedType().get()
-                                                        + " to " + leftResolution.evaluatedType().get()
+                                                        + " to " + env.getDeclarationType(leftResolution.name())
                                         )
                                 ),
                                 (env) -> Resolution.failure("Cannot assign non-existing identifier")
@@ -211,18 +202,30 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
     @Override
     public Resolution visit(Declaration statement) {
-        return new Resolution(
-                new SemanticSuccess(),
-                Optional.of(statement.getType()),
-                false,
-                Optional.of(statement.getName()),
-                Set.of(statement)
-        );
+        return null;
     }
 
     @Override
     public Resolution visit(FunctionCallStatement statement) {
-        return null;
+        IdentifierResolution functionCallResolution = statement.getLeft().accept(identifierVisitor);
+        ParametersResolution parameterResolution = statement.getRight().accept(parametersVisitor);
+
+        if (!functionCallResolution.result().isSuccessful()) {
+            return Resolution.failure(functionCallResolution.result().errorMessage());
+        }
+
+        if (!parameterResolution.result().isSuccessful()) {
+            return Resolution.failure(parameterResolution.result().errorMessage());
+        }
+
+        List<DeclarationType> types = parameterResolution.types();
+
+        String functionName = functionCallResolution.name();
+        if (!env.isFunctionDeclared(functionName, types)) {
+            return Resolution.failure("Cannot resolve " + functionName + "(" + types + ").");
+        }
+        // TODO: resolve into Literal if not void
+        return Resolution.emptySuccess();
     }
 
     @Override
@@ -231,24 +234,22 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
     }
 
     @Override
-    public Resolution visit(VariableIdentifier variableIdentifier) {
+    public Resolution visit(Identifier identifier) {
         // TODO: convert to validator
-        if (!env.isVariableDeclared(variableIdentifier.getName())) {
+        if (!env.isVariableDeclared(identifier.getName())) {
             return new Resolution(
-                    new SemanticFailure("Cannot find identifier " + variableIdentifier.getName()),
+                    new SemanticFailure("Cannot find identifier " + identifier.getName()),
                     Optional.empty(),
                     false,
-                    Optional.of(variableIdentifier.getName()),
-                    Collections.emptySet()
+                    Optional.of(identifier.getName())
             );
         }
         else {
             return new Resolution(
                     new SemanticSuccess(),
-                    Optional.of(env.getDeclarationType(variableIdentifier.getName())),
+                    Optional.of(env.getDeclarationType(identifier.getName())),
                     false,
-                    Optional.of(variableIdentifier.getName()),
-                    Collections.emptySet()
+                    Optional.of(identifier.getName())
             );
         }
     }

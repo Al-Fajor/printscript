@@ -14,7 +14,7 @@
     },
     {
       "assignation": {
-        "varIdentifier": {
+        "identifier": {
           "name": "a",
           "identifierType": "variable"
         },
