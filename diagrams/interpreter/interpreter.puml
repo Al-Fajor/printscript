@@ -1,12 +1,13 @@
 @startuml
 PrintScriptInterpreter *-- InterpreterState
-PrintScriptInterpreter *-- StrategySelector
 InterpreterState o-- Function
 InterpreterState o-- Variable
 Variable *-- VariableType
-ExpressionEvaluator *- ExpressionResult
-StrategySelector o-- InterpreterStrategy
-InterpreterStrategy o--- ExpressionEvaluator
+PrintScriptInterpreter -> StatementVisitor
+StatementVisitor --> EvaluatorVisitor
+StatementVisitor --> IdentifierVisitor
+EvaluatorVisitor o-- EvaluationResult
+
 interface Interpreter {
     +interpret(AstComponent[]): void
 }
@@ -33,9 +34,6 @@ class PrintScriptState implements InterpreterState {
     -Map<String, Variable<String>> strVariables
     -Map<String, Function> functions
 }
-class StrategySelector {
-    +execute(AstComponent): void
-}
 class Variable<T> {
     -VariableType
     -T value
@@ -46,26 +44,25 @@ enum VariableType {
     STRING
     BOOLEAN
 }
-class BinaryExpressionEvaluator implements ExpressionEvaluator
-class ComponentEvaluator implements ExpressionEvaluator
-class ConditionalEvaluator implements ExpressionEvaluator
-class ExpressionResult {
+class EvaluationResult {
     -VariableType
     -String stringResult
     -Double numericResult
     -Boolean boolResult
 }
-class IdentifierEvaluator implements ExpressionEvaluator
-class LiteralEvaluator implements ExpressionEvaluator
-interface ExpressionEvaluator {
-    +evaluate(AstComponent): ExpressionResult
+class EvaluatorVisitor implements Visitor {
+    visit(BinaryExpression): EvaluationResult
+    visit(Literal<?>): EvaluationResult
+    visit(VariableIdentifier): EvaluationResult
 }
-class AssignationStrategy implements InterpreterStrategy
-class DeclarationStrategy implements InterpreterStrategy
-class FunctionCallStrategy implements InterpreterStrategy
-class IfStatementStrategy implements InterpreterStrategy
-class ParametersStrategy implements InterpreterStrategy
-interface InterpreterStrategy {
-    +execute(AstComponent): void
+class IdentifierVisitor implements Visitor {
+    visit(VariableIdentifier): String
+    visit(FunctionIdentifier): String
+    visit(Declaration): String
+}
+class StatementVisitor implements Visitor {
+    visit(AssignationStatement): void
+    visit(FunctionCallStatement): void
+    visit(IfStatement): void
 }
 @enduml

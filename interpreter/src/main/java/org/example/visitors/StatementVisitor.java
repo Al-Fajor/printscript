@@ -60,6 +60,7 @@ public class StatementVisitor implements Visitor<Void> {
 		return null;
 	}
 
+
 	@Override
 	public Void visit(Declaration declaration) {
 		return null;
