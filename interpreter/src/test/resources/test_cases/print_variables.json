@@ -1,21 +1,9 @@
 {
   "ast_list": [
     {
-      "declaration": {
-        "declarationType": "Number",
-        "name": "num"
-      }
-    },
-    {
-      "declaration": {
-        "declarationType": "String",
-        "name": "string"
-      }
-    },
-    {
       "assignation": {
-        "varIdentifier": {
-          "identifierType": "variable",
+        "declaration": {
+          "declarationType": "Number",
           "name": "num"
         },
         "literal": {
@@ -25,8 +13,8 @@
     },
     {
       "assignation": {
-        "varIdentifier": {
-          "identifierType": "variable",
+        "declaration": {
+          "declarationType": "String",
           "name": "string"
         },
         "literal": {

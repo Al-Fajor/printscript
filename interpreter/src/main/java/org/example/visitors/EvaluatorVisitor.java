@@ -79,6 +79,11 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	}
 
 	@Override
+	public EvaluationResult visit(FunctionIdentifier functionIdentifier) {
+		return null;
+	}
+
+	@Override
 	public EvaluationResult visit(Parameters parameters) {
 		throw new UnsupportedOperationException("Implement parameters evaluation");
 	}

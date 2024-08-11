@@ -22,6 +22,11 @@ public class IdentifierVisitor implements Visitor<String> {
 	}
 
 	@Override
+	public String visit(FunctionIdentifier functionIdentifier) {
+		return functionIdentifier.getName();
+	}
+
+	@Override
 	public String visit(Declaration declaration) {
 		DeclarationType declarationType = declaration.getType();
 		String name = declaration.getName();

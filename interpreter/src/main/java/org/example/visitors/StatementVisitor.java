@@ -94,4 +94,9 @@ public class StatementVisitor implements Visitor<Void> {
 	public Void visit(VariableIdentifier variableIdentifier) {
 		return null;
 	}
+
+	@Override
+	public Void visit(FunctionIdentifier functionIdentifier) {
+		return null;
+	}
 }
