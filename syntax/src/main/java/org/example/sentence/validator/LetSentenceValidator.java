@@ -1,19 +1,10 @@
 package org.example.sentence.validator;
 
-import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
-import java.util.Iterator;
 import java.util.List;
 
-import static org.example.token.BaseTokenTypes.ASSIGNATION;
-import static org.example.token.BaseTokenTypes.COLON;
-import static org.example.token.BaseTokenTypes.FUNCTION;
-import static org.example.token.BaseTokenTypes.IDENTIFIER;
-import static org.example.token.BaseTokenTypes.LITERAL;
-import static org.example.token.BaseTokenTypes.OPERATOR;
-import static org.example.token.BaseTokenTypes.SEMICOLON;
-import static org.example.token.BaseTokenTypes.TYPE;
+import static org.example.token.BaseTokenTypes.*;
 
 public class LetSentenceValidator implements SentenceValidator{
   @Override
@@ -22,34 +13,46 @@ public class LetSentenceValidator implements SentenceValidator{
   }
 
   private boolean checkValidity(List<Token> tokens) {
-    Iterator<Token> iterator = tokens.iterator();
-    while(iterator.hasNext()){
-      Token token = iterator.next();
-      switch ((BaseTokenTypes) token.getType()){
-        case LET:
-          if(iterator.next().getType() != IDENTIFIER) return false;
-          break;
-        case IDENTIFIER:
-          if (iterator.next().getType() != COLON) return false;
-          break;
-        case SEMICOLON:
-          if (iterator.hasNext()) return false;
-          break;
-        case COLON:
-          if (iterator.next().getType() != TYPE) return false;
-          break;
-        case TYPE:
-          if (iterator.next().getType() != ASSIGNATION) return false;
-          break;
-        case LITERAL:
-          if (!List.of(SEMICOLON, OPERATOR).contains(iterator.next().getType()) ) return false; //In case I receive a binary operation
-          break;
-        case ASSIGNATION:
-        case OPERATOR:
-          if (!List.of(LITERAL, IDENTIFIER, FUNCTION).contains(iterator.next().getType())) return false; //In case I get a variable reassignation
-          break;
-      }
+    CommonValidator validator = new CommonValidator();
+
+    for (int i = 0; i < tokens.size(); i++) {
+      Token token = tokens.get(i);
+      Token nextToken = i+1>=tokens.size() ? null: tokens.get(i+1);
+      if(validator.isNotSpecialToken(token)) return validator.isValidToken(token, nextToken);
+      if (isNotValidSequence(token, nextToken, validator)) return false;
     }
     return true;
+  }
+
+  private boolean isNotValidSequence(Token token, Token nextToken, CommonValidator validator) {
+    switch (token.getType()){
+      case LET:
+        if(nextToken == null) return true;
+        if(nextToken.getType() != IDENTIFIER) return true;
+        break;
+      case IDENTIFIER:
+        if(nextToken == null) return true;
+        if(!List.of(COLON, SEMICOLON).contains(nextToken.getType())) return true;
+        break;
+      case COLON:
+        if(nextToken == null) return true;
+        if (nextToken.getType() != TYPE) return true;
+        break;
+      case TYPE:
+        if(nextToken == null) return true;
+        if (nextToken.getType() != ASSIGNATION) return true;
+        break;
+      case LITERAL:
+        if(nextToken == null) return true;
+        if (!List.of(SEMICOLON, OPERATOR).contains(nextToken.getType()) ) return true;
+        break;
+      case ASSIGNATION:
+        if(nextToken == null) return true;
+        if (!List.of(LITERAL, IDENTIFIER, FUNCTION).contains(nextToken.getType())) return true;
+        break;
+      default:
+        break;
+    }
+    return false;
   }
 }
