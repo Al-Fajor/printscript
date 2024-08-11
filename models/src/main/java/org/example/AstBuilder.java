@@ -66,6 +66,9 @@ public class AstBuilder {
                 else if (value instanceof Number) {
                     return new Literal<>((Number) value);
                 }
+				else if (value == JSONObject.NULL) {
+					return new Literal<>(null);
+				}
                 else throw new IllegalArgumentException("Cannot parse JSON: Unsupported value " + value + " for literal");
             case "varIdentifier":
                 return new VariableIdentifier(
@@ -104,7 +107,9 @@ public class AstBuilder {
                 }
 
                 return new Parameters(parameters);
-            case "funIdentifier", "conditional", "if", "ifClauses", "statementBlock":
+			case "funIdentifier":
+				return new FunctionIdentifier(astComponentJson.getString("name"));
+            case "conditional", "if", "ifClauses", "statementBlock":
                 throw new RuntimeException("Not implemented yet: case '" + astComponentJsonName + "'");
             default:
                 throw new IllegalArgumentException(astComponentJsonName + " is not a valid ast component");

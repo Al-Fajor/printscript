@@ -4,6 +4,16 @@ import org.example.Pair;
 import org.example.ast.visitor.Visitor;
 
 public class FunctionIdentifier implements IdentifierComponent {
+	private final String name;
+
+	public FunctionIdentifier(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	public Pair<Integer, Integer> getStart() {
 		return null;
@@ -16,6 +26,6 @@ public class FunctionIdentifier implements IdentifierComponent {
 
 	@Override
 	public <T> T accept(Visitor<T> visitor) {
-		return null;
+		return visitor.visit(this);
 	}
 }
