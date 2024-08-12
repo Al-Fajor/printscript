@@ -1,9 +1,7 @@
 package org.example;
 
-import org.example.token.Token;
-
-import java.util.List;
+import org.example.lexerresult.LexerResult;
 
 public interface Lexer {
-    List<Token> lex(String input);
+    LexerResult lex(String input);
 }

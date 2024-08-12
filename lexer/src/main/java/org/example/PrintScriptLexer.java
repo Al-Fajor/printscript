@@ -1,19 +1,22 @@
 package org.example;
 
+import org.example.lexerresult.LexerFailure;
+import org.example.lexerresult.LexerResult;
+import org.example.lexerresult.LexerSuccess;
+import org.example.scanresult.FailedScanResult;
 import org.example.scanresult.ScanResult;
-import org.example.token.Token;
-
-import java.util.List;
 
 public class PrintScriptLexer implements Lexer{
 
     @Override
-    public List<Token> lex(String input) {
+    public LexerResult lex(String input) {
         Scanner scanner = new Scanner();
         ScanResult scanResult = scanner.scan(input);
-        if (!scanResult.isSuccessful()) throw new IllegalArgumentException();
+        if (!scanResult.isSuccessful()) {
+            return new LexerFailure((FailedScanResult) scanResult);
+        }
         Tokenizer tokenizer = new Tokenizer();
-        return tokenizer.tokenize(input);
+        return new LexerSuccess(tokenizer.tokenize(input));
     }
 
 }
