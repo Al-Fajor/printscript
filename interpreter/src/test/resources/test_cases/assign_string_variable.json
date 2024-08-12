@@ -7,13 +7,13 @@
           "name": "string"
         },
         "2_literal": {
-          "value": ""
+          "value": null
         }
       }
     },
     {
       "assignation": {
-        "1_varIdentifier": {
+        "1_identifier": {
           "identifierType": "variable",
           "name": "string"
         },

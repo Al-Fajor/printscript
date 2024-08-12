@@ -17,13 +17,8 @@ public class IdentifierVisitor implements Visitor<String> {
 	}
 
 	@Override
-	public String visit(VariableIdentifier variableIdentifier) {
+	public String visit(Identifier variableIdentifier) {
 		return variableIdentifier.getName();
-	}
-
-	@Override
-	public String visit(FunctionIdentifier functionIdentifier) {
-		return functionIdentifier.getName();
 	}
 
 	@Override
