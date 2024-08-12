@@ -1,0 +1,4 @@
+{
+  "code": "let x: string = \"hello;",
+  "tokens": ""
+}

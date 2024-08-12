@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.lexerresult.LexerFailure;
+import org.example.lexerresult.LexerResult;
 import org.example.token.Token;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,11 +11,11 @@ import java.util.List;
 
 public class LexerTestBuilder {
 
-    public void testLexer(String filePath) throws IOException {
+    public void testTokenDetection(String filePath) throws IOException {
         Lexer lexer = new PrintScriptLexer();
         FileParser fp = new FileParser();
         List<Token> expectedList = fp.getTokens(filePath);
-        List<Token> actualList = lexer.lex(fp.getCode(filePath));
+        List<Token> actualList = lexer.lex(fp.getCode(filePath)).getTokens();
         compareTokens(expectedList, actualList);
     }
 
@@ -23,6 +25,13 @@ public class LexerTestBuilder {
             assertEquals(expectedList.get(i).getType(), actualList.get(i).getType());
             assertEquals(expectedList.get(i).getValue(), actualList.get(i).getValue());
         }
+    }
+
+    public void testLexicalErrorDetection(String filePath) throws IOException {
+        Lexer lexer = new PrintScriptLexer();
+        FileParser fp = new FileParser();
+        LexerResult result =  lexer.lex(fp.getCode(filePath));
+        assertInstanceOf(LexerFailure.class, result);
     }
 
 }
