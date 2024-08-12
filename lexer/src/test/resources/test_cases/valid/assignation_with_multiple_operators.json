@@ -1,0 +1,4 @@
+{
+  "code": "x = 5 + 3 - 2 * 4 / 2;",
+    "tokens": "IDENTIFIER(x) -> ASSIGNATION(=) -> LITERAL(5) -> OPERATOR(+) -> LITERAL(3) -> OPERATOR(-) -> LITERAL(2) -> OPERATOR(*) -> LITERAL(4) -> OPERATOR(/) -> LITERAL(2) -> SEMICOLON(;)"
+}
