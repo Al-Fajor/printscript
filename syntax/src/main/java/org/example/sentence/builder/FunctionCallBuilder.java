@@ -25,7 +25,7 @@ public class FunctionCallBuilder implements SentenceBuilder {
     List<EvaluableComponent> parameters = new TokenMapper().buildArgument(tokens.subList(1, tokens.size()));
     System.out.println(parameters);
 
-    return new FunctionCallStatement(new FunctionIdentifier("println"),
+    return new FunctionCallStatement(new Identifier("println", IdentifierType.FUNCTION),
       new Parameters(parameters));
   }
 }

@@ -55,7 +55,7 @@ public class TokenMapper {
   public EvaluableComponent mapToken(Token token) {
     Map<TokenType, EvaluableComponent> map = Map.of(
       LITERAL, translateToLiteral(token.getValue()),
-      IDENTIFIER, new VariableIdentifier(token.getValue(), IdentifierType.VARIABLE)
+      IDENTIFIER, new Identifier(token.getValue(), IdentifierType.VARIABLE)
     );
     return map.get(token.getType());
   }

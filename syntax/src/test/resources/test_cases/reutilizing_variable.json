@@ -23,7 +23,7 @@
           "declarationType": "Number",
           "name": "b"
         },
-        "2_varIdentifier": {
+        "2_identifier": {
           "name": "a",
           "identifierType": "variable"
         }
