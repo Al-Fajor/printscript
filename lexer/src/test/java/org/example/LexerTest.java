@@ -7,8 +7,9 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LexerTest {
-    Lexer lexer = new PrintScriptLexer();
     LexerTestBuilder lexerTestBuilder = new LexerTestBuilder();
+
+//    Token Detection
 
     @Test
     void integerInlineAssignation() throws IOException {
@@ -59,6 +60,34 @@ class LexerTest {
     void printCreatedVariable() throws IOException {
         lexerTestBuilder.testTokenDetection("src/test/resources/test_cases/valid/println_created_variable.json");
     }
+
+    @Test
+    void wierdSpacingInlineAssignation() throws IOException {
+        lexerTestBuilder.testTokenDetection("src/test/resources/test_cases/valid/wierd_spacing_inline_assignation.json");
+    }
+
+    @Test
+    void NoSpaceInlineAssignation() throws IOException {
+        lexerTestBuilder.testTokenDetection("src/test/resources/test_cases/valid/no_space_inline_assignation.json");
+    }
+
+    @Test
+    void NoSpaceSubtractionAssignation() throws IOException {
+        lexerTestBuilder.testTokenDetection("src/test/resources/test_cases/valid/no_space_subtraction_assignation.json");
+    }
+
+    @Test
+    void assignationWithMultipleOperators() throws IOException {
+        lexerTestBuilder.testTokenDetection("src/test/resources/test_cases/valid/assignation_with_multiple_operators.json");
+    }
+
+    @Test
+    void noSpaceAssignationWithMultipleOperators() throws IOException {
+        lexerTestBuilder.testTokenDetection("src/test/resources/test_cases/valid/no_space_assignation_with_multiple_operators.json");
+    }
+
+//  Lexical errors
+
     @Test
     void invalidIdentifiers() throws IOException {
         lexerTestBuilder.testLexicalErrorDetection("src/test/resources/test_cases/invalid/identifiers.json");
