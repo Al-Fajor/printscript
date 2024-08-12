@@ -3,6 +3,8 @@ package org.example;
 import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
+import org.example.lexerresult.LexerFailure;
+import org.example.lexerresult.LexerResult;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
@@ -18,7 +20,14 @@ public class Runner {
     SemanticAnalyzer semanticAnalyzer = getSemanticAnalyzer();
     Interpreter interpreter = new PrintScriptInterpreter();
 
-    SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexer.lex(code));
+    LexerResult lexerResult = lexer.lex(code);
+
+    if (!lexerResult.isSuccessful()) {
+      System.out.println(((LexerFailure) lexerResult).message());
+      return;
+    }
+
+    SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerResult.getTokens());
 
     if(syntaxResult.isFailure() && syntaxResult instanceof SyntaxError){
       System.out.println(((SyntaxError) syntaxResult).getReason());
