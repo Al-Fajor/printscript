@@ -62,25 +62,22 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	}
 
 	@Override
-	public EvaluationResult visit(VariableIdentifier variableIdentifier) {
-		VariableType variableType = state.getVariableType(variableIdentifier.getName());
-		switch(variableType) {
-			case NUMBER -> {
-				return new EvaluationResult(getNumericValue(variableIdentifier));
+	public EvaluationResult visit(Identifier identifier) {
+		if (identifier.getType() == IdentifierType.VARIABLE) {
+			VariableType variableType = state.getVariableType(identifier.getName());
+			switch (variableType) {
+				case NUMBER -> {
+					return new EvaluationResult(getNumericValue(identifier));
+				}
+				case STRING -> {
+					return new EvaluationResult(getStringValue(identifier));
+				}
+				case BOOLEAN -> throw new UnsupportedOperationException("Implement Boolean variables");
+				default -> throw new IllegalArgumentException("Invalid variable type");
 			}
-			case STRING -> {
-				return new EvaluationResult(getStringValue(variableIdentifier));
-			}
-			case BOOLEAN ->
-				throw new IllegalArgumentException("Implement Boolean variables");
-			default ->
-				throw new IllegalArgumentException("Invalid variable type");
+		} else {
+			throw new UnsupportedOperationException("Implement function evaluation");
 		}
-	}
-
-	@Override
-	public EvaluationResult visit(FunctionIdentifier functionIdentifier) {
-		return null;
 	}
 
 	@Override
@@ -98,11 +95,11 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 		throw new UnsupportedOperationException("Implement IfStatement variables");
 	}
 
-	private String getStringValue(VariableIdentifier identifier) {
+	private String getStringValue(Identifier identifier) {
 		return state.getStringVariable(identifier.getName()).getValue();
 	}
 
-	private Double getNumericValue(VariableIdentifier identifier) {
+	private Double getNumericValue(Identifier identifier) {
 		return state.getNumericVariable(identifier.getName()).getValue();
 	}
 

@@ -49,9 +49,9 @@ public class StatementVisitor implements Visitor<Void> {
 	}
 
 	private Function getFunction(FunctionCallStatement statement) {
-		AstComponent functionIdentifier = statement.getLeft();
+		AstComponent identifier = statement.getLeft();
 		Visitor<String> identifierVisitor = new IdentifierVisitor(state);
-		String functionName = functionIdentifier.accept(identifierVisitor);
+		String functionName = identifier.accept(identifierVisitor);
 		return state.getFunction(functionName);
 	}
 
@@ -92,12 +92,7 @@ public class StatementVisitor implements Visitor<Void> {
 	}
 
 	@Override
-	public Void visit(VariableIdentifier variableIdentifier) {
-		return null;
-	}
-
-	@Override
-	public Void visit(FunctionIdentifier functionIdentifier) {
+	public Void visit(Identifier variableIdentifier) {
 		return null;
 	}
 }

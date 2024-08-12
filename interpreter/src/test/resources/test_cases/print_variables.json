@@ -24,12 +24,12 @@
     },
     {
       "functionCall": {
-        "funIdentifier": {
+        "identifier": {
           "identifierType": "function",
           "name": "println"
         },
         "params": {
-          "varIdentifier": {
+          "identifier": {
             "identifierType": "variable",
             "name": "string"
           }
@@ -38,12 +38,12 @@
     },
     {
       "functionCall": {
-        "funIdentifier": {
+        "identifier": {
           "identifierType": "function",
           "name": "println"
         },
         "params": {
-          "varIdentifier": {
+          "identifier": {
             "identifierType": "variable",
             "name": "num"
           }

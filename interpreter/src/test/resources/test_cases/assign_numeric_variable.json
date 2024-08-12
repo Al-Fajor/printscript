@@ -13,7 +13,7 @@
     },
     {
       "assignation": {
-        "varIdentifier": {
+        "identifier": {
           "identifierType": "variable",
           "name": "num"
         },
