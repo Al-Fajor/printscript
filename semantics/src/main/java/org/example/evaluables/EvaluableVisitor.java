@@ -24,11 +24,11 @@ import org.example.parameters.ParametersVisitor;
 import org.example.resolution_validators.AssigningToValidValue;
 import org.example.resolution_validators.IdentifierExists;
 import org.example.resolution_validators.IsDeclarationElseAssignation;
+import org.example.resolution_validators.IsFunctionDeclared;
 import org.example.resolution_validators.IsOperationValid;
 import org.example.resolution_validators.IsSimpleDeclaration;
-import org.example.resolution_validators.IsSuccessful;
+import org.example.resolution_validators.IsResolutionSuccessful;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +53,9 @@ public class EvaluableVisitor implements Visitor<Resolution> {
         var leftResolution = expression.getLeftComponent().accept(this);
         var rightResolution = expression.getRightComponent().accept(this);
 
-        return new IsSuccessful(
+        return new IsResolutionSuccessful(
                 leftResolution,
-                new IsSuccessful(
+                new IsResolutionSuccessful(
                         rightResolution,
                             new IsOperationValid(
                                     lang,
@@ -98,15 +98,6 @@ public class EvaluableVisitor implements Visitor<Resolution> {
         };
     }
 
-    private static boolean differentTypes(Resolution rightResolution, Resolution leftResolution) {
-        return rightResolution.evaluatedType().get() != leftResolution.evaluatedType().get();
-    }
-
-    private static boolean bothAreNumbers(Resolution rightResolution, Resolution leftResolution) {
-        return rightResolution.evaluatedType().get() == DeclarationType.NUMBER
-                && leftResolution.evaluatedType().get() == DeclarationType.NUMBER;
-    }
-
     @Override
     public Resolution visit(Conditional conditional) {
         return null;
@@ -145,7 +136,7 @@ public class EvaluableVisitor implements Visitor<Resolution> {
         IdentifierResolution leftResolution = statement.getLeft().accept(identifierVisitor);
         Resolution rightResolution = statement.getRight().accept(this);
 
-        return new IsSuccessful(
+        return new IsResolutionSuccessful(
                 rightResolution,
                 new IsDeclarationElseAssignation(
                         leftResolution,
@@ -200,23 +191,23 @@ public class EvaluableVisitor implements Visitor<Resolution> {
     public Resolution visit(FunctionCallStatement statement) {
         IdentifierResolution functionCallResolution = statement.getLeft().accept(identifierVisitor);
         ParametersResolution parameterResolution = statement.getRight().accept(parametersVisitor);
-
-        if (!functionCallResolution.result().isSuccessful()) {
-            return Resolution.emptyFailure(functionCallResolution.result().errorMessage());
-        }
-
-        if (!parameterResolution.result().isSuccessful()) {
-            return Resolution.emptyFailure(parameterResolution.result().errorMessage());
-        }
-
         List<DeclarationType> types = parameterResolution.types();
-
         String functionName = functionCallResolution.name();
-        if (!env.isFunctionDeclared(functionName, types)) {
-            return Resolution.emptyFailure("Cannot resolve " + functionName + "(" + types + ").");
-        }
-        // TODO: resolve into Literal if not void
-        return Resolution.emptySuccess();
+
+        return new IsResolutionSuccessful(
+                functionCallResolution,
+                new IsResolutionSuccessful(
+                        parameterResolution,
+                        new IsFunctionDeclared(
+                                parameterResolution,
+                                functionCallResolution,
+                                (env) -> Resolution.emptySuccess(),
+                                (env) -> Resolution.emptyFailure("Cannot resolve " + functionName + "(" + types + ").")
+                        ),
+                        (env) -> Resolution.emptyFailure(parameterResolution.result().errorMessage())
+                ),
+                (env) -> Resolution.emptyFailure(functionCallResolution.result().errorMessage())
+        ).analyze(env);
     }
 
     @Override

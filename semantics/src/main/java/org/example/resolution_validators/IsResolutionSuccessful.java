@@ -3,11 +3,11 @@ package org.example.resolution_validators;
 import org.example.Environment;
 import org.example.evaluables.Resolution;
 
-public class IsSuccessful extends ConditionalValidator {
-    private final Resolution resolution;
+public class IsResolutionSuccessful extends ConditionalValidator {
+    private final SemanticResultWrapper resolution;
 
-    public IsSuccessful(
-            Resolution resolution,
+    public IsResolutionSuccessful(
+            SemanticResultWrapper resolution,
             ResolutionValidator trueCaseValidator,
             ResolutionValidator falseCaseValidator
     ) {
