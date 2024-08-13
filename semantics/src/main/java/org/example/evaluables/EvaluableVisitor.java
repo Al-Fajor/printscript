@@ -16,6 +16,7 @@ import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.Visitor;
+import org.example.externalization.Language;
 import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
 import org.example.parameters.ParametersResolution;
@@ -23,9 +24,11 @@ import org.example.parameters.ParametersVisitor;
 import org.example.resolution_validators.AssigningToValidValue;
 import org.example.resolution_validators.IdentifierExists;
 import org.example.resolution_validators.IsDeclarationElseAssignation;
+import org.example.resolution_validators.IsOperationValid;
 import org.example.resolution_validators.IsSimpleDeclaration;
 import org.example.resolution_validators.IsSuccessful;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +36,7 @@ public class EvaluableVisitor implements Visitor<Resolution> {
     private Environment env;
     private final IdentifierVisitor identifierVisitor;
     private final ParametersVisitor parametersVisitor;
+    private final Language lang = new Language();
 
     public EvaluableVisitor(Environment env, IdentifierVisitor identifierVisitor, ParametersVisitor parametersVisitor) {
         this.env = env;
@@ -47,51 +51,39 @@ public class EvaluableVisitor implements Visitor<Resolution> {
     @Override
     public Resolution visit(BinaryExpression expression) {
         var leftResolution = expression.getLeftComponent().accept(this);
-
-        if (!leftResolution.result().isSuccessful()) {
-            return leftResolution;
-        }
         var rightResolution = expression.getRightComponent().accept(this);
 
-        if (!rightResolution.result().isSuccessful()) {
-            return rightResolution;
-        }
+        return new IsSuccessful(
+                leftResolution,
+                new IsSuccessful(
+                        rightResolution,
+                            new IsOperationValid(
+                                    lang,
+                                    leftResolution,
+                                    rightResolution,
+                                    expression,
+                                    (env) -> new Resolution(
+                                            new SemanticSuccess(),
+                                            Optional.of(lang.getResolvedType(
+                                                    leftResolution.evaluatedType().get(),
+                                                    expression.getOperator(),
+                                                    rightResolution.evaluatedType().get())
+                                            ),
+                                            true,
+                                            Optional.empty()
+                                    ),
+                                    (env) -> Resolution.emptyFailure(
+                                            "Cannot perform operation because types are incompatible: "
+                                                    + rightResolution.evaluatedType().get() + " "
+                                                    + getSymbol(expression.getOperator()) + " "
+                                                    + leftResolution.evaluatedType().get() + " "
 
-        if (expression.getOperator() == BinaryOperator.SUM) {
-            if (bothAreNumbers(leftResolution, rightResolution)) {
-                return new Resolution(
-                        new SemanticSuccess(),
-                        Optional.of(DeclarationType.NUMBER),
-                        true,
-                        Optional.empty()
-                );
-            } else {
-                return new Resolution(
-                        new SemanticSuccess(),
-                        Optional.of(DeclarationType.STRING),
-                        true,
-                        Optional.empty()
-                );
-            }
-        }
-
-        else {
-            if (differentTypes(rightResolution, leftResolution)) {
-                return Resolution.emptyFailure(
-                        "Cannot perform operation because types are incompatible: "
-                                + rightResolution.evaluatedType().get() + " "
-                                + getSymbol(expression.getOperator()) + " "
-                                + leftResolution.evaluatedType().get() + " "
-                );
-            } else {
-                return new Resolution(
-                        new SemanticSuccess(),
-                        Optional.of(rightResolution.evaluatedType().get()),
-                        true,
-                        Optional.empty()
-                );
-            }
-        }
+                                    )
+                            ),
+                        (env) -> rightResolution
+                ),
+                (env) -> leftResolution
+        ).analyze(env);
     }
 
     private String getSymbol(BinaryOperator operator) {
