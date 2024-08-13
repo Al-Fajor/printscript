@@ -1,13 +1,13 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
-import org.example.evaluables.Resolution;
+import org.example.evaluables.EvaluableResolution;
 
 public class IsSimpleDeclaration extends ConditionalValidator {
-    private final Resolution rightResolution;
+    private final EvaluableResolution rightResolution;
 
     public IsSimpleDeclaration(
-            Resolution rightResolution,
+            EvaluableResolution rightResolution,
             ResolutionValidator trueCaseValidator,
             ResolutionValidator falseCaseValidator
     ) {

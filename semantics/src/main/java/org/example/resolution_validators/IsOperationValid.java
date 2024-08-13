@@ -2,19 +2,19 @@ package org.example.resolution_validators;
 
 import org.example.Environment;
 import org.example.ast.BinaryExpression;
-import org.example.evaluables.Resolution;
+import org.example.evaluables.EvaluableResolution;
 import org.example.externalization.Language;
 
 public class IsOperationValid extends ConditionalValidator {
     private final Language language;
-    private final Resolution leftResolution;
-    private final Resolution rightResolution;
+    private final EvaluableResolution leftResolution;
+    private final EvaluableResolution rightResolution;
     private final BinaryExpression expression;
 
     public IsOperationValid(
             Language language,
-            Resolution leftResolution,
-            Resolution rightResolution,
+            EvaluableResolution leftResolution,
+            EvaluableResolution rightResolution,
             BinaryExpression expression,
             ResolutionValidator trueCaseValidator,
             ResolutionValidator falseCaseValidator

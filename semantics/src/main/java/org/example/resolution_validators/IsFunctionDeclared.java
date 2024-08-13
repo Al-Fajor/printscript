@@ -1,9 +1,7 @@
 package org.example.resolution_validators;
 
-import jdk.jshell.JShell;
 import org.example.Environment;
 import org.example.ast.DeclarationType;
-import org.example.evaluables.Resolution;
 import org.example.identifiers.IdentifierResolution;
 import org.example.parameters.ParametersResolution;
 

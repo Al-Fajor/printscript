@@ -8,14 +8,14 @@ import org.example.resolution_validators.SemanticResultWrapper;
 
 import java.util.Optional;
 
-public record Resolution(
+public record EvaluableResolution(
         SemanticResult result,
         Optional<DeclarationType> evaluatedType,
         boolean isValuePresent,
         Optional<String> identifierName
 ) implements SemanticResultWrapper {
-    public static Resolution emptyFailure(String reason) {
-        return new Resolution(
+    public static EvaluableResolution emptyFailure(String reason) {
+        return new EvaluableResolution(
                 new SemanticFailure(reason),
                 Optional.empty(),
                 false,
@@ -23,8 +23,8 @@ public record Resolution(
         );
     }
 
-    public static Resolution emptySuccess() {
-        return new Resolution(
+    public static EvaluableResolution emptySuccess() {
+        return new EvaluableResolution(
                 new SemanticSuccess(),
                 Optional.empty(),
                 false,

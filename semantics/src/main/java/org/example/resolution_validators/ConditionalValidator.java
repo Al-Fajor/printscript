@@ -1,7 +1,7 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
-import org.example.evaluables.Resolution;
+import org.example.evaluables.EvaluableResolution;
 
 // The Template Method pattern will be more readable than Strategy, in this case
 public abstract class ConditionalValidator implements ResolutionValidator {
@@ -17,7 +17,7 @@ public abstract class ConditionalValidator implements ResolutionValidator {
     }
 
     @Override
-    public Resolution analyze(Environment environment) {
+    public EvaluableResolution analyze(Environment environment) {
         if (meetsCondition(environment)) {
             return trueCaseValidator.analyze(environment);
         }

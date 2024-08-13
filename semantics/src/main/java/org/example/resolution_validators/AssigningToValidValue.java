@@ -1,18 +1,18 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
+import org.example.evaluables.EvaluableResolution;
 import org.example.identifiers.IdentifierResolution;
-import org.example.evaluables.Resolution;
 
 import java.util.Optional;
 
 public class AssigningToValidValue extends ConditionalValidator {
     private final IdentifierResolution leftResolution;
-    private final Resolution rightResolution;
+    private final EvaluableResolution rightResolution;
 
     public AssigningToValidValue(
             IdentifierResolution leftResolution,
-            Resolution rightResolution,
+            EvaluableResolution rightResolution,
             ResolutionValidator trueCaseValidator,
             ResolutionValidator falseCaseValidator
     ) {

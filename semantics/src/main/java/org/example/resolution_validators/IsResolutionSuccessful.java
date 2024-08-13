@@ -1,7 +1,6 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
-import org.example.evaluables.Resolution;
 
 public class IsResolutionSuccessful extends ConditionalValidator {
     private final SemanticResultWrapper resolution;
