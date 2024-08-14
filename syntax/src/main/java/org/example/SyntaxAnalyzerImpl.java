@@ -4,14 +4,12 @@ import org.example.ast.AstComponent;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
-import org.example.sentence.builder.*;
+import org.example.sentence.builder.SentenceBuilder;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
-import org.example.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
@@ -23,18 +21,27 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
 
   private SyntaxResult buildSentences(List<Token> tokens) {
     try{
-
       List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
-      List<AstComponent> components = tokenSentences.stream().map(sentence -> initialTokenMap().get(sentence.getFirst().getType()).buildSentence(sentence)).collect(Collectors.toList());
+      List<AstComponent> components = tokenSentences.stream().map(this::buildSentence)
+        .collect(Collectors.toList());
 
-      return components.contains(null) ?
-        new SyntaxError("Invalid sentence at index: " + components.indexOf(null) + ";\n" +
-          " Starting token: " + tokenSentences.get(components.indexOf(null)).getFirst()) :
-        new SyntaxSuccess(components);
+      return getSyntaxResult(components, tokenSentences);
 
     } catch (NullPointerException e){
       return new SyntaxError("Invalid tokens");
     }
+  }
+
+  private SyntaxResult getSyntaxResult(List<AstComponent> components, List<List<Token>> tokenSentences) {
+    return components.contains(null) ?
+      new SyntaxError("Invalid sentence at index: " + components.indexOf(null) + ";\n" +
+        " Starting token: " + tokenSentences.get(components.indexOf(null)).getFirst()) :
+      new SyntaxSuccess(components);
+  }
+
+  private AstComponent buildSentence(List<Token> sentence) {
+    SentenceBuilder builder = new SentenceBuilder();
+    return builder.buildSentence(sentence);
   }
 
   private List<List<Token>> getSentencesWithTokens(List<Token> tokens) {
@@ -50,15 +57,9 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer{
     return sentences;
   }
 
-
-  private Map<? extends TokenType, ? extends SentenceBuilder> initialTokenMap(){
-    return Map.of(
-      BaseTokenTypes.LET, new LetBuilder(),
-      BaseTokenTypes.IF, new IfBuilder(),
-      BaseTokenTypes.ELSE, new ElseBuilder(),
-      BaseTokenTypes.PRINTLN, new FunctionCallBuilder()
-    );
-  }
+//  private Map<TokenType, Integer> bindingPowers(){
+//
+//  }
 
 
 }

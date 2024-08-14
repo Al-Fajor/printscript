@@ -1,6 +1,7 @@
 package org.example;
 
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
@@ -43,6 +44,14 @@ public class SyntaxTest {
         getTestExecutable(testFile)
       )
     );
+  }
+  @Test
+  public void debug() throws IOException {
+    test("declare_sum.json");
+  }
+
+  private void test(String filePath) throws IOException {
+    assertTrue(testBuilder.testSyntax(TEST_CASE_DIRECTORY + "/" + filePath));
   }
 
   private Executable getTestExecutable(File testFile) {

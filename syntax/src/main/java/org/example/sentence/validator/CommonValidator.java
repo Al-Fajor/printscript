@@ -22,7 +22,7 @@ public class CommonValidator {
         if(mapper.matchesSeparatorType(token, "opening")){
           if(nextToken == null) return false;
           if (!List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType())
-            && !mapper.matchesSeparatorType(nextToken, "closing")) return false;
+            && !mapper.matchesSeparatorType(nextToken, "closing") && !nextToken.getValue().equals("-")) return false;
           break;
         }
         if(mapper.matchesSeparatorType(token, "closing")) {
@@ -31,7 +31,7 @@ public class CommonValidator {
         }
       case OPERATOR:
         if(nextToken == null) return false;
-        if(!List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType())) return false;
+        if(!List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType()) && !mapper.matchesSeparatorType(nextToken, "opening")) return false;
         break;
       case SEMICOLON:
         if(nextToken != null) return false;
@@ -40,11 +40,6 @@ public class CommonValidator {
         break;
     }
     return true;
-  }
-
-  public boolean notMatchesType(Token token, TokenType nextType){
-    if(token == null) return false;
-    return token.getType() == nextType;
   }
 
 }

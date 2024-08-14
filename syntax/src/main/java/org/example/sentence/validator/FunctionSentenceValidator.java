@@ -21,7 +21,9 @@ public class FunctionSentenceValidator implements SentenceValidator{
       Token token = tokens.get(i);
       TokenType tokenType = token.getType();
       Token nextToken = i+1 >= tokens.size() ? null : tokens.get(i+1);
-      if(validator.isNotSpecialToken(token)) return validator.isValidToken(token, nextToken);
+      if(validator.isNotSpecialToken(token)){
+        if(!validator.isValidToken(token, nextToken)) return false;
+      }
       if (isNotValidSequence(tokenType, nextToken)) return false;
     }
     return true;

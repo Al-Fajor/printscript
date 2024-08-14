@@ -1,5 +1,6 @@
 package org.example.sentence.validator;
 
+import org.example.sentence.mapper.TokenMapper;
 import org.example.token.Token;
 
 import java.util.List;
@@ -18,13 +19,16 @@ public class LetSentenceValidator implements SentenceValidator{
     for (int i = 0; i < tokens.size(); i++) {
       Token token = tokens.get(i);
       Token nextToken = i+1>=tokens.size() ? null: tokens.get(i+1);
-      if(validator.isNotSpecialToken(token)) return validator.isValidToken(token, nextToken);
-      if (isNotValidSequence(token, nextToken, validator)) return false;
+      if(validator.isNotSpecialToken(token)){
+        if(!validator.isValidToken(token, nextToken)) return false;
+      }
+      if (isNotValidSequence(token, nextToken)) return false;
     }
     return true;
   }
 
-  private boolean isNotValidSequence(Token token, Token nextToken, CommonValidator validator) {
+  private boolean isNotValidSequence(Token token, Token nextToken) {
+    TokenMapper mapper = new TokenMapper();
     switch (token.getType()){
       case LET:
         if(nextToken == null) return true;
@@ -44,11 +48,11 @@ public class LetSentenceValidator implements SentenceValidator{
         break;
       case LITERAL:
         if(nextToken == null) return true;
-        if (!List.of(SEMICOLON, OPERATOR).contains(nextToken.getType()) ) return true;
+        if (!List.of(SEMICOLON, OPERATOR).contains(nextToken.getType()) && !mapper.matchesSeparatorType(nextToken, "closing") ) return true;
         break;
       case ASSIGNATION:
         if(nextToken == null) return true;
-        if (!List.of(LITERAL, IDENTIFIER, FUNCTION).contains(nextToken.getType())) return true;
+        if (!List.of(LITERAL, IDENTIFIER, FUNCTION).contains(nextToken.getType()) && !nextToken.getValue().equals("-")) return true;
         break;
       default:
         break;
