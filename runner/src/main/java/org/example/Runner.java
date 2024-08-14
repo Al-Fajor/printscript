@@ -8,6 +8,7 @@ import org.example.lexerresult.LexerResult;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
+import javax.naming.spi.Resolver;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,30 +38,18 @@ public class Runner {
     List<AstComponent> components = syntaxResult.getComponents();
     SemanticResult result = semanticAnalyzer.analyze(components);
 
-    if(result.isFailure()){
-      System.out.println("Semantic error");
+    if(!result.isSuccessful()){
+      System.out.println("Semantic error: " + result.errorMessage());
     }
     else{
       interpreter.interpret(components);
     }
-
-
-
-
   }
 
   private static SemanticAnalyzer getSemanticAnalyzer() {
     SemanticAnalyzer semanticAnalyzer;
 
     {
-      Map<Class<? extends AstComponent>, Resolver> resolverMap = Map.of(
-        AssignationStatement.class, new AssignationResolver(),
-        BinaryExpression.class, new BinaryExpressionResolver(),
-        Literal.class, new LiteralResolver(),
-        Identifier.class, new IdentifierResolver(),
-        FunctionCallStatement.class, new FunctionCallResolver(),
-        Parameters.class, new ParametersResolver()
-      );
       MapEnvironment env = new MapEnvironment(
         new HashMap<String, DeclarationType>(),
         Set.of(
@@ -68,7 +57,7 @@ public class Runner {
           new Signature("println", List.of(DeclarationType.STRING))
         )
       );
-      semanticAnalyzer = new AnalyzerImpl(resolverMap, env);
+      semanticAnalyzer = new SemanticAnalyzerImpl(env);
     }
     return semanticAnalyzer;
   }

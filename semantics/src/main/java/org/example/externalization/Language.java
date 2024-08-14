@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Language {
-    Path resourcePath = Paths.get("src/main/resources/lang.json");
+    Path resourcePath = Paths.get("../semantics/src/main/resources/lang.json");
     File file = resourcePath.toFile();
     String content;
 
