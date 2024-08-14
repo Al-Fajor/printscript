@@ -25,7 +25,7 @@ public class Tokenizer{
     private void addToken(List<Token> tokens, Matcher matcher) {
         for (BaseTokenTypes baseTokenTypes : BaseTokenTypes.values()) {
             if (matcher.group(baseTokenTypes.name()) != null) {
-                System.out.println(baseTokenTypes.name() + ": " + matcher.group(baseTokenTypes.name()));
+//                System.out.println(baseTokenTypes.name() + ": " + matcher.group(baseTokenTypes.name()));
                 tokens.add(new Token(baseTokenTypes, matcher.start(), matcher.end(), matcher.group(baseTokenTypes.name())));
             }
         }
