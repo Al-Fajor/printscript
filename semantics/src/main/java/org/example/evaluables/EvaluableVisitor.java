@@ -16,6 +16,7 @@ import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.Visitor;
+import org.example.externalization.Language;
 import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
 import org.example.parameters.ParametersResolution;
@@ -23,16 +24,19 @@ import org.example.parameters.ParametersVisitor;
 import org.example.resolution_validators.AssigningToValidValue;
 import org.example.resolution_validators.IdentifierExists;
 import org.example.resolution_validators.IsDeclarationElseAssignation;
+import org.example.resolution_validators.IsFunctionDeclared;
+import org.example.resolution_validators.IsOperationValid;
 import org.example.resolution_validators.IsSimpleDeclaration;
-import org.example.resolution_validators.IsSuccessful;
+import org.example.resolution_validators.IsResolutionSuccessful;
 
 import java.util.List;
 import java.util.Optional;
 
-public class EvaluableVisitor implements Visitor<Resolution> {
+public class EvaluableVisitor implements Visitor<EvaluableResolution> {
     private Environment env;
     private final IdentifierVisitor identifierVisitor;
     private final ParametersVisitor parametersVisitor;
+    private final Language lang = new Language();
 
     public EvaluableVisitor(Environment env, IdentifierVisitor identifierVisitor, ParametersVisitor parametersVisitor) {
         this.env = env;
@@ -45,53 +49,41 @@ public class EvaluableVisitor implements Visitor<Resolution> {
     }
 
     @Override
-    public Resolution visit(BinaryExpression expression) {
+    public EvaluableResolution visit(BinaryExpression expression) {
         var leftResolution = expression.getLeftComponent().accept(this);
-
-        if (!leftResolution.result().isSuccessful()) {
-            return leftResolution;
-        }
         var rightResolution = expression.getRightComponent().accept(this);
 
-        if (!rightResolution.result().isSuccessful()) {
-            return rightResolution;
-        }
+        return new IsResolutionSuccessful(
+                leftResolution,
+                new IsResolutionSuccessful(
+                        rightResolution,
+                            new IsOperationValid(
+                                    lang,
+                                    leftResolution,
+                                    rightResolution,
+                                    expression,
+                                    (env) -> new EvaluableResolution(
+                                            new SemanticSuccess(),
+                                            Optional.of(lang.getResolvedType(
+                                                    leftResolution.evaluatedType().get(),
+                                                    expression.getOperator(),
+                                                    rightResolution.evaluatedType().get())
+                                            ),
+                                            true,
+                                            Optional.empty()
+                                    ),
+                                    (env) -> EvaluableResolution.emptyFailure(
+                                            "Cannot perform operation because types are incompatible: "
+                                                    + rightResolution.evaluatedType().get() + " "
+                                                    + getSymbol(expression.getOperator()) + " "
+                                                    + leftResolution.evaluatedType().get() + " "
 
-        if (expression.getOperator() == BinaryOperator.SUM) {
-            if (bothAreNumbers(leftResolution, rightResolution)) {
-                return new Resolution(
-                        new SemanticSuccess(),
-                        Optional.of(DeclarationType.NUMBER),
-                        true,
-                        Optional.empty()
-                );
-            } else {
-                return new Resolution(
-                        new SemanticSuccess(),
-                        Optional.of(DeclarationType.STRING),
-                        true,
-                        Optional.empty()
-                );
-            }
-        }
-
-        else {
-            if (differentTypes(rightResolution, leftResolution)) {
-                return Resolution.emptyFailure(
-                        "Cannot perform operation because types are incompatible: "
-                                + rightResolution.evaluatedType().get() + " "
-                                + getSymbol(expression.getOperator()) + " "
-                                + leftResolution.evaluatedType().get() + " "
-                );
-            } else {
-                return new Resolution(
-                        new SemanticSuccess(),
-                        Optional.of(rightResolution.evaluatedType().get()),
-                        true,
-                        Optional.empty()
-                );
-            }
-        }
+                                    )
+                            ),
+                        (env) -> rightResolution
+                ),
+                (env) -> leftResolution
+        ).analyze(env);
     }
 
     private String getSymbol(BinaryOperator operator) {
@@ -102,32 +94,23 @@ public class EvaluableVisitor implements Visitor<Resolution> {
             case MULTIPLICATION -> "*";
             case DIVISION -> "/";
             default ->
-                    throw new RuntimeException("Invalid operator: " + operator + "(Resolution return for this type yet to be implemented)");
+                    throw new RuntimeException("Invalid operator: " + operator + "(EvaluableResolution return for this type yet to be implemented)");
         };
     }
 
-    private static boolean differentTypes(Resolution rightResolution, Resolution leftResolution) {
-        return rightResolution.evaluatedType().get() != leftResolution.evaluatedType().get();
-    }
-
-    private static boolean bothAreNumbers(Resolution rightResolution, Resolution leftResolution) {
-        return rightResolution.evaluatedType().get() == DeclarationType.NUMBER
-                && leftResolution.evaluatedType().get() == DeclarationType.NUMBER;
-    }
-
     @Override
-    public Resolution visit(Conditional conditional) {
+    public EvaluableResolution visit(Conditional conditional) {
         return null;
     }
 
     @Override
-    public Resolution visit(IfStatement ifStatement) {
+    public EvaluableResolution visit(IfStatement ifStatement) {
         return null;
     }
 
     @Override
-    public Resolution visit(Literal<?> literal) {
-        return new Resolution(
+    public EvaluableResolution visit(Literal<?> literal) {
+        return new EvaluableResolution(
                 new SemanticSuccess(),
                 Optional.of(mapToDeclarationType(literal)),
                 true,
@@ -144,36 +127,36 @@ public class EvaluableVisitor implements Visitor<Resolution> {
     }
 
     @Override
-    public Resolution visit(Parameters parameters) {
+    public EvaluableResolution visit(Parameters parameters) {
         return null;
     }
 
     @Override
-    public Resolution visit(AssignationStatement statement) {
+    public EvaluableResolution visit(AssignationStatement statement) {
         IdentifierResolution leftResolution = statement.getLeft().accept(identifierVisitor);
-        Resolution rightResolution = statement.getRight().accept(this);
+        EvaluableResolution rightResolution = statement.getRight().accept(this);
 
-        return new IsSuccessful(
+        return new IsResolutionSuccessful(
                 rightResolution,
                 new IsDeclarationElseAssignation(
                         leftResolution,
                         new IdentifierExists(
                                 leftResolution,
-                                (env) -> Resolution.emptyFailure("Variable has already been declared"),
+                                (env) -> EvaluableResolution.emptyFailure("Variable has already been declared"),
                                 new IsSimpleDeclaration(
                                         rightResolution,
                                         (env) -> {
                                             env.declareVariable(leftResolution.name(), leftResolution.type().get());
-                                            return Resolution.emptySuccess();
+                                            return EvaluableResolution.emptySuccess();
                                         },
                                         new AssigningToValidValue(
                                                 leftResolution,
                                                 rightResolution,
                                                 (env) -> {
                                                     env.declareVariable(leftResolution.name(), leftResolution.type().get());
-                                                    return Resolution.emptySuccess();
+                                                    return EvaluableResolution.emptySuccess();
                                                 },
-                                                (env) -> Resolution.emptyFailure(
+                                                (env) -> EvaluableResolution.emptyFailure(
                                                         "Cannot assign value of type " + rightResolution.evaluatedType().get()
                                                                 + " to variable of type" + leftResolution.type().get()
                                                 )
@@ -186,13 +169,13 @@ public class EvaluableVisitor implements Visitor<Resolution> {
                                 new AssigningToValidValue(
                                         leftResolution,
                                         rightResolution,
-                                        (env) -> Resolution.emptySuccess(),
-                                        (env) -> Resolution.emptyFailure(
+                                        (env) -> EvaluableResolution.emptySuccess(),
+                                        (env) -> EvaluableResolution.emptyFailure(
                                                 "Cannot assign type " + rightResolution.evaluatedType().get()
                                                         + " to " + env.getDeclarationType(leftResolution.name())
                                         )
                                 ),
-                                (env) -> Resolution.emptyFailure("Cannot assign non-existing identifier")
+                                (env) -> EvaluableResolution.emptyFailure("Cannot assign non-existing identifier")
                         )
                 ),
                 (env) -> rightResolution
@@ -200,56 +183,54 @@ public class EvaluableVisitor implements Visitor<Resolution> {
     }
 
     @Override
-    public Resolution visit(Declaration statement) {
+    public EvaluableResolution visit(Declaration statement) {
         return null;
     }
 
     @Override
-    public Resolution visit(FunctionCallStatement statement) {
+    public EvaluableResolution visit(FunctionCallStatement statement) {
         IdentifierResolution functionCallResolution = statement.getLeft().accept(identifierVisitor);
         ParametersResolution parameterResolution = statement.getRight().accept(parametersVisitor);
-
-        if (!functionCallResolution.result().isSuccessful()) {
-            return Resolution.emptyFailure(functionCallResolution.result().errorMessage());
-        }
-
-        if (!parameterResolution.result().isSuccessful()) {
-            return Resolution.emptyFailure(parameterResolution.result().errorMessage());
-        }
-
         List<DeclarationType> types = parameterResolution.types();
-
         String functionName = functionCallResolution.name();
-        if (!env.isFunctionDeclared(functionName, types)) {
-            return Resolution.emptyFailure("Cannot resolve " + functionName + "(" + types + ").");
-        }
-        // TODO: resolve into Literal if not void
-        return Resolution.emptySuccess();
+
+        return new IsResolutionSuccessful(
+                functionCallResolution,
+                new IsResolutionSuccessful(
+                        parameterResolution,
+                        new IsFunctionDeclared(
+                                parameterResolution,
+                                functionCallResolution,
+                                (env) -> EvaluableResolution.emptySuccess(),
+                                (env) -> EvaluableResolution.emptyFailure("Cannot resolve " + functionName + "(" + types + ").")
+                        ),
+                        (env) -> EvaluableResolution.emptyFailure(parameterResolution.result().errorMessage())
+                ),
+                (env) -> EvaluableResolution.emptyFailure(functionCallResolution.result().errorMessage())
+        ).analyze(env);
     }
 
     @Override
-    public Resolution visit(StatementBlock statementBlock) {
+    public EvaluableResolution visit(StatementBlock statementBlock) {
         return null;
     }
 
     @Override
-    public Resolution visit(Identifier identifier) {
-        // TODO: convert to validator
-        if (!env.isVariableDeclared(identifier.getName())) {
-            return new Resolution(
-                    new SemanticFailure("Cannot find identifier " + identifier.getName()),
-                    Optional.empty(),
-                    false,
-                    Optional.of(identifier.getName())
-            );
-        }
-        else {
-            return new Resolution(
-                    new SemanticSuccess(),
-                    Optional.of(env.getDeclarationType(identifier.getName())),
-                    false,
-                    Optional.of(identifier.getName())
-            );
-        }
+    public EvaluableResolution visit(Identifier identifier) {
+        return new IdentifierExists(
+                identifier,
+                (env) -> new EvaluableResolution(
+                        new SemanticSuccess(),
+                        Optional.of(env.getDeclarationType(identifier.getName())),
+                        false,
+                        Optional.of(identifier.getName())
+                ),
+                (env) -> new EvaluableResolution(
+                        new SemanticFailure("Cannot find identifier " + identifier.getName()),
+                        Optional.empty(),
+                        false,
+                        Optional.of(identifier.getName())
+                )
+        ).analyze(env);
     }
 }

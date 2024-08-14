@@ -1,6 +1,6 @@
 package org.example.parameters;
 
-import org.example.evaluables.Resolution;
+import org.example.evaluables.EvaluableResolution;
 import org.example.SemanticResult;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
@@ -54,7 +54,7 @@ public class ParametersVisitor implements Visitor<ParametersResolution> {
         List<DeclarationType> types = new ArrayList<>();
 
         for (EvaluableComponent component: parameters.getParameters()) {
-            Resolution resolution = component.accept(evaluableVisitor);
+            EvaluableResolution resolution = component.accept(evaluableVisitor);
             SemanticResult result = resolution.result();
 
             if (!result.isSuccessful()) return new ParametersResolution(result, Collections.emptyList());

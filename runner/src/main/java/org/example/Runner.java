@@ -6,6 +6,7 @@ import org.example.lexerresult.LexerResult;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
+import javax.naming.spi.Resolver;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -34,14 +35,11 @@ public class Runner {
 
     if(!result.isSuccessful()){
       throw new RuntimeException("Semantic error");
+
     }
     else{
       interpreter.interpret(components);
     }
-
-
-
-
   }
 
   private static SemanticAnalyzer getSemanticAnalyzer() {
