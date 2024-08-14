@@ -19,11 +19,19 @@ public class SentenceBuilder {
     return switch (tokens.getFirst().getType()) {
       case LET -> buildLetSentence(tokens);
       case FUNCTION, PRINTLN -> buildFunctionSentence(tokens);
+      case IDENTIFIER -> buildReassignationSentence(tokens);
       default -> null;
     };
   }
 
-  private AstComponent buildFunctionSentence(List<Token> tokens) {
+    private AstComponent buildReassignationSentence(List<Token> tokens) {
+      if(tokens.size()<=2 || tokens.get(1).getType() != ASSIGNATION) return null;
+      TokenMapper mapper = new TokenMapper();
+      IdentifierComponent identifier = (IdentifierComponent) mapper.mapToken(tokens.getFirst()); //TODO: eliminate casting
+      return new AssignationStatement(identifier, mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst());
+    }
+
+    private AstComponent buildFunctionSentence(List<Token> tokens) {
     SentenceValidator validator = new FunctionSentenceValidator();
     if(!validator.isValidSentence(tokens)) return null;
 
