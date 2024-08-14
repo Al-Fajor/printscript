@@ -1,0 +1,4 @@
+{
+  "code": "let name: string = \"Joe\"; \n let lastName: string = \"Doe\";",
+  "tokens": "LET(let) -> IDENTIFIER(name) -> COLON(:) -> TYPE(string) -> ASSIGNATION(=) -> LITERAL(\"Joe\") -> SEMICOLON(;) -> LET(let) -> IDENTIFIER(lastName) -> COLON(:) -> TYPE(string) -> ASSIGNATION(=) -> LITERAL(\"Doe\") -> SEMICOLON(;)"
+}

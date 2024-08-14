@@ -1,0 +1,68 @@
+@startuml
+PrintScriptInterpreter *-- InterpreterState
+InterpreterState o-- Function
+InterpreterState o-- Variable
+Variable *-- VariableType
+PrintScriptInterpreter -> StatementVisitor
+StatementVisitor --> EvaluatorVisitor
+StatementVisitor --> IdentifierVisitor
+EvaluatorVisitor o-- EvaluationResult
+
+interface Interpreter {
+    +interpret(AstComponent[]): void
+}
+interface Function {
+    +executeFunction(Parameters): void
+
+}
+interface InterpreterState {
+    +addNumericVariable(Variable<Double>): void
+    +getNumericVariable(String name): Variable<Double>
+    +setNumericVariable(String name, Double value): void
+    +addStringVariable(Variable<String>): void
+    +getStringVariable(String name): Variable<String>
+    +setStringVariable(String name, String value): void
+    +getVariableType(String name): VariableType
+    +getFunction(String name): Function
+    +addFunction(Function): void
+}
+class AstFunction implements Function
+class PrintlnFunction implements Function
+class PrintScriptInterpreter implements Interpreter
+class PrintScriptState implements InterpreterState {
+    -Map<String, Variable<Double>> numVariables
+    -Map<String, Variable<String>> strVariables
+    -Map<String, Function> functions
+}
+class Variable<T> {
+    -VariableType
+    -T value
+    -String name
+}
+enum VariableType {
+    NUMBER
+    STRING
+    BOOLEAN
+}
+class EvaluationResult {
+    -VariableType
+    -String stringResult
+    -Double numericResult
+    -Boolean boolResult
+}
+class EvaluatorVisitor implements Visitor {
+    visit(BinaryExpression): EvaluationResult
+    visit(Literal<?>): EvaluationResult
+    visit(VariableIdentifier): EvaluationResult
+}
+class IdentifierVisitor implements Visitor {
+    visit(VariableIdentifier): String
+    visit(FunctionIdentifier): String
+    visit(Declaration): String
+}
+class StatementVisitor implements Visitor {
+    visit(AssignationStatement): void
+    visit(FunctionCallStatement): void
+    visit(IfStatement): void
+}
+@enduml

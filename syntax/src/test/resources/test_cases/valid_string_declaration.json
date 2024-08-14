@@ -1,0 +1,14 @@
+{ "tokens": "LET -> IDENTIFIER(a) -> COLON -> TYPE(string) -> ASSIGNATION -> LITERAL(\"hello\") -> SEMICOLON",
+  "ast_list":[
+                          {
+                            "assignation": {
+                              "1_declaration": {
+                                "declarationType": "String",
+                                "name": "a"
+                              },
+                              "2_literal": {
+                                "value": "hello"
+                              }
+                            }
+                          }
+                        ]}

@@ -1,0 +1,4 @@
+{
+  "code": "println(x);",
+  "tokens": "PRINTLN(println) -> SEPARATOR(() -> IDENTIFIER(x) -> SEPARATOR()) -> SEMICOLON(;)"
+}

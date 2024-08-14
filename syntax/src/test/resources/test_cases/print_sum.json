@@ -1,0 +1,22 @@
+{"tokens": "PRINTLN -> SEPARATOR(\"(\") ->LITERAL(2) -> OPERATOR(+) -> LITERAL(2) -> SEPARATOR(\")\") -> SEMICOLON" ,
+  "ast_list": [
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
+        },
+        "params": {
+          "binaryExpression": {
+            "op": "+",
+            "1_literal": {
+              "value": 2
+            },
+            "2_literal": {
+              "value": 2
+            }
+          }
+        }
+      }
+    }
+  ]}

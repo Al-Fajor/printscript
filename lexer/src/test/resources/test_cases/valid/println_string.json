@@ -1,0 +1,4 @@
+{
+  "code": "println(\"Hello, World!\");",
+  "tokens": "PRINTLN(println) -> SEPARATOR(() -> LITERAL(\"Hello, World!\") -> SEPARATOR()) -> SEMICOLON(;)"
+}
