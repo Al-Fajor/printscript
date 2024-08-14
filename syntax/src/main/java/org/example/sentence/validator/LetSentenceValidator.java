@@ -44,7 +44,7 @@ public class LetSentenceValidator implements SentenceValidator{
         break;
       case TYPE:
         if(nextToken == null) return true;
-        if (nextToken.getType() != ASSIGNATION) return true;
+        if (!List.of(ASSIGNATION, SEMICOLON).contains(nextToken.getType())) return true;
         break;
       case LITERAL:
         if(nextToken == null) return true;

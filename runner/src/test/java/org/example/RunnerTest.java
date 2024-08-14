@@ -50,6 +50,7 @@ class RunnerTest {
       "println(x);" +
             "x = 2;" +
             "println(x);", Result.SUCCESS);
+    test("let b: string;", Result.SUCCESS);
   }
 
 

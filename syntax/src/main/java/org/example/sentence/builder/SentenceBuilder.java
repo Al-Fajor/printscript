@@ -49,9 +49,12 @@ public class SentenceBuilder {
     Token type = tokens.get(3), identifier = tokens.get(1);
 
     DeclarationType declarationType = getDeclarationType(type.getValue());
-
+    //let x: number;
     IdentifierComponent declaration = new Declaration(declarationType, identifier.getValue());
-    return new AssignationStatement(declaration, mapper.buildExpression(tokens.subList(5, tokens.size())).getFirst());
+      System.out.println("ID VALUE: " + identifier.getValue());
+//      System.out.println(tokens.get(4).getType());
+    EvaluableComponent value = tokens.get(4).getType() != ASSIGNATION ? new Literal<>(null) : mapper.buildExpression(tokens.subList(5, tokens.size())).getFirst();
+    return new AssignationStatement(declaration, value);
   }
 
   private DeclarationType getDeclarationType(String type) {
