@@ -44,7 +44,7 @@ public class StatementVisitor implements Visitor<Void> {
 	public Void visit(FunctionCallStatement statement) {
 		Function function = getFunction(statement);
 		AstComponent parameters = statement.getRight();
-		function.executeFunction((Parameters) parameters); // TODO avoid cast
+		function.executeFunction((Parameters) parameters); // TODO avoid cast (visitor for params.) :)
 		return null;
 	}
 

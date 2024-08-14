@@ -26,22 +26,18 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 		AstComponent rightExpression = expression.getRightComponent();
 		EvaluationResult leftResult = leftExpression.accept(this);
 		EvaluationResult rightResult = rightExpression.accept(this);
-		switch (operator) {
-			case SUM -> {
-				return addResults(leftResult, rightResult);
-			}
-			case SUBTRACTION -> {
-				return subtractResults(leftResult, rightResult);
-			}
-			case MULTIPLICATION -> {
-				return multiplyResults(leftResult, rightResult);
-			}
-			case DIVISION -> {
-				return divideResults(leftResult, rightResult);
-			}
+		return switch (operator) {
+			case SUM ->
+					addResults(leftResult, rightResult);
+			case SUBTRACTION ->
+					subtractResults(leftResult, rightResult);
+			case MULTIPLICATION ->
+					multiplyResults(leftResult, rightResult);
+			case DIVISION ->
+					divideResults(leftResult, rightResult);
 			default ->
 				throw new IllegalArgumentException("Implement the operator " + operator);
-		}
+		};
 	}
 
 	@Override
