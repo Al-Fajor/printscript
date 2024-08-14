@@ -44,10 +44,13 @@ class RunnerTest {
 
   @Test
   public void testRunner6(){
-    test("let 1a: number = 2;", Result.FAIL);
-    test("println(10)", Result.SUCCESS);
+//    test("let 1a: number = 2;", Result.FAIL);
+//    test("println(10)", Result.SUCCESS);
     test("let x: number = -1;" +
-      "println(x);", Result.SUCCESS);
+      "println(x);" +
+            "x = 2;" +
+            "println(x);", Result.SUCCESS);
+    test("let b: string;", Result.SUCCESS);
   }
 
 

@@ -112,8 +112,8 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
     public EvaluableResolution visit(Literal<?> literal) {
         return new EvaluableResolution(
                 new SemanticSuccess(),
-                Optional.of(mapToDeclarationType(literal)),
-                true,
+                Optional.ofNullable(mapToDeclarationType(literal)),
+                literal.getValue() != null,
                 Optional.empty()
         );
     }
@@ -122,6 +122,7 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
         return switch(literal.getValue()) {
             case String ignoredString -> DeclarationType.STRING;
             case Number ignoredNumber -> DeclarationType.NUMBER;
+            case null -> null;
             default -> throw new IllegalStateException("Unexpected value: " + literal.getValue());
         };
     }
