@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+echo "====================="
+echo "RUNNING TESTS"
+echo "====================="
+./gradlew test

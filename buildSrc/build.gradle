@@ -18,7 +18,12 @@ tasks.test {
     useJUnitPlatform()
 }
 
+//If it doesn't work for you, delete it, we'll see it
 tasks.withType(JavaCompile) {
     sourceCompatibility = '21'
     targetCompatibility = '21'
+}
+
+tasks.create("pre-commit"){
+
 }
