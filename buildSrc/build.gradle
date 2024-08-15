@@ -26,4 +26,14 @@ tasks.withType(JavaCompile) {
 
 tasks.create("pre-commit"){
 
+
+
+
+
+
+
+
+
+
+
 }
