@@ -66,7 +66,8 @@ public class InterpreterTest {
         InterpreterState state = new TestState();
         Interpreter interpreter = new PrintScriptInterpreter(state);
         interpreter.interpret(astBuilder.buildFromJson("src/test/resources/test_cases/print_variables.json"));
-        assertPrints("Ronal Macdonal :D\r\n7.0\r\n"); // using only \n makes the test fail because windows uses different line separators
+        String lineSeparator = System.lineSeparator(); // uses CRLF / CR depending on system
+        assertPrints("Ronal Macdonal :D" + lineSeparator + "7.0" + lineSeparator);
         restoreStreams(); // More magic for console output testing
     }
 
