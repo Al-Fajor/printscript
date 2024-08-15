@@ -5,3 +5,5 @@ echo "====================="
 echo "RUNNING TESTS"
 echo "====================="
 ./gradlew test
+echo "====================="
+#TODO: customize message
