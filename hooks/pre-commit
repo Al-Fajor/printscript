@@ -7,4 +7,5 @@ echo "====================="
 ./gradlew test
 echo "====================="
 
+
 #TODO: customize message
