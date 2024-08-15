@@ -77,13 +77,13 @@ class LexerTest {
 	}
 
 	@Test
-	void NoSpaceInlineAssignation() throws IOException {
+	void noSpaceInlineAssignation() throws IOException {
 		lexerTestBuilder.testTokenDetection(
 				"src/test/resources/test_cases/valid/no_space_inline_assignation.json");
 	}
 
 	@Test
-	void NoSpaceSubtractionAssignation() throws IOException {
+	void noSpaceSubtractionAssignation() throws IOException {
 		lexerTestBuilder.testTokenDetection(
 				"src/test/resources/test_cases/valid/no_space_subtraction_assignation.json");
 	}

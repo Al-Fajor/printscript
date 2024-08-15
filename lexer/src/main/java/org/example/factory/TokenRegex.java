@@ -25,5 +25,4 @@ public class TokenRegex {
 		regexMap.put(BaseTokenTypes.SEPARATOR, "[\\(\\)\\{\\}]");
 		return regexMap;
 	}
-	;
 }

@@ -15,21 +15,21 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
 public class SyntaxTest {
-	String RUN_ONLY = "";
+	String runOnly = "";
 	SyntaxTestBuilder testBuilder = new SyntaxTestBuilder();
-	String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
+	String testCaseDirectory = "src/test/resources/test_cases";
 
 	@TestFactory
 	Stream<DynamicTest> syntaxTests() {
 		Stream<File> files;
 
-		if (RUN_ONLY.isEmpty()) {
-			Path resourcePath = Paths.get(TEST_CASE_DIRECTORY);
+		if (runOnly.isEmpty()) {
+			Path resourcePath = Paths.get(testCaseDirectory);
 			File directory = resourcePath.toFile();
 
 			files = Arrays.stream(Objects.requireNonNull(directory.listFiles()));
 		} else {
-			Path resourcePath = Paths.get(TEST_CASE_DIRECTORY + File.separator + RUN_ONLY);
+			Path resourcePath = Paths.get(testCaseDirectory + File.separator + runOnly);
 			File singleFile = resourcePath.toFile();
 
 			files = Stream.of(singleFile);
@@ -46,7 +46,7 @@ public class SyntaxTest {
 	}
 
 	private void test(String filePath) throws IOException {
-		assertTrue(testBuilder.testSyntax(TEST_CASE_DIRECTORY + "/" + filePath));
+		assertTrue(testBuilder.testSyntax(testCaseDirectory + "/" + filePath));
 	}
 
 	private Executable getTestExecutable(File testFile) {

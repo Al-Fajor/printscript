@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'com.diffplug.spotless'
+    id 'checkstyle'
 }
 
 spotless {
@@ -9,4 +10,13 @@ spotless {
         indentWithTabs()
         removeUnusedImports()
     }
+}
+
+// Static code analysis configuration
+checkstyle {
+    toolVersion = '10.3.3'
+    ignoreFailures = false
+    maxWarnings = 0
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+
 }

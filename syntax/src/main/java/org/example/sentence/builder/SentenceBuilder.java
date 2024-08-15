@@ -48,7 +48,8 @@ public class SentenceBuilder {
 
 		TokenMapper mapper = new TokenMapper();
 		// May need to change method
-		Token type = tokens.get(3), identifier = tokens.get(1);
+		Token type = tokens.get(3);
+		Token identifier = tokens.get(1);
 
 		DeclarationType declarationType = getDeclarationType(type.getValue());
 		// let x: number;

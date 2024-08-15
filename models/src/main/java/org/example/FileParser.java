@@ -28,9 +28,9 @@ public class FileParser {
 		JSONObject json = new JSONObject(content);
 		String tokenString = json.get("tokens").toString();
 
-		String ARROW = "->";
+		String arrow = "->";
 		List<String> tempTokenList =
-				Arrays.stream(tokenString.split(ARROW)).map(String::strip).toList();
+				Arrays.stream(tokenString.split(arrow)).map(String::strip).toList();
 
 		if (tempTokenList.size() == 1) return List.of();
 

@@ -8,7 +8,7 @@ import org.example.result.SyntaxResult;
 import org.example.token.Token;
 
 public class SyntaxTestBuilder {
-	private List<AstComponent> getASTFromJSON(String filePath) throws IOException {
+	private List<AstComponent> getAstFromJson(String filePath) throws IOException {
 		return new AstBuilder().buildFromJson(filePath);
 	}
 
@@ -17,7 +17,7 @@ public class SyntaxTestBuilder {
 		List<Token> tokens = parser.getTokens(filePath);
 
 		SyntaxResult result = new SyntaxAnalyzerImpl().analyze(tokens);
-		List<AstComponent> expectedList = getASTFromJSON(filePath);
+		List<AstComponent> expectedList = getAstFromJson(filePath);
 
 		if (result.isFailure()) {
 			return expectedList.isEmpty();
@@ -25,10 +25,10 @@ public class SyntaxTestBuilder {
 
 		List<AstComponent> actualList = result.getComponents();
 
-		return compareASTs(expectedList, actualList);
+		return compareAsts(expectedList, actualList);
 	}
 
-	private boolean compareASTs(List<AstComponent> expectedList, List<AstComponent> actualList) {
+	private boolean compareAsts(List<AstComponent> expectedList, List<AstComponent> actualList) {
 		return equalLists(expectedList, actualList);
 	}
 

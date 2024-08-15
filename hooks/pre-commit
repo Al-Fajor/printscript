@@ -1,11 +1,21 @@
-#!/bin/bash
+#!/bin/sh
+separator="====================="
 
 set -e
-echo "====================="
-echo "RUNNING TESTS"
-echo "====================="
-./gradlew test
-echo "====================="
+echo $separator
+echo "Applying Spotless"
+./gradlew spotlessApply
+echo $separator
 
+#Once applied spotless, move to checkStyle
 
-#TODO: customize message
+echo $separator
+echo "Using CheckStyle"
+./gradlew checkstyleMain
+./gradlew checkstyleTest
+echo $separator
+
+echo $separator
+echo "SUCCESSFUL COMMIT"
+echo $separator
+
