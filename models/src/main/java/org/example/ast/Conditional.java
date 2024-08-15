@@ -1,20 +1,19 @@
 package org.example.ast;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.Visitor;
 
-import java.util.Objects;
-
 public class Conditional implements EvaluableComponent {
-    private final AstComponent condition;
+	private final AstComponent condition;
 
-    public Conditional(AstComponent condition) {
-        this.condition = condition;
-    }
+	public Conditional(AstComponent condition) {
+		this.condition = condition;
+	}
 
-    public AstComponent getCondition() {
-        return condition;
-    }
+	public AstComponent getCondition() {
+		return condition;
+	}
 
 	@Override
 	public Pair<Integer, Integer> getStart() {

@@ -4,8 +4,4 @@ import org.example.ast.BinaryOperator;
 import org.example.ast.DeclarationType;
 
 public record OperationType(
-        DeclarationType type1,
-        BinaryOperator operator,
-        DeclarationType type2
-) {
-}
+		DeclarationType type1, BinaryOperator operator, DeclarationType type2) {}

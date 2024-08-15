@@ -1,11 +1,5 @@
 package org.example;
 
-import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,135 +7,142 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.example.ast.*;
+import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.FunctionCallStatement;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class AstBuilder {
-    public List<AstComponent> buildFromJson(String filePath) throws IOException {
-        File file = new File(filePath);
-        String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
-        JSONObject json = new JSONObject(content);
-        JSONArray astArray = json.getJSONArray("ast_list");
+	public List<AstComponent> buildFromJson(String filePath) throws IOException {
+		File file = new File(filePath);
+		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
+		JSONObject json = new JSONObject(content);
+		JSONArray astArray = json.getJSONArray("ast_list");
 
-        List<AstComponent> result = new ArrayList<>();
+		List<AstComponent> result = new ArrayList<>();
 
-        for (int i = 0; i < astArray.length(); i++) {
-            JSONObject jsonObject = astArray.getJSONObject(i);
+		for (int i = 0; i < astArray.length(); i++) {
+			JSONObject jsonObject = astArray.getJSONObject(i);
 
-            String rootComponentName = jsonObject.keys().next();
-            JSONObject rootComponent = jsonObject.getJSONObject(rootComponentName);
+			String rootComponentName = jsonObject.keys().next();
+			JSONObject rootComponent = jsonObject.getJSONObject(rootComponentName);
 
-            result.add(mapToAstComponent(rootComponent, rootComponentName));
-        }
+			result.add(mapToAstComponent(rootComponent, rootComponentName));
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    private AstComponent mapToAstComponent(JSONObject astComponentJson, String astComponentJsonName) {
-        astComponentJsonName = deleteNumbersInName(astComponentJsonName);
-        switch (astComponentJsonName) {
-            case "assignation":
-                Iterator<String> subComponentNames = astComponentJson.keys();
-                String firstComponentName = subComponentNames.next();
-                JSONObject firstComponent = astComponentJson.getJSONObject(firstComponentName);
-                String secondComponentName = subComponentNames.next();
-                JSONObject secondComponent = astComponentJson.getJSONObject(secondComponentName);
+	private AstComponent mapToAstComponent(
+			JSONObject astComponentJson, String astComponentJsonName) {
+		astComponentJsonName = deleteNumbersInName(astComponentJsonName);
+		switch (astComponentJsonName) {
+			case "assignation":
+				Iterator<String> subComponentNames = astComponentJson.keys();
+				String firstComponentName = subComponentNames.next();
+				JSONObject firstComponent = astComponentJson.getJSONObject(firstComponentName);
+				String secondComponentName = subComponentNames.next();
+				JSONObject secondComponent = astComponentJson.getJSONObject(secondComponentName);
 
-                if (subComponentNames.hasNext()) {
-                    throw new IllegalArgumentException("Cannot parse JSON: Received an assignation with too many parameters");
-                }
-
-                return new AssignationStatement(
-                        (IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
-                        (EvaluableComponent) mapToAstComponent(secondComponent, secondComponentName)
-                );
-            case "declaration":
-                return new Declaration(
-                        mapToDeclarationType(astComponentJson.getString("declarationType")),
-                        astComponentJson.getString("name")
-                );
-            case "literal":
-                Object value = astComponentJson.get("value");
-                if (value instanceof String) {
-                    return new Literal<>((String) value);
-                }
-                else if (value instanceof Number) {
-                    return new Literal<>((Number) value);
-                }
-				else if (value == JSONObject.NULL) {
-					return new Literal<>(null);
+				if (subComponentNames.hasNext()) {
+					throw new IllegalArgumentException(
+							"Cannot parse JSON: Received an assignation with too many parameters");
 				}
-                else throw new IllegalArgumentException("Cannot parse JSON: Unsupported value " + value + " for literal");
-            case "identifier":
-                return new Identifier(
-                        astComponentJson.getString("name"),
-                        mapToIdentifierType(astComponentJson.getString("identifierType"))
-                );
-            case "binaryExpression":
-                Iterator<String> operandNames = astComponentJson.keys();
-                operandNames.next();
 
-                String firstOperandName = operandNames.next();
-                JSONObject firstOperand = astComponentJson.getJSONObject(firstOperandName);
-                String secondOperandName = operandNames.next();
-                JSONObject secondOperand = astComponentJson.getJSONObject(secondOperandName);
+				return new AssignationStatement(
+						(IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
+						(EvaluableComponent)
+								mapToAstComponent(secondComponent, secondComponentName));
+			case "declaration":
+				return new Declaration(
+						mapToDeclarationType(astComponentJson.getString("declarationType")),
+						astComponentJson.getString("name"));
+			case "literal":
+				Object value = astComponentJson.get("value");
+				if (value instanceof String) {
+					return new Literal<>((String) value);
+				} else if (value instanceof Number) {
+					return new Literal<>((Number) value);
+				} else if (value == JSONObject.NULL) {
+					return new Literal<>(null);
+				} else
+					throw new IllegalArgumentException(
+							"Cannot parse JSON: Unsupported value " + value + " for literal");
+			case "identifier":
+				return new Identifier(
+						astComponentJson.getString("name"),
+						mapToIdentifierType(astComponentJson.getString("identifierType")));
+			case "binaryExpression":
+				Iterator<String> operandNames = astComponentJson.keys();
+				operandNames.next();
 
-                return new BinaryExpression(
-                    mapToOperator(astComponentJson.getString("op")),
-                    (EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
-                    (EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName)
-                );
-            case "functionCall":
-                return new FunctionCallStatement(
-                        (IdentifierComponent) mapToAstComponent(
-                                astComponentJson.getJSONObject("identifier"),
-                                "identifier"
-                        ),
-                        (Parameters) mapToAstComponent(
-                                astComponentJson.getJSONObject("params"),
-                                "params"
-                        )
-                );
-            case "params":
-                List<EvaluableComponent> parameters = new ArrayList<>();
-                for (String key: astComponentJson.keySet()){
-                    parameters.add((EvaluableComponent) mapToAstComponent(astComponentJson.getJSONObject(key), key));
-                }
+				String firstOperandName = operandNames.next();
+				JSONObject firstOperand = astComponentJson.getJSONObject(firstOperandName);
+				String secondOperandName = operandNames.next();
+				JSONObject secondOperand = astComponentJson.getJSONObject(secondOperandName);
 
-                return new Parameters(parameters);
-            case "conditional", "if", "ifClauses", "statementBlock":
-                throw new RuntimeException("Not implemented yet: case '" + astComponentJsonName + "'");
-            default:
-                throw new IllegalArgumentException(astComponentJsonName + " is not a valid ast component");
-        }
-    }
+				return new BinaryExpression(
+						mapToOperator(astComponentJson.getString("op")),
+						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
+						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName));
+			case "functionCall":
+				return new FunctionCallStatement(
+						(IdentifierComponent)
+								mapToAstComponent(
+										astComponentJson.getJSONObject("identifier"), "identifier"),
+						(Parameters)
+								mapToAstComponent(
+										astComponentJson.getJSONObject("params"), "params"));
+			case "params":
+				List<EvaluableComponent> parameters = new ArrayList<>();
+				for (String key : astComponentJson.keySet()) {
+					parameters.add(
+							(EvaluableComponent)
+									mapToAstComponent(astComponentJson.getJSONObject(key), key));
+				}
 
-    private BinaryOperator mapToOperator(String op) {
-        return switch (op) {
-            case "+" -> BinaryOperator.SUM;
-            case "-" -> BinaryOperator.SUBTRACTION;
-            case "/" -> BinaryOperator.DIVISION;
-            case "*" -> BinaryOperator.MULTIPLICATION;
-            default -> throw new IllegalArgumentException("Invalid operator: " + op);
-        };
-    }
+				return new Parameters(parameters);
+			case "conditional", "if", "ifClauses", "statementBlock":
+				throw new RuntimeException(
+						"Not implemented yet: case '" + astComponentJsonName + "'");
+			default:
+				throw new IllegalArgumentException(
+						astComponentJsonName + " is not a valid ast component");
+		}
+	}
 
-    private static String deleteNumbersInName(String astComponentName) {
-        String[] split = astComponentName.split("_");
-        return split[split.length - 1];
-    }
+	private BinaryOperator mapToOperator(String op) {
+		return switch (op) {
+			case "+" -> BinaryOperator.SUM;
+			case "-" -> BinaryOperator.SUBTRACTION;
+			case "/" -> BinaryOperator.DIVISION;
+			case "*" -> BinaryOperator.MULTIPLICATION;
+			default -> throw new IllegalArgumentException("Invalid operator: " + op);
+		};
+	}
 
-    private IdentifierType mapToIdentifierType(String identifierType) {
-        return switch (identifierType) {
-            case "variable" -> IdentifierType.VARIABLE;
-            case "function" -> IdentifierType.FUNCTION;
-            default -> throw new IllegalArgumentException("Invalid identifierType: " + identifierType);
-        };
-    }
+	private static String deleteNumbersInName(String astComponentName) {
+		String[] split = astComponentName.split("_");
+		return split[split.length - 1];
+	}
 
-    private DeclarationType mapToDeclarationType(String declarationType) {
-        return switch (declarationType) {
-            case "String" -> DeclarationType.STRING;
-            case "Number" -> DeclarationType.NUMBER;
-            default -> throw new IllegalArgumentException("Invalid declarationType " + declarationType);
-        };
-    }
+	private IdentifierType mapToIdentifierType(String identifierType) {
+		return switch (identifierType) {
+			case "variable" -> IdentifierType.VARIABLE;
+			case "function" -> IdentifierType.FUNCTION;
+			default ->
+					throw new IllegalArgumentException("Invalid identifierType: " + identifierType);
+		};
+	}
+
+	private DeclarationType mapToDeclarationType(String declarationType) {
+		return switch (declarationType) {
+			case "String" -> DeclarationType.STRING;
+			case "Number" -> DeclarationType.NUMBER;
+			default ->
+					throw new IllegalArgumentException(
+							"Invalid declarationType " + declarationType);
+		};
+	}
 }

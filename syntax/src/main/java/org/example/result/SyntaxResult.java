@@ -1,10 +1,10 @@
 package org.example.result;
 
+import java.util.List;
 import org.example.ast.AstComponent;
 
-import java.util.List;
-
 public interface SyntaxResult {
-  boolean isFailure();
-  List<AstComponent> getComponents();
+	boolean isFailure();
+
+	List<AstComponent> getComponents();
 }

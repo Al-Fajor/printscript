@@ -1,9 +1,8 @@
 package org.example.ast;
 
+import java.util.List;
 import org.example.Pair;
 import org.example.ast.visitor.Visitor;
-
-import java.util.List;
 
 public class StatementBlock implements AstComponent {
 	private final List<EvaluableComponent> statements;

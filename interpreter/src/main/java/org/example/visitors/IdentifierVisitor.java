@@ -26,12 +26,11 @@ public class IdentifierVisitor implements Visitor<String> {
 		DeclarationType declarationType = declaration.getType();
 		String name = declaration.getName();
 		switch (declarationType) {
-			case NUMBER ->
-				createNumericVariable(name);
-			case STRING ->
-				createStringVariable(name);
+			case NUMBER -> createNumericVariable(name);
+			case STRING -> createStringVariable(name);
 			default ->
-				throw new IllegalArgumentException("Implement declaration type: " + declarationType);
+					throw new IllegalArgumentException(
+							"Implement declaration type: " + declarationType);
 		}
 		return name;
 	}

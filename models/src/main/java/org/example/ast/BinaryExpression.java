@@ -1,32 +1,34 @@
 package org.example.ast;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.Visitor;
 
-import java.util.Objects;
-
 public class BinaryExpression implements EvaluableComponent {
-    private final BinaryOperator operator;
-    private final EvaluableComponent leftComponent;
-    private final EvaluableComponent rightComponent;
+	private final BinaryOperator operator;
+	private final EvaluableComponent leftComponent;
+	private final EvaluableComponent rightComponent;
 
-    public BinaryExpression(BinaryOperator operator, EvaluableComponent leftComponent, EvaluableComponent rightComponent) {
-        this.operator = operator;
-        this.leftComponent = leftComponent;
-        this.rightComponent = rightComponent;
-    }
+	public BinaryExpression(
+			BinaryOperator operator,
+			EvaluableComponent leftComponent,
+			EvaluableComponent rightComponent) {
+		this.operator = operator;
+		this.leftComponent = leftComponent;
+		this.rightComponent = rightComponent;
+	}
 
-    public BinaryOperator getOperator() {
-        return operator;
-    }
+	public BinaryOperator getOperator() {
+		return operator;
+	}
 
-    public AstComponent getLeftComponent() {
-        return leftComponent;
-    }
+	public AstComponent getLeftComponent() {
+		return leftComponent;
+	}
 
-    public AstComponent getRightComponent() {
-        return rightComponent;
-    }
+	public AstComponent getRightComponent() {
+		return rightComponent;
+	}
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
@@ -48,7 +50,9 @@ public class BinaryExpression implements EvaluableComponent {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		BinaryExpression that = (BinaryExpression) o;
-		return operator == that.operator && Objects.equals(leftComponent, that.leftComponent) && Objects.equals(rightComponent, that.rightComponent);
+		return operator == that.operator
+				&& Objects.equals(leftComponent, that.leftComponent)
+				&& Objects.equals(rightComponent, that.rightComponent);
 	}
 
 	@Override
