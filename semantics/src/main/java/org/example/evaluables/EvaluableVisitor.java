@@ -72,11 +72,13 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
                                             true,
                                             Optional.empty()
                                     ),
-                                    (env) -> EvaluableResolution.emptyFailure(
+                                    (env) -> EvaluableResolution.failure(
                                             "Cannot perform operation because types are incompatible: "
                                                     + rightResolution.evaluatedType().get() + " "
                                                     + getSymbol(expression.getOperator()) + " "
-                                                    + leftResolution.evaluatedType().get() + " "
+                                                    + leftResolution.evaluatedType().get() + " ",
+                                            expression.getStart(),
+                                            expression.getEnd()
 
                                     )
                             ),
@@ -143,7 +145,11 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
                         leftResolution,
                         new IdentifierExists(
                                 leftResolution,
-                                (env) -> EvaluableResolution.emptyFailure("Variable has already been declared"),
+                                (env) -> EvaluableResolution.failure(
+                                        "Variable has already been declared",
+                                                statement.getStart(),
+                                                statement.getEnd()
+                                ),
                                 new IsSimpleDeclaration(
                                         rightResolution,
                                         (env) -> {
@@ -157,9 +163,11 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
                                                     env.declareVariable(leftResolution.name(), leftResolution.type().get());
                                                     return EvaluableResolution.emptySuccess();
                                                 },
-                                                (env) -> EvaluableResolution.emptyFailure(
+                                                (env) -> EvaluableResolution.failure(
                                                         "Cannot assign value of type " + rightResolution.evaluatedType().get()
-                                                                + " to variable of type" + leftResolution.type().get()
+                                                                + " to variable of type" + leftResolution.type().get(),
+                                                        statement.getStart(),
+                                                        statement.getEnd()
                                                 )
                                         )
 
@@ -171,12 +179,18 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
                                         leftResolution,
                                         rightResolution,
                                         (env) -> EvaluableResolution.emptySuccess(),
-                                        (env) -> EvaluableResolution.emptyFailure(
+                                        (env) -> EvaluableResolution.failure(
                                                 "Cannot assign type " + rightResolution.evaluatedType().get()
-                                                        + " to " + env.getDeclarationType(leftResolution.name())
+                                                        + " to " + env.getDeclarationType(leftResolution.name()),
+                                                statement.getStart(),
+                                                statement.getEnd()
                                         )
                                 ),
-                                (env) -> EvaluableResolution.emptyFailure("Cannot assign non-existing identifier")
+                                (env) -> EvaluableResolution.failure(
+                                        "Cannot assign non-existing identifier",
+                                        statement.getStart(),
+                                        statement.getEnd()
+                                        )
                         )
                 ),
                 (env) -> rightResolution
@@ -203,11 +217,15 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
                                 parameterResolution,
                                 functionCallResolution,
                                 (env) -> EvaluableResolution.emptySuccess(),
-                                (env) -> EvaluableResolution.emptyFailure("Cannot resolve " + functionName + "(" + types + ").")
+                                (env) -> EvaluableResolution.failure(
+                                        "Cannot resolve function signature " + functionName + "(" + types + ").",
+                                        statement.getStart(),
+                                        statement.getEnd()
+                                )
                         ),
-                        (env) -> EvaluableResolution.emptyFailure(parameterResolution.result().errorMessage())
+                        (env) -> EvaluableResolution.castFrom(parameterResolution)
                 ),
-                (env) -> EvaluableResolution.emptyFailure(functionCallResolution.result().errorMessage())
+                (env) -> EvaluableResolution.castFrom(functionCallResolution)
         ).analyze(env);
     }
 
@@ -227,7 +245,11 @@ public class EvaluableVisitor implements Visitor<EvaluableResolution> {
                         Optional.of(identifier.getName())
                 ),
                 (env) -> new EvaluableResolution(
-                        new SemanticFailure("Cannot find identifier " + identifier.getName()),
+                        new SemanticFailure(
+                                "Cannot find identifier " + identifier.getName(),
+                                Optional.of(identifier.getStart()),
+                                Optional.of(identifier.getEnd())
+                        ),
                         Optional.empty(),
                         false,
                         Optional.of(identifier.getName())
