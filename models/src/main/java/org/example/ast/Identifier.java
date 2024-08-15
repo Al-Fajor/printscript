@@ -1,9 +1,8 @@
 package org.example.ast;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.Visitor;
-
-import java.util.Objects;
 
 public class Identifier implements IdentifierComponent, EvaluableComponent {
 	private final IdentifierType type;

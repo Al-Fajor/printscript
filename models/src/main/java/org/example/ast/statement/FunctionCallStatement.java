@@ -1,12 +1,11 @@
 package org.example.ast.statement;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.AstComponent;
 import org.example.ast.IdentifierComponent;
 import org.example.ast.Parameters;
 import org.example.ast.visitor.Visitor;
-
-import java.util.Objects;
 
 public class FunctionCallStatement implements SentenceStatement {
 	private final IdentifierComponent identifier;
@@ -47,15 +46,13 @@ public class FunctionCallStatement implements SentenceStatement {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		FunctionCallStatement that = (FunctionCallStatement) o;
-		return Objects.equals(identifier, that.identifier) && Objects.equals(parameters, that.parameters);
+		return Objects.equals(identifier, that.identifier)
+				&& Objects.equals(parameters, that.parameters);
 	}
 
 	@Override
 	public String toString() {
-		return "FunctionCall{" +
-				"identifier=" + identifier +
-				", parameters=" + parameters +
-				'}';
+		return "FunctionCall{" + "identifier=" + identifier + ", parameters=" + parameters + '}';
 	}
 
 	@Override

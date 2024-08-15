@@ -1,9 +1,8 @@
 package org.example.sentence.validator;
 
+import java.util.List;
 import org.example.token.Token;
 
-import java.util.List;
-
 public interface SentenceValidator {
-  boolean isValidSentence(List<Token> tokens);
+	boolean isValidSentence(List<Token> tokens);
 }

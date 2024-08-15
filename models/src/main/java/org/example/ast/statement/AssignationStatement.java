@@ -1,21 +1,21 @@
 package org.example.ast.statement;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.AstComponent;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.IdentifierComponent;
 import org.example.ast.visitor.Visitor;
 
-import java.util.Objects;
-
 public class AssignationStatement implements SentenceStatement {
-    private final IdentifierComponent identifier;
-    private final EvaluableComponent expression;
+	private final IdentifierComponent identifier;
+	private final EvaluableComponent expression;
 
-    public AssignationStatement(IdentifierComponent leftComponent, EvaluableComponent rightComponent) {
-        this.identifier = leftComponent;
-        this.expression = rightComponent;
-    }
+	public AssignationStatement(
+			IdentifierComponent leftComponent, EvaluableComponent rightComponent) {
+		this.identifier = leftComponent;
+		this.expression = rightComponent;
+	}
 
 	@Override
 	public AstComponent getLeft() {
@@ -47,7 +47,8 @@ public class AssignationStatement implements SentenceStatement {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		AssignationStatement that = (AssignationStatement) o;
-		return Objects.equals(identifier, that.identifier) && Objects.equals(expression, that.expression);
+		return Objects.equals(identifier, that.identifier)
+				&& Objects.equals(expression, that.expression);
 	}
 
 	@Override
@@ -57,9 +58,11 @@ public class AssignationStatement implements SentenceStatement {
 
 	@Override
 	public String toString() {
-		return "Assignation{" +
-				"leftComponent=" + identifier +
-				", rightComponent=" + expression +
-				'}';
+		return "Assignation{"
+				+ "leftComponent="
+				+ identifier
+				+ ", rightComponent="
+				+ expression
+				+ '}';
 	}
 }

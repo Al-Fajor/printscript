@@ -1,29 +1,29 @@
 package org.example;
 
 public class Variable<T> {
-    private final VariableType type;
-    private final String name;
-    private T value;
+	private final VariableType type;
+	private final String name;
+	private T value;
 
-    public Variable(VariableType type, String name, T value) {
-        this.type = type;
-        this.name = name;
-        this.value = value;
-    }
+	public Variable(VariableType type, String name, T value) {
+		this.type = type;
+		this.name = name;
+		this.value = value;
+	}
 
-    public VariableType getType() {
-        return type;
-    }
+	public VariableType getType() {
+		return type;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public T getValue() {
-        return value;
-    }
+	public T getValue() {
+		return value;
+	}
 
-    public void setValue(T value) {
-        this.value = value;
-    }
+	public void setValue(T value) {
+		this.value = value;
+	}
 }

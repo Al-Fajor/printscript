@@ -1,4 +1,3 @@
 package org.example.ast;
 
-public interface EvaluableComponent extends AstComponent {
-}
+public interface EvaluableComponent extends AstComponent {}
