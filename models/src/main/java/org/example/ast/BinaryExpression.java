@@ -30,12 +30,12 @@ public class BinaryExpression implements EvaluableComponent {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
