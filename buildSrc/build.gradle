@@ -1,0 +1,19 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    // 'libs' references the toml file at the 'gradle' directory
+    implementation libs.spotless.gradle.plugin
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
