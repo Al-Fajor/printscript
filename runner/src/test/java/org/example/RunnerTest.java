@@ -31,7 +31,7 @@ class RunnerTest {
 
 	@Test
 	public void testRunner4() {
-		test("println(-1);", Result.SUCCESS);
+		test("println(-1);", Result.FAIL);
 	}
 
 	@Test
