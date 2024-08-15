@@ -5,7 +5,8 @@ plugins {
 
 spotless {
     java {
-        googleJavaFormat()
-        indentWithSpaces(4)
+        googleJavaFormat().aosp()
+//        indentWithSpaces(4)
+//        removeUnusedImports()
     }
 }
