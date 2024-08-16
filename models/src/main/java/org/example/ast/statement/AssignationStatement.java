@@ -29,12 +29,12 @@ public class AssignationStatement implements SentenceStatement {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
