@@ -103,13 +103,21 @@ public class InterpreterTest {
 	private final PrintStream originalOut = System.out;
 	private final PrintStream originalErr = System.err;
 
-	public void setUpStreams() {
+	private void setUpStreams() {
 		System.setOut(new PrintStream(outContent));
 		System.setErr(new PrintStream(errContent));
 	}
 
-	public void restoreStreams() {
+	private void restoreStreams() {
 		System.setOut(originalOut);
 		System.setErr(originalErr);
+	}
+
+	private Pair<Interpreter, InterpreterState> interpret(String filePath) throws IOException {
+		InterpreterState state = new TestState();
+		Interpreter interpreter = new PrintScriptInterpreter(state);
+		interpreter.interpret(astBuilder.buildFromJson(filePath));
+
+		return new Pair<>(interpreter, state);
 	}
 }
