@@ -4,40 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Stream;
+import org.example.test.TestBuilder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
-public class SyntaxTest {
-	String runOnly = "";
-	SyntaxTestBuilder testBuilder = new SyntaxTestBuilder();
-	String testCaseDirectory = "src/test/resources/test_cases";
+public class SyntaxTest extends TestBuilder {
+	SyntaxTestProvider testProvider = new SyntaxTestProvider();
+	private static final String TEST_CASES = "src/test/resources/test_cases";
 
 	@TestFactory
-	Stream<DynamicTest> syntaxTests() {
-		Stream<File> files;
-
-		if (runOnly.isEmpty()) {
-			Path resourcePath = Paths.get(testCaseDirectory);
-			File directory = resourcePath.toFile();
-
-			files = Arrays.stream(Objects.requireNonNull(directory.listFiles()));
-		} else {
-			Path resourcePath = Paths.get(testCaseDirectory + File.separator + runOnly);
-			File singleFile = resourcePath.toFile();
-
-			files = Stream.of(singleFile);
-		}
-
-		return files.map(
-				(File testFile) ->
-						DynamicTest.dynamicTest(testFile.getName(), getTestExecutable(testFile)));
+	protected Stream<DynamicTest> testAllDirectoryCases() {
+		return super.testAllDirectoryCases(TEST_CASES);
 	}
 
 	@Test
@@ -45,17 +25,18 @@ public class SyntaxTest {
 		test("declare_sum.json");
 	}
 
-	private void test(String filePath) throws IOException {
-		assertTrue(testBuilder.testSyntax(testCaseDirectory + "/" + filePath));
-	}
-
-	private Executable getTestExecutable(File testFile) {
+	@Override
+	protected Executable getTestExecutable(File testFile) {
 		return () -> {
 			try {
-				assertTrue(testBuilder.testSyntax(testFile.getPath()));
+				assertTrue(testProvider.testSyntax(testFile.getPath()));
 			} catch (IOException e) {
 				throw new RuntimeException("Error getting test file");
 			}
 		};
+	}
+
+	private void test(String filePath) throws IOException {
+		assertTrue(testProvider.testSyntax(TEST_CASES + "/" + filePath));
 	}
 }
