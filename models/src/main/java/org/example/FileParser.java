@@ -36,7 +36,7 @@ public class FileParser {
 
 		return tempTokenList.stream()
 				.map(this::getToken)
-				.map(pair -> new Token(pair.first, 0, 0, pair.second))
+				.map(pair -> new Token(pair.first(), 0, 0, pair.second()))
 				.collect(Collectors.toList());
 	}
 
@@ -48,6 +48,4 @@ public class FileParser {
 		String tokenValue = token.substring(token.indexOf('(') + 1, token.lastIndexOf(')'));
 		return new Pair<>(BaseTokenTypes.valueOf(tokenName), tokenValue);
 	}
-
-	private record Pair<T, W>(T first, W second) {}
 }
