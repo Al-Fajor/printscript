@@ -11,9 +11,9 @@ public class StatementBlock implements AstComponent {
 		this.statements = statements;
 	}
 
-    public List<EvaluableComponent> getStatements() {
-        return statements;
-    }
+	public List<EvaluableComponent> getStatements() {
+		return statements;
+	}
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
