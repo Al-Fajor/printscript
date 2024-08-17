@@ -3,6 +3,7 @@ package org.example.ast;
 import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.EvaluableComponentVisitor;
 
 public class Literal<K> implements EvaluableComponent {
 	private final K value;
@@ -40,6 +41,11 @@ public class Literal<K> implements EvaluableComponent {
 
 	@Override
 	public <T> T accept(AstComponentVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 }

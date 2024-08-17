@@ -3,6 +3,8 @@ package org.example.ast;
 import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.EvaluableComponentVisitor;
+import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class Identifier implements IdentifierComponent, EvaluableComponent {
 	private final IdentifierType type;
@@ -14,7 +16,7 @@ public class Identifier implements IdentifierComponent, EvaluableComponent {
 	}
 
 	@Override
-	public Pair<Integer, Integer> getStart() {
+public Pair<Integer, Integer> getStart() {
 		return new Pair<>(1, 1);
 	}
 
@@ -46,6 +48,16 @@ public class Identifier implements IdentifierComponent, EvaluableComponent {
 
 	@Override
 	public <T> T accept(AstComponentVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(IdentifierComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 }

@@ -3,6 +3,7 @@ package org.example.ast;
 import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class Declaration implements IdentifierComponent {
 	private final DeclarationType type;
@@ -38,6 +39,11 @@ public class Declaration implements IdentifierComponent {
 
 	@Override
 	public <T> T accept(AstComponentVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(IdentifierComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 

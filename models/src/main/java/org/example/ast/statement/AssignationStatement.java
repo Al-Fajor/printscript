@@ -6,6 +6,7 @@ import org.example.ast.AstComponent;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.IdentifierComponent;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.StatementVisitor;
 
 public class AssignationStatement implements Statement {
 	private final IdentifierComponent identifier;
@@ -40,6 +41,11 @@ public class AssignationStatement implements Statement {
 	@Override
 	public <T> T accept(AstComponentVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(StatementVisitor<T> statementVisitor) {
+		return statementVisitor.visit(this);
 	}
 
 	@Override

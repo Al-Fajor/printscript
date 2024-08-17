@@ -6,6 +6,7 @@ import org.example.ast.AstComponent;
 import org.example.ast.IdentifierComponent;
 import org.example.ast.Parameters;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.StatementVisitor;
 
 public class FunctionCallStatement implements Statement {
 	private final IdentifierComponent identifier;
@@ -39,6 +40,11 @@ public class FunctionCallStatement implements Statement {
 	@Override
 	public <T> T accept(AstComponentVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(StatementVisitor<T> statementVisitor) {
+		return statementVisitor.visit(this);
 	}
 
 	@Override

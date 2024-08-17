@@ -1,5 +1,5 @@
 package org.example.ast.visitor;
 
-public interface Visitable {
+public interface AstComponentVisitable {
 	<T> T accept(AstComponentVisitor<T> visitor);
 }
