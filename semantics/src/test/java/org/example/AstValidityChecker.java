@@ -13,5 +13,4 @@ public class AstValidityChecker {
 		JSONObject json = new JSONObject(content);
 		return json.getBoolean("valid_semantics");
 	}
-
 }
