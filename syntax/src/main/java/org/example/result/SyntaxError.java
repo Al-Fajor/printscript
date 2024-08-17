@@ -1,27 +1,26 @@
 package org.example.result;
 
+import java.util.List;
 import org.example.ast.AstComponent;
 
-import java.util.List;
+public class SyntaxError implements SyntaxResult {
+	private final String reason;
 
-public class SyntaxError implements SyntaxResult{
-  private final String reason;
+	public SyntaxError(String reason) {
+		this.reason = reason;
+	}
 
-  public SyntaxError(String reason) {
-    this.reason = reason;
-  }
+	@Override
+	public boolean isFailure() {
+		return true;
+	}
 
-  @Override
-  public boolean isFailure() {
-    return true;
-  }
+	public String getReason() {
+		return reason;
+	}
 
-  public String getReason() {
-    return reason;
-  }
-
-  @Override
-  public List<AstComponent> getComponents() {
-    return List.of();
-  }
+	@Override
+	public List<AstComponent> getComponents() {
+		return List.of();
+	}
 }

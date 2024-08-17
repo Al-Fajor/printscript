@@ -1,26 +1,26 @@
 package org.example.ast;
 
-import org.example.Pair;
-import org.example.ast.visitor.Visitor;
-
 import java.util.Objects;
+import org.example.Pair;
+import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class Declaration implements IdentifierComponent {
-    private final DeclarationType type;
-    private final String name;
+	private final DeclarationType type;
+	private final String name;
 
-    public Declaration(DeclarationType type, String name) {
-        this.type = type;
-        this.name = name;
-    }
+	public Declaration(DeclarationType type, String name) {
+		this.type = type;
+		this.name = name;
+	}
 
-    public DeclarationType getType() {
-        return type;
-    }
+	public DeclarationType getType() {
+		return type;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
 	@Override
 	public int hashCode() {
@@ -38,7 +38,12 @@ public class Declaration implements IdentifierComponent {
 	}
 
 	@Override
-	public<T> T accept(Visitor<T> visitor) {
+	public <T> T accept(AstComponentVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(IdentifierComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 

@@ -4,19 +4,18 @@ import org.example.Environment;
 import org.example.evaluables.EvaluableResolution;
 
 public class IsSimpleDeclaration extends ConditionalValidator {
-    private final EvaluableResolution rightResolution;
+	private final EvaluableResolution rightResolution;
 
-    public IsSimpleDeclaration(
-            EvaluableResolution rightResolution,
-            ResolutionValidator trueCaseValidator,
-            ResolutionValidator falseCaseValidator
-    ) {
-        super(trueCaseValidator, falseCaseValidator);
-        this.rightResolution = rightResolution;
-    }
+	public IsSimpleDeclaration(
+			EvaluableResolution rightResolution,
+			ResolutionValidator trueCaseValidator,
+			ResolutionValidator falseCaseValidator) {
+		super(trueCaseValidator, falseCaseValidator);
+		this.rightResolution = rightResolution;
+	}
 
-    @Override
-    protected boolean meetsCondition(Environment environment) {
-        return !rightResolution.isValuePresent();
-    }
+	@Override
+	protected boolean meetsCondition(Environment environment) {
+		return !rightResolution.isValuePresent();
+	}
 }

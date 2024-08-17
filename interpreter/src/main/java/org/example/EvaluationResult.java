@@ -45,7 +45,7 @@ public class EvaluationResult {
 
 	@Override
 	public String toString() {
-		switch(getType()) {
+		switch (getType()) {
 			case STRING -> {
 				return getStringResult();
 			}

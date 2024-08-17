@@ -1,59 +1,55 @@
 package org.example;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import org.example.ast.*;
 import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerResult;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
-import javax.naming.spi.Resolver;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 public class Runner {
-  public void run(String code){
-    Lexer lexer = new PrintScriptLexer();
-    SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
-    SemanticAnalyzer semanticAnalyzer = getSemanticAnalyzer();
-    Interpreter interpreter = new PrintScriptInterpreter();
+	public void run(String code) {
+		Lexer lexer = new PrintScriptLexer();
+		SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
+		SemanticAnalyzer semanticAnalyzer = getSemanticAnalyzer();
+		//		Interpreter interpreter = new PrintScriptInterpreter();
 
-    LexerResult lexerResult = lexer.lex(code);
+		LexerResult lexerResult = lexer.lex(code);
 
-    if (!lexerResult.isSuccessful()) {
-      throw new RuntimeException(((LexerFailure) lexerResult).message());
-    }
+		if (!lexerResult.isSuccessful()) {
+			throw new RuntimeException(((LexerFailure) lexerResult).message());
+		}
 
-    SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerResult.getTokens());
+		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerResult.getTokens());
 
-    if(syntaxResult.isFailure()){
-      throw new RuntimeException(((SyntaxError) syntaxResult).getReason());
-    }
+		if (syntaxResult.isFailure()) {
+			throw new RuntimeException(((SyntaxError) syntaxResult).getReason());
+		}
 
-    List<AstComponent> components = syntaxResult.getComponents();
-    SemanticResult result = semanticAnalyzer.analyze(components);
+		List<AstComponent> components = syntaxResult.getComponents();
+		SemanticResult result = semanticAnalyzer.analyze(components);
 
-    if(!result.isSuccessful()){
-      throw new RuntimeException("Semantic error");
+		if (!result.isSuccessful()) {
+			throw new RuntimeException("Semantic error");
 
-    }
-    else{
-      interpreter.interpret(components);
-    }
-  }
+		} else {
+			//			interpreter.interpret(components);
+		}
+	}
 
-  private static SemanticAnalyzer getSemanticAnalyzer() {
-    SemanticAnalyzer semanticAnalyzer;
-    {
-      MapEnvironment env = new MapEnvironment(
-        new HashMap<>(),
-        Set.of(
-          new Signature("println", List.of(DeclarationType.NUMBER)),
-          new Signature("println", List.of(DeclarationType.STRING))
-        )
-      );
-      semanticAnalyzer = new SemanticAnalyzerImpl(env);
-    }
-    return semanticAnalyzer;
-  }
+	private static SemanticAnalyzer getSemanticAnalyzer() {
+		SemanticAnalyzer semanticAnalyzer;
+		{
+			MapEnvironment env =
+					new MapEnvironment(
+							new HashMap<>(),
+							Set.of(
+									new Signature("println", List.of(DeclarationType.NUMBER)),
+									new Signature("println", List.of(DeclarationType.STRING))));
+			semanticAnalyzer = new SemanticAnalyzerImpl(env);
+		}
+		return semanticAnalyzer;
+	}
 }

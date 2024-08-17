@@ -3,22 +3,22 @@ package org.example;
 import java.util.Optional;
 
 public record SemanticFailure(
-        String errorMessage,
-        Optional<Pair<Integer, Integer>> errorStart,
-        Optional<Pair<Integer, Integer>> errorEnd
-) implements SemanticResult {
-    @Override
-    public boolean isSuccessful() {
-        return false;
-    }
+		String errorMessage,
+		Optional<Pair<Integer, Integer>> errorStart,
+		Optional<Pair<Integer, Integer>> errorEnd)
+		implements SemanticResult {
+	@Override
+	public boolean isSuccessful() {
+		return false;
+	}
 
-    @Override
-    public Optional<Pair<Integer, Integer>> getErrorStart() {
-        return errorStart;
-    }
+	@Override
+	public Optional<Pair<Integer, Integer>> getErrorStart() {
+		return errorStart;
+	}
 
-    @Override
-    public Optional<Pair<Integer, Integer>> getErrorEnd() {
-        return errorEnd;
-    }
+	@Override
+	public Optional<Pair<Integer, Integer>> getErrorEnd() {
+		return errorEnd;
+	}
 }
