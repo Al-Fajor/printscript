@@ -14,7 +14,7 @@ public class EvaluationResult {
 	}
 
 	public EvaluationResult(Double numericResult) {
-this.stringResult = null;
+		this.stringResult = null;
 		this.variableType = VariableType.NUMBER;
 		this.numericResult = numericResult;
 		this.boolResult = null;

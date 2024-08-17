@@ -25,7 +25,7 @@ public class EvaluatorVisitor implements AstComponentVisitor<EvaluationResult> {
 		EvaluableComponent leftExpression = expression.getLeftComponent();
 		EvaluableComponent rightExpression = expression.getRightComponent();
 		EvaluationResult leftResult = leftExpression.accept(this);
-	EvaluationResult rightResult = rightExpression.accept(this);
+		EvaluationResult rightResult = rightExpression.accept(this);
 		return switch (operator) {
 			case SUM -> addResults(leftResult, rightResult);
 			case SUBTRACTION -> subtractResults(leftResult, rightResult);

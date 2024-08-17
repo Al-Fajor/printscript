@@ -21,7 +21,7 @@ public class Identifier implements IdentifierComponent, EvaluableComponent {
 	}
 
 	@Override
-public Pair<Integer, Integer> getEnd() {
+	public Pair<Integer, Integer> getEnd() {
 		return new Pair<>(1, 1);
 	}
 
