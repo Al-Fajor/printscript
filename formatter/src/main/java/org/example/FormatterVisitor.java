@@ -4,13 +4,13 @@ import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 import org.example.factories.RuleMapFactory;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FormatterVisitor implements Visitor<String> {
+public class FormatterVisitor implements AstComponentVisitor<String> {
 
     private final Map<String, Object> ruleMap = new RuleMapFactory().getRuleMap();
 
