@@ -20,8 +20,6 @@ public class RuleMapFactory {
                 String key = keys.next();
                 map.put(key, jsonObject.get(key));
             }
-
-            System.out.println(map);
             return map;
         } catch (Exception e) {
             throw new RuntimeException("Error while reading formatter rules", e);
