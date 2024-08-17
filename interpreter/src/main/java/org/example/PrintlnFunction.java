@@ -4,6 +4,7 @@ import java.util.List;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Parameters;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.EvaluableComponentVisitor;
 import org.example.visitors.EvaluatorVisitor;
 
 public class PrintlnFunction implements Function {
@@ -27,7 +28,7 @@ public class PrintlnFunction implements Function {
 	}
 
 	private void printComponent(EvaluableComponent component) {
-		AstComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
+		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
 		EvaluationResult result = component.accept(evaluatorVisitor);
 		System.out.println(result);
 	}

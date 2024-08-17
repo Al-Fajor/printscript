@@ -19,12 +19,12 @@ public class AssignationStatement implements Statement {
 	}
 
 	@Override
-	public AstComponent getLeft() {
+	public IdentifierComponent getLeft() {
 		return identifier;
 	}
 
 	@Override
-	public AstComponent getRight() {
+	public EvaluableComponent getRight() {
 		return expression;
 	}
 

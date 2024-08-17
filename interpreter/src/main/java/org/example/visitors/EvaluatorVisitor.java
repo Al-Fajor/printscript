@@ -11,8 +11,9 @@ import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.EvaluableComponentVisitor;
 
-public class EvaluatorVisitor implements AstComponentVisitor<EvaluationResult> {
+public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {
 	private final InterpreterState state;
 
 	public EvaluatorVisitor(InterpreterState state) {
@@ -72,18 +73,8 @@ public class EvaluatorVisitor implements AstComponentVisitor<EvaluationResult> {
 	}
 
 	@Override
-	public EvaluationResult visit(Parameters parameters) {
-		throw new UnsupportedOperationException("Implement parameters evaluation");
-	}
-
-	@Override
 	public EvaluationResult visit(Conditional conditional) {
 		throw new UnsupportedOperationException("Implement Conditional variables");
-	}
-
-	@Override
-	public EvaluationResult visit(IfStatement ifStatement) {
-		throw new UnsupportedOperationException("Implement IfStatement variables");
 	}
 
 	private String getStringValue(Identifier identifier) {
@@ -175,25 +166,5 @@ public class EvaluatorVisitor implements AstComponentVisitor<EvaluationResult> {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public EvaluationResult visit(AssignationStatement statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(Declaration statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(FunctionCallStatement statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(StatementBlock statementBlock) {
-		return null;
 	}
 }

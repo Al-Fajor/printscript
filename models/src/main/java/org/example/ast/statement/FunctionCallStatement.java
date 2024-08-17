@@ -28,12 +28,12 @@ public class FunctionCallStatement implements Statement {
 	}
 
 	@Override
-	public AstComponent getLeft() {
+	public IdentifierComponent getLeft() {
 		return identifier;
 	}
 
 	@Override
-	public AstComponent getRight() {
+	public Parameters getRight() {
 		return parameters;
 	}
 
