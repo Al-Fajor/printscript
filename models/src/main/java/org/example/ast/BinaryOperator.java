@@ -1,10 +1,10 @@
 package org.example.ast;
 
 public enum BinaryOperator {
-    SUM,
-    SUBTRACTION,
-    MULTIPLICATION,
-    DIVISION,
+	SUM,
+	SUBTRACTION,
+	MULTIPLICATION,
+	DIVISION,
 	OR,
 	AND,
 	GREATER_THAN,

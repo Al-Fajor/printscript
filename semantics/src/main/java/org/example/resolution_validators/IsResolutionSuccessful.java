@@ -1,21 +1,21 @@
 package org.example.resolution_validators;
 
 import org.example.Environment;
+import org.example.Resolution;
 
 public class IsResolutionSuccessful extends ConditionalValidator {
-    private final SemanticResultWrapper resolution;
+	private final Resolution resolution;
 
-    public IsResolutionSuccessful(
-            SemanticResultWrapper resolution,
-            ResolutionValidator trueCaseValidator,
-            ResolutionValidator falseCaseValidator
-    ) {
-        super(trueCaseValidator, falseCaseValidator);
-        this.resolution = resolution;
-    }
+	public IsResolutionSuccessful(
+			Resolution resolution,
+			ResolutionValidator trueCaseValidator,
+			ResolutionValidator falseCaseValidator) {
+		super(trueCaseValidator, falseCaseValidator);
+		this.resolution = resolution;
+	}
 
-    @Override
-    protected boolean meetsCondition(Environment environment) {
-        return resolution.result().isSuccessful();
-    }
+	@Override
+	protected boolean meetsCondition(Environment environment) {
+		return resolution.result().isSuccessful();
+	}
 }

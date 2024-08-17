@@ -1,30 +1,30 @@
 package org.example.ast.statement;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.AstComponent;
 import org.example.ast.Conditional;
 import org.example.ast.IfClauses;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.StatementVisitor;
 
-import java.util.Objects;
-
-public class IfStatement implements SentenceStatement {
+public class IfStatement implements Statement {
 	private final Conditional conditional;
-    private final IfClauses clauses;
+	private final IfClauses clauses;
 
-    public IfStatement(Conditional conditional, IfClauses clauses) {
-        this.conditional = conditional;
-        this.clauses = clauses;
-    }
+	public IfStatement(Conditional conditional, IfClauses clauses) {
+		this.conditional = conditional;
+		this.clauses = clauses;
+	}
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
@@ -38,8 +38,13 @@ public class IfStatement implements SentenceStatement {
 	}
 
 	@Override
-	public <T> T accept(Visitor<T> visitor) {
+	public <T> T accept(AstComponentVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(StatementVisitor<T> statementVisitor) {
+		return statementVisitor.visit(this);
 	}
 
 	@Override
@@ -47,7 +52,8 @@ public class IfStatement implements SentenceStatement {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		IfStatement that = (IfStatement) o;
-		return Objects.equals(conditional, that.conditional) && Objects.equals(clauses, that.clauses);
+		return Objects.equals(conditional, that.conditional)
+				&& Objects.equals(clauses, that.clauses);
 	}
 
 	@Override

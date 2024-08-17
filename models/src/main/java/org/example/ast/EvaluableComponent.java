@@ -1,4 +1,5 @@
 package org.example.ast;
 
-public interface EvaluableComponent extends AstComponent {
-}
+import org.example.ast.visitor.EvaluableComponentVisitable;
+
+public interface EvaluableComponent extends AstComponent, EvaluableComponentVisitable {}

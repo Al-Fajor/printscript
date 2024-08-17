@@ -5,24 +5,21 @@ import org.example.evaluables.EvaluableResolution;
 
 // The Template Method pattern will be more readable than Strategy, in this case
 public abstract class ConditionalValidator implements ResolutionValidator {
-    ResolutionValidator trueCaseValidator;
-    ResolutionValidator falseCaseValidator;
+	ResolutionValidator trueCaseValidator;
+	ResolutionValidator falseCaseValidator;
 
-    public ConditionalValidator(
-            ResolutionValidator trueCaseValidator,
-            ResolutionValidator falseCaseValidator
-    ) {
-        this.trueCaseValidator = trueCaseValidator;
-        this.falseCaseValidator = falseCaseValidator;
-    }
+	public ConditionalValidator(
+			ResolutionValidator trueCaseValidator, ResolutionValidator falseCaseValidator) {
+		this.trueCaseValidator = trueCaseValidator;
+		this.falseCaseValidator = falseCaseValidator;
+	}
 
-    @Override
-    public EvaluableResolution analyze(Environment environment) {
-        if (meetsCondition(environment)) {
-            return trueCaseValidator.analyze(environment);
-        }
-        else return falseCaseValidator.analyze(environment);
-    }
+	@Override
+	public EvaluableResolution analyze(Environment environment) {
+		if (meetsCondition(environment)) {
+			return trueCaseValidator.analyze(environment);
+		} else return falseCaseValidator.analyze(environment);
+	}
 
-    protected abstract boolean meetsCondition(Environment environment);
+	protected abstract boolean meetsCondition(Environment environment);
 }

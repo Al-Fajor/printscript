@@ -1,14 +1,13 @@
 package org.example.ast.statement;
 
+import java.util.Objects;
 import org.example.Pair;
-import org.example.ast.AstComponent;
 import org.example.ast.IdentifierComponent;
 import org.example.ast.Parameters;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.StatementVisitor;
 
-import java.util.Objects;
-
-public class FunctionCallStatement implements SentenceStatement {
+public class FunctionCallStatement implements Statement {
 	private final IdentifierComponent identifier;
 	private final Parameters parameters;
 
@@ -19,27 +18,32 @@ public class FunctionCallStatement implements SentenceStatement {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return null;
+		return new Pair<>(1, 1);
 	}
 
 	@Override
-	public AstComponent getLeft() {
+	public IdentifierComponent getLeft() {
 		return identifier;
 	}
 
 	@Override
-	public AstComponent getRight() {
+	public Parameters getRight() {
 		return parameters;
 	}
 
 	@Override
-	public <T> T accept(Visitor<T> visitor) {
+	public <T> T accept(AstComponentVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(StatementVisitor<T> statementVisitor) {
+		return statementVisitor.visit(this);
 	}
 
 	@Override
@@ -47,15 +51,13 @@ public class FunctionCallStatement implements SentenceStatement {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		FunctionCallStatement that = (FunctionCallStatement) o;
-		return Objects.equals(identifier, that.identifier) && Objects.equals(parameters, that.parameters);
+		return Objects.equals(identifier, that.identifier)
+				&& Objects.equals(parameters, that.parameters);
 	}
 
 	@Override
 	public String toString() {
-		return "FunctionCall{" +
-				"identifier=" + identifier +
-				", parameters=" + parameters +
-				'}';
+		return "FunctionCall{" + "identifier=" + identifier + ", parameters=" + parameters + '}';
 	}
 
 	@Override

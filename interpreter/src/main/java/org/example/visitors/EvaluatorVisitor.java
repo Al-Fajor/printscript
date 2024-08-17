@@ -1,18 +1,15 @@
 package org.example.visitors;
 
+import static org.example.VariableType.NUMBER;
+import static org.example.VariableType.STRING;
+
 import org.example.EvaluationResult;
 import org.example.InterpreterState;
 import org.example.VariableType;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.EvaluableComponentVisitor;
 
-import static org.example.VariableType.NUMBER;
-import static org.example.VariableType.STRING;
-
-public class EvaluatorVisitor implements Visitor<EvaluationResult> {
+public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {
 	private final InterpreterState state;
 
 	public EvaluatorVisitor(InterpreterState state) {
@@ -22,21 +19,16 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	@Override
 	public EvaluationResult visit(BinaryExpression expression) {
 		BinaryOperator operator = expression.getOperator();
-		AstComponent leftExpression = expression.getLeftComponent(); //TODO hacer que BinaryExpression devuelva EvaluableComponent en vez de AstComponent
-		AstComponent rightExpression = expression.getRightComponent();
+		EvaluableComponent leftExpression = expression.getLeftComponent();
+		EvaluableComponent rightExpression = expression.getRightComponent();
 		EvaluationResult leftResult = leftExpression.accept(this);
 		EvaluationResult rightResult = rightExpression.accept(this);
 		return switch (operator) {
-			case SUM ->
-					addResults(leftResult, rightResult);
-			case SUBTRACTION ->
-					subtractResults(leftResult, rightResult);
-			case MULTIPLICATION ->
-					multiplyResults(leftResult, rightResult);
-			case DIVISION ->
-					divideResults(leftResult, rightResult);
-			default ->
-				throw new IllegalArgumentException("Implement the operator " + operator);
+			case SUM -> addResults(leftResult, rightResult);
+			case SUBTRACTION -> subtractResults(leftResult, rightResult);
+			case MULTIPLICATION -> multiplyResults(leftResult, rightResult);
+			case DIVISION -> divideResults(leftResult, rightResult);
+			default -> throw new IllegalArgumentException("Implement the operator " + operator);
 		};
 	}
 
@@ -52,8 +44,7 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 			case Number n -> {
 				return new EvaluationResult(n.doubleValue());
 			}
-			default ->
-					throw new IllegalArgumentException("invalidComponent");
+			default -> throw new IllegalArgumentException("invalidComponent");
 		}
 	}
 
@@ -68,7 +59,8 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 				case STRING -> {
 					return new EvaluationResult(getStringValue(identifier));
 				}
-				case BOOLEAN -> throw new UnsupportedOperationException("Implement Boolean variables");
+				case BOOLEAN ->
+						throw new UnsupportedOperationException("Implement Boolean variables");
 				default -> throw new IllegalArgumentException("Invalid variable type");
 			}
 		} else {
@@ -77,18 +69,8 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	}
 
 	@Override
-	public EvaluationResult visit(Parameters parameters) {
-		throw new UnsupportedOperationException("Implement parameters evaluation");
-	}
-
-	@Override
 	public EvaluationResult visit(Conditional conditional) {
 		throw new UnsupportedOperationException("Implement Conditional variables");
-	}
-
-	@Override
-	public EvaluationResult visit(IfStatement ifStatement) {
-		throw new UnsupportedOperationException("Implement IfStatement variables");
 	}
 
 	private String getStringValue(Identifier identifier) {
@@ -115,7 +97,8 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 		throw new IllegalArgumentException("Results cannot be added");
 	}
 
-	private EvaluationResult subtractResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
+	private EvaluationResult subtractResults(
+			EvaluationResult leftTerm, EvaluationResult rightTerm) {
 		VariableType leftTermType = leftTerm.getType();
 		VariableType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
@@ -125,7 +108,9 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 		}
 		throw new IllegalArgumentException("Results cannot be subtracted");
 	}
-	private EvaluationResult multiplyResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
+
+	private EvaluationResult multiplyResults(
+			EvaluationResult leftTerm, EvaluationResult rightTerm) {
 		VariableType leftTermType = leftTerm.getType();
 		VariableType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
@@ -148,10 +133,16 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	}
 
 	private String getStringResult(EvaluationResult result) {
-		switch(result.getType()) {
-			case STRING -> {return result.getStringResult();}
-			case NUMBER -> {return result.getNumericResult().toString();}
-			case BOOLEAN -> {return result.getBoolResult().toString();}
+		switch (result.getType()) {
+			case STRING -> {
+				return result.getStringResult();
+			}
+			case NUMBER -> {
+				return result.getNumericResult().toString();
+			}
+			case BOOLEAN -> {
+				return result.getBoolResult().toString();
+			}
 			default -> throw new IllegalArgumentException("Result cannot be turned into string");
 		}
 	}
@@ -171,25 +162,5 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public EvaluationResult visit(AssignationStatement statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(Declaration statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(FunctionCallStatement statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(StatementBlock statementBlock) {
-		return null;
 	}
 }

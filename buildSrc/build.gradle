@@ -1,0 +1,55 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    // 'libs' references the toml file at the 'gradle' directory
+    implementation libs.spotless.gradle.plugin
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+//If it doesn't work for you, delete it
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = false
+        html.required = true
+        html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+        sarif.required = true
+    }
+}
+
+//Task to move hooks from /hooks to .git TODO
+tasks.register("addPreCommitGitHookOnBuild") {
+    println("⚈ ⚈ ⚈ Running Add Pre Commit Git Hook Script on Build ⚈ ⚈ ⚈")
+    def sourceDir = new File('./hooks')
+    def targetDir = new File('./.git/hooks')
+
+    if (!targetDir.exists()) {
+        targetDir.mkdirs()
+    }
+
+    sourceDir.eachFile() { file ->
+        def targetFile = new File(targetDir, file.name)
+        file.withInputStream { input ->
+            targetFile.withOutputStream { output ->
+                output << input
+            }
+        }
+    }
+    println("✅ Added Pre Commit Git Hook Script.")
+}

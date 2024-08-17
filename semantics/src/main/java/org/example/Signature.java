@@ -1,10 +1,6 @@
 package org.example;
 
+import java.util.List;
 import org.example.ast.DeclarationType;
 
-import java.util.List;
-
-public record Signature(
-        String functionName,
-        List<DeclarationType> parameters
-) {}
+public record Signature(String functionName, List<DeclarationType> parameters) {}

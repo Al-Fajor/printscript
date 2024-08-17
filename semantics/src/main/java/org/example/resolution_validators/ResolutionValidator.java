@@ -5,5 +5,5 @@ import org.example.evaluables.EvaluableResolution;
 
 @FunctionalInterface
 public interface ResolutionValidator {
-    EvaluableResolution analyze(Environment environment);
+	EvaluableResolution analyze(Environment environment);
 }

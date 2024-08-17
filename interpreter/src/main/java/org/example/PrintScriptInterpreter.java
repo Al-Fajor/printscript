@@ -1,30 +1,28 @@
 package org.example;
 
+import java.util.List;
 import org.example.ast.AstComponent;
-import org.example.ast.statement.SentenceStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.statement.Statement;
 import org.example.visitors.StatementVisitor;
 
-import java.util.List;
-
 public class PrintScriptInterpreter implements Interpreter {
-    private final InterpreterState state;
-    private final Visitor<Void> statementVisitor;
+	private final InterpreterState state;
+	private final org.example.ast.visitor.StatementVisitor<Void> statementVisitor;
 
-    public PrintScriptInterpreter() {
-        state = new PrintScriptState();
+	public PrintScriptInterpreter() {
+		state = new PrintScriptState();
 		statementVisitor = new StatementVisitor(state);
-    }
+	}
 
-    public PrintScriptInterpreter(InterpreterState state) {
-        this.state = state;
+	public PrintScriptInterpreter(InterpreterState state) {
+		this.state = state;
 		statementVisitor = new StatementVisitor(state);
-    }
+	}
 
-    @Override
-    public void interpret(List<AstComponent> astList) {
-        for (AstComponent statement : astList) {
-            statement.accept(statementVisitor);
-        }
-    }
+	@Override
+	public void interpret(List<AstComponent> astList) {
+		for (AstComponent statement : astList) {
+			((Statement) statement).accept(statementVisitor); // TODO avoid cast
+		}
+	}
 }
