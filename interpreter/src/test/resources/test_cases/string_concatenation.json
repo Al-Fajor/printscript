@@ -1,4 +1,17 @@
 {
+  "expectedVariables": [
+    {
+      "name": "numberString",
+      "type": "String",
+      "value": "5.0 Cars"
+    },
+    {
+      "name": "stringString",
+      "type": "String",
+      "value": "Hello World"
+    }
+  ],
+  "expectedPrintLines": [],
   "ast_list": [
     {
       "assignation": {

@@ -7,7 +7,7 @@ import org.example.observer.Observer;
 
 public class InterpreterFactory {
 	private List<Observer<?, ?>> observers = new ArrayList<>();
-	private StateListener stateListener = state -> {};
+	private StateListener stateListener = getEmptyStateListener();
 
 	public void addObserver(Observer<?, ?> observer) {
 		observers.add(observer);
@@ -19,5 +19,16 @@ public class InterpreterFactory {
 
 	public Interpreter create() {
 		return new PrintScriptInterpreter(new PrintScriptState(observers, stateListener));
+	}
+
+	private StateListener getEmptyStateListener() {
+		return new StateListener() {
+
+			@Override
+			public void updateVariable(Variable<?> variable) {}
+
+			@Override
+			public void updateFunction(Function function) {}
+		};
 	}
 }

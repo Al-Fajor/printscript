@@ -23,7 +23,7 @@ public class PrintScriptState implements InterpreterState {
 
 	public void addNumericVariable(Variable<Double> numericVariable) {
 		numericVariables.put(numericVariable.getName(), numericVariable);
-		stateListener.update(this);
+		stateListener.updateVariable(numericVariable);
 	}
 
 	public Variable<Double> getNumericVariable(String name) {
@@ -32,12 +32,12 @@ public class PrintScriptState implements InterpreterState {
 
 	public void setNumericVariable(String name, Double value) {
 		numericVariables.get(name).setValue(value);
-		stateListener.update(this);
+		stateListener.updateVariable(numericVariables.get(name));
 	}
 
 	public void addStringVariable(Variable<String> stringVariable) {
 		stringVariables.put(stringVariable.getName(), stringVariable);
-		stateListener.update(this);
+		stateListener.updateVariable(stringVariable);
 	}
 
 	public Variable<String> getStringVariable(String name) {
@@ -46,7 +46,7 @@ public class PrintScriptState implements InterpreterState {
 
 	public void setStringVariable(String name, String value) {
 		stringVariables.get(name).setValue(value);
-		stateListener.update(this);
+		stateListener.updateVariable(stringVariables.get(name));
 	}
 
 	public VariableType getVariableType(String name) {
@@ -63,15 +63,11 @@ public class PrintScriptState implements InterpreterState {
 
 	public void addFunction(Function function) {
 		functions.put(function.getName(), function);
-		stateListener.update(this);
+		stateListener.updateFunction(function);
 	}
 
 	@Override
 	public List<Observer<?, ?>> getObservers() {
 		return observers;
-	}
-
-	private StateListener getEmptyStateListener() {
-		return state -> {};
 	}
 }

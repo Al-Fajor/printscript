@@ -1,5 +1,7 @@
 package org.example;
 
 public interface StateListener {
-	void update(InterpreterState state);
+	void updateVariable(Variable<?> variable);
+
+	void updateFunction(Function function);
 }

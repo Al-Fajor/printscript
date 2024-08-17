@@ -31,7 +31,7 @@ public class PrintlnFunction implements Function {
 	private void printComponent(EvaluableComponent component) {
 		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
 		EvaluationResult result = component.accept(evaluatorVisitor);
-		getPrintObserver().updateChanges(result.toString());
+		getPrintObserver().updateChanges(result.toString() + '\n');
 	}
 
 	private PrintObserver getPrintObserver() {

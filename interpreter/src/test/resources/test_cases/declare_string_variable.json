@@ -1,4 +1,12 @@
 {
+  "expectedVariables": [
+    {
+      "name": "string",
+      "type": "String",
+      "value": null
+    }
+  ],
+  "expectedPrintLines": [],
   "ast_list": [
     {
       "assignation": {
