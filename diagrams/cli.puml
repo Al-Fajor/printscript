@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Cli {
+    - Map<String, Command> commands
+    + main(String[] args)
+}
+
+interface Command {
+    + execute(String[] args)
+}
+
+class ValidationCommand implements Command {
+    + execute(String[] args)
+}
+class ExecutionCommand implements Command {
+    + execute(String[] args)
+}
+class FormattingCommand implements Command {
+    + execute(String[] args)
+}
+class AnalysisCommand implements Command {
+    + execute(String[] args)
+}
+class HelpCommand implements Command {
+    + execute(String[] args)
+}
+
+interface Observer {
+    + notifyChange(String message)
+}
+
+class SemanticAnalyzerObserver implements Observer {
+    + notifyChange(String message)
+}
+
+class SyntacticAnalyzerObserver implements Observer {
+    + notifyChange(String message)
+}
+
+Cli *-> Command
+ValidationCommand ---> SemanticAnalyzerObserver
+ValidationCommand ---> SyntacticAnalyzerObserver
+
+@enduml

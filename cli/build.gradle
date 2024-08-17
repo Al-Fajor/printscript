@@ -13,6 +13,10 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation(project(":models"))
+    implementation(project(":lexer"))
+    implementation(project(":syntax"))
+    implementation(project(":semantics"))
 }
 
 test {
