@@ -8,7 +8,6 @@ import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 import org.example.ast.visitor.IdentifierComponentVisitor;
 

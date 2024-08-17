@@ -7,10 +7,6 @@ import org.example.EvaluationResult;
 import org.example.InterpreterState;
 import org.example.VariableType;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 
 public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {

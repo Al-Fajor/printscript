@@ -4,10 +4,6 @@ import org.example.InterpreterState;
 import org.example.Variable;
 import org.example.VariableType;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class IdentifierVisitor implements IdentifierComponentVisitor<String> {

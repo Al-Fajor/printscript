@@ -3,7 +3,6 @@ package org.example;
 import java.util.List;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Parameters;
-import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 import org.example.visitors.EvaluatorVisitor;
 

@@ -2,7 +2,6 @@ package org.example.ast.statement;
 
 import java.util.Objects;
 import org.example.Pair;
-import org.example.ast.AstComponent;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.IdentifierComponent;
 import org.example.ast.visitor.AstComponentVisitor;
