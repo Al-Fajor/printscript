@@ -2,7 +2,7 @@ package org.example.ast;
 
 import java.util.List;
 import org.example.Pair;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 
 public class StatementBlock implements AstComponent {
 	private final List<EvaluableComponent> statements;
@@ -22,7 +22,7 @@ public class StatementBlock implements AstComponent {
 	}
 
 	@Override
-	public <T> T accept(Visitor<T> visitor) {
+	public <T> T accept(AstComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 }

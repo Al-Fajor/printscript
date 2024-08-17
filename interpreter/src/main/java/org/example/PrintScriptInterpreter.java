@@ -2,12 +2,12 @@ package org.example;
 
 import java.util.List;
 import org.example.ast.AstComponent;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 import org.example.visitors.StatementVisitor;
 
 public class PrintScriptInterpreter implements Interpreter {
 	private final InterpreterState state;
-	private final Visitor<Void> statementVisitor;
+	private final AstComponentVisitor<Void> statementVisitor;
 
 	public PrintScriptInterpreter() {
 		state = new PrintScriptState();

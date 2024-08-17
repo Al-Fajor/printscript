@@ -10,9 +10,9 @@ import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 
-public class EvaluatorVisitor implements Visitor<EvaluationResult> {
+public class EvaluatorVisitor implements AstComponentVisitor<EvaluationResult> {
 	private final InterpreterState state;
 
 	public EvaluatorVisitor(InterpreterState state) {

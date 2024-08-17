@@ -8,9 +8,9 @@ import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 
-public class StatementVisitor implements Visitor<Void> {
+public class StatementVisitor implements AstComponentVisitor<Void> {
 	private final InterpreterState state;
 
 	public StatementVisitor(InterpreterState state) {
@@ -20,11 +20,11 @@ public class StatementVisitor implements Visitor<Void> {
 	@Override
 	public Void visit(AssignationStatement statement) {
 		AstComponent identifierComponent = statement.getLeft();
-		Visitor<String> identifierVisitor = new IdentifierVisitor(state);
+		AstComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
 		String identifierName = identifierComponent.accept(identifierVisitor);
 
 		AstComponent evaluableComponent = statement.getRight();
-		Visitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
+		AstComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
 		EvaluationResult result = evaluableComponent.accept(evaluatorVisitor);
 
 		assignValueToIdentifier(identifierName, result);
@@ -51,7 +51,7 @@ public class StatementVisitor implements Visitor<Void> {
 
 	private Function getFunction(FunctionCallStatement statement) {
 		AstComponent identifier = statement.getLeft();
-		Visitor<String> identifierVisitor = new IdentifierVisitor(state);
+		AstComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
 		String functionName = identifier.accept(identifierVisitor);
 		return state.getFunction(functionName);
 	}

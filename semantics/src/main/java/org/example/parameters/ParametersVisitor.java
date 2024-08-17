@@ -17,11 +17,11 @@ import org.example.ast.StatementBlock;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
 
-public class ParametersVisitor implements Visitor<ParametersResolution> {
+public class ParametersVisitor implements AstComponentVisitor<ParametersResolution> {
 	private EvaluableVisitor evaluableVisitor;
 
 	public void setEvaluableVisitor(EvaluableVisitor evaluableVisitor) {

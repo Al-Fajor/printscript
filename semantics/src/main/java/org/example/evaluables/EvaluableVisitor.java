@@ -17,7 +17,7 @@ import org.example.ast.StatementBlock;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 import org.example.externalization.Language;
 import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
@@ -31,7 +31,7 @@ import org.example.resolution_validators.IsOperationValid;
 import org.example.resolution_validators.IsResolutionSuccessful;
 import org.example.resolution_validators.IsSimpleDeclaration;
 
-public class EvaluableVisitor implements Visitor<EvaluableResolution> {
+public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
 	private Environment env;
 	private final IdentifierVisitor identifierVisitor;
 	private final ParametersVisitor parametersVisitor;

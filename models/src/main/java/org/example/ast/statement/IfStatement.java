@@ -5,9 +5,9 @@ import org.example.Pair;
 import org.example.ast.AstComponent;
 import org.example.ast.Conditional;
 import org.example.ast.IfClauses;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 
-public class IfStatement implements SentenceStatement {
+public class IfStatement implements Statement {
 	private final Conditional conditional;
 	private final IfClauses clauses;
 
@@ -37,7 +37,7 @@ public class IfStatement implements SentenceStatement {
 	}
 
 	@Override
-	public <T> T accept(Visitor<T> visitor) {
+	public <T> T accept(AstComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 
