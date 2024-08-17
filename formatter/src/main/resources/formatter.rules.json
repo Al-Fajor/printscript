@@ -2,5 +2,5 @@
   "spaceBeforeColon" : true,
   "spaceAfterColon" : true,
   "spaceAroundEquals" : true,
-  "spaceAfterPrintln": 0
+  "spaceBeforePrintln": 0
 }

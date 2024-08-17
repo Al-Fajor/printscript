@@ -33,29 +33,46 @@ public class FormatterVisitor implements Visitor<String> {
 
     @Override
     public String visit(Literal<?> literal) {
+        if (literal.getValue() == null) {
+            return "";
+        }
+//        TODO remove instanceof
+        if (literal.getValue() instanceof String) {
+            return "\"" + literal.getValue() + "\"";
+        }
         return literal.getValue().toString();
     }
 
     @Override
     public String visit(Parameters parameters) {
-        return parameters.toString();
+        return parameters.getParameters().stream()
+                .map(parameter -> parameter.accept(this))
+                .collect(Collectors.joining(", "));
     }
 
     @Override
     public String visit(AssignationStatement statement) {
+//        TODO maybe change this idk
         boolean spaceAroundEquals = (boolean) ruleMap.get("spaceAroundEquals");
-        return statement.getLeft().accept(this) +
+        String right = statement.getRight().accept(this);
+        String left = statement.getLeft().accept(this);
+        if (right.equals("")) {
+            return left;
+        }
+        return left +
             (spaceAroundEquals ? " " : "") +
             "=" +
             (spaceAroundEquals ? " " : "") +
-            statement.getRight().accept(this);
+            right;
     }
 
     @Override
     public String visit(Declaration statement) {
+//        TODO maybe change this idk
         boolean spaceBeforeColon = (boolean) ruleMap.get("spaceBeforeColon");
         boolean spaceAfterColon = (boolean) ruleMap.get("spaceAfterColon");
         return
+            "let " +
             statement.getName() +
             (spaceBeforeColon ? " " : "" ) +
             ":" +
@@ -65,7 +82,9 @@ public class FormatterVisitor implements Visitor<String> {
 
     @Override
     public String visit(FunctionCallStatement statement) {
-        return statement.getLeft().accept(this) + "(" + statement.getRight().accept(this) + ")";
+        int spacesBeforePrintln = (int) ruleMap.get("spaceBeforePrintln");
+        String spaces = " ".repeat(spacesBeforePrintln);
+        return spaces + statement.getLeft().accept(this) + "(" + statement.getRight().accept(this) + ")";
     }
 
     @Override
