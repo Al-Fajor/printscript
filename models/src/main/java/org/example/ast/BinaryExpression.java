@@ -22,11 +22,11 @@ public class BinaryExpression implements EvaluableComponent {
 		return operator;
 	}
 
-	public AstComponent getLeftComponent() {
+	public EvaluableComponent getLeftComponent() {
 		return leftComponent;
 	}
 
-	public AstComponent getRightComponent() {
+	public EvaluableComponent getRightComponent() {
 		return rightComponent;
 	}
 

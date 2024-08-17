@@ -22,10 +22,8 @@ public class EvaluatorVisitor implements AstComponentVisitor<EvaluationResult> {
 	@Override
 	public EvaluationResult visit(BinaryExpression expression) {
 		BinaryOperator operator = expression.getOperator();
-		AstComponent leftExpression =
-				expression.getLeftComponent(); // TODO hacer que BinaryExpression devuelva
-		// EvaluableComponent en vez de AstComponent
-		AstComponent rightExpression = expression.getRightComponent();
+		EvaluableComponent leftExpression = expression.getLeftComponent();
+		EvaluableComponent rightExpression = expression.getRightComponent();
 		EvaluationResult leftResult = leftExpression.accept(this);
 		EvaluationResult rightResult = rightExpression.accept(this);
 		return switch (operator) {
