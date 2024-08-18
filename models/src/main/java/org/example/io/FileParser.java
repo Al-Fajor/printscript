@@ -41,19 +41,6 @@ public class FileParser {
 				.collect(Collectors.toList());
 	}
 
-	public String readRange(
-			String filePath,
-			org.example.Pair<Integer, Integer> from,
-			org.example.Pair<Integer, Integer> to)
-			throws IOException {
-		try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
-			List<String> segment =
-					lines.skip(from.first() - 1).limit(to.first() + to.second() + 1).toList();
-
-			return Color.colorSegmentRed(segment, from, to);
-		}
-	}
-
 	private Pair<BaseTokenTypes, String> getToken(String token) {
 		if (token.indexOf('(') == -1) {
 			return new Pair<>(BaseTokenTypes.valueOf(token), "");

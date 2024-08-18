@@ -15,7 +15,7 @@ public class Color {
 		mutableSegment.set(0, getWithInitialEscapeCode(segment, from));
 		mutableSegment.set(segment.size() - 1, getWithFinalEscapeCode(segment, to));
 
-		return mutableSegment.stream().toString();
+		return String.join("\n", mutableSegment);
 	}
 
 	private static String getWithFinalEscapeCode(

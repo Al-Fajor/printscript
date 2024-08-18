@@ -8,6 +8,7 @@ import org.example.StateListener;
 import org.example.Variable;
 import org.example.ast.AstComponent;
 import org.example.factory.InterpreterFactory;
+import org.example.io.Color;
 import org.example.observer.PrintObserver;
 import org.example.observer.PrintSubscriber;
 
@@ -24,6 +25,7 @@ public class ExecutionCommand implements Command {
 	@Override
 	public void execute(String[] args) {
 		List<AstComponent> astList = parser.parse(args[0]);
+        if (astList.isEmpty()) return;
 
 		Color.printGreen("Running...");
 		interpreter.interpret(astList);
