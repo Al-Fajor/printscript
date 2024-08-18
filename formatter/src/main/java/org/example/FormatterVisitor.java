@@ -87,7 +87,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
         String breaks = "";
         if (identifier.equals("println")) {
             int spacesBeforePrintln = Integer.parseInt(ruleMap.get("breaksBeforePrintln"));
-            breaks = "\n".repeat(spacesBeforePrintln);
+            breaks = "\n".repeat(spacesBeforePrintln-1);
         }
         return breaks + statement.getLeft().accept(this) + "(" + statement.getRight().accept(this) + ")";
     }
