@@ -1,5 +1,6 @@
 package org.example.commands;
 
+import java.util.List;
 import org.example.Function;
 import org.example.Interpreter;
 import org.example.Parser;
@@ -10,49 +11,44 @@ import org.example.factory.InterpreterFactory;
 import org.example.observer.PrintObserver;
 import org.example.observer.PrintSubscriber;
 
-import java.util.List;
-
 public class ExecutionCommand implements Command {
-    Parser parser = new Parser();
-    Interpreter interpreter;
-    {
-        PrintSubscriber printSubscriber = new PrintSubscriber();
-        StateListener stateListener = getDummyListener();
-        interpreter = createInterpreter(stateListener, printSubscriber);
-    }
+	Parser parser = new Parser();
+	Interpreter interpreter;
 
-    @Override
-	public void execute(String[] args) {
-        List<AstComponent> astList = parser.parse(args[0]);
-
-        Color.printGreen("Running...");
-        interpreter.interpret(astList);
+	{
+		PrintSubscriber printSubscriber = new PrintSubscriber();
+		StateListener stateListener = getDummyListener();
+		interpreter = createInterpreter(stateListener, printSubscriber);
 	}
 
-    // TODO: duplicate from InterpreterTester
-    private Interpreter createInterpreter(
-            StateListener stateListener, PrintSubscriber printSubscriber) {
-        InterpreterFactory factory = new InterpreterFactory();
-        factory.setStateListener(stateListener);
+	@Override
+	public void execute(String[] args) {
+		List<AstComponent> astList = parser.parse(args[0]);
 
-        PrintObserver printObserver = new PrintObserver();
-        printObserver.addSubscriber(printSubscriber);
-        factory.addObserver(printObserver);
+		Color.printGreen("Running...");
+		interpreter.interpret(astList);
+	}
 
-        return factory.create();
-    }
+	// TODO: duplicate from InterpreterTester
+	private Interpreter createInterpreter(
+			StateListener stateListener, PrintSubscriber printSubscriber) {
+		InterpreterFactory factory = new InterpreterFactory();
+		factory.setStateListener(stateListener);
 
-    private static StateListener getDummyListener() {
-        return new StateListener() {
-            @Override
-            public void updateVariable(Variable<?> variable) {
+		PrintObserver printObserver = new PrintObserver();
+		printObserver.addSubscriber(printSubscriber);
+		factory.addObserver(printObserver);
 
-            }
+		return factory.create();
+	}
 
-            @Override
-            public void updateFunction(Function function) {
+	private static StateListener getDummyListener() {
+		return new StateListener() {
+			@Override
+			public void updateVariable(Variable<?> variable) {}
 
-            }
-        };
-    }
+			@Override
+			public void updateFunction(Function function) {}
+		};
+	}
 }
