@@ -9,26 +9,34 @@
   "expectedPrintLines": [],
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "String",
-          "name": "string"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "string"
+          }
         },
-        "2_literal": {
-          "value": null
+        {
+          "literal": {
+            "value": null
+          }
         }
-      }
+      ]
     },
     {
-      "assignation": {
-        "1_identifier": {
-          "identifierType": "variable",
-          "name": "string"
+      "assignation": [
+        {
+          "identifier": {
+            "identifierType": "variable",
+            "name": "string"
+          }
         },
-        "2_literal": {
-          "value": "This is a string"
+        {
+          "literal": {
+            "value": "This is a string"
+          }
         }
-      }
+      ]
     }
   ]
 }

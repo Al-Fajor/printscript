@@ -35,42 +35,41 @@ public class AstBuilder {
 
 	private AstComponent mapToAstComponent(
 			JSONObject astComponentJson, String astComponentJsonName) {
-		switch (astComponentJsonName) {
-			case "declaration":
-				return new Declaration(
-						mapToDeclarationType(astComponentJson.getString("declarationType")),
-						astComponentJson.getString("name"));
-			case "literal":
-				Object value = astComponentJson.get("value");
-				return switch (value) {
-					case String ignored -> new Literal<>((String) value);
-					case Number ignored -> new Literal<>((Number) value);
-					case null -> new Literal<>(null);
-					default ->
-							throw new IllegalArgumentException(
-									"Cannot parse JSON: Unsupported value "
-											+ value
-											+ " for literal");
-				};
-			case "identifier":
-				return new Identifier(
-						astComponentJson.getString("name"),
-						mapToIdentifierType(astComponentJson.getString("identifierType")));
-			case "functionCall":
-				return new FunctionCallStatement(
-						(IdentifierComponent)
-								mapToAstComponent(
-										astComponentJson.getJSONObject("identifier"), "identifier"),
-						(Parameters)
-								mapToAstComponent(
-										astComponentJson.getJSONArray("params"), "params"));
-			case "conditional", "if", "ifClauses", "statementBlock":
-				throw new RuntimeException(
-						"Not implemented yet: case '" + astComponentJsonName + "'");
-			default:
-				throw new IllegalArgumentException(
-						astComponentJsonName + " is not a valid ast component");
-		}
+        return switch (astComponentJsonName) {
+            case "declaration" -> new Declaration(
+                    mapToDeclarationType(astComponentJson.getString("declarationType")),
+                    astComponentJson.getString("name"));
+            case "literal" -> {
+                Object value = astComponentJson.get("value");
+
+                // This condition seems stupid, but it is how the Null object
+                // is implemented in org.json
+                if (value.equals(null)) yield new Literal<>(null);
+
+                yield switch (value) {
+                    case String ignored -> new Literal<>((String) value);
+                    case Number ignored -> new Literal<>((Number) value);
+                    default -> throw new IllegalArgumentException(
+                            "Cannot parse JSON: Unsupported value "
+                                    + value
+                                    + " for literal");
+                };
+            }
+            case "identifier" -> new Identifier(
+                    astComponentJson.getString("name"),
+                    mapToIdentifierType(astComponentJson.getString("identifierType")));
+            case "functionCall" -> new FunctionCallStatement(
+                    (IdentifierComponent)
+                            mapToAstComponent(
+                                    astComponentJson.getJSONObject("identifier"), "identifier"),
+                    (Parameters)
+                            mapToAstComponent(
+                                    astComponentJson.getJSONArray("params"), "params"));
+            case "conditional", "if", "ifClauses", "statementBlock" -> throw new RuntimeException(
+                    "Not implemented yet: case '" + astComponentJsonName + "'");
+            default -> throw new IllegalArgumentException(
+                    astComponentJsonName + " is not a valid ast component");
+        };
 	}
 
 	private AstComponent mapToAstComponent(JSONArray jsonArray, String astComponentJsonName) {

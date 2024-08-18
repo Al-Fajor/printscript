@@ -9,39 +9,67 @@
   "expectedPrintLines": [],
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "Number",
-          "name": "num"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "num"
+          }
         },
-        "2_binaryExpression": {
-          "op": "*",
-          "1_binaryExpression": {
-            "op": "+",
-            "1_binaryExpression": {
-              "op": "-",
-              "1_literal": {
-                "value": 5
-              },
-              "2_literal": {
+        {
+          "binaryExpression": [
+            {
+              "op": "*"
+            },
+            {
+              "binaryExpression": [
+                {
+                  "op": "+"
+                },
+                {
+                  "binaryExpression": [
+                    {
+                      "op": "-"
+                    },
+                    {
+                      "literal": {
+                        "value": 5
+                      }
+                    },
+                    {
+                      "literal": {
+                        "value": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "binaryExpression": [
+                    {
+                      "op": "/"
+                    },
+                    {
+                      "literal": {
+                        "value": 100
+                      }
+                    },
+                    {
+                      "literal": {
+                        "value": 5
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "literal": {
                 "value": 2
               }
-            },
-            "2_binaryExpression": {
-              "op": "/",
-              "1_literal": {
-                "value": 100
-              },
-              "2_literal": {
-                "value": 5
-              }
             }
-          },
-          "2_literal": {
-            "value": 2
-          }
+          ]
         }
-      }
+      ]
     }
   ]
 }

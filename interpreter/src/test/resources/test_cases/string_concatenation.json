@@ -14,38 +14,58 @@
   "expectedPrintLines": [],
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "String",
-          "name": "numberString"
-        },
-        "2_binaryExpression": {
-          "op": "+",
-          "1_literal": {
-            "value": 5
-          },
-          "2_literal": {
-            "value": " Cars"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "numberString"
           }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "+"
+            },
+            {
+              "literal": {
+                "value": 5
+              }
+            },
+            {
+              "literal": {
+                "value": " Cars"
+              }
+            }
+          ]
         }
-      }
+      ]
     },
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "String",
-          "name": "stringString"
-        },
-        "2_binaryExpression": {
-          "op": "+",
-          "1_literal": {
-            "value": "Hello "
-          },
-          "2_literal": {
-            "value": "World"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "stringString"
           }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "+"
+            },
+            {
+              "literal": {
+                "value": "Hello "
+              }
+            },
+            {
+              "literal": {
+                "value": "World"
+              }
+            }
+          ]
         }
-      }
+      ]
     }
   ]
 }
