@@ -37,6 +37,6 @@ public class LexerTestBuilder {
 		FileParser fp = new FileParser();
 		Result result = lexer.lex(fp.getCode(filePath));
 		assertFalse(result.isSuccessful());
-        System.out.println(result.errorMessage());
+		System.out.println(result.errorMessage());
 	}
 }

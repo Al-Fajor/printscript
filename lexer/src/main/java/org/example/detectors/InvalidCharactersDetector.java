@@ -26,7 +26,17 @@ public class InvalidCharactersDetector implements LexicalErrorDetector {
 				insideString = !insideString;
 			} else if (!insideString && invalidChars.contains(c)) {
 				return new ScanFailure(
-						"Invalid character detected: '" + c + "'" + " at line " + lineNumber + ", position " + positionInLine + " to line " + lineNumber + ", position " + (positionInLine + 1),
+						"Invalid character detected: '"
+								+ c
+								+ "'"
+								+ " at line "
+								+ lineNumber
+								+ ", position "
+								+ positionInLine
+								+ " to line "
+								+ lineNumber
+								+ ", position "
+								+ (positionInLine + 1),
 						new Pair<>(lineNumber, positionInLine),
 						new Pair<>(lineNumber, positionInLine + 1));
 			}

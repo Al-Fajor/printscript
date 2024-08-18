@@ -53,7 +53,11 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 							+ "' at line "
 							+ lines
 							+ ", position "
-							+ position + " to line " + lines + ", position " + (position + 1),
+							+ position
+							+ " to line "
+							+ lines
+							+ ", position "
+							+ (position + 1),
 					new Pair<>(lines, position),
 					new Pair<>(lines, position + 1));
 		}

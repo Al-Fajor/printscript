@@ -42,7 +42,8 @@ public class Parser {
 		if (lexingFailed(lexerResult)) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming syntactic analysis");
-		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(( (LexerSuccess) lexerResult).getTokens());
+		SyntaxResult syntaxResult =
+				syntaxAnalyzer.analyze(((LexerSuccess) lexerResult).getTokens());
 		if (syntaxAnalysisFailed(syntaxResult)) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming semantic analysis");
@@ -102,7 +103,7 @@ public class Parser {
 	private static boolean lexingFailed(Result lexerResult) {
 		if (!lexerResult.isSuccessful()) {
 			System.out.println("Lexing failed with error");
-            System.out.println(lexerResult.errorMessage());
+			System.out.println(lexerResult.errorMessage());
 			return true;
 		}
 		return false;
