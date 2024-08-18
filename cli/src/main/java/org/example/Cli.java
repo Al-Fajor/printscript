@@ -20,28 +20,28 @@ public class Cli {
 					"format", new FormattingCommand(),
 					"analyze", new AnalyzeCommand());
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            System.out.print("PrintScript> ");
+		while (true) {
+			System.out.print("PrintScript> ");
 
-            if (!scanner.hasNext()) {
-                throw new IllegalStateException("There's nothing to read");
-            }
+			if (!scanner.hasNext()) {
+				throw new IllegalStateException("There's nothing to read");
+			}
 
-            String[] scannedArgs = scanner.nextLine().split(" ");
+			String[] scannedArgs = scanner.nextLine().split(" ");
 
-
-            if (scannedArgs.length == 1) {
-                System.out.println("Command must be of the form '<command> <filePath> <flags>'");
-            } else
-                commands.getOrDefault(
-                                scannedArgs[0],
-                                (commandArgs) ->
-                                        System.out.println(scannedArgs[0] + " is not a valid command"))
-                        .execute(getCommandArguments(scannedArgs));
-        }
+			if (scannedArgs.length == 1) {
+				System.out.println("Command must be of the form '<command> <filePath> <flags>'");
+			} else
+				commands.getOrDefault(
+								scannedArgs[0],
+								(commandArgs) ->
+										System.out.println(
+												scannedArgs[0] + " is not a valid command"))
+						.execute(getCommandArguments(scannedArgs));
+		}
 	}
 
 	private static String[] getCommandArguments(String[] args) {
