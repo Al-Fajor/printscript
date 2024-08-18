@@ -29,15 +29,15 @@ public class Parser {
 	}
 
 	public List<AstComponent> parse(String path) {
-        String code;
-        try {
-            code = ScriptReader.readCodeFromSource(path);
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not read file; got error: \n" + e.getMessage());
-            return Collections.emptyList();
-        }
+		String code;
+		try {
+			code = ScriptReader.readCodeFromSource(path);
+		} catch (FileNotFoundException e) {
+			System.out.println("Could not read file; got error: \n" + e.getMessage());
+			return Collections.emptyList();
+		}
 
-        Color.printGreen("\nPerforming lexical analysis");
+		Color.printGreen("\nPerforming lexical analysis");
 		LexerResult lexerResult = lexer.lex(code);
 		if (lexingFailed(lexerResult)) return Collections.emptyList();
 
@@ -63,7 +63,8 @@ public class Parser {
 				// semanticResult.getErrorEnd().get());
 				// TODO: undo hardcoding once error location is returned within Result
 				coloredSegment =
-						ScriptReader.readAndHighlightRange(path, new Pair<>(1, 3), new Pair<>(2, 6));
+						ScriptReader.readAndHighlightRange(
+								path, new Pair<>(1, 3), new Pair<>(2, 6));
 			} catch (IOException e) {
 				throw new RuntimeException("Could not read file at " + path);
 			}
