@@ -1,20 +1,30 @@
 {"tokens": "LET -> IDENTIFIER(a) -> COLON -> TYPE(number) -> ASSIGNATION -> LITERAL(5) -> OPERATOR(+) -> LITERAL(3) -> SEMICOLON",
   "ast_list":[
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "Number",
-          "name": "a"
-        },
-        "2_binaryExpression": {
-          "op": "+",
-          "1_literal": {
-            "value": 5
-          },
-          "2_literal": {
-            "value": 3
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "a"
           }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "+"
+            },
+            {
+              "literal": {
+                "value": 5
+              }
+            },
+            {
+              "literal": {
+                "value": 3
+              }
+            }
+          ]
         }
-      }
+      ]
     }
   ]}

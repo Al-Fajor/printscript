@@ -60,9 +60,4 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		}
 		return sentences;
 	}
-
-	//  private Map<TokenType, Integer> bindingPowers(){
-	//
-	//  }
-
 }

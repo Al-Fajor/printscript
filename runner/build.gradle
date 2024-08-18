@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":syntax"))
     implementation(project(":semantics"))
     implementation(project(":interpreter"))
+    testImplementation(project(":testFramework"))
 }
 
 test {

@@ -1,122 +1,34 @@
 package org.example;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
+import java.util.stream.Stream;
+import org.example.test.TestBuilder;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.function.Executable;
 
-import java.io.IOException;
-import org.junit.jupiter.api.Test;
-
-class LexerTest {
+class LexerTest extends TestBuilder {
 	LexerTestBuilder lexerTestBuilder = new LexerTestBuilder();
+	private static final String testCaseDirectory = "src/test/resources/test_cases/";
 
 	//    Token Detection
-
-	@Test
-	void integerInlineAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/integer_inline_assignation.json");
+	@TestFactory
+	protected Stream<DynamicTest> testValidCases() {
+		return super.testAllDirectoryCases(testCaseDirectory + "valid");
 	}
 
-	@Test
-	void decimalInlineAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/decimal_inline_assignation.json");
+	//    Token Error Detection
+	@TestFactory
+	protected Stream<DynamicTest> testInvalidCases() {
+		return super.testAllDirectoryCases(testCaseDirectory + "invalid");
 	}
 
-	@Test
-	void stringInlineAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/string_inline_assignation.json");
-	}
-
-	@Test
-	void variableCreation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/variable_creation.json");
-	}
-
-	@Test
-	void integerSumInlineAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/integer_sum_inline_assignation.json");
-	}
-
-	@Test
-	void integerAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/integer_assignation.json");
-	}
-
-	@Test
-	void stringMultilineInlineAssignations() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/string_multiline_inline_assignations.json");
-	}
-
-	@Test
-	void printlnString() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/println_string.json");
-	}
-
-	@Test
-	void printlnVariableTest() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/println_variable.json");
-	}
-
-	@Test
-	void printCreatedVariable() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/println_created_variable.json");
-	}
-
-	@Test
-	void wierdSpacingInlineAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/wierd_spacing_inline_assignation.json");
-	}
-
-	@Test
-	void noSpaceInlineAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/no_space_inline_assignation.json");
-	}
-
-	@Test
-	void noSpaceSubtractionAssignation() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/no_space_subtraction_assignation.json");
-	}
-
-	@Test
-	void assignationWithMultipleOperators() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/assignation_with_multiple_operators.json");
-	}
-
-	@Test
-	void noSpaceAssignationWithMultipleOperators() throws IOException {
-		lexerTestBuilder.testTokenDetection(
-				"src/test/resources/test_cases/valid/no_space_assignation_with_multiple_operators.json");
-	}
-
-	//  Lexical errors
-
-	@Test
-	void invalidIdentifiers() throws IOException {
-		lexerTestBuilder.testLexicalErrorDetection(
-				"src/test/resources/test_cases/invalid/identifiers.json");
-	}
-
-	@Test
-	void unterminatedStrings() throws IOException {
-		lexerTestBuilder.testLexicalErrorDetection(
-				"src/test/resources/test_cases/invalid/unterminated_strings.json");
-	}
-
-	@Test
-	void invalidNumberFormats() throws IOException {
-		lexerTestBuilder.testLexicalErrorDetection(
-				"src/test/resources/test_cases/invalid/number_formats.json");
+	@Override
+	protected Executable getTestExecutable(File testFile) {
+		String filePath = String.valueOf(testFile);
+		boolean testsFailure = filePath.contains("/invalid/");
+		return testsFailure
+				? () -> lexerTestBuilder.testLexicalErrorDetection(filePath)
+				: () -> lexerTestBuilder.testTokenDetection(filePath);
 	}
 }

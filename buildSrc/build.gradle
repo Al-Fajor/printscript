@@ -28,12 +28,11 @@ tasks.withType(Checkstyle) {
     reports {
         xml.required = false
         html.required = true
-        html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+//        html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
         sarif.required = true
     }
 }
 
-//Task to move hooks from /hooks to .git TODO
 tasks.register("addPreCommitGitHookOnBuild") {
     println("⚈ ⚈ ⚈ Running Add Pre Commit Git Hook Script on Build ⚈ ⚈ ⚈")
     def sourceDir = new File('./hooks')

@@ -2,26 +2,34 @@
   "valid_semantics": true,
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "Number",
-          "name": "a"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "a"
+          }
         },
-        "2_literal": {
-          "value": 9
+        {
+          "literal": {
+            "value": 9
+          }
         }
-      }
+      ]
     },
     {
-      "assignation": {
-        "identifier": {
-          "name": "a",
-          "identifierType": "variable"
+      "assignation": [
+        {
+          "identifier": {
+            "name": "a",
+            "identifierType": "variable"
+          }
         },
-        "literal": {
-          "value": 10
+        {
+          "literal": {
+            "value": 10
+          }
         }
-      }
+      ]
     }
   ]
 }

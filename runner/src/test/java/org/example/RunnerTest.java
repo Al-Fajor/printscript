@@ -41,10 +41,17 @@ class RunnerTest {
 
 	@Test
 	public void testRunner6() {
-		//    test("let 1a: number = 2;", Result.FAIL);
-		//    test("println(10)", Result.SUCCESS);
+		test("let 1a: number = 2;", Result.FAIL);
+		test("println(10)", Result.SUCCESS);
 		test("let x: number = -1;" + "println(x);" + "x = 2;" + "println(x);", Result.SUCCESS);
 		test("let b: string;", Result.SUCCESS);
+	}
+
+	@Test
+	public void testPrintSyntax() {
+		test(
+				"let num: number = 10;" + "println((num * 11) + 9);" + "println(num * 11 + 9);",
+				Result.SUCCESS);
 	}
 
 	private Executable run(String code) {

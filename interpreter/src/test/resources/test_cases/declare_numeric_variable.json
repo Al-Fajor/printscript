@@ -9,15 +9,19 @@
   "expectedPrintLines": [],
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "Number",
-          "name": "num"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "num"
+          }
         },
-        "literal": {
-          "value": null
+        {
+          "literal": {
+            "value": null
+          }
         }
-      }
+      ]
     }
   ]
 }

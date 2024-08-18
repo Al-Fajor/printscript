@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import org.example.ast.*;
-import org.example.lexerresult.LexerFailure;
-import org.example.lexerresult.LexerResult;
+import org.example.lexerresult.LexerSuccess;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
@@ -16,20 +15,20 @@ public class Runner {
 		SemanticAnalyzer semanticAnalyzer = getSemanticAnalyzer();
 		//		Interpreter interpreter = new PrintScriptInterpreter();
 
-		LexerResult lexerResult = lexer.lex(code);
+		Result lexerResult = lexer.lex(code);
 
 		if (!lexerResult.isSuccessful()) {
-			throw new RuntimeException(((LexerFailure) lexerResult).message());
+			throw new RuntimeException((lexerResult).errorMessage());
 		}
-
-		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerResult.getTokens());
+		LexerSuccess lexerSuccess = (LexerSuccess) lexerResult;
+		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerSuccess.getTokens());
 
 		if (syntaxResult.isFailure()) {
 			throw new RuntimeException(((SyntaxError) syntaxResult).getReason());
 		}
 
 		List<AstComponent> components = syntaxResult.getComponents();
-		SemanticResult result = semanticAnalyzer.analyze(components);
+		Result result = semanticAnalyzer.analyze(components);
 
 		if (!result.isSuccessful()) {
 			throw new RuntimeException("Semantic error");

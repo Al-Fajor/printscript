@@ -1,4 +1,4 @@
-{"tokens": "PRINTLN -> SEPARATOR(() -> LITERAL(5) -> SEPARATOR(\")\") -> SEMICOLON" ,
+{"tokens": "PRINTLN -> SEPARATOR(\"(\") -> LITERAL(5) -> SEPARATOR(\")\") -> SEMICOLON" ,
   "ast_list":[
     {
       "functionCall": {
@@ -6,11 +6,13 @@
           "name": "println",
           "identifierType": "function"
         },
-        "params": {
-          "1_literal": {
-            "value": 5
+        "params": [
+          {
+            "literal": {
+              "value": 5
+            }
           }
-        }
+        ]
       }
     }
   ]}

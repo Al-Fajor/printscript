@@ -1,10 +1,9 @@
 package org.example.externalization;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import org.example.ast.BinaryOperator;
@@ -13,17 +12,21 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Language {
-	Path resourcePath = Paths.get("../semantics/src/main/resources/lang.json");
-	File file = resourcePath.toFile();
 	String content;
 
 	{
-		try {
-			content = new String(Files.readAllBytes(Paths.get(file.toURI())));
+		try (InputStream inputStream =
+						getClass().getClassLoader().getResourceAsStream("lang.json");
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+			content = sb.toString();
 		} catch (IOException e) {
 			throw new RuntimeException(
-					"Could not load PrintScript's language configuration; got error:\n"
-							+ e.getMessage());
+					"Could not load PrintScript's language configuration; got error:\n" + e);
 		}
 	}
 

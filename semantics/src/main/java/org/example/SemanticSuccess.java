@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.Optional;
 
-public class SemanticSuccess implements SemanticResult {
+public class SemanticSuccess implements Result {
 	@Override
 	public boolean isSuccessful() {
 		return true;

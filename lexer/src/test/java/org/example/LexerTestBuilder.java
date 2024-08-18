@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.List;
-import org.example.lexerresult.LexerFailure;
-import org.example.lexerresult.LexerResult;
+import org.example.io.FileParser;
+import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
 
 public class LexerTestBuilder {
@@ -14,8 +14,14 @@ public class LexerTestBuilder {
 		Lexer lexer = new PrintScriptLexer();
 		FileParser fp = new FileParser();
 		List<Token> expectedList = fp.getTokens(filePath);
-		List<Token> actualList = lexer.lex(fp.getCode(filePath)).getTokens();
-		compareTokens(expectedList, actualList);
+		Result result = lexer.lex(fp.getCode(filePath));
+		if (result.isSuccessful()) {
+			LexerSuccess success = (LexerSuccess) result;
+			List<Token> actualList = success.getTokens();
+			compareTokens(expectedList, actualList);
+		} else {
+			fail("Lexer failed to parse the file");
+		}
 	}
 
 	private void compareTokens(List<Token> expectedList, List<Token> actualList) {
@@ -29,7 +35,8 @@ public class LexerTestBuilder {
 	public void testLexicalErrorDetection(String filePath) throws IOException {
 		Lexer lexer = new PrintScriptLexer();
 		FileParser fp = new FileParser();
-		LexerResult result = lexer.lex(fp.getCode(filePath));
-		assertInstanceOf(LexerFailure.class, result);
+		Result result = lexer.lex(fp.getCode(filePath));
+		assertFalse(result.isSuccessful());
+		System.out.println(result.errorMessage());
 	}
 }

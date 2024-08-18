@@ -17,7 +17,7 @@ public class ExpressionBuilder {
 	private EvaluableComponent parseExpression(TokenReader reader, int bindingPower) {
 		EvaluableComponent left = parsePrimaryExpression(reader);
 		while (getBindingPower(reader.getCurrentToken()) > bindingPower) {
-			left = parseBinaryExpression(reader, left, bindingPower);
+			left = parseBinaryExpression(reader, left, getBindingPower(reader.getCurrentToken()));
 		}
 		return left;
 	}
@@ -64,12 +64,11 @@ public class ExpressionBuilder {
 	}
 
 	private EvaluableComponent parseBinaryExpression(
-			TokenReader tokenReader, EvaluableComponent left, int bindingPower) {
-		Token currentToken = tokenReader.getCurrentToken();
-		//    if(operator.getType() != OPERATOR || operator == null || getBindingPower(operator) <
-		// bindingPower) return left;
-		tokenReader.consume();
-		EvaluableComponent right = parseExpression(tokenReader, bindingPower);
+			TokenReader reader, EvaluableComponent left, int bindingPower) {
+
+		Token currentToken = reader.getCurrentToken();
+		reader.consume();
+		EvaluableComponent right = parseExpression(reader, bindingPower);
 
 		TokenMapper mapper = new TokenMapper();
 		return left != null

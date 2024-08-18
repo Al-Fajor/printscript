@@ -3,53 +3,65 @@
   "expectedPrintLines": ["Ronal Macdonal :D", "7.0"],
   "ast_list": [
     {
-      "assignation": {
-        "declaration": {
-          "declarationType": "Number",
-          "name": "num"
-        },
-        "literal": {
-          "value": 7
-        }
-      }
-    },
-    {
-      "assignation": {
-        "declaration": {
-          "declarationType": "String",
-          "name": "string"
-        },
-        "literal": {
-          "value": "Ronal Macdonal :D"
-        }
-      }
-    },
-    {
-      "functionCall": {
-        "identifier": {
-          "identifierType": "function",
-          "name": "println"
-        },
-        "params": {
-          "identifier": {
-            "identifierType": "variable",
-            "name": "string"
-          }
-        }
-      }
-    },
-    {
-      "functionCall": {
-        "identifier": {
-          "identifierType": "function",
-          "name": "println"
-        },
-        "params": {
-          "identifier": {
-            "identifierType": "variable",
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
             "name": "num"
           }
+        },
+        {
+          "literal": {
+            "value": 7
+          }
         }
+      ]
+    },
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "string"
+          }
+        },
+        {
+          "literal": {
+            "value": "Ronal Macdonal :D"
+          }
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "num"
+            }
+          }
+        ]
       }
     }
   ]
