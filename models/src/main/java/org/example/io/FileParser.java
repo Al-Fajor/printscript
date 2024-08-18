@@ -1,4 +1,4 @@
-package org.example;
+package org.example.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 import org.json.JSONObject;
@@ -40,6 +41,19 @@ public class FileParser {
 				.collect(Collectors.toList());
 	}
 
+	public String readRange(
+			String filePath,
+			org.example.Pair<Integer, Integer> from,
+			org.example.Pair<Integer, Integer> to)
+			throws IOException {
+		try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
+			List<String> segment =
+					lines.skip(from.first() - 1).limit(to.first() + to.second() + 1).toList();
+
+			return Color.colorSegmentRed(segment, from, to);
+		}
+	}
+
 	private Pair<BaseTokenTypes, String> getToken(String token) {
 		if (token.indexOf('(') == -1) {
 			return new Pair<>(BaseTokenTypes.valueOf(token), "");
@@ -49,5 +63,6 @@ public class FileParser {
 		return new Pair<>(BaseTokenTypes.valueOf(tokenName), tokenValue);
 	}
 
+	// TODO: there's already a Pair defined in the package
 	private record Pair<T, W>(T first, W second) {}
 }
