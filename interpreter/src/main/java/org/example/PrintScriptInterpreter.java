@@ -2,17 +2,12 @@ package org.example;
 
 import java.util.List;
 import org.example.ast.AstComponent;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.statement.Statement;
 import org.example.visitors.StatementVisitor;
 
 public class PrintScriptInterpreter implements Interpreter {
 	private final InterpreterState state;
-	private final Visitor<Void> statementVisitor;
-
-	public PrintScriptInterpreter() {
-		state = new PrintScriptState();
-		statementVisitor = new StatementVisitor(state);
-	}
+	private final org.example.ast.visitor.StatementVisitor<Void> statementVisitor;
 
 	public PrintScriptInterpreter(InterpreterState state) {
 		this.state = state;
@@ -22,7 +17,7 @@ public class PrintScriptInterpreter implements Interpreter {
 	@Override
 	public void interpret(List<AstComponent> astList) {
 		for (AstComponent statement : astList) {
-			statement.accept(statementVisitor);
+			((Statement) statement).accept(statementVisitor); // TODO avoid cast
 		}
 	}
 }

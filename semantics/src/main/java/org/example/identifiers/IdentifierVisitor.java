@@ -12,9 +12,9 @@ import org.example.ast.StatementBlock;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 
-public class IdentifierVisitor implements Visitor<IdentifierResolution> {
+public class IdentifierVisitor implements AstComponentVisitor<IdentifierResolution> {
 	@Override
 	public IdentifierResolution visit(BinaryExpression expression) {
 		return null;

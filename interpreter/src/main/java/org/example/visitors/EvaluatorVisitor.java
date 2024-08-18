@@ -7,12 +7,9 @@ import org.example.EvaluationResult;
 import org.example.InterpreterState;
 import org.example.VariableType;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.EvaluableComponentVisitor;
 
-public class EvaluatorVisitor implements Visitor<EvaluationResult> {
+public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {
 	private final InterpreterState state;
 
 	public EvaluatorVisitor(InterpreterState state) {
@@ -22,10 +19,8 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	@Override
 	public EvaluationResult visit(BinaryExpression expression) {
 		BinaryOperator operator = expression.getOperator();
-		AstComponent leftExpression =
-				expression.getLeftComponent(); // TODO hacer que BinaryExpression devuelva
-		// EvaluableComponent en vez de AstComponent
-		AstComponent rightExpression = expression.getRightComponent();
+		EvaluableComponent leftExpression = expression.getLeftComponent();
+		EvaluableComponent rightExpression = expression.getRightComponent();
 		EvaluationResult leftResult = leftExpression.accept(this);
 		EvaluationResult rightResult = rightExpression.accept(this);
 		return switch (operator) {
@@ -74,18 +69,8 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 	}
 
 	@Override
-	public EvaluationResult visit(Parameters parameters) {
-		throw new UnsupportedOperationException("Implement parameters evaluation");
-	}
-
-	@Override
 	public EvaluationResult visit(Conditional conditional) {
 		throw new UnsupportedOperationException("Implement Conditional variables");
-	}
-
-	@Override
-	public EvaluationResult visit(IfStatement ifStatement) {
-		throw new UnsupportedOperationException("Implement IfStatement variables");
 	}
 
 	private String getStringValue(Identifier identifier) {
@@ -177,25 +162,5 @@ public class EvaluatorVisitor implements Visitor<EvaluationResult> {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public EvaluationResult visit(AssignationStatement statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(Declaration statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(FunctionCallStatement statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluationResult visit(StatementBlock statementBlock) {
-		return null;
 	}
 }

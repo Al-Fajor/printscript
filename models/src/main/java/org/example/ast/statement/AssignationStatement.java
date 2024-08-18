@@ -2,12 +2,12 @@ package org.example.ast.statement;
 
 import java.util.Objects;
 import org.example.Pair;
-import org.example.ast.AstComponent;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.IdentifierComponent;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.StatementVisitor;
 
-public class AssignationStatement implements SentenceStatement {
+public class AssignationStatement implements Statement {
 	private final IdentifierComponent identifier;
 	private final EvaluableComponent expression;
 
@@ -18,12 +18,12 @@ public class AssignationStatement implements SentenceStatement {
 	}
 
 	@Override
-	public AstComponent getLeft() {
+	public IdentifierComponent getLeft() {
 		return identifier;
 	}
 
 	@Override
-	public AstComponent getRight() {
+	public EvaluableComponent getRight() {
 		return expression;
 	}
 
@@ -38,8 +38,13 @@ public class AssignationStatement implements SentenceStatement {
 	}
 
 	@Override
-	public <T> T accept(Visitor<T> visitor) {
+	public <T> T accept(AstComponentVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(StatementVisitor<T> statementVisitor) {
+		return statementVisitor.visit(this);
 	}
 
 	@Override

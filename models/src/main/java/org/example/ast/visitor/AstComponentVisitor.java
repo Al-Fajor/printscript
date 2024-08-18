@@ -5,7 +5,7 @@ import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 
-public interface Visitor<T> {
+public interface AstComponentVisitor<T> {
 	T visit(BinaryExpression expression);
 
 	T visit(Conditional conditional);

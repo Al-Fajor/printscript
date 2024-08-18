@@ -6,7 +6,7 @@ public record SemanticFailure(
 		String errorMessage,
 		Optional<Pair<Integer, Integer>> errorStart,
 		Optional<Pair<Integer, Integer>> errorEnd)
-		implements SemanticResult {
+		implements Result {
 	@Override
 	public boolean isSuccessful() {
 		return false;

@@ -1,3 +1,5 @@
 package org.example.ast;
 
-public interface IdentifierComponent extends AstComponent {}
+import org.example.ast.visitor.IdentifierComponentVisitable;
+
+public interface IdentifierComponent extends AstComponent, IdentifierComponentVisitable {}

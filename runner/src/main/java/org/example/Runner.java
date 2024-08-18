@@ -14,7 +14,7 @@ public class Runner {
 		Lexer lexer = new PrintScriptLexer();
 		SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
 		SemanticAnalyzer semanticAnalyzer = getSemanticAnalyzer();
-		Interpreter interpreter = new PrintScriptInterpreter();
+		//		Interpreter interpreter = new PrintScriptInterpreter();
 
 		LexerResult lexerResult = lexer.lex(code);
 
@@ -29,13 +29,13 @@ public class Runner {
 		}
 
 		List<AstComponent> components = syntaxResult.getComponents();
-		SemanticResult result = semanticAnalyzer.analyze(components);
+		Result result = semanticAnalyzer.analyze(components);
 
 		if (!result.isSuccessful()) {
 			throw new RuntimeException("Semantic error");
 
 		} else {
-			interpreter.interpret(components);
+			//			interpreter.interpret(components);
 		}
 	}
 

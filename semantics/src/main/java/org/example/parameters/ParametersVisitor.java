@@ -3,7 +3,7 @@ package org.example.parameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.example.SemanticResult;
+import org.example.Result;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
 import org.example.ast.Conditional;
@@ -17,11 +17,11 @@ import org.example.ast.StatementBlock;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
-import org.example.ast.visitor.Visitor;
+import org.example.ast.visitor.AstComponentVisitor;
 import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
 
-public class ParametersVisitor implements Visitor<ParametersResolution> {
+public class ParametersVisitor implements AstComponentVisitor<ParametersResolution> {
 	private EvaluableVisitor evaluableVisitor;
 
 	public void setEvaluableVisitor(EvaluableVisitor evaluableVisitor) {
@@ -54,7 +54,7 @@ public class ParametersVisitor implements Visitor<ParametersResolution> {
 
 		for (EvaluableComponent component : parameters.getParameters()) {
 			EvaluableResolution resolution = component.accept(evaluableVisitor);
-			SemanticResult result = resolution.result();
+			Result result = resolution.result();
 
 			if (!result.isSuccessful())
 				return new ParametersResolution(result, Collections.emptyList());

@@ -39,7 +39,7 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 		return () -> {
 			try {
 				List<AstComponent> astList = builder.buildFromJson(testFile.getAbsolutePath());
-				SemanticResult analyticResult = semanticAnalyzer.analyze(astList);
+				Result analyticResult = semanticAnalyzer.analyze(astList);
 				boolean validity = checker.readValidityFromJson(testFile.getAbsolutePath());
 
 				assertAndPrintError(analyticResult, validity);
@@ -49,7 +49,7 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 		};
 	}
 
-	private static void assertAndPrintError(SemanticResult analyticResult, boolean validity) {
+	private static void assertAndPrintError(Result analyticResult, boolean validity) {
 		if (!analyticResult.isSuccessful()) {
 			System.out.println("Semantic Error: " + analyticResult.errorMessage());
 		}
