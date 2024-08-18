@@ -36,7 +36,7 @@ public class AstBuilder {
 	private AstComponent mapToAstComponent(
 			JSONObject astComponentJson, String astComponentJsonName) {
 		switch (astComponentJsonName) {
-            case "declaration":
+			case "declaration":
 				return new Declaration(
 						mapToDeclarationType(astComponentJson.getString("declarationType")),
 						astComponentJson.getString("name"));
