@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Scanner;
 import org.example.commands.AnalyzeCommand;
 import org.example.commands.Command;
 import org.example.commands.ExecutionCommand;
@@ -13,23 +14,34 @@ public class Cli {
 	private static final Map<String, Command> commands =
 			Map.of(
 					"help", new HelpCommand(),
+					"", new HelpCommand(),
 					"validate", new ValidationCommand(),
 					"execute", new ExecutionCommand(),
 					"format", new FormattingCommand(),
 					"analyze", new AnalyzeCommand());
-	public static final String[] NO_PARAMETERS = {};
 
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			commands.get("help").execute(NO_PARAMETERS);
-		} else if (args.length == 1) {
-			System.out.println("Command must be of the form '<command> <filePath> <flags>'");
-		} else
-			commands.getOrDefault(
-							args[0],
-							(commandArgs) ->
-									System.out.println(args[0] + " is not a valid command"))
-					.execute(getCommandArguments(args));
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.print("PrintScript> ");
+
+            if (!scanner.hasNext()) {
+                throw new IllegalStateException("There's nothing to read");
+            }
+
+            String[] scannedArgs = scanner.nextLine().split(" ");
+
+
+            if (scannedArgs.length == 1) {
+                System.out.println("Command must be of the form '<command> <filePath> <flags>'");
+            } else
+                commands.getOrDefault(
+                                scannedArgs[0],
+                                (commandArgs) ->
+                                        System.out.println(scannedArgs[0] + " is not a valid command"))
+                        .execute(getCommandArguments(scannedArgs));
+        }
 	}
 
 	private static String[] getCommandArguments(String[] args) {
