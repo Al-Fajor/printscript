@@ -82,9 +82,13 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(FunctionCallStatement statement) {
-        int spacesBeforePrintln = (int) ruleMap.get("spaceBeforePrintln");
-        String spaces = " ".repeat(spacesBeforePrintln);
-        return spaces + statement.getLeft().accept(this) + "(" + statement.getRight().accept(this) + ")";
+        String identifier = statement.getLeft().accept(this);
+        String breaks = "";
+        if (identifier.equals("println")) {
+            int spacesBeforePrintln = (int) ruleMap.get("breaksBeforePrintln");
+            breaks = "\n".repeat(spacesBeforePrintln);
+        }
+        return breaks + statement.getLeft().accept(this) + "(" + statement.getRight().accept(this) + ")";
     }
 
     @Override
