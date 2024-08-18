@@ -18,9 +18,9 @@ public class InvalidChainDetector implements LexicalErrorDetector {
 			int line = getLine(input, matcher.start());
 			int positionInLine = getPositionInLine(input, matcher.start());
 			return new ScanFailure(
-					"Invalid chain of characters",
+					"Invalid chain of characters: " + matcher.group() + " at line " + line + ", position " + positionInLine + " to line " + line + ", position " + (positionInLine + matcher.group().length()),
 					new Pair<>(line, positionInLine),
-					new Pair<>(line, positionInLine + matcher.group().length() - 1));
+					new Pair<>(line, positionInLine + matcher.group().length()));
 		}
 		return new ScanSuccess();
 	}

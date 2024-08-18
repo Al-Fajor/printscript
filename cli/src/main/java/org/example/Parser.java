@@ -10,7 +10,7 @@ import org.example.ast.AstComponent;
 import org.example.ast.DeclarationType;
 import org.example.io.Color;
 import org.example.io.ScriptReader;
-import org.example.lexerresult.LexerResult;
+import org.example.lexerresult.LexerSuccess;
 import org.example.result.SyntaxResult;
 
 public class Parser {
@@ -38,11 +38,11 @@ public class Parser {
 		}
 
 		Color.printGreen("\nPerforming lexical analysis");
-		LexerResult lexerResult = lexer.lex(code);
+		Result lexerResult = lexer.lex(code);
 		if (lexingFailed(lexerResult)) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming syntactic analysis");
-		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerResult.getTokens());
+		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(( (LexerSuccess) lexerResult).getTokens());
 		if (syntaxAnalysisFailed(syntaxResult)) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming semantic analysis");
@@ -99,11 +99,10 @@ public class Parser {
 		return false;
 	}
 
-	private static boolean lexingFailed(LexerResult lexerResult) {
+	private static boolean lexingFailed(Result lexerResult) {
 		if (!lexerResult.isSuccessful()) {
 			System.out.println("Lexing failed with error");
-			// TODO: print error
-			System.out.println("[Error cause here]");
+            System.out.println(lexerResult.errorMessage());
 			return true;
 		}
 		return false;
