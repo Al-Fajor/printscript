@@ -15,7 +15,7 @@ class PrintScriptFormatterTest {
         String path = "src/test/resources/variable_assignation.json";
         PrintScriptFormatter formatter = new PrintScriptFormatter();
         String code = formatter.format(astBuilder.buildFromJson(path));
-        assertEquals(code, fileParser.getCode(path));
+        assertEquals(fileParser.getCode(path), code);
     }
 
     @Test
@@ -23,7 +23,7 @@ class PrintScriptFormatterTest {
         String path = "src/test/resources/string_assignation.json";
         PrintScriptFormatter formatter = new PrintScriptFormatter();
         String code = formatter.format(astBuilder.buildFromJson(path));
-        assertEquals(code, fileParser.getCode(path));
+        assertEquals(fileParser.getCode(path), code);
     }
 
     @Test
@@ -31,7 +31,7 @@ class PrintScriptFormatterTest {
         String path = "src/test/resources/print_operation.json";
         PrintScriptFormatter formatter = new PrintScriptFormatter();
         String code = formatter.format(astBuilder.buildFromJson(path));
-        assertEquals(code, fileParser.getCode(path));
+        assertEquals(fileParser.getCode(path), code);
     }
 
     @Test
@@ -39,7 +39,23 @@ class PrintScriptFormatterTest {
         String path = "src/test/resources/variable_assignation2.json";
         PrintScriptFormatter formatter = new PrintScriptFormatter();
         String code = formatter.format(astBuilder.buildFromJson(path));
-        assertEquals(code, fileParser.getCode(path));
+        assertEquals(fileParser.getCode(path), code);
+    }
+
+    @Test
+    void stringConcatenation() throws IOException {
+        String path = "src/test/resources/string_concatenation.json";
+        PrintScriptFormatter formatter = new PrintScriptFormatter();
+        String code = formatter.format(astBuilder.buildFromJson(path));
+        assertEquals(fileParser.getCode(path), code);
+    }
+
+    @Test
+    void printVariables() throws IOException {
+        String path = "src/test/resources/print_variables.json";
+        PrintScriptFormatter formatter = new PrintScriptFormatter();
+        String code = formatter.format(astBuilder.buildFromJson(path));
+        assertEquals(fileParser.getCode(path), code);
     }
 
 }
