@@ -66,12 +66,15 @@ public class BinaryExpression implements EvaluableComponent {
 		return Objects.hash(operator, leftComponent, rightComponent);
 	}
 
-  @Override
-  public String toString() {
-    return "BinaryExpression{" +
-      "operator=" + operator +
-      ", leftComponent=" + leftComponent +
-      ", rightComponent=" + rightComponent +
-      '}';
-  }
+	@Override
+	public String toString() {
+		return "BinaryExpression{"
+				+ "operator="
+				+ operator
+				+ ", leftComponent="
+				+ leftComponent
+				+ ", rightComponent="
+				+ rightComponent
+				+ '}';
+	}
 }

@@ -60,5 +60,4 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		}
 		return sentences;
 	}
-
 }
