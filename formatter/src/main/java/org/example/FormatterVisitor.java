@@ -11,8 +11,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
+    private final Map<String, String> ruleMap;
 
-    private final Map<String, String> ruleMap = new RuleMapFactory().getRuleMap();
+    public FormatterVisitor(RuleMapFactory ruleMapFactory) {
+        ruleMap = ruleMapFactory.getRuleMap();
+    }
 
     @Override
     public String visit(BinaryExpression expression) {
