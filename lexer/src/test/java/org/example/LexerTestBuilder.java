@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.util.List;
 import org.example.io.FileParser;
-import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
 

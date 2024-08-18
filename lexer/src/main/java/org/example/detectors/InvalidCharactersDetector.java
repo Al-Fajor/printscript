@@ -11,7 +11,7 @@ public class InvalidCharactersDetector implements LexicalErrorDetector {
 	@Override
 	public Result detect(String input) {
 		List<Character> invalidChars =
-				List.of('!', '@', '#', '$', '%', '^', '&', '|', '\\', '.', '?');
+				List.of('!', '@', '#', '$', '%', '^', '&', '|', '\\', '?');
 		boolean insideString = false;
 		int lineNumber = 1;
 		int positionInLine = 0;
