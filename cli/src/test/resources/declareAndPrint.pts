@@ -1,2 +1,5 @@
 let a: string = "Hello, World!";
-println(a);
+let x: string = "Hello, World!";
+let y: string = "Hello, World!";
+let z: string = "Hello, World!";
+println(b);

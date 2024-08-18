@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,9 +29,15 @@ public class Parser {
 	}
 
 	public List<AstComponent> parse(String path) {
-		String code = ScriptReader.readCodeFromSource(path);
+        String code;
+        try {
+            code = ScriptReader.readCodeFromSource(path);
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not read file; got error: \n" + e.getMessage());
+            return Collections.emptyList();
+        }
 
-		Color.printGreen("\nPerforming lexical analysis");
+        Color.printGreen("\nPerforming lexical analysis");
 		LexerResult lexerResult = lexer.lex(code);
 		if (lexingFailed(lexerResult)) return Collections.emptyList();
 
@@ -51,17 +58,17 @@ public class Parser {
 		if (!semanticResult.isSuccessful()) {
 			String coloredSegment;
 			try {
-				//                coloredSegment = ScriptReader.readAndColorRange(
+				//                coloredSegment = ScriptReader.readAndHighlightRange(
 				//                        path, semanticResult.getErrorStart().get(),
 				// semanticResult.getErrorEnd().get());
 				// TODO: undo hardcoding once error location is returned within Result
 				coloredSegment =
-						ScriptReader.readAndColorRange(path, new Pair<>(1, 3), new Pair<>(2, 6));
+						ScriptReader.readAndHighlightRange(path, new Pair<>(1, 3), new Pair<>(2, 6));
 			} catch (IOException e) {
 				throw new RuntimeException("Could not read file at " + path);
 			}
 			System.out.println(
-					"Semantic analysis failed with error '"
+					"Semantic analysis failed with error: '"
 							+ semanticResult.errorMessage()
 							+ "'\n from line "
 							+ semanticResult.getErrorStart().get().first()
