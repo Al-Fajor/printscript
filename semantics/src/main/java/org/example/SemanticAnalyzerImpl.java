@@ -7,14 +7,14 @@ import org.example.evaluables.EvaluableVisitor;
 import org.example.identifiers.IdentifierVisitor;
 import org.example.parameters.ParametersVisitor;
 
-public class SemanticAnalyzerImpl implements SemanticAnalyzer, Observable<String> {
+public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 	// TODO: may define externally, such as in a config file
 	private final Environment baseEnvironment;
 	private final ParametersVisitor parametersVisitor = new ParametersVisitor();
 	private final IdentifierVisitor identifierVisitor = new IdentifierVisitor();
 	private final EvaluableVisitor evaluableVisitor =
 			new EvaluableVisitor(null, identifierVisitor, parametersVisitor);
-	private final List<Observer<String>> observers = new LinkedList<>();
+	private final List<Observer<Pair<Integer, Integer>>> observers = new LinkedList<>();
 
 	public SemanticAnalyzerImpl(Environment baseEnvironment) {
 		this.baseEnvironment = baseEnvironment;
@@ -34,7 +34,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer, Observable<String
 			observers.forEach(
 					observer ->
 							observer.notifyChange(
-									"Performing semantic analysis: " + (finalCompleted + 1)));
+									new Pair<>(finalCompleted + 1, asts.size())));
 			completed++;
 
 			if (!resolution.result().isSuccessful()) return resolution.result();
@@ -43,8 +43,8 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer, Observable<String
 		return new SemanticSuccess();
 	}
 
-	@Override
-	public void addObserver(Observer<String> observer) {
-		observers.add(observer);
-	}
+    @Override
+    public void addObserver(Observer<Pair<Integer, Integer>> observer) {
+        observers.add(observer);
+    }
 }
