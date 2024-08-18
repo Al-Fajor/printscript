@@ -32,9 +32,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 			var resolution = ast.accept(evaluableVisitor);
 			int finalCompleted = completed;
 			observers.forEach(
-					observer ->
-							observer.notifyChange(
-									new Pair<>(finalCompleted + 1, asts.size())));
+					observer -> observer.notifyChange(new Pair<>(finalCompleted + 1, asts.size())));
 			completed++;
 
 			if (!resolution.result().isSuccessful()) return resolution.result();
@@ -43,8 +41,8 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 		return new SemanticSuccess();
 	}
 
-    @Override
-    public void addObserver(Observer<Pair<Integer, Integer>> observer) {
-        observers.add(observer);
-    }
+	@Override
+	public void addObserver(Observer<Pair<Integer, Integer>> observer) {
+		observers.add(observer);
+	}
 }
