@@ -1,11 +1,10 @@
 package org.example.detectors;
 
+import java.util.Stack;
 import org.example.Pair;
 import org.example.Result;
 import org.example.lexerresult.ScanFailure;
 import org.example.lexerresult.ScanSuccess;
-
-import java.util.Stack;
 
 public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 	@Override
@@ -28,15 +27,7 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
             }
 
 			if (charAtI == '\"') {
-				if (isString) {
-					if (stack.peek() == '\"') {
-						stack.pop();
-						isString = false;
-					}
-				} else {
-					stack.push(charAtI);
-					isString = true;
-				}
+				isString = dealWithDoubleQuotes(isString, stack, charAtI);
 			} else if (!isString && contains(openingChars, charAtI)) {
 				stack.push(charAtI);
 			} else if (!isString && contains(closingChars, charAtI)) {
@@ -71,10 +62,22 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 		return false;
 	}
 
-	public boolean matches(char open, char close) {
+	private boolean matches(char open, char close) {
 		return (open == '(' && close == ')')
 				|| (open == '{' && close == '}')
 				|| (open == '[' && close == ']')
 				|| (open == '\"' && close == '\"');
+	}
+
+	private boolean dealWithDoubleQuotes(boolean isString, Stack<Character> stack, char charAtI) {
+		if (isString) {
+			if (stack.peek() == '\"') {
+				stack.pop();
+				return false;
+			}
+		} else {
+			stack.push(charAtI);
+		}
+		return true;
 	}
 }

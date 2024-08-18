@@ -1,12 +1,11 @@
 package org.example.detectors;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.example.Pair;
 import org.example.Result;
 import org.example.lexerresult.ScanFailure;
 import org.example.lexerresult.ScanSuccess;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class InvalidChainDetector implements LexicalErrorDetector {
 	@Override
