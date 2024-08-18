@@ -14,17 +14,17 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 		char[] closingChars = new char[] {')', '}', ']', '\"'};
 		boolean isString = false;
 
-        int lines = 0;
-        int position = 0;
+		int lines = 0;
+		int position = 0;
 		for (int i = 0; i < input.length(); i++) {
 			char charAtI = input.charAt(i);
 
-            if (charAtI == '\n') {
-                lines++;
-                position = 0;
-            } else {
-                position++;
-            }
+			if (charAtI == '\n') {
+				lines++;
+				position = 0;
+			} else {
+				position++;
+			}
 
 			if (charAtI == '\"') {
 				isString = dealWithDoubleQuotes(isString, stack, charAtI);
@@ -32,22 +32,30 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 				stack.push(charAtI);
 			} else if (!isString && contains(closingChars, charAtI)) {
 				if (stack.isEmpty() || !matches(stack.peek(), charAtI)) {
-                    return new ScanFailure(
-                            "Unmatched closing character '" + charAtI + "' at line " + lines + ", position " + position,
-                            new Pair<>(lines, position),
-                            new Pair<>(lines, position + 1)
-                    );
+					return new ScanFailure(
+							"Unmatched closing character '"
+									+ charAtI
+									+ "' at line "
+									+ lines
+									+ ", position "
+									+ position,
+							new Pair<>(lines, position),
+							new Pair<>(lines, position + 1));
 				}
 				stack.pop();
 			}
 		}
 
 		if (!stack.isEmpty()) {
-            return new ScanFailure(
-                    "Unfinished separator '" + stack.peek() + "' at line " + lines + ", position " + position,
-                    new Pair<>(lines, position),
-                    new Pair<>(lines, position + 1)
-            );
+			return new ScanFailure(
+					"Unfinished separator '"
+							+ stack.peek()
+							+ "' at line "
+							+ lines
+							+ ", position "
+							+ position,
+					new Pair<>(lines, position),
+					new Pair<>(lines, position + 1));
 		}
 
 		return new ScanSuccess();

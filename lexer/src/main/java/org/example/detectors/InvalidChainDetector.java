@@ -15,35 +15,35 @@ public class InvalidChainDetector implements LexicalErrorDetector {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(input);
 		if (matcher.find()) {
-            int line = getLine(input, matcher.start());
-            int positionInLine = getPositionInLine(input, matcher.start());
+			int line = getLine(input, matcher.start());
+			int positionInLine = getPositionInLine(input, matcher.start());
 			return new ScanFailure(
-                    "Invalid chain of characters",
-                    new Pair<>(line, positionInLine),
-                    new Pair<>(line, positionInLine + matcher.group().length() - 1));
+					"Invalid chain of characters",
+					new Pair<>(line, positionInLine),
+					new Pair<>(line, positionInLine + matcher.group().length() - 1));
 		}
 		return new ScanSuccess();
 	}
 
-    private int getLine(String input, int index) {
-        int line = 0;
-        for (int i = 0; i < index; i++) {
-            if (input.charAt(i) == '\n') {
-                line++;
-            }
-        }
-        return line;
-    }
+	private int getLine(String input, int index) {
+		int line = 0;
+		for (int i = 0; i < index; i++) {
+			if (input.charAt(i) == '\n') {
+				line++;
+			}
+		}
+		return line;
+	}
 
-    private int getPositionInLine(String input, int index) {
-        int position = 0;
-        for (int i = 0; i < index; i++) {
-            if (input.charAt(i) == '\n') {
-                position = 0;
-            } else {
-                position++;
-            }
-        }
-        return position;
-    }
+	private int getPositionInLine(String input, int index) {
+		int position = 0;
+		for (int i = 0; i < index; i++) {
+			if (input.charAt(i) == '\n') {
+				position = 0;
+			} else {
+				position++;
+			}
+		}
+		return position;
+	}
 }

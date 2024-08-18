@@ -1,7 +1,6 @@
 package org.example.lexerresult;
 
 import java.util.Optional;
-
 import org.example.Pair;
 import org.example.Result;
 
@@ -17,19 +16,18 @@ public class LexerFailure implements Result {
 		return false;
 	}
 
-    @Override
-    public String errorMessage() {
-        return result.errorMessage();
-    }
+	@Override
+	public String errorMessage() {
+		return result.errorMessage();
+	}
 
-    @Override
-    public Optional<Pair<Integer, Integer>> getErrorStart() {
-        return result.getErrorStart();
-    }
+	@Override
+	public Optional<Pair<Integer, Integer>> getErrorStart() {
+		return result.getErrorStart();
+	}
 
-    @Override
-    public Optional<Pair<Integer, Integer>> getErrorEnd() {
-        return result.getErrorEnd();
-    }
-
+	@Override
+	public Optional<Pair<Integer, Integer>> getErrorEnd() {
+		return result.getErrorEnd();
+	}
 }

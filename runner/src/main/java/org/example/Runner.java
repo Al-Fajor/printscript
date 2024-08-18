@@ -20,7 +20,7 @@ public class Runner {
 		if (!lexerResult.isSuccessful()) {
 			throw new RuntimeException((lexerResult).errorMessage());
 		}
-        LexerSuccess lexerSuccess = (LexerSuccess) lexerResult;
+		LexerSuccess lexerSuccess = (LexerSuccess) lexerResult;
 		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerSuccess.getTokens());
 
 		if (syntaxResult.isFailure()) {

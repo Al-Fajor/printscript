@@ -8,6 +8,9 @@ import org.example.detectors.UnfinishedSeparatorsDetector;
 
 public class ErrorDetectorFactory {
 	public static List<LexicalErrorDetector> create() {
-		return List.of(new UnfinishedSeparatorsDetector(), new InvalidChainDetector(), new InvalidCharactersDetector());
+		return List.of(
+				new UnfinishedSeparatorsDetector(),
+				new InvalidChainDetector(),
+				new InvalidCharactersDetector());
 	}
 }

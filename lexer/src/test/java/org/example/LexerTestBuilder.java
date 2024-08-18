@@ -14,14 +14,14 @@ public class LexerTestBuilder {
 		Lexer lexer = new PrintScriptLexer();
 		FileParser fp = new FileParser();
 		List<Token> expectedList = fp.getTokens(filePath);
-        Result result = lexer.lex(fp.getCode(filePath));
-        if (result.isSuccessful()) {
-            LexerSuccess success = (LexerSuccess) result;
-            List<Token> actualList = success.getTokens();
-            compareTokens(expectedList, actualList);
-        } else {
-            fail("Lexer failed to parse the file");
-        }
+		Result result = lexer.lex(fp.getCode(filePath));
+		if (result.isSuccessful()) {
+			LexerSuccess success = (LexerSuccess) result;
+			List<Token> actualList = success.getTokens();
+			compareTokens(expectedList, actualList);
+		} else {
+			fail("Lexer failed to parse the file");
+		}
 	}
 
 	private void compareTokens(List<Token> expectedList, List<Token> actualList) {
