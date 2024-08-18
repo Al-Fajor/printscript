@@ -1,20 +1,32 @@
 package org.example.detectors;
 
+import org.example.Pair;
+import org.example.Result;
+import org.example.lexerresult.ScanFailure;
+import org.example.lexerresult.ScanSuccess;
+
 import java.util.Stack;
-import org.example.scanresult.FailedScanResult;
-import org.example.scanresult.ScanResult;
-import org.example.scanresult.SuccessfulScanResult;
 
 public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 	@Override
-	public ScanResult detect(String input) {
+	public Result detect(String input) {
 		Stack<Character> stack = new Stack<>();
 		char[] openingChars = new char[] {'(', '{', '[', '\"'};
 		char[] closingChars = new char[] {')', '}', ']', '\"'};
 		boolean isString = false;
 
+        int lines = 0;
+        int position = 0;
 		for (int i = 0; i < input.length(); i++) {
 			char charAtI = input.charAt(i);
+
+            if (charAtI == '\n') {
+                lines++;
+                position = 0;
+            } else {
+                position++;
+            }
+
 			if (charAtI == '\"') {
 				if (isString) {
 					if (stack.peek() == '\"') {
@@ -29,23 +41,25 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 				stack.push(charAtI);
 			} else if (!isString && contains(closingChars, charAtI)) {
 				if (stack.isEmpty() || !matches(stack.peek(), charAtI)) {
-					return new FailedScanResult(
-							i, "Unmatched closing character '" + charAtI + "' at index " + i);
+                    return new ScanFailure(
+                            "Unmatched closing character '" + charAtI + "' at line " + lines + ", position " + position,
+                            new Pair<>(lines, position),
+                            new Pair<>(lines, position + 1)
+                    );
 				}
 				stack.pop();
 			}
 		}
 
 		if (!stack.isEmpty()) {
-			return new FailedScanResult(
-					input.length(),
-					"Unmatched opening character '"
-							+ stack.peek()
-							+ "' at index "
-							+ input.lastIndexOf(stack.peek()));
+            return new ScanFailure(
+                    "Unfinished separator '" + stack.peek() + "' at line " + lines + ", position " + position,
+                    new Pair<>(lines, position),
+                    new Pair<>(lines, position + 1)
+            );
 		}
 
-		return new SuccessfulScanResult();
+		return new ScanSuccess();
 	}
 
 	private boolean contains(char[] array, char c) {
