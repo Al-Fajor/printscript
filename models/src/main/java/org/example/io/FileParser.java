@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.example.Pair;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 import org.json.JSONObject;
@@ -36,7 +37,7 @@ public class FileParser {
 
 		return tempTokenList.stream()
 				.map(this::getToken)
-				.map(pair -> new Token(pair.first, 0, 0, pair.second))
+				.map(pair -> new Token(pair.first(), 0, 0, pair.second()))
 				.collect(Collectors.toList());
 	}
 
@@ -48,7 +49,4 @@ public class FileParser {
 		String tokenValue = token.substring(token.indexOf('(') + 1, token.lastIndexOf(')'));
 		return new Pair<>(BaseTokenTypes.valueOf(tokenName), tokenValue);
 	}
-
-	// TODO: there's already a Pair defined in the package
-	private record Pair<T, W>(T first, W second) {}
 }
