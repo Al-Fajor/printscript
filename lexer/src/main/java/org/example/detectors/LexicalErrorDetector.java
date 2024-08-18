@@ -1,7 +1,7 @@
 package org.example.detectors;
 
-import org.example.scanresult.ScanResult;
+import org.example.Result;
 
 public interface LexicalErrorDetector {
-	ScanResult detect(String input);
+	Result detect(String input);
 }
