@@ -1,5 +1,8 @@
 package org.example;
 
+import java.util.List;
+import org.example.observer.Observer;
+
 public interface InterpreterState {
 	void addNumericVariable(Variable<Double> numericVariable);
 
@@ -18,4 +21,6 @@ public interface InterpreterState {
 	Function getFunction(String name);
 
 	void addFunction(Function function);
+
+	List<Observer<?, ?>> getObservers();
 }
