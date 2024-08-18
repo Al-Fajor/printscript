@@ -47,6 +47,13 @@ class RunnerTest {
 		test("let b: string;", Result.SUCCESS);
 	}
 
+	@Test
+	public void testPrintSyntax() {
+		test(
+				"let num: number = 10;" + "println((num * 11) + 9);" + "println(num * 11 + 9);",
+				Result.SUCCESS);
+	}
+
 	private Executable run(String code) {
 		return () -> runner.run(code);
 	}
