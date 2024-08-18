@@ -6,17 +6,25 @@
           "name": "println",
           "identifierType": "function"
         },
-        "params": {
-          "binaryExpression": {
-            "op": "+",
-            "1_literal": {
-              "value": 2
-            },
-            "2_literal": {
-              "value": 2
-            }
+        "params": [
+          {
+            "binaryExpression": [
+              {
+                "op": "+"
+              },
+              {
+                "literal": {
+                  "value": 2
+                }
+              },
+              {
+                "literal": {
+                  "value": 2
+                }
+              }
+            ]
           }
-        }
+        ]
       }
     }
   ]}
