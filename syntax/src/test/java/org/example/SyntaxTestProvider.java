@@ -7,10 +7,7 @@ import org.example.ast.AstComponent;
 import org.example.result.SyntaxResult;
 import org.example.token.Token;
 
-public class SyntaxTestBuilder {
-	private List<AstComponent> getAstFromJson(String filePath) throws IOException {
-		return new AstBuilder().buildFromJson(filePath);
-	}
+public class SyntaxTestProvider {
 
 	public boolean testSyntax(String filePath) throws IOException {
 		FileParser parser = new FileParser();
@@ -50,5 +47,9 @@ public class SyntaxTestBuilder {
 
 	private String printWholeList(List<AstComponent> list) {
 		return list.stream().map(String::valueOf).collect(Collectors.joining());
+	}
+
+	private List<AstComponent> getAstFromJson(String filePath) throws IOException {
+		return new AstBuilder().buildFromJson(filePath);
 	}
 }
