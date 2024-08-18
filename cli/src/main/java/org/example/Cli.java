@@ -11,10 +11,11 @@ public class Cli {
 					"execute", new ExecutionCommand(),
 					"format", new FormattingCommand(),
 					"analyze", new AnalyzeCommand());
+	public static final String[] NO_PARAMETERS = {};
 
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			commands.get("help").execute(getCommandArguments(args));
+			commands.get("help").execute(NO_PARAMETERS);
 		} else if (args.length == 1) {
 			System.out.println("Command must be of the form '<command> <filePath> <flags>'");
 		} else

@@ -30,7 +30,7 @@ public class ValidationCommand implements Command {
 		LexerResult lexerResult = lexer.lex(code);
 		if (lexingFailed(lexerResult)) return;
 
-		System.out.println("Performing syntax analysis");
+		System.out.println("Performing syntactic analysis");
 		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerResult.getTokens());
 		if (syntaxAnalysisFailed(syntaxResult)) return;
 
@@ -57,7 +57,7 @@ public class ValidationCommand implements Command {
 	}
 
 	private static boolean syntaxAnalysisFailed(SyntaxResult syntaxResult) {
-		if (!syntaxResult.isFailure()) {
+		if (syntaxResult.isFailure()) {
 			System.out.println("Syntax analysis failed; got error:");
 			// TODO: print error
 			return true;

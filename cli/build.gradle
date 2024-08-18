@@ -1,10 +1,11 @@
 plugins {
     id 'java'
     id 'library-conventions'
+    id 'application'
 }
 
 group = 'org.example'
-version = 'unspecified'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -17,8 +18,13 @@ dependencies {
     implementation(project(":lexer"))
     implementation(project(":syntax"))
     implementation(project(":semantics"))
+    implementation(project(":interpreter"))
 }
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass = 'org.example.Cli'
 }
