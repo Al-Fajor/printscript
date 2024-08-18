@@ -19,16 +19,16 @@ public class ScriptReader {
 		}
 	}
 
-    public static String readAndColorRange(
-            String filePath,
-            org.example.Pair<Integer, Integer> from,
-            org.example.Pair<Integer, Integer> to)
-            throws IOException {
-        try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
-            List<String> segment =
-                    lines.skip(from.first() - 1).limit(to.first() + to.second() + 1).toList();
+	public static String readAndColorRange(
+			String filePath,
+			org.example.Pair<Integer, Integer> from,
+			org.example.Pair<Integer, Integer> to)
+			throws IOException {
+		try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
+			List<String> segment =
+					lines.skip(from.first() - 1).limit(to.first() + to.second() + 1).toList();
 
-            return Color.colorSegmentRed(segment, from, to);
-        }
-    }
+			return Color.colorSegmentRed(segment, from, to);
+		}
+	}
 }

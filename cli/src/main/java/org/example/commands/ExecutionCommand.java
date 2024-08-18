@@ -25,7 +25,7 @@ public class ExecutionCommand implements Command {
 	@Override
 	public void execute(String[] args) {
 		List<AstComponent> astList = parser.parse(args[0]);
-        if (astList.isEmpty()) return;
+		if (astList.isEmpty()) return;
 
 		Color.printGreen("Running...");
 		interpreter.interpret(astList);
