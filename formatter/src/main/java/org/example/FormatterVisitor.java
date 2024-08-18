@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
 
-    private final Map<String, Object> ruleMap = new RuleMapFactory().getRuleMap();
+    private final Map<String, String> ruleMap = new RuleMapFactory().getRuleMap();
 
     @Override
     public String visit(BinaryExpression expression) {
@@ -52,8 +52,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(AssignationStatement statement) {
-//        TODO maybe change this idk
-        boolean spaceAroundEquals = (boolean) ruleMap.get("spaceAroundEquals");
+        boolean spaceAroundEquals = Boolean.parseBoolean(ruleMap.get("spaceAroundEquals"));
         String right = statement.getRight().accept(this);
         String left = statement.getLeft().accept(this);
         if (right.equals("")) {
@@ -68,9 +67,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(Declaration statement) {
-//        TODO maybe change this idk
-        boolean spaceBeforeColon = (boolean) ruleMap.get("spaceBeforeColon");
-        boolean spaceAfterColon = (boolean) ruleMap.get("spaceAfterColon");
+        boolean spaceBeforeColon = Boolean.parseBoolean(ruleMap.get("spaceBeforeColon"));
+        boolean spaceAfterColon = Boolean.parseBoolean(ruleMap.get("spaceAfterColon"));
         return
             "let " +
             statement.getName() +
@@ -85,7 +83,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
         String identifier = statement.getLeft().accept(this);
         String breaks = "";
         if (identifier.equals("println")) {
-            int spacesBeforePrintln = (int) ruleMap.get("breaksBeforePrintln");
+            int spacesBeforePrintln = Integer.parseInt(ruleMap.get("breaksBeforePrintln"));
             breaks = "\n".repeat(spacesBeforePrintln);
         }
         return breaks + statement.getLeft().accept(this) + "(" + statement.getRight().accept(this) + ")";

@@ -9,16 +9,16 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class RuleMapFactory {
-    public Map<String, Object> getRuleMap() {
+    public Map<String, String> getRuleMap() {
         String PATH = "src/main/resources/formatter.rules.json";
         try {
             String content = Files.readString(Path.of(PATH));
             JSONObject jsonObject = new JSONObject(content);
-            Map<String, Object> map = new HashMap<>();
+            Map<String, String> map = new HashMap<>();
             Iterator<String> keys = jsonObject.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
-                map.put(key, jsonObject.get(key));
+                map.put(key, jsonObject.get(key).toString());
             }
             return map;
         } catch (Exception e) {
