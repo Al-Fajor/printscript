@@ -3,6 +3,8 @@ package org.example.sentence.validator;
 import static org.example.token.BaseTokenTypes.*;
 
 import java.util.List;
+import java.util.Stack;
+
 import org.example.sentence.mapper.TokenMapper;
 import org.example.token.Token;
 import org.example.token.TokenType;
@@ -21,8 +23,7 @@ public class CommonValidator {
 			case SEPARATOR:
 				if (mapper.matchesSeparatorType(token, "opening")) {
 					if (nextToken == null) return false;
-					if (!List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType())
-							&& !mapper.matchesSeparatorType(nextToken, "closing")
+					if (!List.of(IDENTIFIER, LITERAL, FUNCTION, SEPARATOR).contains(nextToken.getType())
 							&& !nextToken.getValue().equals("-")) return false;
 					break;
 				}
@@ -43,4 +44,21 @@ public class CommonValidator {
 		}
 		return true;
 	}
+
+  public boolean areParenthesesBalanced(List<Token> tokens) {
+    Stack<String> stack = new Stack<>();
+    //TODO: when we add them, add the "{" keys case
+
+    for (Token token : tokens) {
+      if (token.getValue().equals("(")) {
+        stack.push(token.getValue());
+      } else if (token.getValue().equals(")")) {
+        if (stack.isEmpty() || !stack.pop().equals("(")) {
+          return false;
+        }
+      }
+    }
+
+    return stack.isEmpty();
+  }
 }

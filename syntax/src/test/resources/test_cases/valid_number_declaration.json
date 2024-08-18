@@ -1,14 +1,14 @@
 {"tokens": "LET -> IDENTIFIER(a) -> COLON -> TYPE(number) -> ASSIGNATION -> LITERAL(5) -> SEMICOLON",
   "ast_list":[
-                                    {
-                                      "assignation": {
-                                        "1_declaration": {
-                                          "declarationType": "Number",
-                                          "name": "a"
-                                        },
-                                        "2_literal": {
-                                          "value": 5
-                                        }
-                                      }
-                                    }
-                                  ]}
+    {
+      "assignation": {
+        "1_declaration": {
+          "declarationType": "Number",
+          "name": "a"
+        },
+        "2_literal": {
+          "value": 5
+        }
+      }
+    }
+  ]}
