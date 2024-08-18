@@ -22,7 +22,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 	}
 
 	@Override
-	public SemanticResult analyze(List<AstComponent> asts) {
+	public Result analyze(List<AstComponent> asts) {
 		Environment env = baseEnvironment.copy();
 		evaluableVisitor.setEnv(env);
 

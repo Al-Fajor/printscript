@@ -44,7 +44,7 @@ public class Parser {
 
 	private boolean semanticAnalysisFailed(SyntaxResult syntaxResult) {
 		semanticAnalyzer.addObserver(new SemanticAnalyzerObserver());
-		SemanticResult semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
+		Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
 
 		if (!semanticResult.isSuccessful()) {
 			System.out.println(

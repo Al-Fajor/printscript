@@ -2,6 +2,12 @@ package org.example;
 
 import java.util.Arrays;
 import java.util.Map;
+import org.example.commands.AnalyzeCommand;
+import org.example.commands.Command;
+import org.example.commands.ExecutionCommand;
+import org.example.commands.FormattingCommand;
+import org.example.commands.HelpCommand;
+import org.example.commands.ValidationCommand;
 
 public class Cli {
 	private static final Map<String, Command> commands =

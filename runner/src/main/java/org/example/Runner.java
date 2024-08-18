@@ -29,7 +29,7 @@ public class Runner {
 		}
 
 		List<AstComponent> components = syntaxResult.getComponents();
-		SemanticResult result = semanticAnalyzer.analyze(components);
+		Result result = semanticAnalyzer.analyze(components);
 
 		if (!result.isSuccessful()) {
 			throw new RuntimeException("Semantic error");
