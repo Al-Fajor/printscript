@@ -12,36 +12,23 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Language {
-//	Path resourcePath = Paths.get("../semantics/src/main/resources/lang.json");
-//	File file = resourcePath.toFile();
-//	String content;
-//
-//	{
-//		try {
-//			content = new String(Files.readAllBytes(resourcePath));
-//		} catch (IOException e) {
-//			throw new RuntimeException(
-//					"Could not load PrintScript's language configuration at path " + resourcePath.toAbsolutePath() + "; got error:\n"
-//							+ e);
-//		}
-//	}
+	String content;
 
-    String content;
-
-    {
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("lang.json");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-            content = sb.toString();
-        } catch (IOException e) {
-            throw new RuntimeException(
-                    "Could not load PrintScript's language configuration; got error:\n" + e);
-        }
-    }
+	{
+		try (InputStream inputStream =
+						getClass().getClassLoader().getResourceAsStream("lang.json");
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+			content = sb.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(
+					"Could not load PrintScript's language configuration; got error:\n" + e);
+		}
+	}
 
 	JSONObject json = new JSONObject(content);
 
