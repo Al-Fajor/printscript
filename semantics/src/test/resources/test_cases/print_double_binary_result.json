@@ -14,13 +14,25 @@
                 "op": "-"
               },
               {
-                "literal": {
-                  "value": 2
-                }
+                "binaryExpression": [
+                  {
+                    "op": "-"
+                  },
+                  {
+                    "literal": {
+                      "value": 2
+                    }
+                  },
+                  {
+                    "literal": {
+                      "value": 4
+                    }
+                  }
+                ]
               },
               {
                 "literal": {
-                  "value": 4
+                  "value": 2
                 }
               }
             ]

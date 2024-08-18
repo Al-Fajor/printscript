@@ -2,15 +2,19 @@
   "valid_semantics": true,
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "String",
-          "name": "a"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "a"
+          }
         },
-        "2_literal": {
-          "value": "Hi"
+        {
+          "literal": {
+            "value": "Hi"
+          }
         }
-      }
+      ]
     },
     {
       "functionCall": {
@@ -18,12 +22,14 @@
           "name": "println",
           "identifierType": "function"
         },
-        "params": {
-          "1_identifier": {
-            "name": "a",
-            "identifierType": "variable"
+        "params": [
+          {
+            "identifier": {
+              "name": "a",
+              "identifierType": "variable"
+            }
           }
-        }
+        ]
       }
     }
   ]

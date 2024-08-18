@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
@@ -26,7 +25,7 @@ public class AstBuilder {
 			JSONObject jsonObject = astArray.getJSONObject(i);
 
 			String rootComponentName = jsonObject.keys().next();
-			JSONObject rootComponent = jsonObject.getJSONObject(rootComponentName);
+			Object rootComponent = jsonObject.get(rootComponentName);
 
 			result.add(mapToAstComponent(rootComponent, rootComponentName));
 		}
@@ -36,56 +35,27 @@ public class AstBuilder {
 
 	private AstComponent mapToAstComponent(
 			JSONObject astComponentJson, String astComponentJsonName) {
-		astComponentJsonName = deleteNumbersInName(astComponentJsonName);
 		switch (astComponentJsonName) {
-			case "assignation":
-				Iterator<String> subComponentNames = astComponentJson.keys();
-				String firstComponentName = subComponentNames.next();
-				JSONObject firstComponent = astComponentJson.getJSONObject(firstComponentName);
-				String secondComponentName = subComponentNames.next();
-				JSONObject secondComponent = astComponentJson.getJSONObject(secondComponentName);
-
-				if (subComponentNames.hasNext()) {
-					throw new IllegalArgumentException(
-							"Cannot parse JSON: Received an assignation with too many parameters");
-				}
-
-				return new AssignationStatement(
-						(IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
-						(EvaluableComponent)
-								mapToAstComponent(secondComponent, secondComponentName));
-			case "declaration":
+            case "declaration":
 				return new Declaration(
 						mapToDeclarationType(astComponentJson.getString("declarationType")),
 						astComponentJson.getString("name"));
 			case "literal":
 				Object value = astComponentJson.get("value");
-				if (value instanceof String) {
-					return new Literal<>((String) value);
-				} else if (value instanceof Number) {
-					return new Literal<>((Number) value);
-				} else if (value == JSONObject.NULL) {
-					return new Literal<>(null);
-				} else
-					throw new IllegalArgumentException(
-							"Cannot parse JSON: Unsupported value " + value + " for literal");
+				return switch (value) {
+					case String ignored -> new Literal<>((String) value);
+					case Number ignored -> new Literal<>((Number) value);
+					case null -> new Literal<>(null);
+					default ->
+							throw new IllegalArgumentException(
+									"Cannot parse JSON: Unsupported value "
+											+ value
+											+ " for literal");
+				};
 			case "identifier":
 				return new Identifier(
 						astComponentJson.getString("name"),
 						mapToIdentifierType(astComponentJson.getString("identifierType")));
-			case "binaryExpression":
-				Iterator<String> operandNames = astComponentJson.keys();
-				operandNames.next();
-
-				String firstOperandName = operandNames.next();
-				JSONObject firstOperand = astComponentJson.getJSONObject(firstOperandName);
-				String secondOperandName = operandNames.next();
-				JSONObject secondOperand = astComponentJson.getJSONObject(secondOperandName);
-
-				return new BinaryExpression(
-						mapToOperator(astComponentJson.getString("op")),
-						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
-						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName));
 			case "functionCall":
 				return new FunctionCallStatement(
 						(IdentifierComponent)
@@ -93,22 +63,68 @@ public class AstBuilder {
 										astComponentJson.getJSONObject("identifier"), "identifier"),
 						(Parameters)
 								mapToAstComponent(
-										astComponentJson.getJSONObject("params"), "params"));
-			case "params":
-				List<EvaluableComponent> parameters = new ArrayList<>();
-				for (String key : astComponentJson.keySet()) {
-					parameters.add(
-							(EvaluableComponent)
-									mapToAstComponent(astComponentJson.getJSONObject(key), key));
-				}
-
-				return new Parameters(parameters);
+										astComponentJson.getJSONArray("params"), "params"));
 			case "conditional", "if", "ifClauses", "statementBlock":
 				throw new RuntimeException(
 						"Not implemented yet: case '" + astComponentJsonName + "'");
 			default:
 				throw new IllegalArgumentException(
 						astComponentJsonName + " is not a valid ast component");
+		}
+	}
+
+	private AstComponent mapToAstComponent(JSONArray jsonArray, String astComponentJsonName) {
+		switch (astComponentJsonName) {
+			case "binaryExpression":
+				String firstOperandName = jsonArray.getJSONObject(1).keys().next();
+				Object firstOperand = jsonArray.getJSONObject(1).get(firstOperandName);
+				String secondOperandName = jsonArray.getJSONObject(2).keys().next();
+				Object secondOperand = jsonArray.getJSONObject(2).get(secondOperandName);
+
+				return new BinaryExpression(
+						mapToOperator(jsonArray.getJSONObject(0).getString("op")),
+						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
+						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName));
+
+			case "assignation":
+				String firstComponentName = jsonArray.getJSONObject(0).keys().next();
+				JSONObject firstComponent =
+						jsonArray.getJSONObject(0).getJSONObject(firstComponentName);
+				String secondComponentName = jsonArray.getJSONObject(1).keys().next();
+				Object secondComponent = jsonArray.getJSONObject(1).get(secondComponentName);
+
+				return new AssignationStatement(
+						(IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
+						(EvaluableComponent)
+								mapToAstComponent(secondComponent, secondComponentName));
+
+			case "params":
+				List<EvaluableComponent> parameters = new ArrayList<>();
+				for (Object object : jsonArray) {
+					JSONObject jsonObject = (JSONObject) object;
+					String key = jsonObject.keys().next();
+					Object subComponent = jsonObject.get(key);
+
+					parameters.add((EvaluableComponent) mapToAstComponent(subComponent, key));
+				}
+
+				return new Parameters(parameters);
+
+			default:
+				throw new IllegalArgumentException(
+						astComponentJsonName + " is not a valid ast component");
+		}
+	}
+
+	private AstComponent mapToAstComponent(Object object, String objectName) {
+		if (object instanceof JSONObject jsonObject) {
+			return mapToAstComponent(jsonObject, objectName);
+		}
+
+		if (object instanceof JSONArray jsonArray) {
+			return mapToAstComponent(jsonArray, objectName);
+		} else {
+			throw new IllegalArgumentException("Can only map JSON objects and JSON arrays");
 		}
 	}
 
@@ -120,11 +136,6 @@ public class AstBuilder {
 			case "*" -> BinaryOperator.MULTIPLICATION;
 			default -> throw new IllegalArgumentException("Invalid operator: " + op);
 		};
-	}
-
-	private static String deleteNumbersInName(String astComponentName) {
-		String[] split = astComponentName.split("_");
-		return split[split.length - 1];
 	}
 
 	private IdentifierType mapToIdentifierType(String identifierType) {

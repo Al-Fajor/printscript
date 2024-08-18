@@ -2,21 +2,31 @@
   "valid_semantics": true,
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "Number",
-          "name": "a"
-        },
-        "2_binaryExpression": {
-          "op": "*",
-          "1_literal": {
-            "value": 2
-          },
-          "2_literal": {
-            "value": 3
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "a"
           }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "*"
+            },
+            {
+              "literal": {
+                "value": 2
+              }
+            },
+            {
+              "literal": {
+                "value": 3
+              }
+            }
+          ]
         }
-      }
+      ]
     }
   ]
 }

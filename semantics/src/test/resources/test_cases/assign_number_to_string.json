@@ -2,15 +2,19 @@
   "valid_semantics": false,
   "ast_list": [
     {
-      "assignation": {
-        "1_declaration": {
-          "declarationType": "Number",
-          "name": "a"
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "a"
+          }
         },
-        "2_literal": {
-          "value": "Hi"
+        {
+          "literal": {
+            "value": "Hi"
+          }
         }
-      }
+      ]
     }
     ]
 }
