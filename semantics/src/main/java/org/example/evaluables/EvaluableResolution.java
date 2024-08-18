@@ -3,13 +3,13 @@ package org.example.evaluables;
 import java.util.Optional;
 import org.example.Pair;
 import org.example.Resolution;
+import org.example.Result;
 import org.example.SemanticFailure;
-import org.example.SemanticResult;
 import org.example.SemanticSuccess;
 import org.example.ast.DeclarationType;
 
 public record EvaluableResolution(
-		SemanticResult result,
+		Result result,
 		Optional<DeclarationType> evaluatedType,
 		boolean isValuePresent,
 		Optional<String> identifierName)

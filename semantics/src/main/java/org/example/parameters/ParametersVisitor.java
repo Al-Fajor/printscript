@@ -3,7 +3,7 @@ package org.example.parameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.example.SemanticResult;
+import org.example.Result;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
 import org.example.ast.Conditional;
@@ -54,7 +54,7 @@ public class ParametersVisitor implements AstComponentVisitor<ParametersResoluti
 
 		for (EvaluableComponent component : parameters.getParameters()) {
 			EvaluableResolution resolution = component.accept(evaluableVisitor);
-			SemanticResult result = resolution.result();
+			Result result = resolution.result();
 
 			if (!result.isSuccessful())
 				return new ParametersResolution(result, Collections.emptyList());

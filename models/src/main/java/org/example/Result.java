@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.Optional;
 
-public interface SemanticResult {
+public interface Result {
 	boolean isSuccessful();
 
 	String errorMessage();
