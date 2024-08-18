@@ -1,0 +1,27 @@
+{
+  "code": "let num:number;\nnum=7;",
+  "ast_list": [
+    {
+      "assignation": {
+        "declaration": {
+          "declarationType": "Number",
+          "name": "num"
+        },
+        "literal": {
+          "value": null
+        }
+      }
+    },
+    {
+      "assignation": {
+        "identifier": {
+          "identifierType": "variable",
+          "name": "num"
+        },
+        "literal": {
+          "value": 7
+        }
+      }
+    }
+  ]
+}
