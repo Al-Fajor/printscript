@@ -9,9 +9,7 @@ import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.*;
-import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
-import org.example.token.TokenType;
 
 public class SentenceBuilder {
 	public AstComponent buildSentence(List<Token> tokens) {
@@ -27,12 +25,13 @@ public class SentenceBuilder {
 		if (tokens.size() <= 2 || tokens.get(1).getType() != ASSIGNATION) return null;
 		TokenMapper mapper = new TokenMapper();
 
-    // TODO: eliminate casting
-    IdentifierComponent identifier = (IdentifierComponent) mapper.mapToken(tokens.getFirst());
+		// TODO: eliminate casting
+		IdentifierComponent identifier = (IdentifierComponent) mapper.mapToken(tokens.getFirst());
 
-    EvaluableComponent value = mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst();
+		EvaluableComponent value =
+				mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst();
 
-    return new AssignationStatement(identifier, value);
+		return new AssignationStatement(identifier, value);
 	}
 
 	private AstComponent buildFunctionSentence(List<Token> tokens) {
@@ -42,9 +41,9 @@ public class SentenceBuilder {
 		List<EvaluableComponent> parameters =
 				new TokenMapper().buildExpression(tokens.subList(1, tokens.size()));
 
-    IdentifierComponent id = new Identifier("println", IdentifierType.FUNCTION);
-		
-    return new FunctionCallStatement(id, new Parameters(parameters));
+		IdentifierComponent id = new Identifier("println", IdentifierType.FUNCTION);
+
+		return new FunctionCallStatement(id, new Parameters(parameters));
 	}
 
 	private AstComponent buildLetSentence(List<Token> tokens) {

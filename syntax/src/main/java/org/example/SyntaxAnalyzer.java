@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.List;
-
 import org.example.observer.Observable;
 import org.example.result.SyntaxResult;
 import org.example.token.Token;

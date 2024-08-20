@@ -2,9 +2,7 @@ package org.example.result;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.example.Pair;
-import org.example.Result;
 import org.example.ast.AstComponent;
 
 public class SyntaxSuccess implements SyntaxResult {
@@ -19,23 +17,23 @@ public class SyntaxSuccess implements SyntaxResult {
 		return components;
 	}
 
-  @Override
-  public boolean isSuccessful() {
-    return true;
-  }
+	@Override
+	public boolean isSuccessful() {
+		return true;
+	}
 
-  @Override
-  public String errorMessage() {
-    return "Not an error";
-  }
+	@Override
+	public String errorMessage() {
+		return "Not an error";
+	}
 
-  @Override
-  public Optional<Pair<Integer, Integer>> getErrorStart() {
-    return Optional.empty();
-  }
+	@Override
+	public Optional<Pair<Integer, Integer>> getErrorStart() {
+		return Optional.empty();
+	}
 
-  @Override
-  public Optional<Pair<Integer, Integer>> getErrorEnd() {
-    return Optional.empty();
-  }
+	@Override
+	public Optional<Pair<Integer, Integer>> getErrorEnd() {
+		return Optional.empty();
+	}
 }

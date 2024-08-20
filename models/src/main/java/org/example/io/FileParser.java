@@ -15,15 +15,15 @@ import org.json.JSONObject;
 public class FileParser {
 
 	public String getCode(String filePath) throws IOException {
-    JSONObject json = getJsonObject(filePath);
-    return json.get("code").toString();
+		JSONObject json = getJsonObject(filePath);
+		return json.get("code").toString();
 	}
 
 	// Need to define the correct format of expected results, should be a JSON
 	public List<Token> getTokens(String filePath) throws IOException {
 
-    JSONObject json = getJsonObject(filePath);
-    String tokenString = json.get("tokens").toString();
+		JSONObject json = getJsonObject(filePath);
+		String tokenString = json.get("tokens").toString();
 
 		List<String> tempTokenList =
 				Arrays.stream(tokenString.split("->")).map(String::strip).toList();
@@ -36,9 +36,9 @@ public class FileParser {
 				.collect(Collectors.toList());
 	}
 
-  //Private
+	// Private
 
-  private Pair<BaseTokenTypes, String> getToken(String token) {
+	private Pair<BaseTokenTypes, String> getToken(String token) {
 		if (token.indexOf('(') == -1) {
 			return new Pair<>(BaseTokenTypes.valueOf(token), "");
 		}
@@ -47,9 +47,9 @@ public class FileParser {
 		return new Pair<>(BaseTokenTypes.valueOf(tokenName), tokenValue);
 	}
 
-  private JSONObject getJsonObject(String filePath) throws IOException {
-    File file = new File(filePath);
-    String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
-    return new JSONObject(content);
-  }
+	private JSONObject getJsonObject(String filePath) throws IOException {
+		File file = new File(filePath);
+		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
+		return new JSONObject(content);
+	}
 }

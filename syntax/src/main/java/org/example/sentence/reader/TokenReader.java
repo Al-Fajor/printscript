@@ -8,7 +8,7 @@ public class TokenReader {
 	private final Iterator<Token> tokens;
 	private Token currentToken;
 
-  public TokenReader(List<Token> tokens) {
+	public TokenReader(List<Token> tokens) {
 		this.tokens = tokens.iterator();
 		consume();
 	}
