@@ -24,12 +24,8 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 	private SyntaxResult buildSentences(List<Token> tokens) {
 		List<List<Token>> sentences =
 				getSentencesWithTokens(tokens); // Separate sentences by semicolons
-		SyntaxResult result =
-				getSyntaxResult(sentences); // Get result (if there's an error, returns error)
 
-		System.out.println(result.errorMessage()); // Print it
-
-		return result; // Return it
+		return getSyntaxResult(sentences); // Return it
 	}
 
 	private SyntaxResult getSyntaxResult(List<List<Token>> tokenSentences) {
