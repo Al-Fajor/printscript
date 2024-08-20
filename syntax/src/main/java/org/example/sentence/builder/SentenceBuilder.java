@@ -4,47 +4,56 @@ import static org.example.token.BaseTokenTypes.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.*;
-import org.example.token.BaseTokenTypes;
+import org.example.sentence.validator.validity.Validity;
 import org.example.token.Token;
-import org.example.token.TokenType;
 
 public class SentenceBuilder {
-	public AstComponent buildSentence(List<Token> tokens) {
-		return switch (tokens.getFirst().getType()) {
-			case LET -> buildLetSentence(tokens);
-			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens);
-			case IDENTIFIER -> buildReassignationSentence(tokens);
-			default -> null;
-		};
+	public Pair<Optional<AstComponent>, String> buildSentence(List<Token> tokens) {
+		var sentence = getAstComponent(tokens);
+		Optional<AstComponent> component =
+				sentence.first() == null ? Optional.empty() : Optional.of(sentence.first());
+		return new Pair<>(component, sentence.second());
 	}
 
-	private AstComponent buildReassignationSentence(List<Token> tokens) {
-		if (tokens.size() <= 2 || tokens.get(1).getType() != ASSIGNATION) return null;
+	private Pair<AstComponent, String> buildReassignationSentence(List<Token> tokens) {
+		if (tokens.size() <= 2 || tokens.get(1).getType() != ASSIGNATION)
+			return new Pair<>(null, "Invalid reassignation sentence");
 		TokenMapper mapper = new TokenMapper();
-		IdentifierComponent identifier =
-				(IdentifierComponent) mapper.mapToken(tokens.getFirst()); // TODO: eliminate casting
-		return new AssignationStatement(
-				identifier, mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst());
+
+		// TODO: eliminate casting
+		IdentifierComponent identifier = (IdentifierComponent) mapper.mapToken(tokens.getFirst());
+
+		EvaluableComponent value =
+				mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst();
+
+		return new Pair<>(new AssignationStatement(identifier, value), "Not an error");
 	}
 
-	private AstComponent buildFunctionSentence(List<Token> tokens) {
+	private Pair<AstComponent, String> buildFunctionSentence(List<Token> tokens) {
 		SentenceValidator validator = new FunctionSentenceValidator();
-		if (!validator.isValidSentence(tokens)) return null;
+		Validity validity = validator.isValidSentence(tokens);
+		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
 		List<EvaluableComponent> parameters =
 				new TokenMapper().buildExpression(tokens.subList(1, tokens.size()));
-		return new FunctionCallStatement(
-				new Identifier("println", IdentifierType.FUNCTION), new Parameters(parameters));
+
+		IdentifierComponent id = new Identifier("println", IdentifierType.FUNCTION);
+
+		return new Pair<>(
+				new FunctionCallStatement(id, new Parameters(parameters)), "Not an error");
 	}
 
-	private AstComponent buildLetSentence(List<Token> tokens) {
+	private Pair<AstComponent, String> buildLetSentence(List<Token> tokens) {
 		SentenceValidator validator = new LetSentenceValidator();
-		if (!validator.isValidSentence(tokens)) return null;
+		Validity validity = validator.isValidSentence(tokens);
+		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
 		TokenMapper mapper = new TokenMapper();
 		// May need to change method
@@ -54,13 +63,12 @@ public class SentenceBuilder {
 		DeclarationType declarationType = getDeclarationType(type.getValue());
 		// let x: number;
 		IdentifierComponent declaration = new Declaration(declarationType, identifier.getValue());
-		System.out.println("ID VALUE: " + identifier.getValue());
-		//      System.out.println(tokens.get(4).getType());
+
 		EvaluableComponent value =
 				tokens.get(4).getType() != ASSIGNATION
 						? new Literal<>(null)
 						: mapper.buildExpression(tokens.subList(5, tokens.size())).getFirst();
-		return new AssignationStatement(declaration, value);
+		return new Pair<>(new AssignationStatement(declaration, value), "Not an error");
 	}
 
 	private DeclarationType getDeclarationType(String type) {
@@ -72,12 +80,12 @@ public class SentenceBuilder {
 		return declarationTypeMap.get(type.toLowerCase());
 	}
 
-	private Map<? extends TokenType, SentenceValidator> getValidatorMap() {
-		return Map.of(
-				BaseTokenTypes.LET, new LetSentenceValidator(),
-				BaseTokenTypes.IF, new IfSentenceValidator(),
-				BaseTokenTypes.ELSE, new ElseSentenceValidator(),
-				BaseTokenTypes.PRINTLN, new FunctionSentenceValidator(),
-				BaseTokenTypes.FUNCTION, new FunctionSentenceValidator());
+	private Pair<AstComponent, String> getAstComponent(List<Token> tokens) {
+		return switch (tokens.getFirst().getType()) {
+			case LET -> buildLetSentence(tokens);
+			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens);
+			case IDENTIFIER -> buildReassignationSentence(tokens);
+			default -> null;
+		};
 	}
 }

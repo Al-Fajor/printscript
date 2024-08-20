@@ -5,6 +5,7 @@ import java.util.List;
 import org.example.ast.AstComponent;
 import org.example.evaluables.EvaluableVisitor;
 import org.example.identifiers.IdentifierVisitor;
+import org.example.observer.Observer;
 import org.example.parameters.ParametersVisitor;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
