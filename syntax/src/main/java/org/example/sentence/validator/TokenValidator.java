@@ -9,9 +9,9 @@ import org.example.token.Token;
 import org.example.token.TokenType;
 
 public class TokenValidator {
-	private final String NOT_AN_ERROR = "Not an error";
-	private final String NO_FOLLOWING_TOKEN = "No following token";
-	private final String SHOULD_BE_FOLLOWED_BY = "Should be followed by ";
+	private final String notAnError = "Not an error";
+	private final String noFollowingToken = "No following token";
+	private final String shouldBeFollowedBy = "Should be followed by ";
 
 	public boolean isNotSpecialToken(Token token) {
 		List<TokenType> specialTypes =
@@ -25,32 +25,32 @@ public class TokenValidator {
 		switch (type) {
 			case SEPARATOR:
 				if (mapper.matchesSeparatorType(token, "opening")) {
-					if (nextToken == null) return NO_FOLLOWING_TOKEN;
+					if (nextToken == null) return noFollowingToken;
 					if (!List.of(IDENTIFIER, LITERAL, FUNCTION, SEPARATOR)
 									.contains(nextToken.getType())
 							&& !nextToken.getValue().equals("-"))
-						return SHOULD_BE_FOLLOWED_BY
+						return shouldBeFollowedBy
 								+ "IDENTIFIER, LITERAL, FUNCTION, SEPARATOR or '-'";
 					break;
 				}
 				if (mapper.matchesSeparatorType(token, "closing")) {
-					if (nextToken == null) return NO_FOLLOWING_TOKEN;
+					if (nextToken == null) return noFollowingToken;
 					break;
 				}
 			case OPERATOR:
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 				if (!List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType())
 						&& !mapper.matchesSeparatorType(nextToken, "opening"))
-					return SHOULD_BE_FOLLOWED_BY
+					return shouldBeFollowedBy
 							+ "IDENTIFIER, LITERAL, FUNCTION or OPENING SEPARATOR";
 				break;
 			case SEMICOLON:
-				if (nextToken != null) return NO_FOLLOWING_TOKEN;
+				if (nextToken != null) return noFollowingToken;
 				break;
 			default:
 				break;
 		}
-		return NOT_AN_ERROR;
+		return notAnError;
 	}
 
 	public boolean areParenthesesBalanced(List<Token> tokens) {

@@ -11,9 +11,9 @@ import org.example.token.Token;
 
 public class LetSentenceValidator implements SentenceValidator {
 
-	private final String NOT_AN_ERROR = "Not an error";
-	private final String NO_FOLLOWING_TOKEN = "No following token";
-	private final String SHOULD_BE_FOLLOWED_BY = "Should be followed by ";
+	private final String notAnError = "Not an error";
+	private final String noFollowingToken = "No following token";
+	private final String shouldBeFollowedBy = "Should be followed by ";
 
 	@Override
 	public Validity isValidSentence(List<Token> tokens) {
@@ -28,10 +28,10 @@ public class LetSentenceValidator implements SentenceValidator {
 			Token nextToken = i + 1 >= tokens.size() ? null : tokens.get(i + 1);
 			if (validator.isNotSpecialToken(token)) {
 				String message = validator.getValidityMessage(token, nextToken);
-				if (!message.equals(NOT_AN_ERROR)) return new InvalidSentence(message);
+				if (!message.equals(notAnError)) return new InvalidSentence(message);
 			}
 			String ownValidityMessage = getValidityMessage(token, nextToken);
-			if (!ownValidityMessage.equals(NOT_AN_ERROR))
+			if (!ownValidityMessage.equals(notAnError))
 				return new InvalidSentence(ownValidityMessage);
 		}
 		return new ValidSentence();
@@ -41,50 +41,50 @@ public class LetSentenceValidator implements SentenceValidator {
 		TokenMapper mapper = new TokenMapper();
 		switch (token.getType()) {
 			case LET:
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 
-				if (nextToken.getType() != IDENTIFIER) return SHOULD_BE_FOLLOWED_BY + "IDENTIFIER";
+				if (nextToken.getType() != IDENTIFIER) return shouldBeFollowedBy + "IDENTIFIER";
 				break;
 
 			case IDENTIFIER:
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 
 				if (!List.of(COLON, SEMICOLON).contains(nextToken.getType()))
-					return SHOULD_BE_FOLLOWED_BY + "SEMICOLON or COLON";
+					return shouldBeFollowedBy + "SEMICOLON or COLON";
 				break;
 
 			case COLON:
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 
-				if (nextToken.getType() != TYPE) return SHOULD_BE_FOLLOWED_BY + "TYPE";
+				if (nextToken.getType() != TYPE) return shouldBeFollowedBy + "TYPE";
 				break;
 
 			case TYPE:
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 
 				if (!List.of(ASSIGNATION, SEMICOLON).contains(nextToken.getType()))
-					return SHOULD_BE_FOLLOWED_BY + "ASSIGNATION or SEMICOLON";
+					return shouldBeFollowedBy + "ASSIGNATION or SEMICOLON";
 				break;
 
 			case LITERAL:
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 
 				if (!List.of(SEMICOLON, OPERATOR).contains(nextToken.getType())
 						&& !mapper.matchesSeparatorType(nextToken, "closing"))
-					return SHOULD_BE_FOLLOWED_BY + "SEMICOLON, OPERATOR or CLOSING SEPARATOR";
+					return shouldBeFollowedBy + "SEMICOLON, OPERATOR or CLOSING SEPARATOR";
 				break;
 
 			case ASSIGNATION:
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 
 				if (!List.of(LITERAL, IDENTIFIER, FUNCTION).contains(nextToken.getType())
 						&& !nextToken.getValue().equals("-"))
-					return SHOULD_BE_FOLLOWED_BY + "LITERAL, IDENTIFIER, FUNCTION or '-'";
+					return shouldBeFollowedBy + "LITERAL, IDENTIFIER, FUNCTION or '-'";
 				break;
 
 			default:
 				break;
 		}
-		return NOT_AN_ERROR;
+		return notAnError;
 	}
 }

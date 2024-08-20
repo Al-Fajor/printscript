@@ -11,9 +11,9 @@ import org.example.token.Token;
 import org.example.token.TokenType;
 
 public class FunctionSentenceValidator implements SentenceValidator {
-	private final String NOT_AN_ERROR = "Not an error";
-	private final String NO_FOLLOWING_TOKEN = "No following token";
-	private final String SHOULD_BE_FOLLOWED_BY = "Should be followed by ";
+	private final String notAnError = "Not an error";
+	private final String noFollowingToken = "No following token";
+	private final String shouldBeFollowedBy = "Should be followed by ";
 
 	@Override
 	public Validity isValidSentence(List<Token> tokens) {
@@ -33,18 +33,18 @@ public class FunctionSentenceValidator implements SentenceValidator {
 
 			if (tokenType == SEPARATOR) {
 				String message = validator.getValidityMessage(token, nextToken);
-				if (!(validator.areParenthesesBalanced(tokens) && message.equals(NOT_AN_ERROR))) {
+				if (!(validator.areParenthesesBalanced(tokens) && message.equals(notAnError))) {
 					return new InvalidSentence(message);
 				} else continue;
 			}
 
 			if (validator.isNotSpecialToken(token)) {
 				String message = validator.getValidityMessage(token, nextToken);
-				if (!validator.getValidityMessage(token, nextToken).equals(NOT_AN_ERROR))
+				if (!validator.getValidityMessage(token, nextToken).equals(notAnError))
 					return new InvalidSentence(message);
 			}
 			String ownValidityMessage = getValidityMessage(tokenType, nextToken);
-			if (!ownValidityMessage.equals(NOT_AN_ERROR))
+			if (!ownValidityMessage.equals(notAnError))
 				return new InvalidSentence(ownValidityMessage);
 		}
 		return new ValidSentence();
@@ -54,20 +54,20 @@ public class FunctionSentenceValidator implements SentenceValidator {
 		TokenMapper mapper = new TokenMapper();
 		switch (tokenType) {
 			case PRINTLN, FUNCTION -> {
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 				if (!mapper.matchesSeparatorType(nextToken, "opening"))
-					return SHOULD_BE_FOLLOWED_BY + "OPENING SEPARATOR";
+					return shouldBeFollowedBy + "OPENING SEPARATOR";
 			}
 			case LITERAL, IDENTIFIER -> {
-				if (nextToken == null) return NO_FOLLOWING_TOKEN;
+				if (nextToken == null) return noFollowingToken;
 				if (!List.of(OPERATOR, SEMICOLON, SEPARATOR).contains(nextToken.getType())
 						&& !mapper.matchesSeparatorType(nextToken, "closing"))
-					return SHOULD_BE_FOLLOWED_BY + "OPERATOR, SEMICOLON or SEPARATOR";
+					return shouldBeFollowedBy + "OPERATOR, SEMICOLON or SEPARATOR";
 			}
 			default -> {
-				return NOT_AN_ERROR;
+				return notAnError;
 			}
 		}
-		return NOT_AN_ERROR;
+		return notAnError;
 	}
 }
