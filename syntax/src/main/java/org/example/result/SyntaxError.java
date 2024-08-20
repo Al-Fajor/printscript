@@ -9,9 +9,13 @@ import org.example.ast.AstComponent;
 
 public class SyntaxError implements SyntaxResult{
 	private final String reason;
+  private final Pair<Integer, Integer> start;
+  private final Pair<Integer, Integer> end;
 
-	public SyntaxError(String reason) {
+	public SyntaxError(Pair<Integer, Integer> start, Pair<Integer, Integer> end, String reason) {
 		this.reason = reason;
+    this.start = start;
+    this.end = end;
 	}
 
 	@Override
@@ -31,11 +35,11 @@ public class SyntaxError implements SyntaxResult{
 
   @Override
   public Optional<Pair<Integer, Integer>> getErrorStart() {
-    return Optional.empty();
+    return Optional.of(start);
   }
 
   @Override
   public Optional<Pair<Integer, Integer>> getErrorEnd() {
-    return Optional.empty();
+    return Optional.of(end);
   }
 }

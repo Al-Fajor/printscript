@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.AstComponent;
+import org.example.observer.Observable;
+import org.example.observer.Observer;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
@@ -19,22 +21,18 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 	}
 
 	private SyntaxResult buildSentences(List<Token> tokens) {
-		try {
-			List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
-			List<AstComponent> components =
-					tokenSentences.stream().map(this::buildSentence).collect(Collectors.toList());
+    List<List<Token>> sentences = getSentencesWithTokens(tokens);
 
-			return getSyntaxResult(components, tokenSentences);
+    List<AstComponent> components =
+      sentences.stream().map(this::buildSentence).collect(Collectors.toList());
 
-		} catch (NullPointerException e) {
-			return new SyntaxError("Invalid tokens");
-		}
+    return getSyntaxResult(components, sentences);
 	}
 
 	private SyntaxResult getSyntaxResult(
 			List<AstComponent> components, List<List<Token>> tokenSentences) {
 		return components.contains(null)
-				? new SyntaxError(
+				? new SyntaxError(null, null, //TODO
 						"Invalid sentence at index: "
 								+ components.indexOf(null)
 								+ ";\n"
@@ -60,4 +58,10 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		}
 		return sentences;
 	}
+
+  @Override
+  public void addObserver(Observer<Pair<Integer, Integer>> observer) {
+    //TODO
+    return;
+  }
 }

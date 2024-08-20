@@ -31,11 +31,11 @@ public class SyntaxSuccess implements SyntaxResult {
 
   @Override
   public Optional<Pair<Integer, Integer>> getErrorStart() {
-    return Optional.empty(); //TODO
+    return Optional.empty();
   }
 
   @Override
   public Optional<Pair<Integer, Integer>> getErrorEnd() {
-    return Optional.empty(); //TODO
+    return Optional.empty();
   }
 }
