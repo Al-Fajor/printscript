@@ -8,7 +8,7 @@ import org.example.sentence.mapper.TokenMapper;
 import org.example.token.Token;
 import org.example.token.TokenType;
 
-public class CommonValidator {
+public class TokenValidator {
 	public boolean isNotSpecialToken(Token token) {
 		List<TokenType> specialTypes =
 				List.of(LET, PRINTLN, FUNCTION, ASSIGNATION, COLON, TYPE, LITERAL, IDENTIFIER);

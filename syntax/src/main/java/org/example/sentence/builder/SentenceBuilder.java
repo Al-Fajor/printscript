@@ -26,10 +26,13 @@ public class SentenceBuilder {
 	private AstComponent buildReassignationSentence(List<Token> tokens) {
 		if (tokens.size() <= 2 || tokens.get(1).getType() != ASSIGNATION) return null;
 		TokenMapper mapper = new TokenMapper();
-		IdentifierComponent identifier =
-				(IdentifierComponent) mapper.mapToken(tokens.getFirst()); // TODO: eliminate casting
-		return new AssignationStatement(
-				identifier, mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst());
+
+    // TODO: eliminate casting
+    IdentifierComponent identifier = (IdentifierComponent) mapper.mapToken(tokens.getFirst());
+
+    EvaluableComponent value = mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst();
+
+    return new AssignationStatement(identifier, value);
 	}
 
 	private AstComponent buildFunctionSentence(List<Token> tokens) {
@@ -38,8 +41,10 @@ public class SentenceBuilder {
 
 		List<EvaluableComponent> parameters =
 				new TokenMapper().buildExpression(tokens.subList(1, tokens.size()));
-		return new FunctionCallStatement(
-				new Identifier("println", IdentifierType.FUNCTION), new Parameters(parameters));
+
+    IdentifierComponent id = new Identifier("println", IdentifierType.FUNCTION);
+		
+    return new FunctionCallStatement(id, new Parameters(parameters));
 	}
 
 	private AstComponent buildLetSentence(List<Token> tokens) {
@@ -54,8 +59,7 @@ public class SentenceBuilder {
 		DeclarationType declarationType = getDeclarationType(type.getValue());
 		// let x: number;
 		IdentifierComponent declaration = new Declaration(declarationType, identifier.getValue());
-		System.out.println("ID VALUE: " + identifier.getValue());
-		//      System.out.println(tokens.get(4).getType());
+
 		EvaluableComponent value =
 				tokens.get(4).getType() != ASSIGNATION
 						? new Literal<>(null)
@@ -70,14 +74,5 @@ public class SentenceBuilder {
 						"string", DeclarationType.STRING,
 						"function", DeclarationType.FUNCTION);
 		return declarationTypeMap.get(type.toLowerCase());
-	}
-
-	private Map<? extends TokenType, SentenceValidator> getValidatorMap() {
-		return Map.of(
-				BaseTokenTypes.LET, new LetSentenceValidator(),
-				BaseTokenTypes.IF, new IfSentenceValidator(),
-				BaseTokenTypes.ELSE, new ElseSentenceValidator(),
-				BaseTokenTypes.PRINTLN, new FunctionSentenceValidator(),
-				BaseTokenTypes.FUNCTION, new FunctionSentenceValidator());
 	}
 }

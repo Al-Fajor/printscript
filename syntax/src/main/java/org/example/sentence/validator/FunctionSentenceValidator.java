@@ -16,7 +16,7 @@ public class FunctionSentenceValidator implements SentenceValidator {
 	private boolean checkValidity(List<Token> tokens) {
 		// FUNCTION | PRINTLN -> SEPARATOR("(") -> ANYTHING -> SEPARATOR(")") -> ANYTHING ->
 		// SEMICOLON
-		CommonValidator validator = new CommonValidator();
+		TokenValidator validator = new TokenValidator();
 		for (int i = 0; i < tokens.size(); i++) {
 			Token token = tokens.get(i);
 			TokenType tokenType = token.getType();

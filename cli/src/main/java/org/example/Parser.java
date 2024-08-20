@@ -91,7 +91,7 @@ public class Parser {
 	}
 
 	private static boolean syntaxAnalysisFailed(SyntaxResult syntaxResult) {
-		if (syntaxResult.isFailure()) {
+		if (!syntaxResult.isSuccessful()) {
 			System.out.println("Syntax analysis failed with error");
 			// TODO: print error
 			System.out.println("[Error cause here]");

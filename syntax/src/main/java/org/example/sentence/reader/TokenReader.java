@@ -22,12 +22,4 @@ public class TokenReader {
 	public Token getCurrentToken() {
 		return currentToken;
 	}
-
-	public Token getPreviousToken() {
-		return previousToken;
-	}
-
-	//  public TokenReader getCopy() {
-	//    return new TokenReader(originalTokens.subList(currentIndex, originalTokens.size()));
-	//  }
 }

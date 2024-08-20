@@ -13,7 +13,7 @@ public class LetSentenceValidator implements SentenceValidator {
 	}
 
 	private boolean checkValidity(List<Token> tokens) {
-		CommonValidator validator = new CommonValidator();
+		TokenValidator validator = new TokenValidator();
 
 		for (int i = 0; i < tokens.size(); i++) {
 			Token token = tokens.get(i);
