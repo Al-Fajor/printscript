@@ -7,7 +7,7 @@ echo "Applying Spotless"
 ./gradlew spotlessApply
 echo $separator
 
-#Once applied spotless, move to checkStyle
+#Once applied spotless, move to checkStylee
 
 echo $separator
 echo "Using CheckStyle"
