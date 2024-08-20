@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import org.example.ast.*;
 import org.example.lexerresult.LexerSuccess;
-import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
 public class Runner {
@@ -23,8 +22,8 @@ public class Runner {
 		LexerSuccess lexerSuccess = (LexerSuccess) lexerResult;
 		SyntaxResult syntaxResult = syntaxAnalyzer.analyze(lexerSuccess.getTokens());
 
-		if (syntaxResult.isFailure()) {
-			throw new RuntimeException(((SyntaxError) syntaxResult).getReason());
+		if (!syntaxResult.isSuccessful()) {
+			throw new RuntimeException(syntaxResult.errorMessage());
 		}
 
 		List<AstComponent> components = syntaxResult.getComponents();

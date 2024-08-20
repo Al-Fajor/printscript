@@ -4,54 +4,70 @@ import static org.example.token.BaseTokenTypes.*;
 
 import java.util.List;
 import org.example.sentence.mapper.TokenMapper;
+import org.example.sentence.validator.validity.InvalidSentence;
+import org.example.sentence.validator.validity.ValidSentence;
+import org.example.sentence.validator.validity.Validity;
 import org.example.token.Token;
 import org.example.token.TokenType;
 
 public class FunctionSentenceValidator implements SentenceValidator {
+	private final String notAnError = "Not an error";
+	private final String noFollowingToken = "No following token";
+	private final String shouldBeFollowedBy = "Should be followed by ";
+
 	@Override
-	public boolean isValidSentence(List<Token> tokens) {
+	public Validity isValidSentence(List<Token> tokens) {
 		return checkValidity(tokens);
 	}
 
-	private boolean checkValidity(List<Token> tokens) {
+	private Validity checkValidity(List<Token> tokens) {
 		// FUNCTION | PRINTLN -> SEPARATOR("(") -> ANYTHING -> SEPARATOR(")") -> ANYTHING ->
 		// SEMICOLON
-		CommonValidator validator = new CommonValidator();
+		TokenValidator validator = new TokenValidator();
 		for (int i = 0; i < tokens.size(); i++) {
 			Token token = tokens.get(i);
 			TokenType tokenType = token.getType();
 			Token nextToken = i + 1 >= tokens.size() ? null : tokens.get(i + 1);
+
 			// Hardcoded SEPARATOR case, may need optimization
-			if (token.getType() == SEPARATOR) {
-				if (!(validator.areParenthesesBalanced(tokens)
-						&& validator.isValidToken(token, nextToken))) {
-					return false;
+
+			if (tokenType == SEPARATOR) {
+				String message = validator.getValidityMessage(token, nextToken);
+				if (!(validator.areParenthesesBalanced(tokens) && message.equals(notAnError))) {
+					return new InvalidSentence(message);
 				} else continue;
 			}
+
 			if (validator.isNotSpecialToken(token)) {
-				if (!validator.isValidToken(token, nextToken)) return false;
+				String message = validator.getValidityMessage(token, nextToken);
+				if (!validator.getValidityMessage(token, nextToken).equals(notAnError))
+					return new InvalidSentence(message);
 			}
-			if (isNotValidSequence(tokenType, nextToken)) return false;
+			String ownValidityMessage = getValidityMessage(tokenType, nextToken);
+			if (!ownValidityMessage.equals(notAnError))
+				return new InvalidSentence(ownValidityMessage);
 		}
-		return true;
+		return new ValidSentence();
 	}
 
-	private boolean isNotValidSequence(TokenType tokenType, Token nextToken) {
+	private String getValidityMessage(TokenType tokenType, Token nextToken) {
 		TokenMapper mapper = new TokenMapper();
 		switch (tokenType) {
 			case PRINTLN, FUNCTION -> {
-				if (nextToken == null) return true;
-				if (!mapper.matchesSeparatorType(nextToken, "opening")) return true;
+				if (nextToken == null) return noFollowingToken;
+				if (!mapper.matchesSeparatorType(nextToken, "opening"))
+					return shouldBeFollowedBy + "OPENING SEPARATOR";
 			}
 			case LITERAL, IDENTIFIER -> {
-				if (nextToken == null) return true;
+				if (nextToken == null) return noFollowingToken;
 				if (!List.of(OPERATOR, SEMICOLON, SEPARATOR).contains(nextToken.getType())
-						&& !mapper.matchesSeparatorType(nextToken, "closing")) return true;
+						&& !mapper.matchesSeparatorType(nextToken, "closing"))
+					return shouldBeFollowedBy + "OPERATOR, SEMICOLON or SEPARATOR";
 			}
 			default -> {
-				return false;
+				return notAnError;
 			}
 		}
-		return false;
+		return notAnError;
 	}
 }
