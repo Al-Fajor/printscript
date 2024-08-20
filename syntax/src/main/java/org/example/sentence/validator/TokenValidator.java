@@ -9,40 +9,48 @@ import org.example.token.Token;
 import org.example.token.TokenType;
 
 public class TokenValidator {
+	private final String NOT_AN_ERROR = "Not an error";
+	private final String NO_FOLLOWING_TOKEN = "No following token";
+	private final String SHOULD_BE_FOLLOWED_BY = "Should be followed by ";
+
 	public boolean isNotSpecialToken(Token token) {
 		List<TokenType> specialTypes =
 				List.of(LET, PRINTLN, FUNCTION, ASSIGNATION, COLON, TYPE, LITERAL, IDENTIFIER);
 		return !specialTypes.contains(token.getType());
 	}
 
-	public boolean isValidToken(Token token, Token nextToken) {
+	public String getValidityMessage(Token token, Token nextToken) {
 		TokenType type = token.getType();
 		TokenMapper mapper = new TokenMapper();
 		switch (type) {
 			case SEPARATOR:
 				if (mapper.matchesSeparatorType(token, "opening")) {
-					if (nextToken == null) return false;
+					if (nextToken == null) return NO_FOLLOWING_TOKEN;
 					if (!List.of(IDENTIFIER, LITERAL, FUNCTION, SEPARATOR)
 									.contains(nextToken.getType())
-							&& !nextToken.getValue().equals("-")) return false;
+							&& !nextToken.getValue().equals("-"))
+						return SHOULD_BE_FOLLOWED_BY
+								+ "IDENTIFIER, LITERAL, FUNCTION, SEPARATOR or '-'";
 					break;
 				}
 				if (mapper.matchesSeparatorType(token, "closing")) {
-					if (nextToken == null) return false;
+					if (nextToken == null) return NO_FOLLOWING_TOKEN;
 					break;
 				}
 			case OPERATOR:
-				if (nextToken == null) return false;
+				if (nextToken == null) return NO_FOLLOWING_TOKEN;
 				if (!List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType())
-						&& !mapper.matchesSeparatorType(nextToken, "opening")) return false;
+						&& !mapper.matchesSeparatorType(nextToken, "opening"))
+					return SHOULD_BE_FOLLOWED_BY
+							+ "IDENTIFIER, LITERAL, FUNCTION or OPENING SEPARATOR";
 				break;
 			case SEMICOLON:
-				if (nextToken != null) return false;
+				if (nextToken != null) return NO_FOLLOWING_TOKEN;
 				break;
 			default:
 				break;
 		}
-		return true;
+		return NOT_AN_ERROR;
 	}
 
 	public boolean areParenthesesBalanced(List<Token> tokens) {

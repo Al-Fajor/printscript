@@ -38,16 +38,15 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		for (int i = 0; i < tokenSentences.size(); i++) {
 
 			List<Token> currentSentence = tokenSentences.get(i);
-			Optional<AstComponent> component = buildSentence(currentSentence);
+			var result = buildSentence(currentSentence);
+			Optional<AstComponent> component = result.first();
 
 			final int completed = i;
 			observers.forEach(
 					observer ->
-							observer.notifyChange(
-									new Pair<>(
-											completed,
-											tokenSentences
-													.size()))); // TODO: may need a line change
+							observer.notifyChange(new Pair<>(completed, tokenSentences.size())));
+
+			// TODO: may need a line change
 
 			if (component.isPresent()) {
 				finalComponents.add(component.get());
@@ -56,16 +55,15 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 				return new SyntaxError(
 						new Pair<>(i, 0),
 						new Pair<>(i, currentSentence.size() - 1),
-						parseError(currentSentence));
+						result.second());
 			}
 		}
 		return new SyntaxSuccess(finalComponents);
 	}
 
-	private Optional<AstComponent> buildSentence(List<Token> sentence) {
+	private Pair<Optional<AstComponent>, String> buildSentence(List<Token> sentence) {
 		SentenceBuilder builder = new SentenceBuilder();
-		AstComponent component = builder.buildSentence(sentence);
-		return component != null ? Optional.of(component) : Optional.empty();
+		return builder.buildSentence(sentence);
 	}
 
 	private List<List<Token>> getSentencesWithTokens(List<Token> tokens) {
@@ -84,10 +82,5 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 	@Override
 	public void addObserver(Observer<Pair<Integer, Integer>> observer) {
 		observers.add(observer);
-	}
-
-	private String parseError(List<Token> currentSentence) {
-		// TODO: parse error message correctly
-		return "Invalid syntax: " + currentSentence.getFirst().toString();
 	}
 }
