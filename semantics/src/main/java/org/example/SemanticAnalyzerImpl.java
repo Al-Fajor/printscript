@@ -6,20 +6,16 @@ import org.example.ast.AstComponent;
 import org.example.evaluables.EvaluableVisitor;
 import org.example.identifiers.IdentifierVisitor;
 import org.example.observer.Observer;
-import org.example.parameters.ParametersVisitor;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 	// TODO: may define externally, such as in a config file
 	private final Environment baseEnvironment;
-	private final ParametersVisitor parametersVisitor = new ParametersVisitor();
 	private final IdentifierVisitor identifierVisitor = new IdentifierVisitor();
-	private final EvaluableVisitor evaluableVisitor =
-			new EvaluableVisitor(null, identifierVisitor, parametersVisitor);
+	private final EvaluableVisitor evaluableVisitor = new EvaluableVisitor(null, identifierVisitor);
 	private final List<Observer<Pair<Integer, Integer>>> observers = new LinkedList<>();
 
 	public SemanticAnalyzerImpl(Environment baseEnvironment) {
 		this.baseEnvironment = baseEnvironment;
-		parametersVisitor.setEvaluableVisitor(evaluableVisitor);
 	}
 
 	@Override
