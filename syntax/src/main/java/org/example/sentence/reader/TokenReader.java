@@ -7,15 +7,13 @@ import org.example.token.Token;
 public class TokenReader {
 	private final Iterator<Token> tokens;
 	private Token currentToken;
-	private Token previousToken;
 
-	public TokenReader(List<Token> tokens) {
+  public TokenReader(List<Token> tokens) {
 		this.tokens = tokens.iterator();
 		consume();
 	}
 
 	public void consume() {
-		previousToken = currentToken;
 		currentToken = tokens.hasNext() ? tokens.next() : null;
 	}
 

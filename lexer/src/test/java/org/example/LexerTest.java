@@ -26,8 +26,8 @@ class LexerTest extends TestBuilder {
 	@Override
 	protected Executable getTestExecutable(File testFile) {
 		String filePath = String.valueOf(testFile);
-		boolean testsFailure = filePath.contains("/invalid/");
-		return testsFailure
+		boolean isTestingFailure = filePath.contains(File.separator + "invalid" + File.separator);
+		return isTestingFailure
 				? () -> lexerTestBuilder.testLexicalErrorDetection(filePath)
 				: () -> lexerTestBuilder.testTokenDetection(filePath);
 	}
