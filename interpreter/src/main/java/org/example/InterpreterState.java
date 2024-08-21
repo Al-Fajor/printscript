@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.List;
-
 import org.example.observer.BrokerObserver;
 
 public interface InterpreterState {
