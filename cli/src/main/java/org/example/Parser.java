@@ -15,8 +15,14 @@ import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
 public class Parser {
+    ProgressBarObserver observer = new ProgressBarObserver();
+
     Lexer lexer = new PrintScriptLexer();
-    SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
+    SyntaxAnalyzer syntaxAnalyzer;
+    {
+        syntaxAnalyzer = new SyntaxAnalyzerImpl();
+        syntaxAnalyzer.addObserver(observer);
+    }
     SemanticAnalyzer semanticAnalyzer;
 
     {
@@ -27,6 +33,7 @@ public class Parser {
                                 new Signature("println", List.of(DeclarationType.NUMBER)),
                                 new Signature("println", List.of(DeclarationType.STRING))));
         semanticAnalyzer = new SemanticAnalyzerImpl(env);
+        semanticAnalyzer.addObserver(observer);
     }
 
     public List<AstComponent> parse(String path) {
@@ -54,7 +61,6 @@ public class Parser {
     }
 
     private boolean semanticAnalysisFailed(SyntaxResult syntaxResult, String path) {
-        semanticAnalyzer.addObserver(new SemanticAnalyzerBrokerObserver());
         Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
 
         if (!semanticResult.isSuccessful()) {

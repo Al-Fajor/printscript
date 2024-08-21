@@ -40,7 +40,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 			final int completed = i;
 			observers.forEach(
 					observer ->
-							observer.notifyChange(new Pair<>(completed, tokenSentences.size())));
+							observer.notifyChange(new Pair<>(completed + 1, tokenSentences.size())));
 
 			// TODO: may need a line change
 

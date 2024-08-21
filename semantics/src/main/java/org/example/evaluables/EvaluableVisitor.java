@@ -235,12 +235,12 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 						.filter(resolution -> !resolution.result().isSuccessful())
 						.findFirst();
 
-		List<DeclarationType> types =
+        if (firstInvalidParameter.isPresent()) return firstInvalidParameter.get();
+
+        List<DeclarationType> types =
 				resolvedParameters.stream()
 						.map(resolution -> resolution.evaluatedType().get())
 						.toList();
-
-		if (firstInvalidParameter.isPresent()) return firstInvalidParameter.get();
 
 		String functionName = functionCallResolution.name();
 

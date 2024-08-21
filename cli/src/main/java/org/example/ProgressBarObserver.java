@@ -2,12 +2,12 @@ package org.example;
 
 import org.example.observer.Observer;
 
-public class SemanticAnalyzerBrokerObserver implements Observer<Pair<Integer, Integer>> {
+public class ProgressBarObserver implements Observer<Pair<Integer, Integer>> {
 	@Override
 	public void notifyChange(Pair<Integer, Integer> message) {
 		double proportion = (double) message.first() / (double) message.second();
 
-		String percent =
+        String percent =
 				message.first() < message.second()
 						? String.format("%.2f", proportion * 100) + "%\r"
 						: String.format("%.2f", proportion * 100) + "%\n";
