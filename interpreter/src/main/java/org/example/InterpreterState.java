@@ -1,7 +1,8 @@
 package org.example;
 
 import java.util.List;
-import org.example.observer.Observer;
+
+import org.example.observer.BrokerObserver;
 
 public interface InterpreterState {
 	void addNumericVariable(Variable<Double> numericVariable);
@@ -22,5 +23,5 @@ public interface InterpreterState {
 
 	void addFunction(Function function);
 
-	List<Observer<?, ?>> getObservers();
+	List<BrokerObserver<?, ?>> getObservers();
 }

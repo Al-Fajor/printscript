@@ -2,7 +2,7 @@ package org.example;
 
 import org.example.observer.Observer;
 
-public class SemanticAnalyzerObserver implements Observer<Pair<Integer, Integer>> {
+public class SemanticAnalyzerBrokerObserver implements Observer<Pair<Integer, Integer>> {
 	@Override
 	public void notifyChange(Pair<Integer, Integer> message) {
 		double proportion = (double) message.first() / (double) message.second();

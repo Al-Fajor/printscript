@@ -3,16 +3,16 @@ package org.example;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.example.observer.Observer;
+import org.example.observer.BrokerObserver;
 
 public class PrintScriptState implements InterpreterState {
 	private final Map<String, Variable<Double>> numericVariables;
 	private final Map<String, Variable<String>> stringVariables;
 	private final Map<String, Function> functions;
-	private final List<Observer<?, ?>> observers;
+	private final List<BrokerObserver<?, ?>> observers;
 	private final StateListener stateListener;
 
-	public PrintScriptState(List<Observer<?, ?>> observers, StateListener stateListener) {
+	public PrintScriptState(List<BrokerObserver<?, ?>> observers, StateListener stateListener) {
 		this.observers = observers;
 		this.stateListener = stateListener;
 		numericVariables = new HashMap<>();
@@ -67,7 +67,7 @@ public class PrintScriptState implements InterpreterState {
 	}
 
 	@Override
-	public List<Observer<?, ?>> getObservers() {
+	public List<BrokerObserver<?, ?>> getObservers() {
 		return observers;
 	}
 }
