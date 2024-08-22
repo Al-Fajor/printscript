@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
+//    TODO Create own class for rules. Verify rules immediately after getting parsed
+//    TODO think of a better way to structure code following SOLID
     private final Map<String, String> ruleMap;
 
     public FormatterVisitor(RuleMapFactory ruleMapFactory) {
