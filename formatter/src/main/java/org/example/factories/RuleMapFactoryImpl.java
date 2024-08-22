@@ -13,7 +13,7 @@ public class RuleMapFactoryImpl implements RuleMapFactory {
     @Override
     public Map<String, String> getRuleMap() {
         MapFromFile mapFromFile = new MapFromFile();
-        String PATH = "src/main/resources/formatter.rules.json";
+        String PATH = "src/main/resources/rules.json";
         return mapFromFile.getMapFromFile(PATH);
     }
 }
