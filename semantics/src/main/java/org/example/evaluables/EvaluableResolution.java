@@ -12,7 +12,6 @@ import org.example.ast.DeclarationType;
 public record EvaluableResolution(
 		Result result,
 		Optional<DeclarationType> evaluatedType,
-		boolean isValuePresent,
 		Optional<String> identifierName)
 		implements Resolution {
 
@@ -25,7 +24,6 @@ public record EvaluableResolution(
 		return new EvaluableResolution(
 				new SemanticFailure(reason, Optional.of(start), Optional.of(end)),
 				Optional.empty(),
-				false,
 				Optional.empty());
 	}
 
@@ -46,7 +44,7 @@ public record EvaluableResolution(
 
 	public static EvaluableResolution emptySuccess() {
 		return new EvaluableResolution(
-				new SemanticSuccess(), Optional.empty(), false, Optional.empty());
+				new SemanticSuccess(), Optional.empty(), Optional.empty());
 	}
 
 	public static Optional<EvaluableResolution> returnFirstFailedResolution(

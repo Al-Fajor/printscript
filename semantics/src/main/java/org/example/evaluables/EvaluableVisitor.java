@@ -47,48 +47,56 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		var leftResolution = expression.getLeftComponent().accept(this);
 		var rightResolution = expression.getRightComponent().accept(this);
 
-		return EvaluableResolution
-                .returnFirstFailedResolution(leftResolution, rightResolution)
+		return EvaluableResolution.returnFirstFailedResolution(leftResolution, rightResolution)
 				.orElse(validateOperationTypes(expression, leftResolution, rightResolution));
 	}
 
-    private EvaluableResolution validateOperationTypes(BinaryExpression expression, EvaluableResolution leftResolution, EvaluableResolution rightResolution) {
-        if (lang.isOperationSupported(
-                leftResolution.evaluatedType().get(),
-                expression.getOperator(),
-                rightResolution.evaluatedType().get())) {
-            return returnSuccessfulOperationResolution(expression, leftResolution, rightResolution);
-        } else {
-            return returnFailedOperationResolution(expression, rightResolution, leftResolution);
-        }
-    }
+	private EvaluableResolution validateOperationTypes(
+			BinaryExpression expression,
+			EvaluableResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		if (lang.isOperationSupported(
+				leftResolution.evaluatedType().get(),
+				expression.getOperator(),
+				rightResolution.evaluatedType().get())) {
+			return successfulOperationResolution(expression, leftResolution, rightResolution);
+		} else {
+			return failedOperationResolution(expression, rightResolution, leftResolution);
+		}
+	}
 
-    private EvaluableResolution returnSuccessfulOperationResolution(BinaryExpression expression, EvaluableResolution leftResolution, EvaluableResolution rightResolution) {
-        return new EvaluableResolution(
-                new SemanticSuccess(),
-                Optional.of(
-                        lang.getResolvedType(
-                                leftResolution.evaluatedType().get(),
-                                expression.getOperator(),
-                                rightResolution.evaluatedType().get())),
-                true,
-                Optional.empty());
-    }
+	private EvaluableResolution successfulOperationResolution(
+			BinaryExpression expression,
+			EvaluableResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		return new EvaluableResolution(
+				new SemanticSuccess(),
+				Optional.of(
+						lang.getResolvedType(
+								leftResolution.evaluatedType().get(),
+								expression.getOperator(),
+								rightResolution.evaluatedType().get())),
 
-    private EvaluableResolution returnFailedOperationResolution(BinaryExpression expression, EvaluableResolution rightResolution, EvaluableResolution leftResolution) {
-        return EvaluableResolution.failure(
-                "Cannot perform operation because types are incompatible: "
-                        + rightResolution.evaluatedType().get()
-                        + " "
-                        + getSymbol(expression.getOperator())
-                        + " "
-                        + leftResolution.evaluatedType().get()
-                        + " ",
-                expression.getStart(),
-                expression.getEnd());
-    }
+				Optional.empty());
+	}
 
-    private String getSymbol(BinaryOperator operator) {
+	private EvaluableResolution failedOperationResolution(
+			BinaryExpression expression,
+			EvaluableResolution rightResolution,
+			EvaluableResolution leftResolution) {
+		return EvaluableResolution.failure(
+				"Cannot perform operation because types are incompatible: "
+						+ rightResolution.evaluatedType().get()
+						+ " "
+						+ getSymbol(expression.getOperator())
+						+ " "
+						+ leftResolution.evaluatedType().get()
+						+ " ",
+				expression.getStart(),
+				expression.getEnd());
+	}
+
+	private String getSymbol(BinaryOperator operator) {
 		// TODO: could move to BinaryOperator
 		return switch (operator) {
 			case SUM -> "+";
@@ -118,7 +126,6 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		return new EvaluableResolution(
 				new SemanticSuccess(),
 				Optional.ofNullable(mapToDeclarationType(literal)),
-				literal.getValue() != null,
 				Optional.empty());
 	}
 
@@ -272,7 +279,6 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 								new EvaluableResolution(
 										new SemanticSuccess(),
 										Optional.of(env.getDeclarationType(identifier.getName())),
-										false,
 										Optional.of(identifier.getName())),
 						(env) ->
 								new EvaluableResolution(
@@ -281,7 +287,6 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 												Optional.of(identifier.getStart()),
 												Optional.of(identifier.getEnd())),
 										Optional.empty(),
-										false,
 										Optional.of(identifier.getName())))
 				.analyze(env);
 	}
