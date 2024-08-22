@@ -1,0 +1,24 @@
+{
+  "config": "staticanalyzer/src/test/resources/test_configs/snake-case.json",
+  "cases": [
+	{
+	  "code": "let snake_case: string;",
+	  "results": [
+		{
+		  "successful": true
+		}
+	  ]
+	},
+	{
+	  "code": "let notSnakeCase: string;",
+	  "results": [
+		{
+		  "successful": false,
+		  "errorMessage": "Identifier \"not_camel_case\" is not in snake case",
+		  "errorStart": "1 5",
+		  "errorEnd": "1 18"
+		}
+	  ]
+	}
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "config": "staticanalyzer/src/test/resources/test_configs/mixed-config-1.json",
+  "cases": [
+	{
+	  "code": "let camel: number = 3;\nprintln(camel);",
+	  "results": [
+		{
+		  "successful": true
+		}
+	  ]
+	},
+	{
+	  "code": "let not_camel: number = 3;\nprintln(not_camel);",
+	  "results": [
+		{
+		  "successful": false,
+		  "errorMessage": "Identifier \"not_camel_case\" is not in camel case",
+		  "errorStart": "1 5",
+		  "errorEnd": "1 13"
+		}
+	  ]
+	},
+	{
+	  "code": "let not_camel: number = 2;\nprintln(not_camel + 2);",
+	  "results": [
+		{
+		  "successful": false,
+		  "errorMessage": "Identifier \"not_camel_case\" is not in camel case",
+		  "errorStart": "1 5",
+		  "errorEnd": "1 13"
+		},
+		{
+		  "successful": false,
+		  "errorMessage": "Expressions in println function not allowed",
+		  "errorStart": "2 8",
+		  "errorEnd": "2 90"
+		}
+	  ]
+	}
+  ]
+}

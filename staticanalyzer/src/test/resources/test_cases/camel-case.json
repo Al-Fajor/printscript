@@ -1,0 +1,24 @@
+{
+  "config": "staticanalyzer/src/test/resources/test_configs/camel-case.json",
+  "cases": [
+	{
+	  "code": "let camelCase: string;",
+	  "results": [
+		{
+		  "successful": true
+		}
+	  ]
+	},
+	{
+	  "code": "let not_camel_case: string;",
+	  "results": [
+		{
+		  "successful": false,
+		  "errorMessage": "Identifier \"not_camel_case\" is not in camel case",
+		  "errorStart": "1 5",
+		  "errorEnd": "1 18"
+	    }
+	  ]
+	}
+  ]
+}
