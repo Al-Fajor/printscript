@@ -32,7 +32,8 @@ public class FileParser {
 
 		return tempTokenList.stream()
 				.map(this::getToken)
-				.map(pair -> new Token(pair.first(), 0, 0, pair.second()))
+//                TODO use actual positions.
+				.map(pair -> new Token(pair.first(), new Pair<>(0, 0), new Pair<>(0, 0), pair.second()))
 				.collect(Collectors.toList());
 	}
 
