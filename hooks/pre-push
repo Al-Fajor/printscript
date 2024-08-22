@@ -26,6 +26,11 @@ echo "TESTS PASSED"
 echo $separator
 
 echo $separator
+echo "RUNNING COVERAGE VERIFICATION"
+./gradlew jacocoTestCoverageVerification
+echo $separator
+
+echo $separator
 echo "SUCCESSFUL PUSH"
 echo $separator
 
