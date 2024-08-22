@@ -55,11 +55,11 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 	}
 
 	private boolean isCamelCase(String string) {
-		return string.matches("(^[a-z]|[A-Z0-9])[a-z]*");
+		return string.matches("_*[a-z]+([A-Z]+[a-z]*)*");
 	}
 
 	private boolean isSnakeCase(String string) {
-		return string.matches("[a-zA-Z]+(_[a-zA-Z]+)*");
+		return string.matches("_*[a-z]+(_+[a-z]*)*");
 	}
 
 	private List<Token> getTokens(String input) {

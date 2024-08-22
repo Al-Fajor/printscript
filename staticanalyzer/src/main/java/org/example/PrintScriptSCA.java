@@ -23,6 +23,9 @@ public class PrintScriptSCA implements StaticCodeAnalyzer {
 				default -> throw new IllegalStateException("Unexpected value: " + entry);
 			}
 		}
+		if (results.isEmpty()) {
+			return List.of(new SuccessResult());
+		}
 		return results;
 	}
 }
