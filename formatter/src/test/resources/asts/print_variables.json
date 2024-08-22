@@ -1,0 +1,36 @@
+{
+  "code": "let num : number = 7;\nprintln(num);",
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "num"
+          }
+        },
+        {
+          "literal": {
+            "value": 7
+          }
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "num"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

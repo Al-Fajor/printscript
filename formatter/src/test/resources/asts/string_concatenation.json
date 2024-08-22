@@ -1,0 +1,59 @@
+{
+  "code": "let numberString : string = 5 + \" Cars\";\nlet stringString : string = \"Hello \" + \"World\";",
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "numberString"
+          }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "+"
+            },
+            {
+              "literal": {
+                "value": 5
+              }
+            },
+            {
+              "literal": {
+                "value": " Cars"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "stringString"
+          }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "+"
+            },
+            {
+              "literal": {
+                "value": "Hello "
+              }
+            },
+            {
+              "literal": {
+                "value": "World"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
