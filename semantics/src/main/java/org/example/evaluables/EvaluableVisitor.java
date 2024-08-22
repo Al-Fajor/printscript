@@ -21,8 +21,6 @@ import org.example.ast.visitor.AstComponentVisitor;
 import org.example.externalization.Language;
 import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
-import org.example.parameters.ParametersResolution;
-import org.example.parameters.ParametersVisitor;
 import org.example.resolution_validators.AssigningToValidValue;
 import org.example.resolution_validators.IdentifierExists;
 import org.example.resolution_validators.IsDeclarationElseAssignation;
@@ -34,16 +32,11 @@ import org.example.resolution_validators.IsSimpleDeclaration;
 public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
 	private Environment env;
 	private final IdentifierVisitor identifierVisitor;
-	private final ParametersVisitor parametersVisitor;
 	private final Language lang = new Language();
 
-	public EvaluableVisitor(
-			Environment env,
-			IdentifierVisitor identifierVisitor,
-			ParametersVisitor parametersVisitor) {
+	public EvaluableVisitor(Environment env, IdentifierVisitor identifierVisitor) {
 		this.env = env;
 		this.identifierVisitor = identifierVisitor;
-		this.parametersVisitor = parametersVisitor;
 	}
 
 	public void setEnv(Environment env) {
@@ -228,28 +221,44 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	@Override
 	public EvaluableResolution visit(FunctionCallStatement statement) {
 		IdentifierResolution functionCallResolution = statement.getLeft().accept(identifierVisitor);
-		ParametersResolution parameterResolution = statement.getRight().accept(parametersVisitor);
-		List<DeclarationType> types = parameterResolution.types();
+		Parameters parameters = statement.getRight();
+
+		// TODO: improve (have no time due to shovel grabbing, man)
+
+		List<EvaluableResolution> resolvedParameters =
+				parameters.getParameters().stream()
+						.map(astComponent -> astComponent.accept(this))
+						.toList();
+
+		Optional<EvaluableResolution> firstInvalidParameter =
+				resolvedParameters.stream()
+						.filter(resolution -> !resolution.result().isSuccessful())
+						.findFirst();
+
+		List<DeclarationType> types =
+				resolvedParameters.stream()
+						.map(resolution -> resolution.evaluatedType().get())
+						.toList();
+
+		if (firstInvalidParameter.isPresent()) return firstInvalidParameter.get();
+
 		String functionName = functionCallResolution.name();
 
 		return new IsResolutionSuccessful(
 						functionCallResolution,
-						new IsResolutionSuccessful(
-								parameterResolution,
-								new IsFunctionDeclared(
-										parameterResolution,
-										functionCallResolution,
-										(env) -> EvaluableResolution.emptySuccess(),
-										(env) ->
-												EvaluableResolution.failure(
-														"Cannot resolve function signature "
-																+ functionName
-																+ "("
-																+ types
-																+ ").",
-														statement.getStart(),
-														statement.getEnd())),
-								(env) -> EvaluableResolution.castFrom(parameterResolution)),
+						new IsFunctionDeclared(
+								types,
+								functionCallResolution,
+								(env) -> EvaluableResolution.emptySuccess(),
+								(env) ->
+										EvaluableResolution.failure(
+												"Cannot resolve function signature "
+														+ functionName
+														+ "("
+														+ types
+														+ ").",
+												statement.getStart(),
+												statement.getEnd())),
 						(env) -> EvaluableResolution.castFrom(functionCallResolution))
 				.analyze(env);
 	}

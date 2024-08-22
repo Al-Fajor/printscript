@@ -15,23 +15,18 @@ import org.json.JSONObject;
 public class FileParser {
 
 	public String getCode(String filePath) throws IOException {
-		File file = new File(filePath);
-		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
-		JSONObject json = new JSONObject(content);
+		JSONObject json = getJsonObject(filePath);
 		return json.get("code").toString();
 	}
 
 	// Need to define the correct format of expected results, should be a JSON
 	public List<Token> getTokens(String filePath) throws IOException {
-		// Change to a method to correctly get all the code
-		File file = new File(filePath);
-		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
-		JSONObject json = new JSONObject(content);
+
+		JSONObject json = getJsonObject(filePath);
 		String tokenString = json.get("tokens").toString();
 
-		String arrow = "->";
 		List<String> tempTokenList =
-				Arrays.stream(tokenString.split(arrow)).map(String::strip).toList();
+				Arrays.stream(tokenString.split("->")).map(String::strip).toList();
 
 		if (tempTokenList.size() == 1) return List.of();
 
@@ -41,6 +36,8 @@ public class FileParser {
 				.collect(Collectors.toList());
 	}
 
+	// Private
+
 	private Pair<BaseTokenTypes, String> getToken(String token) {
 		if (token.indexOf('(') == -1) {
 			return new Pair<>(BaseTokenTypes.valueOf(token), "");
@@ -48,5 +45,11 @@ public class FileParser {
 		String tokenName = token.substring(0, token.indexOf('('));
 		String tokenValue = token.substring(token.indexOf('(') + 1, token.lastIndexOf(')'));
 		return new Pair<>(BaseTokenTypes.valueOf(tokenName), tokenValue);
+	}
+
+	private JSONObject getJsonObject(String filePath) throws IOException {
+		File file = new File(filePath);
+		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
+		return new JSONObject(content);
 	}
 }

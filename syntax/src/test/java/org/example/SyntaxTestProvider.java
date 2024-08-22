@@ -18,7 +18,7 @@ public class SyntaxTestProvider {
 		SyntaxResult result = new SyntaxAnalyzerImpl().analyze(tokens);
 		List<AstComponent> expectedList = getAstFromJson(filePath);
 
-		if (result.isFailure()) {
+		if (!result.isSuccessful()) {
 			return expectedList.isEmpty();
 		}
 

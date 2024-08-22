@@ -35,8 +35,8 @@ tasks.withType(Checkstyle) {
 
 tasks.register("addPreCommitGitHookOnBuild") {
     println("⚈ ⚈ ⚈ Running Add Pre Commit Git Hook Script on Build ⚈ ⚈ ⚈")
-    def sourceDir = new File('./hooks')
-    def targetDir = new File('./.git/hooks')
+    def sourceDir = new File('../hooks')
+    def targetDir = new File('../.git/hooks')
 
     if (!targetDir.exists()) {
         targetDir.mkdirs()

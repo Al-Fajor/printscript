@@ -2,8 +2,9 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.example.ast.AstComponent;
+import org.example.observer.Observer;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
@@ -12,6 +13,8 @@ import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
+	List<Observer<Pair<Integer, Integer>>> observers = new ArrayList<>();
+
 	@Override
 	public SyntaxResult analyze(List<Token> tokens) {
 		if (tokens.isEmpty()) return new SyntaxSuccess(List.of());
@@ -19,31 +22,42 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 	}
 
 	private SyntaxResult buildSentences(List<Token> tokens) {
-		try {
-			List<List<Token>> tokenSentences = getSentencesWithTokens(tokens);
-			List<AstComponent> components =
-					tokenSentences.stream().map(this::buildSentence).collect(Collectors.toList());
+		List<List<Token>> sentences =
+				getSentencesWithTokens(tokens); // Separate sentences by semicolons
 
-			return getSyntaxResult(components, tokenSentences);
+		return getSyntaxResult(sentences); // Return it
+	}
 
-		} catch (NullPointerException e) {
-			return new SyntaxError("Invalid tokens");
+	private SyntaxResult getSyntaxResult(List<List<Token>> tokenSentences) {
+		List<AstComponent> finalComponents = new ArrayList<>();
+
+		for (int i = 0; i < tokenSentences.size(); i++) {
+
+			List<Token> currentSentence = tokenSentences.get(i);
+			var result = buildSentence(currentSentence);
+			Optional<AstComponent> component = result.first();
+
+			final int completed = i;
+			observers.forEach(
+					observer ->
+							observer.notifyChange(new Pair<>(completed, tokenSentences.size())));
+
+			// TODO: may need a line change
+
+			if (component.isPresent()) {
+				finalComponents.add(component.get());
+
+			} else {
+				return new SyntaxError(
+						new Pair<>(i, 0),
+						new Pair<>(i, currentSentence.size() - 1),
+						result.second());
+			}
 		}
+		return new SyntaxSuccess(finalComponents);
 	}
 
-	private SyntaxResult getSyntaxResult(
-			List<AstComponent> components, List<List<Token>> tokenSentences) {
-		return components.contains(null)
-				? new SyntaxError(
-						"Invalid sentence at index: "
-								+ components.indexOf(null)
-								+ ";\n"
-								+ " Starting token: "
-								+ tokenSentences.get(components.indexOf(null)).getFirst())
-				: new SyntaxSuccess(components);
-	}
-
-	private AstComponent buildSentence(List<Token> sentence) {
+	private Pair<Optional<AstComponent>, String> buildSentence(List<Token> sentence) {
 		SentenceBuilder builder = new SentenceBuilder();
 		return builder.buildSentence(sentence);
 	}
@@ -59,5 +73,10 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 			}
 		}
 		return sentences;
+	}
+
+	@Override
+	public void addObserver(Observer<Pair<Integer, Integer>> observer) {
+		observers.add(observer);
 	}
 }
