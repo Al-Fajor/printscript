@@ -1,5 +1,6 @@
 package org.example.evaluables;
 
+import java.util.Arrays;
 import java.util.Optional;
 import org.example.Pair;
 import org.example.Resolution;
@@ -46,5 +47,12 @@ public record EvaluableResolution(
 	public static EvaluableResolution emptySuccess() {
 		return new EvaluableResolution(
 				new SemanticSuccess(), Optional.empty(), false, Optional.empty());
+	}
+
+	public static Optional<EvaluableResolution> returnFirstFailedResolution(
+			EvaluableResolution... resolutions) {
+		return Arrays.stream(resolutions)
+				.filter(resolution -> !resolution.result().isSuccessful())
+				.findFirst();
 	}
 }

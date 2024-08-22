@@ -25,7 +25,6 @@ import org.example.resolution_validators.AssigningToValidValue;
 import org.example.resolution_validators.IdentifierExists;
 import org.example.resolution_validators.IsDeclarationElseAssignation;
 import org.example.resolution_validators.IsFunctionDeclared;
-import org.example.resolution_validators.IsOperationValid;
 import org.example.resolution_validators.IsResolutionSuccessful;
 import org.example.resolution_validators.IsSimpleDeclaration;
 
@@ -48,51 +47,48 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		var leftResolution = expression.getLeftComponent().accept(this);
 		var rightResolution = expression.getRightComponent().accept(this);
 
-		return new IsResolutionSuccessful(
-						leftResolution,
-						new IsResolutionSuccessful(
-								rightResolution,
-								new IsOperationValid(
-										lang,
-										leftResolution,
-										rightResolution,
-										expression,
-										(env) ->
-												new EvaluableResolution(
-														new SemanticSuccess(),
-														Optional.of(
-																lang.getResolvedType(
-																		leftResolution
-																				.evaluatedType()
-																				.get(),
-																		expression.getOperator(),
-																		rightResolution
-																				.evaluatedType()
-																				.get())),
-														true,
-														Optional.empty()),
-										(env) ->
-												EvaluableResolution.failure(
-														"Cannot perform operation because types are incompatible: "
-																+ rightResolution
-																		.evaluatedType()
-																		.get()
-																+ " "
-																+ getSymbol(
-																		expression.getOperator())
-																+ " "
-																+ leftResolution
-																		.evaluatedType()
-																		.get()
-																+ " ",
-														expression.getStart(),
-														expression.getEnd())),
-								(env) -> rightResolution),
-						(env) -> leftResolution)
-				.analyze(env);
+		return EvaluableResolution
+                .returnFirstFailedResolution(leftResolution, rightResolution)
+				.orElse(validateOperationTypes(expression, leftResolution, rightResolution));
 	}
 
-	private String getSymbol(BinaryOperator operator) {
+    private EvaluableResolution validateOperationTypes(BinaryExpression expression, EvaluableResolution leftResolution, EvaluableResolution rightResolution) {
+        if (lang.isOperationSupported(
+                leftResolution.evaluatedType().get(),
+                expression.getOperator(),
+                rightResolution.evaluatedType().get())) {
+            return returnSuccessfulOperationResolution(expression, leftResolution, rightResolution);
+        } else {
+            return returnFailedOperationResolution(expression, rightResolution, leftResolution);
+        }
+    }
+
+    private EvaluableResolution returnSuccessfulOperationResolution(BinaryExpression expression, EvaluableResolution leftResolution, EvaluableResolution rightResolution) {
+        return new EvaluableResolution(
+                new SemanticSuccess(),
+                Optional.of(
+                        lang.getResolvedType(
+                                leftResolution.evaluatedType().get(),
+                                expression.getOperator(),
+                                rightResolution.evaluatedType().get())),
+                true,
+                Optional.empty());
+    }
+
+    private EvaluableResolution returnFailedOperationResolution(BinaryExpression expression, EvaluableResolution rightResolution, EvaluableResolution leftResolution) {
+        return EvaluableResolution.failure(
+                "Cannot perform operation because types are incompatible: "
+                        + rightResolution.evaluatedType().get()
+                        + " "
+                        + getSymbol(expression.getOperator())
+                        + " "
+                        + leftResolution.evaluatedType().get()
+                        + " ",
+                expression.getStart(),
+                expression.getEnd());
+    }
+
+    private String getSymbol(BinaryOperator operator) {
 		// TODO: could move to BinaryOperator
 		return switch (operator) {
 			case SUM -> "+";
