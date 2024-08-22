@@ -32,4 +32,13 @@ public class FailResult implements Result {
 	public Optional<Pair<Integer, Integer>> getErrorEnd() {
 		return Optional.of(errorEnd);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof FailResult)) {
+			return false;
+		}
+		FailResult other = (FailResult) o;
+		return other.errorMessage.equals(errorMessage) && other.errorStart.equals(errorStart) && other.errorEnd.equals(errorEnd);
+	}
 }

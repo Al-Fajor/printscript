@@ -1,5 +1,5 @@
 {
-  "config": "staticanalyzer/src/test/resources/test_configs/snake-case.json",
+  "config": "src/test/resources/test_configs/snake-case.json",
   "cases": [
 	{
 	  "code": "let snake_case: string;",

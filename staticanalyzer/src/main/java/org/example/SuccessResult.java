@@ -22,4 +22,9 @@ public class SuccessResult implements Result {
 	public Optional<Pair<Integer, Integer>> getErrorEnd() {
 		return Optional.empty();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof SuccessResult;
+	}
 }

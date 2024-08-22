@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class ScaTests extends TestBuilder {
 	ScaTester tester = new ScaTester();
-	String TEST_CASES = "staticanalyzer/src/test/resources/test_cases";
+	String TEST_CASES = "src/test/resources/test_cases";
 
 	public ScaTests() throws IOException {}
 

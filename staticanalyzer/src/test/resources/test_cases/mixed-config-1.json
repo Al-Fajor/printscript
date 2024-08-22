@@ -1,5 +1,5 @@
 {
-  "config": "staticanalyzer/src/test/resources/test_configs/mixed-config-1.json",
+  "config": "src/test/resources/test_configs/mixed-config-1.json",
   "cases": [
 	{
 	  "code": "let camel: number = 3;\nprintln(camel);",

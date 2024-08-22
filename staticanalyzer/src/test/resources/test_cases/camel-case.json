@@ -1,5 +1,5 @@
 {
-  "config": "staticanalyzer/src/test/resources/test_configs/camel-case.json",
+  "config": "src/test/resources/test_configs/camel-case.json",
   "cases": [
 	{
 	  "code": "let camelCase: string;",
