@@ -28,9 +28,9 @@ public class Tokenizer {
 				tokens.add(
 						new Token(
 								baseTokenTypes,
-                                PositionServices.getPositionPair(input, matcher.start()),
+								PositionServices.getPositionPair(input, matcher.start()),
 								PositionServices.getPositionPair(input, matcher.end()),
-                                matcher.group(baseTokenTypes.name())));
+								matcher.group(baseTokenTypes.name())));
 			}
 		}
 	}

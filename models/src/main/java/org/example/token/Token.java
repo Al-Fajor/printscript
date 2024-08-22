@@ -8,7 +8,11 @@ public class Token {
 	private final Pair<Integer, Integer> end;
 	private final String value;
 
-	public Token(TokenType type, Pair<Integer, Integer> start, Pair<Integer, Integer> end, String value) {
+	public Token(
+			TokenType type,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end,
+			String value) {
 		this.type = type;
 		this.start = start;
 		this.end = end;
