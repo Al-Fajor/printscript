@@ -9,7 +9,7 @@ import java.util.Map;
 public class PrintScriptSCA implements StaticCodeAnalyzer {
 	private final Map<ConfigAttribute, String> configMap;
 
-	public PrintScriptSCA(ConfigReader configReader) throws IOException {
+	      public PrintScriptSCA(ConfigReader configReader) throws IOException {
 		this.configMap = configReader.read();
 	}
 	
