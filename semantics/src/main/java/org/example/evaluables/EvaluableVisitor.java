@@ -3,6 +3,7 @@ package org.example.evaluables;
 import java.util.List;
 import java.util.Optional;
 import org.example.Environment;
+import org.example.Resolution;
 import org.example.SemanticFailure;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
@@ -21,12 +22,8 @@ import org.example.ast.visitor.AstComponentVisitor;
 import org.example.externalization.Language;
 import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
-import org.example.resolution_validators.AssigningToValidValue;
-import org.example.resolution_validators.IdentifierExists;
-import org.example.resolution_validators.IsDeclarationElseAssignation;
 import org.example.resolution_validators.IsFunctionDeclared;
 import org.example.resolution_validators.IsResolutionSuccessful;
-import org.example.resolution_validators.IsSimpleDeclaration;
 
 public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
 	private Environment env;
@@ -47,7 +44,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		var leftResolution = expression.getLeftComponent().accept(this);
 		var rightResolution = expression.getRightComponent().accept(this);
 
-		return EvaluableResolution.returnFirstFailedResolution(leftResolution, rightResolution)
+		return Resolution.returnFirstFailedResolution(leftResolution, rightResolution)
 				.orElse(validateOperationTypes(expression, leftResolution, rightResolution));
 	}
 
@@ -147,72 +144,120 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		IdentifierResolution leftResolution = statement.getLeft().accept(identifierVisitor);
 		EvaluableResolution rightResolution = statement.getRight().accept(this);
 
-		return new IsResolutionSuccessful(
-						rightResolution,
-						new IsDeclarationElseAssignation(
-								leftResolution,
-								new IdentifierExists(
-										leftResolution,
-										(env) ->
-												EvaluableResolution.failure(
-														"Variable has already been declared",
-														statement.getStart(),
-														statement.getEnd()),
-										new IsSimpleDeclaration(
-												rightResolution,
-												(env) -> {
-													env.declareVariable(
-															leftResolution.name(),
-															leftResolution.type().get());
-													return EvaluableResolution.emptySuccess();
-												},
-												new AssigningToValidValue(
-														leftResolution,
-														rightResolution,
-														(env) -> {
-															env.declareVariable(
-																	leftResolution.name(),
-																	leftResolution.type().get());
-															return EvaluableResolution
-																	.emptySuccess();
-														},
-														(env) ->
-																EvaluableResolution.failure(
-																		"Cannot assign value of type "
-																				+ rightResolution
-																						.evaluatedType()
-																						.get()
-																				+ " to variable of type"
-																				+ leftResolution
-																						.type()
-																						.get(),
-																		statement.getStart(),
-																		statement.getEnd())))),
-								new IdentifierExists(
-										leftResolution,
-										new AssigningToValidValue(
-												leftResolution,
-												rightResolution,
-												(env) -> EvaluableResolution.emptySuccess(),
-												(env) ->
-														EvaluableResolution.failure(
-																"Cannot assign type "
-																		+ rightResolution
-																				.evaluatedType()
-																				.get()
-																		+ " to "
-																		+ env.getDeclarationType(
-																				leftResolution
-																						.name()),
-																statement.getStart(),
-																statement.getEnd())),
-										(env) ->
-												EvaluableResolution.failure(
-														"Cannot assign non-existing identifier",
-														statement.getStart(),
-														statement.getEnd()))),
-						(env) -> rightResolution)
-				.analyze(env);
+		return Resolution.returnFirstFailedResolution(rightResolution)
+				.orElse(
+						validateDeclarationOrAssignation(
+								statement, leftResolution, rightResolution));
+	}
+
+	private EvaluableResolution validateDeclarationOrAssignation(
+			AssignationStatement statement,
+			IdentifierResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		boolean isDeclaration = leftResolution.type().isPresent();
+		if (isDeclaration) {
+			return checkIdentifierDoesNotExist(statement, leftResolution, rightResolution);
+		} else {
+			return checkIdentifierExists(statement, leftResolution, rightResolution);
+		}
+	}
+
+	private EvaluableResolution checkIdentifierExists(
+			AssignationStatement statement,
+			IdentifierResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		if (env.isVariableDeclared(leftResolution.name())) {
+			return checkAssigningToValidValue(statement, leftResolution, rightResolution);
+		} else {
+			return EvaluableResolution.failure(
+					"Cannot assign non-existing identifier",
+					statement.getStart(),
+					statement.getEnd());
+		}
+	}
+
+	private EvaluableResolution checkAssigningToValidValue(
+			AssignationStatement statement,
+			IdentifierResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		Boolean typesMatch =
+				leftResolution
+						.type()
+						.or(() -> Optional.of(env.getDeclarationType(leftResolution.name())))
+						.flatMap(
+								value1 ->
+										rightResolution
+												.evaluatedType()
+												.map(value2 -> value1 == value2))
+						.orElseThrow(
+								() -> new IllegalStateException("Cannot perform type comparison"));
+
+		if (typesMatch) {
+			return EvaluableResolution.emptySuccess();
+		} else {
+			return EvaluableResolution.failure(
+					"Cannot assign type "
+							+ rightResolution.evaluatedType().get()
+							+ " to "
+							+ env.getDeclarationType(leftResolution.name()),
+					statement.getStart(),
+					statement.getEnd());
+		}
+	}
+
+	private EvaluableResolution checkIdentifierDoesNotExist(
+			AssignationStatement statement,
+			IdentifierResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		if (env.isVariableDeclared(leftResolution.name())) {
+			return EvaluableResolution.failure(
+					"Variable has already been declared", statement.getStart(), statement.getEnd());
+		} else {
+			return checkIsSimpleDeclaration(statement, leftResolution, rightResolution);
+		}
+	}
+
+	private EvaluableResolution checkIsSimpleDeclaration(
+			AssignationStatement statement,
+			IdentifierResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		boolean isSimpleDeclaration = rightResolution.evaluatedType().isEmpty();
+		if (isSimpleDeclaration) {
+			env.declareVariable(leftResolution.name(), leftResolution.type().get());
+			return EvaluableResolution.emptySuccess();
+		} else {
+			return checkDeclaringWithValidValue(statement, leftResolution, rightResolution);
+		}
+	}
+
+	private EvaluableResolution checkDeclaringWithValidValue(
+			AssignationStatement statement,
+			IdentifierResolution leftResolution,
+			EvaluableResolution rightResolution) {
+		Boolean typesMatch =
+				leftResolution
+						.type()
+						.or(() -> Optional.of(env.getDeclarationType(leftResolution.name())))
+						.flatMap(
+								value1 ->
+										rightResolution
+												.evaluatedType()
+												.map(value2 -> value1 == value2))
+						.orElseThrow(
+								() -> new IllegalStateException("Cannot perform type comparison"));
+
+		if (typesMatch) {
+			env.declareVariable(leftResolution.name(), leftResolution.type().get());
+			return EvaluableResolution.emptySuccess();
+		} else {
+			return EvaluableResolution.failure(
+					"Cannot assign value of type "
+							+ rightResolution.evaluatedType().get()
+							+ " to variable of type"
+							+ leftResolution.type().get(),
+					statement.getStart(),
+					statement.getEnd());
+		}
 	}
 
 	@Override
@@ -272,21 +317,19 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(Identifier identifier) {
-		return new IdentifierExists(
-						identifier,
-						(env) ->
-								new EvaluableResolution(
-										new SemanticSuccess(),
-										Optional.of(env.getDeclarationType(identifier.getName())),
-										Optional.of(identifier.getName())),
-						(env) ->
-								new EvaluableResolution(
-										new SemanticFailure(
-												"Cannot find identifier " + identifier.getName(),
-												Optional.of(identifier.getStart()),
-												Optional.of(identifier.getEnd())),
-										Optional.empty(),
-										Optional.of(identifier.getName())))
-				.analyze(env);
+		if (env.isVariableDeclared(identifier.getName())) {
+			return new EvaluableResolution(
+					new SemanticSuccess(),
+					Optional.of(env.getDeclarationType(identifier.getName())),
+					Optional.of(identifier.getName()));
+		} else {
+			return new EvaluableResolution(
+					new SemanticFailure(
+							"Cannot find identifier " + identifier.getName(),
+							Optional.of(identifier.getStart()),
+							Optional.of(identifier.getEnd())),
+					Optional.empty(),
+					Optional.of(identifier.getName()));
+		}
 	}
 }
