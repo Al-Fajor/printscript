@@ -76,7 +76,6 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 								leftResolution.evaluatedType().get(),
 								expression.getOperator(),
 								rightResolution.evaluatedType().get())),
-
 				Optional.empty());
 	}
 
