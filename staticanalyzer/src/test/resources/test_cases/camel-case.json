@@ -14,9 +14,9 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel_case\" is not in camel case",
+		  "errorMessage": "Identifier \"not_camel_case\" is not in camelCase",
 		  "errorStart": "1 5",
-		  "errorEnd": "1 18"
+		  "errorEnd": "1 19"
 	    }
 	  ]
 	}

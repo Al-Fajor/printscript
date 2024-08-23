@@ -5,7 +5,7 @@
 	  "code": "let x: number = 2;\nlet y: number = 2;\nprintln(x + y);",
 	  "results": [
 		{
-		  "successful": false
+		  "successful": true
 		}
 	  ]
 	},
@@ -13,7 +13,7 @@
 	  "code": "println(5 * 2);",
 	  "results":[
 		{
-		  "successful": false
+		  "successful": true
 		}
 	  ]
 	},

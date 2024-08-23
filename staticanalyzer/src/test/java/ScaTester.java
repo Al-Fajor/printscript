@@ -9,8 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ScaTester {
 	public ScaTester() throws IOException {}
@@ -55,9 +54,6 @@ public class ScaTester {
 	}
 
 	private void compareResults(List<Result> expectedResults, List<Result> results) {
-		assertEquals(expectedResults.size(), results.size());
-		for (int i = 0; i < expectedResults.size(); i++) {
-			assertEquals(expectedResults.get(i), results.get(i));
-		}
+		assertIterableEquals(expectedResults, results);
 	}
 }

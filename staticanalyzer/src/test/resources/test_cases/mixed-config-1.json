@@ -14,9 +14,15 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel_case\" is not in camel case",
+		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
 		  "errorStart": "1 5",
-		  "errorEnd": "1 13"
+		  "errorEnd": "1 14"
+		},
+		{
+		  "successful": false,
+		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
+		  "errorStart": "2 9",
+		  "errorEnd": "2 18"
 		}
 	  ]
 	},
@@ -25,15 +31,21 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel_case\" is not in camel case",
-		  "errorStart": "1 5",
-		  "errorEnd": "1 13"
+		  "errorMessage": "Expressions in println function not allowed",
+		  "errorStart": "2 1",
+		  "errorEnd": "2 8"
 		},
 		{
 		  "successful": false,
-		  "errorMessage": "Expressions in println function not allowed",
-		  "errorStart": "2 8",
-		  "errorEnd": "2 90"
+		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
+		  "errorStart": "1 5",
+		  "errorEnd": "1 14"
+		},
+		{
+		  "successful": false,
+		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
+		  "errorStart": "2 9",
+		  "errorEnd": "2 18"
 		}
 	  ]
 	}

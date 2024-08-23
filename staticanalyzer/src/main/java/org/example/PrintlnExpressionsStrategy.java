@@ -34,7 +34,7 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 		List<Integer> printlnIndexes = getIndexesOfPrintln(tokens);
 		for (Integer index : printlnIndexes) {
 			if (hasExpressions(tokens, index)) {
-				results.add(new FailResult("Expressions in println function not allowed", new Pair<>(0,0), new Pair<>(0,0)));
+				results.add(new FailResult("Expressions in println function not allowed", tokens.get(index).getStart(), tokens.get(index).getEnd()));
 			}
 		}
 		return results;
@@ -53,18 +53,16 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 						stack.pop();
 					}
 				}
-				case IDENTIFIER, LITERAL -> {
-					if (stack.size() == 1) {
-						expressionCounter++;
-					}
+				case IDENTIFIER, LITERAL -> expressionCounter++;
+				default -> {
+					continue;
 				}
-				default -> throw new IllegalStateException("Unexpected value: " + token.getType());
 			}
 			if (stack.isEmpty()) {
 				break;
 			}
 		}
-		return expressionCounter == 1;
+		return expressionCounter != 1;
 	}
 
 	private List<Integer> getIndexesOfPrintln(List<Token> tokens) {

@@ -11,10 +11,6 @@ public class PrintScriptSCA implements StaticCodeAnalyzer {
 
 	public PrintScriptSCA(ConfigReader configReader) throws IOException {
 		this.configMap = configReader.read();
-
-
-
-
 	}
 	
 	@Override

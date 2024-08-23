@@ -41,4 +41,13 @@ public class FailResult implements Result {
 		FailResult other = (FailResult) o;
 		return other.errorMessage.equals(errorMessage) && other.errorStart.equals(errorStart) && other.errorEnd.equals(errorEnd);
 	}
+
+	@Override
+	public String toString() {
+		return "FailResult{" +
+				"errorMessage='" + errorMessage + '\'' +
+				", errorStart=" + errorStart +
+				", errorEnd=" + errorEnd +
+				'}';
+	}
 }

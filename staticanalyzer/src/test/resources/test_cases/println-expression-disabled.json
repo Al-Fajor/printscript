@@ -7,8 +7,8 @@
 		{
 		  "successful": false,
 		  "errorMessage": "Expressions in println function not allowed",
-		  "errorStart": "3 8",
-		  "errorEnd": "3 12"
+		  "errorStart": "3 1",
+		  "errorEnd": "3 8"
 	  	}
 	  ]
 	},
@@ -18,8 +18,8 @@
 		{
 		  "successful": false,
 		  "errorMessage": "Expressions in println function not allowed",
-		  "errorStart": "1 8",
-		  "errorEnd": "1 12"
+		  "errorStart": "1 1",
+		  "errorEnd": "1 8"
 	  	}
 	  ]
 	},

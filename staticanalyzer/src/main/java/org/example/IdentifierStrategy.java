@@ -3,63 +3,44 @@ package org.example;
 import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.example.token.BaseTokenTypes.IDENTIFIER;
 
 public class IdentifierStrategy implements AnalyzerStrategy {
-	private final String value;
+	private final String identifierFormat;
 	private final Lexer lexer;
+	private final Map<String, String> regexMap;
 
 	public IdentifierStrategy(String value) {
-		this.value = value;
+		this.identifierFormat = value;
 		lexer = new PrintScriptLexer();
+		regexMap = new HashMap<>();
+		regexMap.put("camelCase", "_*[a-z]+([A-Z]+[a-z]*)*");
+		regexMap.put("snakeCase", "_*[a-z]+(_+[a-z]*)*");
 	}
 
 	@Override
 	public List<Result> analyze(String input) {
-		if (value.equals("camelCase")) {
-			return analyzeCamelCase(input);
-		} else if (value.equals("snakeCase")) {
-			return analyzeSnakeCase(input);
+		String identifierRegex = regexMap.get(identifierFormat);
+		if (identifierRegex != null) {
+			return analyzeWithRegex(input, identifierRegex);
 		}
-		throw new RuntimeException("Unknown identifier strategy: " + value);
+		throw new RuntimeException("Unknown identifier format: " + identifierFormat);
 	}
 
-	private List<Result> analyzeCamelCase(String input) {
+	private List<Result> analyzeWithRegex(String input, String identifierRegex) {
 		List<Token> tokens = getTokens(input);
 		List<Token> identifiers = getIdentifierTokens(tokens);
 		List<Result> results = new ArrayList<>();
 		for (Token token : identifiers) {
-			if(isCamelCase(token.getValue())) {
+			String identifierName = token.getValue();
+			if(identifierName.matches(identifierRegex)) {
 				continue;
 			}
-			results.add(new FailResult("Identifier \"" + token.getValue() + "\" is not in camel case", new Pair<>(0, 0), new Pair<>(0, 0)));
+			results.add(new FailResult("Identifier \"" + token.getValue() + "\" is not in "+ identifierFormat, token.getStart(), token.getEnd()));
 		}
 		return results;
-	}
-
-	private List<Result> analyzeSnakeCase(String input) {
-		List<Token> tokens = getTokens(input);
-		List<Token> identifiers = getIdentifierTokens(tokens);
-		List<Result> results = new ArrayList<>();
-		for (Token token : identifiers) {
-			if(isSnakeCase(token.getValue())) {
-				continue;
-			}
-			results.add(new FailResult("Identifier \"" + token.getValue() + "\" is not in snake case", new Pair<>(0, 0), new Pair<>(0, 0)));
-		}
-		return results;
-	}
-
-	private boolean isCamelCase(String string) {
-		return string.matches("_*[a-z]+([A-Z]+[a-z]*)*");
-	}
-
-	private boolean isSnakeCase(String string) {
-		return string.matches("_*[a-z]+(_+[a-z]*)*");
 	}
 
 	private List<Token> getTokens(String input) {
