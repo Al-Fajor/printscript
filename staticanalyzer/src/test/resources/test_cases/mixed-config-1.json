@@ -31,12 +31,6 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Expressions in println function not allowed",
-		  "errorStart": "2 1",
-		  "errorEnd": "2 8"
-		},
-		{
-		  "successful": false,
 		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
 		  "errorStart": "1 5",
 		  "errorEnd": "1 14"
@@ -46,6 +40,12 @@
 		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
 		  "errorStart": "2 9",
 		  "errorEnd": "2 18"
+		},
+		{
+		  "successful": false,
+		  "errorMessage": "Expressions in println function not allowed",
+		  "errorStart": "2 1",
+		  "errorEnd": "2 8"
 		}
 	  ]
 	}
