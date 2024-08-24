@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":models"))
     testImplementation("org.json:json:20231013")
     implementation("org.json:json:20231013")
-    testImplementation project(':testFramework')
+    testImplementation project(':testframework')
 }
 
 test {
