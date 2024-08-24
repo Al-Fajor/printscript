@@ -14,7 +14,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation(project(":models"))
     implementation(project(":lexer"))
-    implementation(project(":testFramework"))
+    implementation(project(":testframework"))
     testImplementation("org.json:json:20231013")
     implementation("org.json:json:20231013")
 }
