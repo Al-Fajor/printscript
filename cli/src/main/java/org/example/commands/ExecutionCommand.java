@@ -38,12 +38,12 @@ public class ExecutionCommand implements Callable<Integer> {
 		if (!astList.isEmpty()) {
 			System.out.println("Completed validation successfully. No errors found.");
 
-            Color.printGreen("Running...");
-            interpreter.interpret(astList);
-            return 0;
+			Color.printGreen("Running...");
+			interpreter.interpret(astList);
+			return 0;
 		}
 
-        return 1;
+		return 1;
 	}
 
 	// TODO: duplicate from InterpreterTester
