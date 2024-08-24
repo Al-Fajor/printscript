@@ -31,6 +31,16 @@ public class ExecutionCommand implements Command {
 		interpreter.interpret(astList);
 	}
 
+	@Override
+	public String getSyntax() {
+		return "execute <filePath> --version <version>";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Looks for lexical, syntactic or semantic errors in the file and executes the code";
+	}
+
 	// TODO: duplicate from InterpreterTester
 	private Interpreter createInterpreter(
 			StateListener stateListener, PrintSubscriber printSubscriber) {

@@ -15,4 +15,14 @@ public class ValidationCommand implements Command {
 			System.out.println("Completed validation successfully. No errors found.");
 		}
 	}
+
+	@Override
+	public String getSyntax() {
+		return "validate <filePath> --version <version>";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Looks for lexical, syntactic or semantic errors in the file";
+	}
 }

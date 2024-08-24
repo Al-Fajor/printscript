@@ -49,49 +49,45 @@ public class Parser {
 
 		Color.printGreen("\nPerforming lexical analysis");
 		Result lexerResult = lexer.lex(code);
-		if (lexingFailed(lexerResult)) return Collections.emptyList();
+		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming syntactic analysis");
 		SyntaxResult syntaxResult =
 				syntaxAnalyzer.analyze(((LexerSuccess) lexerResult).getTokens());
-		if (syntaxAnalysisFailed(syntaxResult)) return Collections.emptyList();
+		if (stepFailed(path, syntaxResult, "Syntax analysis")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming semantic analysis");
-		if (semanticAnalysisFailed(syntaxResult, path)) return Collections.emptyList();
+		Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
+		if (stepFailed(path, semanticResult, "Semantic Analysis")) return Collections.emptyList();
 
 		return syntaxResult.getComponents();
 	}
 
-	private boolean semanticAnalysisFailed(SyntaxResult syntaxResult, String path) {
-		Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
-
-		if (!semanticResult.isSuccessful()) {
+	private static boolean stepFailed(String path, Result result, String stepName) {
+		if (!result.isSuccessful()) {
 			String coloredSegment;
 			try {
 				coloredSegment =
 						ScriptReader.readAndHighlightRange(
-								path,
-								semanticResult.getErrorStart().get(),
-								semanticResult.getErrorEnd().get());
+								path, result.getErrorStart().get(), result.getErrorEnd().get());
 			} catch (IOException e) {
 				throw new RuntimeException("Could not read file at " + path);
 			}
 			System.out.println(
-					"Semantic analysis failed with error: '"
-							+ semanticResult.errorMessage()
+					stepName
+							+ " failed with error: '"
+							+ result.errorMessage()
 							+ "'\n from line "
-							+ semanticResult.getErrorStart().get().first()
+							+ result.getErrorStart().get().first()
 							+ ", column "
-							+ semanticResult.getErrorStart().get().second()
+							+ result.getErrorStart().get().second()
 							+ "\n to line "
-							+ semanticResult.getErrorEnd().get().first()
+							+ result.getErrorEnd().get().first()
 							+ ", column "
-							+ semanticResult.getErrorEnd().get().second()
+							+ result.getErrorEnd().get().second()
 							+ "\n\n"
 							+ coloredSegment
 							+ "\n");
-
-			semanticResult.errorMessage();
 			return true;
 		}
 		return false;
