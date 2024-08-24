@@ -3,6 +3,7 @@ plugins {
     id 'com.diffplug.spotless'
     id 'checkstyle'
     id 'jacoco'
+    id 'maven-publish'
 }
 
 spotless {
@@ -55,3 +56,22 @@ jacocoTestCoverageVerification {
 }
 
 check.dependsOn jacocoTestCoverageVerification
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            version = "1.0-SNAPSHOT"
+            url = uri("https://maven.pkg.github.com/sasakiimarcos/printscript")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
