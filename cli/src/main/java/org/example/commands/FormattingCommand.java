@@ -1,18 +1,22 @@
 package org.example.commands;
 
-public class FormattingCommand implements Command {
-	@Override
-	public void execute(String[] args) {
-		throw new RuntimeException("Not implemented");
-	}
+import picocli.CommandLine;
 
-	@Override
-	public String getSyntax() {
-		return "format <filePath> --version <version> --config <configFilePath>";
-	}
+@CommandLine.Command(
+		name = "format",
+		description = "Modifies the file to make code cleaner, without changing functionality")
+public class FormattingCommand {
 
-	@Override
-	public String getDescription() {
-		return "Modifies the file to make code cleaner, without changing functionality";
-	}
+	@CommandLine.Parameters(index = "0", description = "The file to be formatted.")
+	private String file;
+
+	@CommandLine.Option(
+			names = "--version",
+			description = "The PrintScript version of the code being validate")
+	private int version;
+
+	@CommandLine.Option(
+			names = "--config",
+			description = "The path to the formatting configuration file")
+	private String config;
 }

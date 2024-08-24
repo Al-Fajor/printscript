@@ -1,18 +1,21 @@
 package org.example.commands;
 
-public class AnalyzeCommand implements Command {
-	@Override
-	public void execute(String[] args) {
-		throw new RuntimeException("Not implemented");
-	}
+import picocli.CommandLine;
 
-	@Override
-	public String getSyntax() {
-		return "analyze <filePath> --version <version> --config <configFilePath>";
-	}
+@CommandLine.Command(
+		name = "analyze",
+		description = "Checks for convention or good practice violations in the file")
+public class AnalyzeCommand {
+	@CommandLine.Parameters(index = "0", description = "The file to be analyzed.")
+	private String file;
 
-	@Override
-	public String getDescription() {
-		return "Checks for convention or good practice violations in the file";
-	}
+	@CommandLine.Option(
+			names = "--version",
+			description = "The PrintScript version of the code being validate")
+	private int version;
+
+	@CommandLine.Option(
+			names = "--config",
+			description = "The path to the formatting configuration file")
+	private String config;
 }

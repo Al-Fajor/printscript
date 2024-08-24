@@ -1,46 +1,27 @@
 package org.example;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import org.example.commands.AnalyzeCommand;
-import org.example.commands.Command;
 import org.example.commands.ExecutionCommand;
 import org.example.commands.FormattingCommand;
-import org.example.commands.HelpCommand;
 import org.example.commands.ValidationCommand;
+import picocli.CommandLine;
 
-public class Cli {
-	private static final Map<String, Command> commands;
-	private static final String[] NO_ARGS = new String[] {};
-
-	static {
-		ExecutionCommand execute = new ExecutionCommand();
-		commands =
-				new HashMap<>(
-						Map.of(
-								"validate", new ValidationCommand(),
-								"execute", execute,
-								"exec", execute,
-								"format", new FormattingCommand(),
-								"analyze", new AnalyzeCommand()));
-
-		HelpCommand help = new HelpCommand(new HashSet<>(commands.values()));
-		commands.put("help", help);
-	}
-
+@CommandLine.Command(
+		name = "pts",
+		subcommands = {
+			ValidationCommand.class,
+			ExecutionCommand.class,
+			FormattingCommand.class,
+			AnalyzeCommand.class
+		},
+		mixinStandardHelpOptions = true)
+public class Cli implements Runnable {
 	public static void main(String[] args) {
-		if (args.length == 0) {
-			commands.get("help").execute(NO_ARGS);
-		} else if (commands.containsKey(args[0])) {
-			commands.get(args[0]).execute(getCommandArguments(args));
-		} else {
-			System.out.println(args[0] + " is not a valid command");
-		}
+		CommandLine.run(new Cli(), args);
 	}
 
-	private static String[] getCommandArguments(String[] args) {
-		return Arrays.copyOfRange(args, 1, args.length);
+	@Override
+	public void run() {
+		System.out.println("Please specify a command.");
 	}
 }

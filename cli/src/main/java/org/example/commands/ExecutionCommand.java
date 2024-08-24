@@ -1,6 +1,7 @@
 package org.example.commands;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import org.example.Function;
 import org.example.Interpreter;
 import org.example.Parser;
@@ -8,11 +9,15 @@ import org.example.StateListener;
 import org.example.Variable;
 import org.example.ast.AstComponent;
 import org.example.factory.InterpreterFactory;
-import org.example.io.Color;
 import org.example.observer.PrintBrokerObserver;
 import org.example.observer.PrintSubscriber;
+import picocli.CommandLine;
 
-public class ExecutionCommand implements Command {
+@CommandLine.Command(
+		name = "execute",
+		description =
+				"Looks for lexical, syntactic or semantic errors in the file and executes the code")
+public class ExecutionCommand implements Callable<Integer> {
 	Parser parser = new Parser();
 	Interpreter interpreter;
 
@@ -22,23 +27,18 @@ public class ExecutionCommand implements Command {
 		interpreter = createInterpreter(stateListener, printSubscriber);
 	}
 
-	@Override
-	public void execute(String[] args) {
-		List<AstComponent> astList = parser.parse(args[0]);
-		if (astList.isEmpty()) return;
-
-		Color.printGreen("Running...");
-		interpreter.interpret(astList);
-	}
+	@CommandLine.Parameters(index = "0", description = "The file to be executed.")
+	private String file;
 
 	@Override
-	public String getSyntax() {
-		return "execute <filePath> --version <version>";
-	}
+	public Integer call() {
+		List<AstComponent> astList = parser.parse(file);
 
-	@Override
-	public String getDescription() {
-		return "Looks for lexical, syntactic or semantic errors in the file and executes the code";
+		if (!astList.isEmpty()) {
+			System.out.println("Completed validation successfully. No errors found.");
+		}
+
+		return 0;
 	}
 
 	// TODO: duplicate from InterpreterTester
