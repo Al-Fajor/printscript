@@ -26,8 +26,9 @@ public class ValidationCommand implements Callable<Integer> {
 
 		if (!astList.isEmpty()) {
 			System.out.println("Completed validation successfully. No errors found.");
+            return 0;
 		}
 
-		return 0;
+        return 1;
 	}
 }

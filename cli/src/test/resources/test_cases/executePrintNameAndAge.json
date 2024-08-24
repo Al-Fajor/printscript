@@ -1,0 +1,9 @@
+{
+  "command": "execute src/test/resources/pts/printNameAndAge.pts",
+  "expectedOutput": [
+    "Performing lexical analysis",
+    "Performing syntactic analysis",
+    "Performing semantic analysis",
+    "My name is John Doe and I'm 27 years old"
+  ]
+}

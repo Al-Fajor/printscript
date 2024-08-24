@@ -1,0 +1,10 @@
+{
+  "command": "execute src/test/resources/pts/declareAndPrint.pts",
+  "expectedOutput": [
+    "Performing lexical analysis",
+    "Performing syntactic analysis",
+    "Performing semantic analysis",
+    "Semantic Analysis failed",
+    "Cannot find identifier b"
+  ]
+}

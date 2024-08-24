@@ -9,6 +9,7 @@ import org.example.StateListener;
 import org.example.Variable;
 import org.example.ast.AstComponent;
 import org.example.factory.InterpreterFactory;
+import org.example.io.Color;
 import org.example.observer.PrintBrokerObserver;
 import org.example.observer.PrintSubscriber;
 import picocli.CommandLine;
@@ -36,9 +37,13 @@ public class ExecutionCommand implements Callable<Integer> {
 
 		if (!astList.isEmpty()) {
 			System.out.println("Completed validation successfully. No errors found.");
+
+            Color.printGreen("Running...");
+            interpreter.interpret(astList);
+            return 0;
 		}
 
-		return 0;
+        return 1;
 	}
 
 	// TODO: duplicate from InterpreterTester

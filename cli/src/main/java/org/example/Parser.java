@@ -49,11 +49,17 @@ public class Parser {
 
 		Color.printGreen("\nPerforming lexical analysis");
 		Result lexerResult = lexer.lex(code);
+
+        System.out.println(((LexerSuccess) lexerResult).getTokens());
+
 		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming syntactic analysis");
 		SyntaxResult syntaxResult =
 				syntaxAnalyzer.analyze(((LexerSuccess) lexerResult).getTokens());
+
+        System.out.println(syntaxResult.getComponents());
+
 		if (stepFailed(path, syntaxResult, "Syntax analysis")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming semantic analysis");
