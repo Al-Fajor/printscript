@@ -57,23 +57,21 @@ jacocoTestCoverageVerification {
 
 check.dependsOn jacocoTestCoverageVerification
 
-subprojects {
-    apply plugin: "maven-publish"
-    publishing {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/sasakiimarcos/printscript")
-                credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-                }
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            version = "1.0-SNAPSHOT"
+            url = uri("https://maven.pkg.github.com/sasakiimarcos/printscript")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("TOKEN")
             }
         }
-        publications {
-            gpr(MavenPublication) {
-                from(components.java)
-            }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
