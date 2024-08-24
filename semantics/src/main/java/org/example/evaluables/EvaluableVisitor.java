@@ -291,8 +291,9 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		String functionName = functionCallResolution.name();
 
-		return Resolution.getFirstFailedResolution(EvaluableResolution.castFrom(functionCallResolution))
-				.orElse(isFunctionDeclared(statement, types, functionName));
+        return getFirstFailedResolution(functionCallResolution)
+                .map(EvaluableResolution::castFrom)
+                .orElse(isFunctionDeclared(statement, types, functionName));
 	}
 
 	private EvaluableResolution isFunctionDeclared(
