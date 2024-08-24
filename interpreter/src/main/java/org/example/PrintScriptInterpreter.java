@@ -6,11 +6,9 @@ import org.example.ast.statement.Statement;
 import org.example.visitors.StatementVisitor;
 
 public class PrintScriptInterpreter implements Interpreter {
-	private final InterpreterState state;
 	private final org.example.ast.visitor.StatementVisitor<Void> statementVisitor;
 
 	public PrintScriptInterpreter(InterpreterState state) {
-		this.state = state;
 		statementVisitor = new StatementVisitor(state);
 	}
 

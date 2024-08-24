@@ -9,30 +9,25 @@ import java.nio.file.Paths;
 import java.util.*;
 import org.example.factory.InterpreterFactory;
 import org.example.io.AstBuilder;
+import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
-import org.example.observer.PrintSubscriber;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class InterpreterTester {
 	public void test(String path) throws IOException {
-		PrintSubscriber printSubscriber = new PrintSubscriber();
-		TestStateListener stateListener = new TestStateListener();
-		Interpreter interpreter = createInterpreter(stateListener, printSubscriber);
+		PrintBrokerObserver printObserver = new PrintBrokerObserver();
+		Interpreter interpreter = createInterpreter(printObserver);
 		interpretTree(interpreter, path);
 
 		List<String> printLines = new ArrayList<>();
 		readExpectedPrintLines(path, printLines);
-		assertEqualPrints(printSubscriber, printLines);
+		assertEqualPrints(printObserver, printLines);
 	}
 
-	private Interpreter createInterpreter(
-			StateListener stateListener, PrintSubscriber printSubscriber) {
+	private Interpreter createInterpreter(BrokerObserver<String> printObserver) {
 		InterpreterFactory factory = new InterpreterFactory();
-		factory.setStateListener(stateListener);
 
-		PrintBrokerObserver printObserver = new PrintBrokerObserver();
-		printObserver.addSubscriber(printSubscriber);
 		factory.addObserver(printObserver);
 
 		return factory.create();
@@ -55,8 +50,9 @@ public class InterpreterTester {
 	}
 
 	private void assertEqualPrints(
-			PrintSubscriber printSubscriber, List<String> expectedPrintLines) {
-		List<String> printedLines = new ArrayList<>(List.of(printSubscriber.getPrintedOutput().split("\n")));
+			PrintBrokerObserver printObserver, List<String> expectedPrintLines) {
+		List<String> printedLines =
+				new ArrayList<>(List.of(printObserver.getPrintedOutput().split("\n")));
 		assertEquals(expectedPrintLines, printedLines);
 	}
 }
