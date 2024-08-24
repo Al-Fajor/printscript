@@ -1,5 +1,7 @@
 package org.example.evaluables;
 
+import static org.example.Resolution.getFirstFailedResolution;
+
 import java.util.List;
 import java.util.Optional;
 import org.example.Environment;
@@ -22,8 +24,6 @@ import org.example.ast.visitor.AstComponentVisitor;
 import org.example.externalization.Language;
 import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
-import org.example.resolution_validators.IsFunctionDeclared;
-import org.example.resolution_validators.IsResolutionSuccessful;
 
 public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
 	private Environment env;
@@ -44,7 +44,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		var leftResolution = expression.getLeftComponent().accept(this);
 		var rightResolution = expression.getRightComponent().accept(this);
 
-		return Resolution.returnFirstFailedResolution(leftResolution, rightResolution)
+		return getFirstFailedResolution(leftResolution, rightResolution)
 				.orElse(validateOperationTypes(expression, leftResolution, rightResolution));
 	}
 
@@ -144,7 +144,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		IdentifierResolution leftResolution = statement.getLeft().accept(identifierVisitor);
 		EvaluableResolution rightResolution = statement.getRight().accept(this);
 
-		return Resolution.returnFirstFailedResolution(rightResolution)
+		return getFirstFailedResolution(rightResolution)
 				.orElse(
 						validateDeclarationOrAssignation(
 								statement, leftResolution, rightResolution));
@@ -291,23 +291,20 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		String functionName = functionCallResolution.name();
 
-		return new IsResolutionSuccessful(
-						functionCallResolution,
-						new IsFunctionDeclared(
-								types,
-								functionCallResolution,
-								(env) -> EvaluableResolution.emptySuccess(),
-								(env) ->
-										EvaluableResolution.failure(
-												"Cannot resolve function signature "
-														+ functionName
-														+ "("
-														+ types
-														+ ").",
-												statement.getStart(),
-												statement.getEnd())),
-						(env) -> EvaluableResolution.castFrom(functionCallResolution))
-				.analyze(env);
+		return Resolution.getFirstFailedResolution(EvaluableResolution.castFrom(functionCallResolution))
+				.orElse(isFunctionDeclared(statement, types, functionName));
+	}
+
+	private EvaluableResolution isFunctionDeclared(
+			FunctionCallStatement statement, List<DeclarationType> types, String functionName) {
+		if (env.isFunctionDeclared(functionName, types)) {
+			return EvaluableResolution.emptySuccess();
+		} else {
+			return EvaluableResolution.failure(
+					"Cannot resolve function signature " + functionName + "(" + types + ").",
+					statement.getStart(),
+					statement.getEnd());
+		}
 	}
 
 	@Override
