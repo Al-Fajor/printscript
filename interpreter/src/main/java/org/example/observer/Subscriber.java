@@ -1,5 +1,5 @@
 package org.example.observer;
 
-public interface Subscriber<O extends Observer<?, ?>> {
+public interface Subscriber<O extends BrokerObserver<?, ?>> {
 	void update(O context);
 }

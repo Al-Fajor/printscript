@@ -26,6 +26,6 @@ public class PositionServices {
 	}
 
 	public static Pair<Integer, Integer> getPositionPair(String input, int index) {
-		return new Pair<>(getLine(input, index), getPositionInLine(input, index));
+		return new Pair<>(getLine(input, index) + 1, getPositionInLine(input, index) + 1);
 	}
 }

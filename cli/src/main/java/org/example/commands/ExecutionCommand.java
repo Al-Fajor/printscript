@@ -9,7 +9,7 @@ import org.example.Variable;
 import org.example.ast.AstComponent;
 import org.example.factory.InterpreterFactory;
 import org.example.io.Color;
-import org.example.observer.PrintObserver;
+import org.example.observer.PrintBrokerObserver;
 import org.example.observer.PrintSubscriber;
 
 public class ExecutionCommand implements Command {
@@ -37,7 +37,7 @@ public class ExecutionCommand implements Command {
 		InterpreterFactory factory = new InterpreterFactory();
 		factory.setStateListener(stateListener);
 
-		PrintObserver printObserver = new PrintObserver();
+		PrintBrokerObserver printObserver = new PrintBrokerObserver();
 		printObserver.addSubscriber(printSubscriber);
 		factory.addObserver(printObserver);
 
