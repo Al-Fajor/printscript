@@ -3,13 +3,13 @@ package org.example.factory;
 import java.util.ArrayList;
 import java.util.List;
 import org.example.*;
-import org.example.observer.Observer;
+import org.example.observer.BrokerObserver;
 
 public class InterpreterFactory {
-	private List<Observer<?, ?>> observers = new ArrayList<>();
+	private List<BrokerObserver<?, ?>> observers = new ArrayList<>();
 	private StateListener stateListener = getEmptyStateListener();
 
-	public void addObserver(Observer<?, ?> observer) {
+	public void addObserver(BrokerObserver<?, ?> observer) {
 		observers.add(observer);
 	}
 

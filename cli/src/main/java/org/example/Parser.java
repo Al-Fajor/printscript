@@ -15,8 +15,16 @@ import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
 public class Parser {
+	ProgressBarObserver observer = new ProgressBarObserver();
+
 	Lexer lexer = new PrintScriptLexer();
-	SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
+	SyntaxAnalyzer syntaxAnalyzer;
+
+	{
+		syntaxAnalyzer = new SyntaxAnalyzerImpl();
+		syntaxAnalyzer.addObserver(observer);
+	}
+
 	SemanticAnalyzer semanticAnalyzer;
 
 	{
@@ -27,6 +35,7 @@ public class Parser {
 								new Signature("println", List.of(DeclarationType.NUMBER)),
 								new Signature("println", List.of(DeclarationType.STRING))));
 		semanticAnalyzer = new SemanticAnalyzerImpl(env);
+		semanticAnalyzer.addObserver(observer);
 	}
 
 	public List<AstComponent> parse(String path) {
@@ -54,19 +63,16 @@ public class Parser {
 	}
 
 	private boolean semanticAnalysisFailed(SyntaxResult syntaxResult, String path) {
-		semanticAnalyzer.addObserver(new SemanticAnalyzerObserver());
 		Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
 
 		if (!semanticResult.isSuccessful()) {
 			String coloredSegment;
 			try {
-				//                coloredSegment = ScriptReader.readAndHighlightRange(
-				//                        path, semanticResult.getErrorStart().get(),
-				// semanticResult.getErrorEnd().get());
-				// TODO: undo hardcoding once error location is returned within Result
 				coloredSegment =
 						ScriptReader.readAndHighlightRange(
-								path, new Pair<>(1, 3), new Pair<>(2, 6));
+								path,
+								semanticResult.getErrorStart().get(),
+								semanticResult.getErrorEnd().get());
 			} catch (IOException e) {
 				throw new RuntimeException("Could not read file at " + path);
 			}

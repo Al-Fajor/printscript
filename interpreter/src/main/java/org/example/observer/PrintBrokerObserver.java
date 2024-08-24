@@ -3,7 +3,7 @@ package org.example.observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public non-sealed class PrintObserver implements Observer<String, PrintSubscriber> {
+public non-sealed class PrintBrokerObserver implements BrokerObserver<String, PrintSubscriber> {
 	private List<PrintSubscriber> subscribers = new ArrayList<>();
 	private String lastPrint;
 

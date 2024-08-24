@@ -4,8 +4,8 @@ import java.util.List;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Parameters;
 import org.example.ast.visitor.EvaluableComponentVisitor;
-import org.example.observer.Observer;
-import org.example.observer.PrintObserver;
+import org.example.observer.BrokerObserver;
+import org.example.observer.PrintBrokerObserver;
 import org.example.visitors.EvaluatorVisitor;
 
 public class PrintlnFunction implements Function {
@@ -34,13 +34,13 @@ public class PrintlnFunction implements Function {
 		getPrintObserver().updateChanges(result.toString() + '\n');
 	}
 
-	private PrintObserver getPrintObserver() {
-		List<Observer<?, ?>> observers = state.getObservers();
-		for (Observer<?, ?> observer : observers) {
-			if (observer instanceof PrintObserver) {
-				return (PrintObserver) observer;
+	private PrintBrokerObserver getPrintObserver() {
+		List<BrokerObserver<?, ?>> observers = state.getObservers();
+		for (BrokerObserver<?, ?> observer : observers) {
+			if (observer instanceof PrintBrokerObserver) {
+				return (PrintBrokerObserver) observer;
 			}
 		}
-		throw new RuntimeException("No PrintObserver found");
+		throw new RuntimeException("No PrintBrokerObserver found");
 	}
 }

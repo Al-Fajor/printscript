@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import org.example.factory.InterpreterFactory;
 import org.example.io.AstBuilder;
-import org.example.observer.PrintObserver;
+import org.example.observer.PrintBrokerObserver;
 import org.example.observer.PrintSubscriber;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,7 +36,7 @@ public class InterpreterTester {
 		InterpreterFactory factory = new InterpreterFactory();
 		factory.setStateListener(stateListener);
 
-		PrintObserver printObserver = new PrintObserver();
+		PrintBrokerObserver printObserver = new PrintBrokerObserver();
 		printObserver.addSubscriber(printSubscriber);
 		factory.addObserver(printObserver);
 

@@ -1,6 +1,6 @@
 package org.example.observer;
 
-public sealed interface Observer<T, S extends Subscriber<?>> permits PrintObserver {
+public sealed interface BrokerObserver<T, S extends Subscriber<?>> permits PrintBrokerObserver {
 	void addSubscriber(S subscriber);
 
 	void notifySubscribers();
