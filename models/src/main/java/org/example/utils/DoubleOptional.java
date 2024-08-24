@@ -17,7 +17,7 @@ public class DoubleOptional<T, S> {
 		this.optional2 = optional2;
 	}
 
-    /** Returns Optional.empty() if any of the two optionals is empty */
+	/** Returns Optional.empty() if any of the two optionals is empty */
 	public <U> Optional<U> map(BiFunction<? super T, ? super S, ? extends U> mapper) {
 		return optional1.flatMap(arg1 -> optional2.map(arg2 -> mapper.apply(arg1, arg2)));
 	}
