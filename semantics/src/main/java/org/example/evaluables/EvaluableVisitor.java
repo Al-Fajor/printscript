@@ -26,8 +26,8 @@ import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
 
 public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
-    public static final SemanticSuccess SUCCESS = new SemanticSuccess();
-    private final Environment env;
+	public static final SemanticSuccess SUCCESS = new SemanticSuccess();
+	private final Environment env;
 	private final IdentifierVisitor identifierVisitor;
 	private final Language lang = new Language();
 
@@ -40,61 +40,51 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		return new EvaluableVisitor(env, identifierVisitor);
 	}
 
-    @Override
+	@Override
 	public EvaluableResolution visit(BinaryExpression expression) {
 		var leftResolution = expression.getLeftComponent().accept(this);
 		var rightResolution = expression.getRightComponent().accept(this);
 
 		if (anyTypeEmpty(leftResolution, rightResolution)) {
-            throw new IllegalStateException("PrintScript does not support null values: received BinaryExpression with an empty type");
-        }
+			throw new IllegalStateException(
+					"PrintScript does not support null values: received BinaryExpression with an empty type");
+		}
 
-        @SuppressWarnings({"OptionalGetWithoutIsPresent"}) // Safe because of anyTypeEmpty
-        DeclarationType leftType = leftResolution.evaluatedType().get();
-        @SuppressWarnings({"OptionalGetWithoutIsPresent"}) // Safe because of anyTypeEmpty
-        DeclarationType rightType = rightResolution.evaluatedType().get();
+		@SuppressWarnings({"OptionalGetWithoutIsPresent"}) // Safe because of anyTypeEmpty
+		DeclarationType leftType = leftResolution.evaluatedType().get();
+		@SuppressWarnings({"OptionalGetWithoutIsPresent"}) // Safe because of anyTypeEmpty
+		DeclarationType rightType = rightResolution.evaluatedType().get();
 
-        return getFirstFailedResolution(leftResolution, rightResolution)
+		return getFirstFailedResolution(leftResolution, rightResolution)
 				.orElse(validateOperationTypes(expression, leftType, rightType));
 	}
 
-    private static boolean anyTypeEmpty(EvaluableResolution leftResolution, EvaluableResolution rightResolution) {
-        return leftResolution.evaluatedType().isEmpty() || rightResolution.evaluatedType().isEmpty();
-    }
+	private static boolean anyTypeEmpty(
+			EvaluableResolution leftResolution, EvaluableResolution rightResolution) {
+		return leftResolution.evaluatedType().isEmpty()
+				|| rightResolution.evaluatedType().isEmpty();
+	}
 
-    private EvaluableResolution validateOperationTypes(
-            BinaryExpression expression,
-            DeclarationType leftType,
-            DeclarationType rightType) {
+	private EvaluableResolution validateOperationTypes(
+			BinaryExpression expression, DeclarationType leftType, DeclarationType rightType) {
 
-        if (lang.isOperationSupported(
-                leftType,
-                expression.getOperator(),
-                rightType)) {
-            return successfulOperationResolution(expression, leftType, rightType);
-        } else {
-            return failedOperationResolution(expression, rightType, leftType);
-        }
+		if (lang.isOperationSupported(leftType, expression.getOperator(), rightType)) {
+			return successfulOperationResolution(expression, leftType, rightType);
+		} else {
+			return failedOperationResolution(expression, rightType, leftType);
+		}
 	}
 
 	private EvaluableResolution successfulOperationResolution(
-            BinaryExpression expression,
-            DeclarationType leftType,
-            DeclarationType rightType) {
+			BinaryExpression expression, DeclarationType leftType, DeclarationType rightType) {
 		return new EvaluableResolution(
 				SUCCESS,
-				Optional.of(
-						lang.getResolvedType(
-								leftType,
-								expression.getOperator(),
-								rightType)),
+				Optional.of(lang.getResolvedType(leftType, expression.getOperator(), rightType)),
 				Optional.empty());
 	}
 
 	private EvaluableResolution failedOperationResolution(
-            BinaryExpression expression,
-            DeclarationType rightType,
-            DeclarationType leftType) {
+			BinaryExpression expression, DeclarationType rightType, DeclarationType leftType) {
 		return EvaluableResolution.failure(
 				"Cannot perform operation because types are incompatible: "
 						+ rightType
@@ -135,9 +125,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	@Override
 	public EvaluableResolution visit(Literal<?> literal) {
 		return new EvaluableResolution(
-				SUCCESS,
-				Optional.ofNullable(mapToDeclarationType(literal)),
-				Optional.empty());
+				SUCCESS, Optional.ofNullable(mapToDeclarationType(literal)), Optional.empty());
 	}
 
 	private DeclarationType mapToDeclarationType(Literal<?> literal) {
@@ -171,7 +159,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 			EvaluableResolution assignedValueResolution) {
 		boolean isDeclaration = identifierResolution.type().isPresent();
 		if (isDeclaration) {
-			return checkIdentifierDoesNotExist(statement, identifierResolution, assignedValueResolution);
+			return checkIdentifierDoesNotExist(
+					statement, identifierResolution, assignedValueResolution);
 		} else {
 			return checkIdentifierExists(statement, identifierResolution, assignedValueResolution);
 		}
@@ -182,7 +171,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 			IdentifierResolution identifierResolution,
 			EvaluableResolution assignedValueResolution) {
 		if (env.isVariableDeclared(identifierResolution.name())) {
-			return checkAssigningToValidValue(statement, identifierResolution, assignedValueResolution);
+			return checkAssigningToValidValue(
+					statement, identifierResolution, assignedValueResolution);
 		} else {
 			return EvaluableResolution.failure(
 					"Cannot assign non-existing identifier",
@@ -196,10 +186,14 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 			IdentifierResolution identifierResolution,
 			EvaluableResolution assignedValueResolution) {
 
-        DeclarationType identifierType = env.getDeclarationType(identifierResolution.name());
-        DeclarationType assignedValueType = assignedValueResolution.evaluatedType().orElseThrow(
-                () -> new IllegalStateException("Received invalid AST: Assigning to value with no type")
-        );
+		DeclarationType identifierType = env.getDeclarationType(identifierResolution.name());
+		DeclarationType assignedValueType =
+				assignedValueResolution
+						.evaluatedType()
+						.orElseThrow(
+								() ->
+										new IllegalStateException(
+												"Received invalid AST: Assigning to value with no type"));
 
 		if (identifierType == assignedValueType) {
 			return EvaluableResolution.emptySuccess();
@@ -222,7 +216,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 			return EvaluableResolution.failure(
 					"Variable has already been declared", statement.getStart(), statement.getEnd());
 		} else {
-			return checkIsSimpleDeclaration(statement, identifierResolution, assignedValueResolution);
+			return checkIsSimpleDeclaration(
+					statement, identifierResolution, assignedValueResolution);
 		}
 	}
 
@@ -233,30 +228,27 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		boolean isSimpleDeclaration = assignedValueResolution.evaluatedType().isEmpty();
 		if (isSimpleDeclaration) {
 			return new EvaluableResolution(
-					SUCCESS,
-					identifierResolution.type(),
-					Optional.of(identifierResolution.name()));
+					SUCCESS, identifierResolution.type(), Optional.of(identifierResolution.name()));
 		} else {
 
-            @SuppressWarnings("OptionalGetWithoutIsPresent") // Safe because declarations always have a type
-            DeclarationType leftType = identifierResolution.type().get();
-            DeclarationType rightType = assignedValueResolution.evaluatedType().get();
-            String name = identifierResolution.name();
+			@SuppressWarnings(
+					"OptionalGetWithoutIsPresent") // Safe because declarations always have a type
+			DeclarationType leftType = identifierResolution.type().get();
+			DeclarationType rightType = assignedValueResolution.evaluatedType().get();
+			String name = identifierResolution.name();
 
-            return checkDeclaringWithValidValue(statement, leftType, rightType, name);
+			return checkDeclaringWithValidValue(statement, leftType, rightType, name);
 		}
 	}
 
 	private EvaluableResolution checkDeclaringWithValidValue(
-            AssignationStatement statement,
-            DeclarationType identifierType,
-            DeclarationType assignedType, String name) {
+			AssignationStatement statement,
+			DeclarationType identifierType,
+			DeclarationType assignedType,
+			String name) {
 
 		if (identifierType == assignedType) {
-			return new EvaluableResolution(
-                    SUCCESS,
-					Optional.of(identifierType),
-					Optional.of(name));
+			return new EvaluableResolution(SUCCESS, Optional.of(identifierType), Optional.of(name));
 		} else {
 			return EvaluableResolution.failure(
 					"Cannot assign value of type "
@@ -286,10 +278,12 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		Optional<EvaluableResolution> firstInvalidParameterResolution =
 				resolvedParameters.stream().filter(Resolution::failed).findFirst();
 
-		if (firstInvalidParameterResolution.isPresent()) return firstInvalidParameterResolution.get();
+		if (firstInvalidParameterResolution.isPresent())
+			return firstInvalidParameterResolution.get();
 
-        @SuppressWarnings("OptionalGetWithoutIsPresent") // Safe because of firstInvalidParameterResolution
-        List<DeclarationType> types =
+		@SuppressWarnings(
+				"OptionalGetWithoutIsPresent") // Safe because of firstInvalidParameterResolution
+		List<DeclarationType> types =
 				resolvedParameters.stream()
 						.map(resolution -> resolution.evaluatedType().get())
 						.toList();
