@@ -10,9 +10,9 @@ public interface Environment {
 
 	DeclarationType getDeclarationType(String name);
 
-	void declareVariable(String name, DeclarationType type);
+	Environment declareVariable(String name, DeclarationType type);
 
-	void declareFunction(String name, DeclarationType... parameters);
+	Environment declareFunction(String name, DeclarationType... parameters);
 
 	Environment copy();
 }

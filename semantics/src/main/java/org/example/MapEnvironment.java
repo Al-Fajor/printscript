@@ -12,9 +12,9 @@ public class MapEnvironment implements Environment {
 	private final Set<Signature> funDeclarations;
 
 	public MapEnvironment(
-			Map<String, DeclarationType> reservedVariables, Set<Signature> reservedFunctions) {
-		this.varDeclarations = reservedVariables;
-		this.funDeclarations = reservedFunctions;
+			Map<String, DeclarationType> varDeclarations, Set<Signature> funDeclarations) {
+		this.varDeclarations = varDeclarations;
+		this.funDeclarations = funDeclarations;
 	}
 
 	@Override
@@ -33,13 +33,19 @@ public class MapEnvironment implements Environment {
 	}
 
 	@Override
-	public void declareVariable(String name, DeclarationType type) {
-		varDeclarations.put(name, type);
+	public Environment declareVariable(String name, DeclarationType type) {
+		Map<String, DeclarationType> mapCopy = new HashMap<>(varDeclarations);
+		mapCopy.put(name, type);
+
+		return new MapEnvironment(mapCopy, funDeclarations);
 	}
 
 	@Override
-	public void declareFunction(String name, DeclarationType... parameters) {
-		funDeclarations.add(new Signature(name, List.of(parameters)));
+	public Environment declareFunction(String name, DeclarationType... parameters) {
+		Set<Signature> setCopy = new HashSet<>(funDeclarations);
+		setCopy.add(new Signature(name, List.of(parameters)));
+
+		return new MapEnvironment(varDeclarations, setCopy);
 	}
 
 	@Override

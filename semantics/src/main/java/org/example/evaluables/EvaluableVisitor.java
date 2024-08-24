@@ -25,7 +25,7 @@ import org.example.identifiers.IdentifierResolution;
 import org.example.identifiers.IdentifierVisitor;
 
 public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
-	private Environment env;
+	private final Environment env;
 	private final IdentifierVisitor identifierVisitor;
 	private final Language lang = new Language();
 
@@ -34,8 +34,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		this.identifierVisitor = identifierVisitor;
 	}
 
-	public void setEnv(Environment env) {
-		this.env = env;
+	public EvaluableVisitor withEnv(Environment env) {
+		return new EvaluableVisitor(env, identifierVisitor);
 	}
 
 	@Override
@@ -222,8 +222,10 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 			EvaluableResolution rightResolution) {
 		boolean isSimpleDeclaration = rightResolution.evaluatedType().isEmpty();
 		if (isSimpleDeclaration) {
-			env.declareVariable(leftResolution.name(), leftResolution.type().get());
-			return EvaluableResolution.emptySuccess();
+			return new EvaluableResolution(
+					new SemanticSuccess(),
+					leftResolution.type(),
+					Optional.of(leftResolution.name()));
 		} else {
 			return checkDeclaringWithValidValue(statement, leftResolution, rightResolution);
 		}
@@ -246,8 +248,10 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 								() -> new IllegalStateException("Cannot perform type comparison"));
 
 		if (typesMatch) {
-			env.declareVariable(leftResolution.name(), leftResolution.type().get());
-			return EvaluableResolution.emptySuccess();
+			return new EvaluableResolution(
+					new SemanticSuccess(),
+					leftResolution.type(),
+					Optional.of(leftResolution.name()));
 		} else {
 			return EvaluableResolution.failure(
 					"Cannot assign value of type "
