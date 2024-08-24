@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation(project(":models"))
+    implementation(project(":lexer"))
+    implementation(project(":testFramework"))
+    testImplementation("org.json:json:20231013")
+    implementation("org.json:json:20231013")
+}
+
+test {
+    useJUnitPlatform()
+}
