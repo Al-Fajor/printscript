@@ -7,6 +7,7 @@ import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
 import org.example.identifiers.IdentifierVisitor;
 import org.example.observer.Observer;
+import org.example.utils.DoubleOptional;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 	// TODO: may define externally, such as in a config file
@@ -53,21 +54,14 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 			EvaluableResolution resolution,
 			EvaluableVisitor currentVisitor,
 			Environment currentEnv) {
-		return resolution
-				.evaluatedType()
-				.flatMap(
-						type ->
-								resolution
-										.identifierName()
-										.map(
-												identifier -> {
-													Environment newEnv =
-															currentEnv.declareVariable(
-																	identifier, type);
-													EvaluableVisitor newVisitor =
-															currentVisitor.withEnv(newEnv);
-													return new Pair<>(newVisitor, newEnv);
-												}))
+
+		return DoubleOptional.from(resolution.evaluatedType(), resolution.identifierName())
+				.map(
+						(type, identifier) -> {
+							Environment newEnv = currentEnv.declareVariable(identifier, type);
+							EvaluableVisitor newVisitor = currentVisitor.withEnv(newEnv);
+							return new Pair<>(newVisitor, newEnv);
+						})
 				.orElse(new Pair<>(currentVisitor, currentEnv));
 	}
 
