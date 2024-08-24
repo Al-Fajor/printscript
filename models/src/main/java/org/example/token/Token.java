@@ -1,12 +1,18 @@
 package org.example.token;
 
+import org.example.Pair;
+
 public class Token {
 	private final TokenType type;
-	private final Integer start;
-	private final Integer end;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 	private final String value;
 
-	public Token(TokenType type, Integer start, Integer end, String value) {
+	public Token(
+			TokenType type,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end,
+			String value) {
 		this.type = type;
 		this.start = start;
 		this.end = end;
@@ -17,11 +23,11 @@ public class Token {
 		return type;
 	}
 
-	public Integer getStart() {
+	public Pair<Integer, Integer> getStart() {
 		return start;
 	}
 
-	public Integer getEnd() {
+	public Pair<Integer, Integer> getEnd() {
 		return end;
 	}
 
