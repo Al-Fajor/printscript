@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.example.ast.AstComponent;
@@ -23,34 +24,42 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
 	@Override
 	public Result analyze(List<AstComponent> asts) {
+		return resolveNextAst(asts.iterator(), evaluableVisitor, baseEnvironment, 0, asts.size());
+	}
 
-		// TODO: could make it recursive
-		int completed = 0;
-		EvaluableVisitor currentVisitor = evaluableVisitor;
-		Environment currentEnv = baseEnvironment;
-		for (AstComponent ast : asts) {
+	private Result resolveNextAst(
+			Iterator<AstComponent> asts,
+			EvaluableVisitor currentVisitor,
+			Environment currentEnv,
+			int completed,
+			int total) {
 
-			var resolution = ast.accept(currentVisitor);
-			notifyObservers(asts, completed);
-			completed++;
-
-			if (!resolution.result().isSuccessful()) return resolution.result();
-
-			Pair<EvaluableVisitor, Environment> updated =
-					update(resolution, currentVisitor, currentEnv);
-			currentVisitor = updated.first();
-			currentEnv = updated.second();
+		if (resolvedAllAsts(asts)) {
+			return new SemanticSuccess();
 		}
 
-		return new SemanticSuccess();
+		EvaluableResolution resolution = asts.next().accept(currentVisitor);
+		notifyObservers(completed, total);
+
+		if (resolution.failed()) {
+			return resolution.result();
+		}
+
+		Pair<EvaluableVisitor, Environment> updated =
+				updateVisitor(resolution, currentVisitor, currentEnv);
+
+		return resolveNextAst(asts, updated.first(), updated.second(), completed + 1, total);
 	}
 
-	private void notifyObservers(List<AstComponent> asts, int finalCompleted) {
-		observers.forEach(
-				observer -> observer.notifyChange(new Pair<>(finalCompleted + 1, asts.size())));
+	private static boolean resolvedAllAsts(Iterator<AstComponent> asts) {
+		return !asts.hasNext();
 	}
 
-	private Pair<EvaluableVisitor, Environment> update(
+	private void notifyObservers(int completed, int total) {
+		observers.forEach(observer -> observer.notifyChange(new Pair<>(completed + 1, total)));
+	}
+
+	private Pair<EvaluableVisitor, Environment> updateVisitor(
 			EvaluableResolution resolution,
 			EvaluableVisitor currentVisitor,
 			Environment currentEnv) {

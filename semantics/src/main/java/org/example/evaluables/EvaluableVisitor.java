@@ -281,9 +281,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 						.toList();
 
 		Optional<EvaluableResolution> firstInvalidParameter =
-				resolvedParameters.stream()
-						.filter(resolution -> !resolution.result().isSuccessful())
-						.findFirst();
+				resolvedParameters.stream().filter(resolution -> resolution.failed()).findFirst();
 
 		if (firstInvalidParameter.isPresent()) return firstInvalidParameter.get();
 

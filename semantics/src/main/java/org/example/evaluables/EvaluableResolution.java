@@ -46,8 +46,6 @@ public record EvaluableResolution(
 
 	public static Optional<EvaluableResolution> returnFirstFailedResolution(
 			EvaluableResolution... resolutions) {
-		return Arrays.stream(resolutions)
-				.filter(resolution -> !resolution.result().isSuccessful())
-				.findFirst();
+		return Arrays.stream(resolutions).filter(resolution -> resolution.failed()).findFirst();
 	}
 }
