@@ -1,17 +1,5 @@
 {
-  "expectedVariables": [
-    {
-      "name": "numberString",
-      "type": "String",
-      "value": "5.0 Cars"
-    },
-    {
-      "name": "stringString",
-      "type": "String",
-      "value": "Hello World"
-    }
-  ],
-  "expectedPrintLines": [],
+  "expectedPrintLines": ["5.0 Cars", "Hello World"],
   "ast_list": [
     {
       "assignation": [
@@ -66,6 +54,39 @@
           ]
         }
       ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "numberString"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "stringString"
+            }
+          }
+        ]
+      }
     }
+
   ]
 }

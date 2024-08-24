@@ -50,10 +50,12 @@ public class EvaluationResult {
 				return getStringResult();
 			}
 			case NUMBER -> {
-				return getNumericResult().toString();
+				Double result = getNumericResult();
+				return result != null ? result.toString() : null;
 			}
 			case BOOLEAN -> {
-				return getBoolResult().toString();
+				Boolean result = getBoolResult();
+				return result != null ? getBoolResult().toString() : null;
 			}
 			default -> throw new IllegalArgumentException("Implement " + getType() + " toString");
 		}
