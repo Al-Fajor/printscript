@@ -5,7 +5,6 @@ import static org.example.Resolution.getFirstFailedResolution;
 import java.util.List;
 import java.util.Optional;
 import org.example.Environment;
-import org.example.Resolution;
 import org.example.SemanticFailure;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
@@ -291,9 +290,9 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		String functionName = functionCallResolution.name();
 
-        return getFirstFailedResolution(functionCallResolution)
-                .map(EvaluableResolution::castFrom)
-                .orElse(isFunctionDeclared(statement, types, functionName));
+		return getFirstFailedResolution(functionCallResolution)
+				.map(EvaluableResolution::castFrom)
+				.orElse(isFunctionDeclared(statement, types, functionName));
 	}
 
 	private EvaluableResolution isFunctionDeclared(
