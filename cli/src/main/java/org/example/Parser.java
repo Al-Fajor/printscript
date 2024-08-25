@@ -12,7 +12,6 @@ import org.example.ast.DeclarationType;
 import org.example.io.Color;
 import org.example.io.ScriptReader;
 import org.example.lexerresult.LexerSuccess;
-import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 
 public class Parser {
@@ -68,36 +67,6 @@ public class Parser {
 		if (!result.isSuccessful()) {
 			System.out.println(stepName + " failed with error: '" + result.errorMessage() + "'");
 			printFailedCode(path, result, stepName);
-			return true;
-		}
-		return false;
-	}
-
-	private static boolean syntaxAnalysisFailed(SyntaxResult syntaxResult) {
-		if (!syntaxResult.isSuccessful()) {
-			SyntaxError error = (SyntaxError) syntaxResult;
-
-			System.out.println("Syntax analysis failed with error: \n " + error.errorMessage());
-			System.out.println(
-					"From line: "
-							+ error.getErrorStart().get().first()
-							+ ", column: "
-							+ error.getErrorStart().get().second());
-			System.out.println(
-					"To line: "
-							+ error.getErrorEnd().get().first()
-							+ ", column: "
-							+ error.getErrorEnd().get().second());
-
-			return true;
-		}
-		return false;
-	}
-
-	private static boolean lexingFailed(Result lexerResult) {
-		if (!lexerResult.isSuccessful()) {
-			System.out.println("Lexing failed with error");
-			System.out.println(lexerResult.errorMessage());
 			return true;
 		}
 		return false;

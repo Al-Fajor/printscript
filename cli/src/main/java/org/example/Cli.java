@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.commands.AnalyzeCommand;
 import org.example.commands.ExecutionCommand;
-import org.example.commands.FormattingCommand;
 import org.example.commands.ValidationCommand;
 import picocli.CommandLine;
 
@@ -11,7 +10,7 @@ import picocli.CommandLine;
 		subcommands = {
 			ValidationCommand.class,
 			ExecutionCommand.class,
-			FormattingCommand.class,
+//			FormattingCommand.class,
 			AnalyzeCommand.class
 		},
 		mixinStandardHelpOptions = true)
