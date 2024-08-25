@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":syntax"))
     implementation(project(":semantics"))
     implementation(project(":interpreter"))
+    implementation(project(":staticanalyzer"))
 }
 
 test {

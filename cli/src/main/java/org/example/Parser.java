@@ -1,7 +1,8 @@
 package org.example;
 
+import static org.example.PrintUtils.printFailedCode;
+
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -49,17 +50,11 @@ public class Parser {
 
 		Color.printGreen("\nPerforming lexical analysis");
 		Result lexerResult = lexer.lex(code);
-
-		System.out.println(((LexerSuccess) lexerResult).getTokens());
-
 		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming syntactic analysis");
 		SyntaxResult syntaxResult =
 				syntaxAnalyzer.analyze(((LexerSuccess) lexerResult).getTokens());
-
-		System.out.println(syntaxResult.getComponents());
-
 		if (stepFailed(path, syntaxResult, "Syntax analysis")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming semantic analysis");
@@ -71,29 +66,8 @@ public class Parser {
 
 	private static boolean stepFailed(String path, Result result, String stepName) {
 		if (!result.isSuccessful()) {
-			String coloredSegment;
-			try {
-				coloredSegment =
-						ScriptReader.readAndHighlightRange(
-								path, result.getErrorStart().get(), result.getErrorEnd().get());
-			} catch (IOException e) {
-				throw new RuntimeException("Could not read file at " + path);
-			}
-			System.out.println(
-					stepName
-							+ " failed with error: '"
-							+ result.errorMessage()
-							+ "'\n from line "
-							+ result.getErrorStart().get().first()
-							+ ", column "
-							+ result.getErrorStart().get().second()
-							+ "\n to line "
-							+ result.getErrorEnd().get().first()
-							+ ", column "
-							+ result.getErrorEnd().get().second()
-							+ "\n\n"
-							+ coloredSegment
-							+ "\n");
+			System.out.println(stepName + " failed with error: '" + result.errorMessage() + "'");
+			printFailedCode(path, result, stepName);
 			return true;
 		}
 		return false;
