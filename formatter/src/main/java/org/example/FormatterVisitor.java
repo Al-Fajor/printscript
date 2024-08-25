@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
 //    TODO Create own class for rules. Verify rules immediately after getting parsed
-//    TODO think of a better way to structure code following SOLID
     private final FormatterRules formatterRules;
 
     public FormatterVisitor(RuleFactory ruleFactory) {
@@ -150,6 +149,14 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
         List<List<String>> results = appliedRules.stream()
                 .map(rule -> rule.applyRules(this, statement))
                 .toList();
+        hasNoTwoOrMoreConsecutiveSpaces(combineStringsLists(results));
         return combineStringsLists(results);
+    }
+
+    private void hasNoTwoOrMoreConsecutiveSpaces(List<String> strings) {
+        if (strings.stream()
+                .anyMatch(string -> string.equals("  "))){
+            throw new RuntimeException("Two or more consecutive spaces found");
+        }
     }
 }
