@@ -1,0 +1,6 @@
+{
+  "spaceBeforeColon" : true,
+  "spaceAfterColon" : true,
+  "spaceAroundEquals" : true,
+  "breaksBeforePrintln": 0
+}
