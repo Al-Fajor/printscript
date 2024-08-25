@@ -10,7 +10,7 @@ import picocli.CommandLine;
 		subcommands = {
 			ValidationCommand.class,
 			ExecutionCommand.class,
-//			FormattingCommand.class,
+			//			FormattingCommand.class,
 			AnalyzeCommand.class
 		},
 		mixinStandardHelpOptions = true)

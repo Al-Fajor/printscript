@@ -1,11 +1,11 @@
-//package org.example.commands;
+// package org.example.commands;
 //
-//import picocli.CommandLine;
+// import picocli.CommandLine;
 //
-//@CommandLine.Command(
+// @CommandLine.Command(
 //		name = "format",
 //		description = "Modifies the file to make code cleaner, without changing functionality")
-//public class FormattingCommand {
+// public class FormattingCommand {
 //
 //	@CommandLine.Parameters(index = "0", description = "The file to be formatted.")
 //	private String file;
@@ -19,4 +19,4 @@
 //			names = "--config",
 //			description = "The path to the formatting configuration file")
 //	private String config;
-//}
+// }
