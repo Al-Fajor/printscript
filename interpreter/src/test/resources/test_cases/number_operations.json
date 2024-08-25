@@ -1,12 +1,5 @@
 {
-  "expectedVariables": [
-    {
-      "name": "num",
-      "type": "Number",
-      "value": 46
-    }
-  ],
-  "expectedPrintLines": [],
+  "expectedPrintLines": ["46.0"],
   "ast_list": [
     {
       "assignation": [
@@ -70,6 +63,22 @@
           ]
         }
       ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "num"
+            }
+          }
+        ]
+      }
     }
   ]
 }

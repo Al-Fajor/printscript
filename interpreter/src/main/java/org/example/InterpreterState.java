@@ -22,5 +22,5 @@ public interface InterpreterState {
 
 	void addFunction(Function function);
 
-	List<BrokerObserver<?, ?>> getObservers();
+	List<BrokerObserver<?>> getObservers();
 }

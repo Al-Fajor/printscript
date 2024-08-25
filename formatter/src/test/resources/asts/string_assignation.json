@@ -1,0 +1,20 @@
+{
+  "code": "let a : string = \"Hi\";",
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "a"
+          }
+        },
+        {
+          "literal": {
+            "value": "Hi"
+          }
+        }
+        ]
+      }
+  ]
+}

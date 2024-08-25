@@ -1,0 +1,51 @@
+{
+  "code": "let a : number = 5 + 3;\nlet b : number = a;",
+  "ast_list":[
+    {
+      "assignation":
+    [
+      {
+        "declaration": {
+          "declarationType": "Number",
+          "name": "a"
+        }
+      },
+      {
+        "binaryExpression": [
+          {
+            "op": "+"
+          },
+          {
+            "literal": {
+              "value": 5
+            }
+          },
+          {
+            "literal": {
+              "value": 3
+            }
+          }
+        ]
+      }
+    ]
+
+  },
+    {
+        "assignation":
+        [
+            {
+                "declaration": {
+                "declarationType": "Number",
+                "name": "b"
+                }
+            },
+            {
+                "identifier": {
+                "name": "a",
+                "identifierType": "variable"
+                }
+            }
+        ]
+      }
+    ]
+}

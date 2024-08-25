@@ -1,0 +1,32 @@
+{
+  "code": "println(2 - 4);",
+  "ast_list": [
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
+        },
+        "params": [
+          {
+            "binaryExpression": [
+              {
+                "op": "-"
+              },
+              {
+                "literal": {
+                  "value": 2
+                }
+              },
+              {
+                "literal": {
+                  "value": 4
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

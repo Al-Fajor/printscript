@@ -1,0 +1,31 @@
+@startuml
+
+interface Visitor<String> {
+    + visit(statement: AssignationStatement): String
+    + visit(statement: Literal): String
+    ... ()
+}
+
+class FormatterVisitor<String> implements Visitor {
+    + visit(statement: AssignationStatement): String
+    + visit(statement: Literal): String
+    ... ()
+}
+
+
+interface Formatter{
+    + format(List<AstComponent>) : String
+}
+
+class PrintScriptFormatter implements Formatter {
+    + format(List<AstComponent>) : String
+}
+
+class RuleMapFactory {
+    + getRuleMap() : Map<String, Object>
+}
+
+FormatterVisitor -> RuleMapFactory
+PrintScriptFormatter -> FormatterVisitor
+
+@enduml

@@ -35,8 +35,8 @@ public class PrintlnFunction implements Function {
 	}
 
 	private PrintBrokerObserver getPrintObserver() {
-		List<BrokerObserver<?, ?>> observers = state.getObservers();
-		for (BrokerObserver<?, ?> observer : observers) {
+		List<BrokerObserver<?>> observers = state.getObservers();
+		for (BrokerObserver<?> observer : observers) {
 			if (observer instanceof PrintBrokerObserver) {
 				return (PrintBrokerObserver) observer;
 			}
