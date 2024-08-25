@@ -15,17 +15,26 @@ import java.util.stream.Collectors;
 public class FormatterVisitor implements AstComponentVisitor<String> {
 //    TODO Create own class for rules. Verify rules immediately after getting parsed
 //    TODO think of a better way to structure code following SOLID
-    private final Rules rules;
+    private final FormatterRules formatterRules;
 
     public FormatterVisitor(RuleFactory ruleFactory) {
-        this.rules = ruleFactory.getRules();
+        this.formatterRules = ruleFactory.getRules();
     }
 
     @Override
     public String visit(BinaryExpression expression) {
+        List<String> combinedResults = getCombinedResults(formatterRules.getBinaryExpressionRuleAppliers(), expression);
+
         String left = expression.getLeftComponent().accept(this);
         String right = expression.getRightComponent().accept(this);
-        return left + " " + expression.getOperator() + " " + right;
+
+        return combinedResults.get(0) +
+                left +
+                combinedResults.get(1) +
+                expression.getOperator() +
+                combinedResults.get(2) +
+                right +
+                combinedResults.get(3);
     }
 
     @Override
@@ -35,6 +44,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(IfStatement ifStatement) {
+//        TODO implement
         return "";
     }
 
@@ -52,6 +62,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(Parameters parameters) {
+        List<String> combinedResults = getCombinedResults(formatterRules.getParameterRuleAppliers(), parameters);
+
         return parameters.getParameters().stream()
                 .map(parameter -> parameter.accept(this))
                 .collect(Collectors.joining(", "));
@@ -59,11 +71,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(AssignationStatement statement) {
-        List<RuleApplier<AssignationStatement>> appliedRules = rules.getAssignationRuleAppliers();
-        List<List<String>> results = appliedRules.stream()
-                .map(rule -> rule.applyRules(this, statement))
-                .toList();
-        List<String> combinedResults = combineStringsLists(results);
+        List<String> combinedResults = getCombinedResults(formatterRules.getAssignationRuleAppliers(), statement);
+
         String right = statement.getRight().accept(this);
         String left = statement.getLeft().accept(this);
         if (right.isEmpty()) {
@@ -80,11 +89,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(Declaration statement) {
-        List<RuleApplier<Declaration>> appliedRules = rules.getDeclarationRuleAppliers();
-        List<List<String>> results = appliedRules.stream()
-                .map(rule -> rule.applyRules(this, statement))
-                .toList();
-        List<String> combinedResults = combineStringsLists(results);
+        List<String> combinedResults = getCombinedResults(formatterRules.getDeclarationRuleAppliers(), statement);
+
         return
             "let " +
             combinedResults.get(0) +
@@ -98,11 +104,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(FunctionCallStatement statement) {
-        List<RuleApplier<FunctionCallStatement>> appliedRules = rules.getFunctionRuleAppliers();
-        List<List<String>> results = appliedRules.stream()
-                .map(rule -> rule.applyRules(this, statement))
-                .toList();
-        List<String> combinedResults = combineStringsLists(results);
+        List<String> combinedResults = getCombinedResults(formatterRules.getFunctionRuleAppliers(), statement);
+
         return  combinedResults.get(0) +
                 statement.getLeft().accept(this) +
                 combinedResults.get(1) +
@@ -128,6 +131,9 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     private List<String> combineStringsLists(List<List<String>> listOfLists) {
         List<String> result = new ArrayList<>();
+        if (listOfLists.isEmpty()) {
+            return result;
+        }
         for (int i = 0; i < listOfLists.getFirst().size(); i++) {
             result.add(addAllNthElements(listOfLists, i));
         }
@@ -138,5 +144,12 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
         return listOfLists.stream()
                 .map(list -> list.get(n))
                 .collect(Collectors.joining());
+    }
+
+    private <T extends AstComponent> List<String> getCombinedResults(List<RuleApplier<T>> appliedRules, T statement) {
+        List<List<String>> results = appliedRules.stream()
+                .map(rule -> rule.applyRules(this, statement))
+                .toList();
+        return combineStringsLists(results);
     }
 }

@@ -1,7 +1,7 @@
 package org.example.factories;
 
-import org.example.Rules;
+import org.example.FormatterRules;
 
 public interface RuleFactory {
-    Rules getRules();
+    FormatterRules getRules();
 }

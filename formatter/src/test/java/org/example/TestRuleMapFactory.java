@@ -10,8 +10,8 @@ public class TestRuleMapFactory implements RuleFactory {
     }
 
     @Override
-    public Rules getRules() {
+    public FormatterRules getRules() {
         RulesFromFile rulesFromFile = new RulesFromFile();
-        return new Rules(rulesFromFile.getMapFromFile(path));
+        return new FormatterRules(rulesFromFile.getMapFromFile(path));
     }
 }
