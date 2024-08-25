@@ -1,11 +1,12 @@
-package org.example;
+package org.example.factories;
 
-import org.example.factories.RuleFactory;
+import org.example.FormatterRules;
+import org.example.RulesFromFile;
 
-public class TestRuleMapFactory implements RuleFactory {
+public class RuleFactoryWithCustomPath implements RuleFactory {
     private final String path;
 
-    public TestRuleMapFactory(String path) {
+    public RuleFactoryWithCustomPath(String path) {
         this.path = path;
     }
 

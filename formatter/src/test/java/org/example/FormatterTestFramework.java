@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.factories.RuleFactoryWithCustomPath;
 import org.example.io.AstBuilder;
 import org.json.JSONObject;
 
@@ -20,8 +21,8 @@ public class FormatterTestFramework {
 
     public void testRules(String path) throws IOException {
         AstBuilder astBuilder = new AstBuilder();
-        TestRuleMapFactory testRuleMapFactory = new TestRuleMapFactory(path + "/rules.json");
-        Formatter formatter = new PrintScriptFormatter(testRuleMapFactory);
+        RuleFactoryWithCustomPath ruleFactoryWithCustomPath = new RuleFactoryWithCustomPath(path + "/rules.json");
+        Formatter formatter = new PrintScriptFormatter(ruleFactoryWithCustomPath);
         Map<String, String> codes = getMapFromFile(path + "/codes.json");
         List<Path> cases = getAllFiles("src/test/resources/asts");
         for (Path testCase : cases) {
