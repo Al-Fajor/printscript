@@ -1,10 +1,8 @@
 package org.example;
 
-import org.example.factories.RuleMapFactory;
+import org.example.factories.RuleFactory;
 
-import java.util.Map;
-
-public class TestRuleMapFactory implements RuleMapFactory {
+public class TestRuleMapFactory implements RuleFactory {
     private final String path;
 
     public TestRuleMapFactory(String path) {
@@ -12,8 +10,8 @@ public class TestRuleMapFactory implements RuleMapFactory {
     }
 
     @Override
-    public Map<String, String> getRuleMap() {
-        MapFromFile mapFromFile = new MapFromFile();
-        return mapFromFile.getMapFromFile(path);
+    public Rules getRules() {
+        RulesFromFile rulesFromFile = new RulesFromFile();
+        return new Rules(rulesFromFile.getMapFromFile(path));
     }
 }

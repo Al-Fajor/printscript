@@ -1,0 +1,7 @@
+package org.example.ruleappliers;
+
+public enum RuleApplierTypes {
+    ASSIGNATION,
+    DECLARATION,
+    FUNCTION_CALL
+}

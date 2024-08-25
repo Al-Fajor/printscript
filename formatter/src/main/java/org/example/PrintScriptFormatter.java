@@ -1,23 +1,22 @@
 package org.example;
 
 import org.example.ast.AstComponent;
-import org.example.factories.RuleMapFactory;
-import org.example.factories.RuleMapFactoryImpl;
+import org.example.factories.RuleFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PrintScriptFormatter implements Formatter {
-    private final RuleMapFactory ruleMapFactory;
+    private final RuleFactory ruleFactory;
 
-    public PrintScriptFormatter(RuleMapFactory ruleMapFactory) {
-        this.ruleMapFactory = ruleMapFactory;
+    public PrintScriptFormatter(RuleFactory ruleFactory) {
+        this.ruleFactory = ruleFactory;
     }
 
     @Override
     public String format(List<AstComponent> asts) {
         List<String> formattedCodes = new ArrayList<>();
-        FormatterVisitor visitor = new FormatterVisitor(ruleMapFactory);
+        FormatterVisitor visitor = new FormatterVisitor(ruleFactory);
         for (AstComponent ast : asts) {
             String formattedCode = ast.accept(visitor) + ";";
             formattedCodes.add(formattedCode);

@@ -5,18 +5,20 @@ import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.AstComponentVisitor;
-import org.example.factories.RuleMapFactory;
+import org.example.factories.RuleFactory;
+import org.example.ruleappliers.RuleApplier;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
 //    TODO Create own class for rules. Verify rules immediately after getting parsed
 //    TODO think of a better way to structure code following SOLID
-    private final Map<String, String> ruleMap;
+    private final Rules rules;
 
-    public FormatterVisitor(RuleMapFactory ruleMapFactory) {
-        ruleMap = ruleMapFactory.getRuleMap();
+    public FormatterVisitor(RuleFactory ruleFactory) {
+        this.rules = ruleFactory.getRules();
     }
 
     @Override
@@ -57,42 +59,59 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     @Override
     public String visit(AssignationStatement statement) {
-        boolean spaceAroundEquals = Boolean.parseBoolean(ruleMap.get("spaceAroundEquals"));
+        List<RuleApplier<AssignationStatement>> appliedRules = rules.getAssignationRuleAppliers();
+        List<List<String>> results = appliedRules.stream()
+                .map(rule -> rule.applyRules(this, statement))
+                .toList();
+        List<String> combinedResults = combineStringsLists(results);
         String right = statement.getRight().accept(this);
         String left = statement.getLeft().accept(this);
-        if (right.equals("")) {
+        if (right.isEmpty()) {
             return left;
         }
-        return left +
-            (spaceAroundEquals ? " " : "") +
+        return combinedResults.get(0) +
+                left +
+                combinedResults.get(1) +
             "=" +
-            (spaceAroundEquals ? " " : "") +
-            right;
+                combinedResults.get(2) +
+            right +
+                combinedResults.get(3);
     }
 
     @Override
     public String visit(Declaration statement) {
-        boolean spaceBeforeColon = Boolean.parseBoolean(ruleMap.get("spaceBeforeColon"));
-        boolean spaceAfterColon = Boolean.parseBoolean(ruleMap.get("spaceAfterColon"));
+        List<RuleApplier<Declaration>> appliedRules = rules.getDeclarationRuleAppliers();
+        List<List<String>> results = appliedRules.stream()
+                .map(rule -> rule.applyRules(this, statement))
+                .toList();
+        List<String> combinedResults = combineStringsLists(results);
         return
             "let " +
+            combinedResults.get(0) +
             statement.getName() +
-            (spaceBeforeColon ? " " : "" ) +
+            combinedResults.get(1) +
             ":" +
-            (spaceAfterColon ? " " : "" ) +
-            statement.getType().toString().toLowerCase();
+            combinedResults.get(2) +
+            statement.getType().toString().toLowerCase() +
+            combinedResults.get(3);
     }
 
     @Override
     public String visit(FunctionCallStatement statement) {
-        String identifier = statement.getLeft().accept(this);
-        String breaks = "";
-        if (identifier.equals("println")) {
-            int spacesBeforePrintln = Integer.parseInt(ruleMap.get("breaksBeforePrintln"));
-//            TODO idk if break after ";" counts
-            breaks = "\n".repeat(spacesBeforePrintln);
-        }
-        return breaks + statement.getLeft().accept(this) + "(" + statement.getRight().accept(this) + ")";
+        List<RuleApplier<FunctionCallStatement>> appliedRules = rules.getFunctionRuleAppliers();
+        List<List<String>> results = appliedRules.stream()
+                .map(rule -> rule.applyRules(this, statement))
+                .toList();
+        List<String> combinedResults = combineStringsLists(results);
+        return  combinedResults.get(0) +
+                statement.getLeft().accept(this) +
+                combinedResults.get(1) +
+                "(" +
+                combinedResults.get(2) +
+                statement.getRight().accept(this) +
+                combinedResults.get(3) +
+                ")" +
+                combinedResults.get(4);
     }
 
     @Override
@@ -105,5 +124,19 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
     @Override
     public String visit(Identifier identifier) {
         return identifier.getName();
+    }
+
+    private List<String> combineStringsLists(List<List<String>> listOfLists) {
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < listOfLists.getFirst().size(); i++) {
+            result.add(addAllNthElements(listOfLists, i));
+        }
+        return result;
+    }
+
+    private String addAllNthElements(List<List<String>> listOfLists, int n) {
+        return listOfLists.stream()
+                .map(list -> list.get(n))
+                .collect(Collectors.joining());
     }
 }
