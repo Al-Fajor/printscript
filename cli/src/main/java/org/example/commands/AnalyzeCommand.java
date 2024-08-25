@@ -1,6 +1,7 @@
 package org.example.commands;
 
-import static org.example.PrintUtils.printFailedCode;
+import static org.example.utils.PrintUtils.printFailedCode;
+import static org.example.utils.ReadUtils.getContent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,7 +39,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 	public Integer call() {
 		String configPathOrDefault = Objects.requireNonNullElse(configPath, DEFAULT_CONFIG_PATH);
 		PrintScriptSCA analyzer = getAnalyzer(configPathOrDefault);
-		String content = getContent();
+		String content = getContent(filePath);
 
 		List<Result> results = analyzer.analyze(content);
 
@@ -56,16 +57,6 @@ public class AnalyzeCommand implements Callable<Integer> {
 		}
 
 		return 0;
-	}
-
-	private String getContent() {
-		String content;
-		try {
-			content = new String(Files.readAllBytes(Paths.get(filePath)));
-		} catch (IOException e) {
-			throw new RuntimeException("Could not get content to format. Got error:\n" + e);
-		}
-		return content;
 	}
 
 	private PrintScriptSCA getAnalyzer(String configPathOrDefault) {

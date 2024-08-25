@@ -1,6 +1,8 @@
-package org.example;
+package org.example.utils;
 
 import java.io.IOException;
+
+import org.example.Result;
 import org.example.io.ScriptReader;
 
 public class PrintUtils {

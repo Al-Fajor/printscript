@@ -1,6 +1,6 @@
 package org.example;
 
-import static org.example.PrintUtils.printFailedCode;
+import static org.example.utils.PrintUtils.printFailedCode;
 
 import java.io.FileNotFoundException;
 import java.util.Collections;
@@ -43,7 +43,7 @@ public class Parser {
 		try {
 			code = ScriptReader.readCodeFromSource(path);
 		} catch (FileNotFoundException e) {
-			System.out.println("Could not read file; got error: \n" + e.getMessage());
+			System.out.println("Could not read file; got error: \n" + e);
 			return Collections.emptyList();
 		}
 

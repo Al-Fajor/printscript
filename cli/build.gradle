@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":semantics"))
     implementation(project(":interpreter"))
     implementation(project(":staticanalyzer"))
+    implementation(project(":formatter"))
 }
 
 test {
