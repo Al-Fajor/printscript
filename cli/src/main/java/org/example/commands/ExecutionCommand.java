@@ -2,7 +2,6 @@ package org.example.commands;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-import org.example.Function;
 import org.example.Interpreter;
 import org.example.Parser;
 import org.example.ast.AstComponent;
@@ -10,7 +9,6 @@ import org.example.factory.InterpreterFactory;
 import org.example.io.Color;
 import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
-import org.example.observer.PrintSubscriber;
 import picocli.CommandLine;
 
 @CommandLine.Command(
