@@ -47,7 +47,7 @@ public class FileParser {
 
 	private Pair<BaseTokenTypes, String> getToken(String token) {
 		if (token.indexOf('(') == -1) {
-			return new Pair<>(BaseTokenTypes.valueOf(token), "");
+      return new Pair<>(BaseTokenTypes.valueOf(token), "");
 		}
 		String tokenName = token.substring(0, token.indexOf('('));
 		String tokenValue = token.substring(token.indexOf('(') + 1, token.lastIndexOf(')'));

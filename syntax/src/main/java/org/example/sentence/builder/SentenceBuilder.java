@@ -17,6 +17,9 @@ import org.example.token.Token;
 public class SentenceBuilder {
 	public Pair<Optional<AstComponent>, String> buildSentence(List<Token> tokens) {
 		var sentence = getAstComponent(tokens);
+    if(sentence == null){
+      return new Pair<>(Optional.empty(), "Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
+    }
 		Optional<AstComponent> component =
 				sentence.first() == null ? Optional.empty() : Optional.of(sentence.first());
 		return new Pair<>(component, sentence.second());
@@ -59,7 +62,7 @@ public class SentenceBuilder {
 								parameters, tokens.get(1).getStart(), tokens.getLast().getEnd()),
 						printStart,
 						tokens.getLast().getEnd()),
-				"Not an error");
+				validity.getErrorMessage());
 	}
 
 	private Pair<AstComponent, String> buildLetSentence(List<Token> tokens) {
@@ -89,7 +92,7 @@ public class SentenceBuilder {
 		return new Pair<>(
 				new AssignationStatement(
 						declaration, value, tokens.getFirst().getStart(), semicolon.getEnd()),
-				"Not an error");
+      validity.getErrorMessage());
 	}
 
 	private DeclarationType getDeclarationType(String type) {

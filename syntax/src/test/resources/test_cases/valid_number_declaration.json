@@ -1,4 +1,4 @@
-{"tokens": "LET -> IDENTIFIER(a) -> COLON -> TYPE(number) -> ASSIGNATION -> LITERAL(5) -> SEMICOLON",
+{"tokens": "LET -> IDENTIFIER(a) -> COLON -> TYPE(number) -> SEMICOLON",
   "ast_list":[
     {
       "assignation": [
@@ -10,7 +10,7 @@
         },
         {
           "literal": {
-            "value": 5
+            "value": null
           }
         }
       ]
