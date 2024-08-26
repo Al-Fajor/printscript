@@ -33,7 +33,10 @@ public class SentenceBuilder {
 		EvaluableComponent value =
 				mapper.buildExpression(tokens.subList(2, tokens.size())).getFirst();
 
-		return new Pair<>(new AssignationStatement(identifier, value), "Not an error");
+		return new Pair<>(
+				new AssignationStatement(
+						identifier, value, tokens.getFirst().getStart(), tokens.getLast().getEnd()),
+				"Not an error");
 	}
 
 	private Pair<AstComponent, String> buildFunctionSentence(List<Token> tokens) {
@@ -43,11 +46,20 @@ public class SentenceBuilder {
 
 		List<EvaluableComponent> parameters =
 				new TokenMapper().buildExpression(tokens.subList(1, tokens.size()));
+		Pair<Integer, Integer> printStart = tokens.getFirst().getStart();
+		Pair<Integer, Integer> printEnd = tokens.getFirst().getEnd();
 
-		IdentifierComponent id = new Identifier("println", IdentifierType.FUNCTION);
+		IdentifierComponent id =
+				new Identifier("println", IdentifierType.FUNCTION, printStart, printEnd);
 
 		return new Pair<>(
-				new FunctionCallStatement(id, new Parameters(parameters)), "Not an error");
+				new FunctionCallStatement(
+						id,
+						new Parameters(
+								parameters, tokens.get(1).getStart(), tokens.getLast().getEnd()),
+						printStart,
+						tokens.getLast().getEnd()),
+				"Not an error");
 	}
 
 	private Pair<AstComponent, String> buildLetSentence(List<Token> tokens) {
@@ -59,16 +71,25 @@ public class SentenceBuilder {
 		// May need to change method
 		Token type = tokens.get(3);
 		Token identifier = tokens.get(1);
+		Token semicolon = tokens.getLast();
 
 		DeclarationType declarationType = getDeclarationType(type.getValue());
 		// let x: number;
-		IdentifierComponent declaration = new Declaration(declarationType, identifier.getValue());
+		IdentifierComponent declaration =
+				new Declaration(
+						declarationType,
+						identifier.getValue(),
+						tokens.getFirst().getStart(),
+						tokens.get(4).getEnd());
 
 		EvaluableComponent value =
 				tokens.get(4).getType() != ASSIGNATION
-						? new Literal<>(null)
+						? new Literal<>(null, semicolon.getStart(), semicolon.getEnd())
 						: mapper.buildExpression(tokens.subList(5, tokens.size())).getFirst();
-		return new Pair<>(new AssignationStatement(declaration, value), "Not an error");
+		return new Pair<>(
+				new AssignationStatement(
+						declaration, value, tokens.getFirst().getStart(), semicolon.getEnd()),
+				"Not an error");
 	}
 
 	private DeclarationType getDeclarationType(String type) {

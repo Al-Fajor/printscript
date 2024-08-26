@@ -10,20 +10,28 @@ import org.example.ast.visitor.StatementVisitor;
 public class FunctionCallStatement implements Statement {
 	private final IdentifierComponent identifier;
 	private final Parameters parameters;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
-	public FunctionCallStatement(IdentifierComponent identifier, Parameters parameters) {
+	public FunctionCallStatement(
+			IdentifierComponent identifier,
+			Parameters parameters,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.identifier = identifier;
 		this.parameters = parameters;
+		this.start = start;
+		this.end = end;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override
@@ -57,7 +65,16 @@ public class FunctionCallStatement implements Statement {
 
 	@Override
 	public String toString() {
-		return "FunctionCall{" + "identifier=" + identifier + ", parameters=" + parameters + '}';
+		return "FunctionCallStatement{"
+				+ "identifier="
+				+ identifier
+				+ ", parameters="
+				+ parameters
+				+ ", start="
+				+ start
+				+ ", end="
+				+ end
+				+ '}';
 	}
 
 	@Override

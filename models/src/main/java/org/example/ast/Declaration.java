@@ -8,10 +8,18 @@ import org.example.ast.visitor.IdentifierComponentVisitor;
 public class Declaration implements IdentifierComponent {
 	private final DeclarationType type;
 	private final String name;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
-	public Declaration(DeclarationType type, String name) {
+	public Declaration(
+			DeclarationType type,
+			String name,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.type = type;
 		this.name = name;
+		this.start = start;
+		this.end = end;
 	}
 
 	public DeclarationType getType() {
@@ -29,12 +37,12 @@ public class Declaration implements IdentifierComponent {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override

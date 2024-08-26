@@ -9,20 +9,28 @@ import org.example.ast.visitor.IdentifierComponentVisitor;
 public class Identifier implements IdentifierComponent, EvaluableComponent {
 	private final IdentifierType type;
 	private final String name;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
-	public Identifier(String name, IdentifierType type) {
+	public Identifier(
+			String name,
+			IdentifierType type,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.name = name;
 		this.type = type;
+		this.start = start;
+		this.end = end;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	public String getName() {

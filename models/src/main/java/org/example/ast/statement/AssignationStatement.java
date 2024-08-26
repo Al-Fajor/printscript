@@ -10,11 +10,18 @@ import org.example.ast.visitor.StatementVisitor;
 public class AssignationStatement implements Statement {
 	private final IdentifierComponent identifier;
 	private final EvaluableComponent expression;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
 	public AssignationStatement(
-			IdentifierComponent leftComponent, EvaluableComponent rightComponent) {
+			IdentifierComponent leftComponent,
+			EvaluableComponent rightComponent,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.identifier = leftComponent;
 		this.expression = rightComponent;
+		this.start = start;
+		this.end = end;
 	}
 
 	@Override
@@ -29,12 +36,12 @@ public class AssignationStatement implements Statement {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override
@@ -63,11 +70,15 @@ public class AssignationStatement implements Statement {
 
 	@Override
 	public String toString() {
-		return "Assignation{"
-				+ "leftComponent="
+		return "AssignationStatement{"
+				+ "identifier="
 				+ identifier
-				+ ", rightComponent="
+				+ ", expression="
 				+ expression
+				+ ", start="
+				+ start
+				+ ", end="
+				+ end
 				+ '}';
 	}
 }

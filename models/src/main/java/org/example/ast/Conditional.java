@@ -7,9 +7,14 @@ import org.example.ast.visitor.EvaluableComponentVisitor;
 
 public class Conditional implements EvaluableComponent {
 	private final AstComponent condition;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
-	public Conditional(AstComponent condition) {
+	public Conditional(
+			AstComponent condition, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
 		this.condition = condition;
+		this.start = start;
+		this.end = end;
 	}
 
 	public AstComponent getCondition() {
@@ -18,12 +23,12 @@ public class Conditional implements EvaluableComponent {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override

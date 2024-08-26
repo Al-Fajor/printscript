@@ -6,9 +6,16 @@ import org.example.ast.visitor.AstComponentVisitor;
 
 public class StatementBlock implements AstComponent {
 	private final List<EvaluableComponent> statements;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
-	public StatementBlock(List<EvaluableComponent> statements) {
+	public StatementBlock(
+			List<EvaluableComponent> statements,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.statements = statements;
+		this.start = start;
+		this.end = end;
 	}
 
 	public List<EvaluableComponent> getStatements() {
@@ -17,12 +24,12 @@ public class StatementBlock implements AstComponent {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override
