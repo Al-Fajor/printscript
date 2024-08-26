@@ -36,20 +36,36 @@ public class TokenMapper {
 	public EvaluableComponent mapToken(Token token) {
 		Map<TokenType, EvaluableComponent> map =
 				Map.of(
-						LITERAL, translateToLiteral(token.getValue()),
-						IDENTIFIER, new Identifier(token.getValue(), IdentifierType.VARIABLE),
-						FUNCTION, new Identifier(token.getValue(), IdentifierType.FUNCTION),
-						PRINTLN, new Identifier("println", IdentifierType.FUNCTION));
+						LITERAL, translateToLiteral(token),
+						IDENTIFIER,
+								new Identifier(
+										token.getValue(),
+										IdentifierType.VARIABLE,
+										token.getStart(),
+										token.getEnd()),
+						FUNCTION,
+								new Identifier(
+										token.getValue(),
+										IdentifierType.FUNCTION,
+										token.getStart(),
+										token.getEnd()),
+						PRINTLN,
+								new Identifier(
+										"println",
+										IdentifierType.FUNCTION,
+										token.getStart(),
+										token.getEnd()));
 		return map.get(token.getType());
 	}
 
 	// Private methods
 
-	public Literal<?> translateToLiteral(String value) {
+	public Literal<?> translateToLiteral(Token token) {
+		String value = token.getValue();
 		if (value.contains("\"") || !isNumeric(value)) {
-			return new Literal<>(clearInvCommas(value));
+			return new Literal<>(clearInvCommas(value), token.getStart(), token.getEnd());
 		}
-		return new Literal<>(Integer.valueOf(value));
+		return new Literal<>(Integer.valueOf(value), token.getStart(), token.getEnd());
 	}
 
 	private boolean isNumeric(String value) {

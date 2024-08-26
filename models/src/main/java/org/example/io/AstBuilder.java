@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
@@ -39,17 +40,22 @@ public class AstBuilder {
 			case "declaration" ->
 					new Declaration(
 							mapToDeclarationType(astComponentJson.getString("declarationType")),
-							astComponentJson.getString("name"));
+							astComponentJson.getString("name"),
+							new Pair<>(1, 1),
+							new Pair<>(1, 1)); // TODO: use real locations and add them to JSONs
 			case "literal" -> {
 				Object value = astComponentJson.get("value");
 
 				// This condition seems stupid, but it is how the Null object
 				// is implemented in org.json
-				if (value.equals(null)) yield new Literal<>(null);
+				if (value.equals(null))
+					yield new Literal<>(null, new Pair<>(1, 1), new Pair<>(1, 1));
 
 				yield switch (value) {
-					case String ignored -> new Literal<>((String) value);
-					case Number ignored -> new Literal<>((Number) value);
+					case String ignored ->
+							new Literal<>((String) value, new Pair<>(1, 1), new Pair<>(1, 1));
+					case Number ignored ->
+							new Literal<>((Number) value, new Pair<>(1, 1), new Pair<>(1, 1));
 					default ->
 							throw new IllegalArgumentException(
 									"Cannot parse JSON: Unsupported value "
@@ -60,7 +66,9 @@ public class AstBuilder {
 			case "identifier" ->
 					new Identifier(
 							astComponentJson.getString("name"),
-							mapToIdentifierType(astComponentJson.getString("identifierType")));
+							mapToIdentifierType(astComponentJson.getString("identifierType")),
+							new Pair<>(1, 1),
+							new Pair<>(1, 1));
 			case "functionCall" ->
 					new FunctionCallStatement(
 							(IdentifierComponent)
@@ -69,7 +77,9 @@ public class AstBuilder {
 											"identifier"),
 							(Parameters)
 									mapToAstComponent(
-											astComponentJson.getJSONArray("params"), "params"));
+											astComponentJson.getJSONArray("params"), "params"),
+							new Pair<>(1, 1),
+							new Pair<>(1, 1));
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
 							"Not implemented yet: case '" + astComponentJsonName + "'");
@@ -90,7 +100,9 @@ public class AstBuilder {
 				return new BinaryExpression(
 						mapToOperator(jsonArray.getJSONObject(0).getString("op")),
 						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
-						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName));
+						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName),
+						new Pair<>(1, 1),
+						new Pair<>(1, 1));
 
 			case "assignation":
 				String firstComponentName = jsonArray.getJSONObject(0).keys().next();
@@ -102,7 +114,9 @@ public class AstBuilder {
 				return new AssignationStatement(
 						(IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
 						(EvaluableComponent)
-								mapToAstComponent(secondComponent, secondComponentName));
+								mapToAstComponent(secondComponent, secondComponentName),
+						new Pair<>(1, 1),
+						new Pair<>(1, 1));
 
 			case "params":
 				List<EvaluableComponent> parameters = new ArrayList<>();
@@ -114,7 +128,7 @@ public class AstBuilder {
 					parameters.add((EvaluableComponent) mapToAstComponent(subComponent, key));
 				}
 
-				return new Parameters(parameters);
+				return new Parameters(parameters, new Pair<>(1, 1), new Pair<>(1, 1));
 
 			default:
 				throw new IllegalArgumentException(

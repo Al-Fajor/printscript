@@ -2,6 +2,7 @@ package org.example.sentence.builder;
 
 import static org.example.token.BaseTokenTypes.*;
 
+import org.example.Pair;
 import org.example.ast.BinaryExpression;
 import org.example.ast.EvaluableComponent;
 import org.example.sentence.mapper.TokenMapper;
@@ -71,8 +72,12 @@ public class ExpressionBuilder {
 		EvaluableComponent right = parseExpression(reader, bindingPower);
 
 		TokenMapper mapper = new TokenMapper();
+		Pair<Integer, Integer> start = left != null ? left.getStart() : currentToken.getStart();
+		Pair<Integer, Integer> end = right.getEnd();
+
 		return left != null
-				? new BinaryExpression(mapper.mapOperator(currentToken.getValue()), left, right)
+				? new BinaryExpression(
+						mapper.mapOperator(currentToken.getValue()), left, right, start, end)
 				: mapper.mapToken(currentToken);
 	}
 

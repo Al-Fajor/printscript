@@ -9,14 +9,20 @@ public class BinaryExpression implements EvaluableComponent {
 	private final BinaryOperator operator;
 	private final EvaluableComponent leftComponent;
 	private final EvaluableComponent rightComponent;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
 	public BinaryExpression(
 			BinaryOperator operator,
 			EvaluableComponent leftComponent,
-			EvaluableComponent rightComponent) {
+			EvaluableComponent rightComponent,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.operator = operator;
 		this.leftComponent = leftComponent;
 		this.rightComponent = rightComponent;
+		this.start = start;
+		this.end = end;
 	}
 
 	public BinaryOperator getOperator() {
@@ -33,12 +39,12 @@ public class BinaryExpression implements EvaluableComponent {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override
@@ -75,6 +81,10 @@ public class BinaryExpression implements EvaluableComponent {
 				+ leftComponent
 				+ ", rightComponent="
 				+ rightComponent
+				+ ", start="
+				+ start
+				+ ", end="
+				+ end
 				+ '}';
 	}
 }

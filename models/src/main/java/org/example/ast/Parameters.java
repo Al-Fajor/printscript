@@ -7,9 +7,16 @@ import org.example.ast.visitor.AstComponentVisitor;
 
 public class Parameters implements AstComponent {
 	private final List<EvaluableComponent> parameters;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
-	public Parameters(List<EvaluableComponent> parameters) {
+	public Parameters(
+			List<EvaluableComponent> parameters,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.parameters = parameters;
+		this.start = start;
+		this.end = end;
 	}
 
 	public List<EvaluableComponent> getParameters() {
@@ -18,12 +25,12 @@ public class Parameters implements AstComponent {
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override
@@ -41,7 +48,14 @@ public class Parameters implements AstComponent {
 
 	@Override
 	public String toString() {
-		return "Parameters{" + "parameters=" + parameters + '}';
+		return "Parameters{"
+				+ "parameters="
+				+ parameters
+				+ ", start="
+				+ start
+				+ ", end="
+				+ end
+				+ '}';
 	}
 
 	@Override

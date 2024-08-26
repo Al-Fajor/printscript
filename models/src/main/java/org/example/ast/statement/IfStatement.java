@@ -11,20 +11,28 @@ import org.example.ast.visitor.StatementVisitor;
 public class IfStatement implements Statement {
 	private final Conditional conditional;
 	private final IfClauses clauses;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
-	public IfStatement(Conditional conditional, IfClauses clauses) {
+	public IfStatement(
+			Conditional conditional,
+			IfClauses clauses,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.conditional = conditional;
 		this.clauses = clauses;
+		this.start = start;
+		this.end = end;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getStart() {
-		return new Pair<>(1, 1);
+		return start;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getEnd() {
-		return new Pair<>(1, 1);
+		return end;
 	}
 
 	@Override
