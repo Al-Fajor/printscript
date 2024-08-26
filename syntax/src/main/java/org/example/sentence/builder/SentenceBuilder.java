@@ -17,9 +17,11 @@ import org.example.token.Token;
 public class SentenceBuilder {
 	public Pair<Optional<AstComponent>, String> buildSentence(List<Token> tokens) {
 		var sentence = getAstComponent(tokens);
-    if(sentence == null){
-      return new Pair<>(Optional.empty(), "Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
-    }
+		if (sentence == null) {
+			return new Pair<>(
+					Optional.empty(),
+					"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
+		}
 		Optional<AstComponent> component =
 				sentence.first() == null ? Optional.empty() : Optional.of(sentence.first());
 		return new Pair<>(component, sentence.second());
@@ -92,7 +94,7 @@ public class SentenceBuilder {
 		return new Pair<>(
 				new AssignationStatement(
 						declaration, value, tokens.getFirst().getStart(), semicolon.getEnd()),
-      validity.getErrorMessage());
+				validity.getErrorMessage());
 	}
 
 	private DeclarationType getDeclarationType(String type) {
