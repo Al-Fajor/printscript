@@ -75,28 +75,22 @@ class CliTest extends TestBuilder {
 
 			cmd.execute(command.split(" "));
 
-            String actualFormattedCode =
-                    ScriptReader
-                            .readCodeFromSource(tempPath.toString())
-                            .replace("\n", "")
-                            .replace("\r", "");
+			String actualFormattedCode =
+					ScriptReader.readCodeFromSource(tempPath.toString())
+							.replace("\n", "")
+							.replace("\r", "");
 			String expectedFormattedCode =
-					ScriptReader
-                            .readCodeFromSource(pathOfFileToFormat.toString().replace("unformatted", "formatted"));
+					ScriptReader.readCodeFromSource(
+							pathOfFileToFormat.toString().replace("unformatted", "formatted"));
 
-			assertEquals(
-                    normalized(expectedFormattedCode),
-                    normalized(actualFormattedCode)
-            );
+			assertEquals(normalized(expectedFormattedCode), normalized(actualFormattedCode));
 		} finally {
 			Files.delete(tempPath);
 			Files.delete(tempDir);
 		}
 	}
 
-    private String normalized(String code) {
-        return code
-                .replace("\n", "")
-                .replace("\r", "");
-    }
+	private String normalized(String code) {
+		return code.replace("\n", "").replace("\r", "");
+	}
 }
