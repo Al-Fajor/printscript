@@ -13,8 +13,7 @@ public abstract class TestBuilder {
 	private final String runOnly = "";
 
 	/** Annotate with @TestFactory whenever you want to create tests from a directory. */
-	protected Stream<DynamicTest> testAllDirectoryCases(
-			String testCaseDirectory) {
+	protected Stream<DynamicTest> testAllDirectoryCases(String testCaseDirectory) {
 		Stream<File> files;
 
 		if (runOnly.isEmpty()) {

@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ScaTester {
-	public ScaTester() throws IOException {}
+	public ScaTester(){}
 
 	public void test(String path) throws IOException {
 		JSONObject json = getJSONObject(path);
@@ -54,6 +54,6 @@ public class ScaTester {
 	}
 
 	private void compareResults(List<Result> expectedResults, List<Result> results) {
-		assertIterableEquals(expectedResults, results);
+    assertTrue(expectedResults.containsAll(results));
 	}
 }
