@@ -28,8 +28,10 @@ public class SentenceBuilder {
 	}
 
 	private Pair<AstComponent, String> buildReassignationSentence(List<Token> tokens) {
-		if (tokens.size() <= 2 || tokens.get(1).getType() != ASSIGNATION)
-			return new Pair<>(null, "Invalid reassignation sentence");
+		SentenceValidator validator = new SentenceValidator();
+		Validity validity = validator.getSentenceValidity(tokens);
+		if (tokens.size() <= 2 || !validity.isValid())
+			return new Pair<>(null, validity.getErrorMessage());
 		TokenMapper mapper = new TokenMapper();
 
 		// TODO: eliminate casting
@@ -45,8 +47,8 @@ public class SentenceBuilder {
 	}
 
 	private Pair<AstComponent, String> buildFunctionSentence(List<Token> tokens) {
-		SentenceValidator validator = new FunctionSentenceValidator();
-		Validity validity = validator.isValidSentence(tokens);
+		SentenceValidator validator = new SentenceValidator();
+		Validity validity = validator.getSentenceValidity(tokens);
 		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
 		List<EvaluableComponent> parameters =
@@ -68,8 +70,8 @@ public class SentenceBuilder {
 	}
 
 	private Pair<AstComponent, String> buildLetSentence(List<Token> tokens) {
-		SentenceValidator validator = new LetSentenceValidator();
-		Validity validity = validator.isValidSentence(tokens);
+		SentenceValidator validator = new SentenceValidator();
+		Validity validity = validator.getSentenceValidity(tokens);
 		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
 		TokenMapper mapper = new TokenMapper();
