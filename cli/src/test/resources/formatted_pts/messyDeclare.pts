@@ -1,3 +1,3 @@
-let num: number = 10;
-let name   :string =   "John";
-let age   :number   = 28;
+let num:number=10;
+let name:string="John";
+let age:number=28;

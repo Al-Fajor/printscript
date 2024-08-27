@@ -53,20 +53,20 @@ public class FormattingCommand implements Callable<Integer> {
 		String formattedCode = formatter.format(validatedComponents);
 		System.out.println(formattedCode);
 
-        overwriteOriginalFile(formattedCode);
+		overwriteOriginalFile(formattedCode);
 
-        return 0;
+		return 0;
 	}
 
-    private void overwriteOriginalFile(String formattedCode) {
-        try {
-            Files.write(Paths.get(filePath), formattedCode.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException("Could not write formatted code. Got error:\n" + e);
-        }
-    }
+	private void overwriteOriginalFile(String formattedCode) {
+		try {
+			Files.write(Paths.get(filePath), formattedCode.getBytes());
+		} catch (IOException e) {
+			throw new RuntimeException("Could not write formatted code. Got error:\n" + e);
+		}
+	}
 
-    private String getAbsolutePath() {
+	private String getAbsolutePath() {
 		String pathOrDefault = Objects.requireNonNullElse(configPath, DEFAULT_CONFIG_PATH);
 		return Paths.get(pathOrDefault).toAbsolutePath().toString();
 	}
