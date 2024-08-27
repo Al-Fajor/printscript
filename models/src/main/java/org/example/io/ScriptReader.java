@@ -12,7 +12,9 @@ import java.util.stream.Stream;
 public class ScriptReader {
 	public static String readCodeFromSource(String path) throws FileNotFoundException {
 		Scanner scanner = new Scanner(new File(path));
-		return scanner.useDelimiter("\\Z").next();
+        String code = scanner.useDelimiter("\\Z").next();
+        scanner.close();
+        return code;
 	}
 
 	public static String readAndHighlightRange(

@@ -1,5 +1,7 @@
 package org.example.commands;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
@@ -51,10 +53,20 @@ public class FormattingCommand implements Callable<Integer> {
 		String formattedCode = formatter.format(validatedComponents);
 		System.out.println(formattedCode);
 
-		return 0;
+        overwriteOriginalFile(formattedCode);
+
+        return 0;
 	}
 
-	private String getAbsolutePath() {
+    private void overwriteOriginalFile(String formattedCode) {
+        try {
+            Files.write(Paths.get(filePath), formattedCode.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Could not write formatted code. Got error:\n" + e);
+        }
+    }
+
+    private String getAbsolutePath() {
 		String pathOrDefault = Objects.requireNonNullElse(configPath, DEFAULT_CONFIG_PATH);
 		return Paths.get(pathOrDefault).toAbsolutePath().toString();
 	}

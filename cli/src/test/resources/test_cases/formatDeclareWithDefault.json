@@ -1,0 +1,6 @@
+{
+  "command": "format src/test/resources/unformatted_pts/declare.pts",
+  "expectedOutput": [
+    "Running formatter..."
+  ]
+}
