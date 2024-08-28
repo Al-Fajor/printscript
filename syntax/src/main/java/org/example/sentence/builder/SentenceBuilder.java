@@ -12,7 +12,9 @@ import org.example.ast.statement.FunctionCallStatement;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.*;
 import org.example.sentence.validator.validity.Validity;
+import org.example.sentence.validator.validity.rule.*;
 import org.example.token.Token;
+import org.example.token.TokenType;
 
 public class SentenceBuilder {
 	public Pair<Optional<AstComponent>, String> buildSentence(List<Token> tokens) {
@@ -28,7 +30,8 @@ public class SentenceBuilder {
 	}
 
 	private Pair<AstComponent, String> buildReassignationSentence(List<Token> tokens) {
-		SentenceValidator validator = new SentenceValidator();
+		SentenceValidator validator =
+				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
 		if (tokens.size() <= 2 || !validity.isValid())
 			return new Pair<>(null, validity.getErrorMessage());
@@ -47,7 +50,8 @@ public class SentenceBuilder {
 	}
 
 	private Pair<AstComponent, String> buildFunctionSentence(List<Token> tokens) {
-		SentenceValidator validator = new SentenceValidator();
+		SentenceValidator validator =
+				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
 		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
@@ -70,7 +74,8 @@ public class SentenceBuilder {
 	}
 
 	private Pair<AstComponent, String> buildLetSentence(List<Token> tokens) {
-		SentenceValidator validator = new SentenceValidator();
+		SentenceValidator validator =
+				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
 		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
@@ -113,6 +118,37 @@ public class SentenceBuilder {
 			case LET -> buildLetSentence(tokens);
 			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens);
 			case IDENTIFIER -> buildReassignationSentence(tokens);
+			default -> null;
+		};
+	}
+
+	private List<ValidityRule> getSentenceRules(TokenType type) {
+		return switch (type) {
+			case PRINTLN, FUNCTION ->
+					List.of(
+							new NextTokenShouldExist(),
+							new FunctionCallRule(),
+							new LiteralRule(),
+							new IdentifierOnFunctionRule(),
+							new OperatorRule(),
+							new SeparatorRule());
+			case LET ->
+					List.of(
+							new NextTokenShouldExist(),
+							new DeclarationRule(),
+							new IdentifierOnDeclarationRule(),
+							new ColonRule(),
+							new TypeRule(),
+							new LiteralRule(),
+							new AssignationOnDeclarationRule(),
+							new OperatorRule(),
+							new SeparatorRule());
+			case IDENTIFIER ->
+					List.of(
+							new NextTokenShouldExist(),
+							new ReassignationRule(),
+							new OperatorRule(),
+							new SeparatorRule());
 			default -> null;
 		};
 	}

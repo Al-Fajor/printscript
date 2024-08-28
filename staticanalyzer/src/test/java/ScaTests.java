@@ -4,14 +4,12 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ScaTests extends TestBuilder {
 	ScaTester tester = new ScaTester();
 	String TEST_CASES = "src/test/resources/test_cases";
-
-	public ScaTests() throws IOException {}
+	public ScaTests() {super();}
 
 	@TestFactory
 	public Stream<DynamicTest> testAllDirectoryCases() {
