@@ -138,7 +138,7 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 				return result.getStringResult();
 			}
 			case NUMBER -> {
-				return result.getNumericResult().toString();
+				return result.getNumericResult().toString().replaceAll("\\.0\\b", "");
 			}
 			case BOOLEAN -> {
 				return result.getBoolResult().toString();

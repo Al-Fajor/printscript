@@ -1,4 +1,4 @@
-let a: string = "Hello, World!";
+let helloWorld: string = "Hello, World!";
 let x: string = "Hello, World!";
 let y: string = "Hello, World!";
 let z: string = "Hello, World!";

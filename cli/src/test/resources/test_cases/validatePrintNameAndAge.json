@@ -1,0 +1,9 @@
+{
+  "command": "validate src/test/resources/pts/printNameAndAge.pts",
+  "expectedOutput": [
+    "Performing lexical analysis",
+    "Performing syntactic analysis",
+    "Performing semantic analysis",
+    "Completed validation successfully. No errors found."
+  ]
+}

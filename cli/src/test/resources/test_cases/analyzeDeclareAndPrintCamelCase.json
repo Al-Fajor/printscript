@@ -1,0 +1,7 @@
+{
+  "command": "analyze src/test/resources/pts/declareAndPrint.pts --config=C:src/test/resources/analyzer_configs/camel-case.json",
+  "expectedOutput": [
+    "Running analyzer...",
+    "Static Code Analyzer found no errors."
+  ]
+}

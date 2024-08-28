@@ -1,50 +1,27 @@
 package org.example;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Scanner;
 import org.example.commands.AnalyzeCommand;
-import org.example.commands.Command;
 import org.example.commands.ExecutionCommand;
 import org.example.commands.FormattingCommand;
-import org.example.commands.HelpCommand;
 import org.example.commands.ValidationCommand;
+import picocli.CommandLine;
 
-public class Cli {
-	private static final Map<String, Command> commands =
-			Map.of(
-					"help", new HelpCommand(),
-					"", new HelpCommand(),
-					"validate", new ValidationCommand(),
-					"execute", new ExecutionCommand(),
-					"format", new FormattingCommand(),
-					"analyze", new AnalyzeCommand());
-
+@CommandLine.Command(
+		name = "pts",
+		subcommands = {
+			ValidationCommand.class,
+			ExecutionCommand.class,
+			FormattingCommand.class,
+			AnalyzeCommand.class
+		},
+		mixinStandardHelpOptions = true)
+public class Cli implements Runnable {
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-
-		while (true) {
-			System.out.print("PrintScript> ");
-
-			if (!scanner.hasNext()) {
-				throw new IllegalStateException("There's nothing to read");
-			}
-
-			String[] scannedArgs = scanner.nextLine().split(" ");
-
-			if (scannedArgs.length == 1) {
-				System.out.println("Command must be of the form '<command> <filePath> <flags>'");
-			} else
-				commands.getOrDefault(
-								scannedArgs[0],
-								(commandArgs) ->
-										System.out.println(
-												scannedArgs[0] + " is not a valid command"))
-						.execute(getCommandArguments(scannedArgs));
-		}
+		CommandLine.run(new Cli(), args);
 	}
 
-	private static String[] getCommandArguments(String[] args) {
-		return Arrays.copyOfRange(args, 1, args.length);
+	@Override
+	public void run() {
+		System.out.println("Please specify a command.");
 	}
 }
