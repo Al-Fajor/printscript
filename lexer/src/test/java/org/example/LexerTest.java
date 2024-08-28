@@ -10,6 +10,10 @@ import org.junit.jupiter.api.function.Executable;
 class LexerTest extends TestBuilder {
 	LexerTestBuilder lexerTestBuilder = new LexerTestBuilder();
 	private static final String testCaseDirectory = "src/test/resources/test_cases/";
+  private static final String runOnly = "";
+  public LexerTest(){
+    super(runOnly);
+  }
 
 	//    Token Detection
 	@TestFactory

@@ -10,6 +10,10 @@ import org.junit.jupiter.api.function.Executable;
 public class InterpreterTests extends TestBuilder {
 	private final InterpreterTester tester = new InterpreterTester();
 	private static final String TEST_CASES = "src/test/resources/test_cases";
+  private static final String runOnly = "";
+  public InterpreterTests(){
+    super(runOnly);
+  }
 
 	@TestFactory
 	protected Stream<DynamicTest> testAllDirectoryCases() {
