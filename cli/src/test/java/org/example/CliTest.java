@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
@@ -70,24 +71,31 @@ class CliTest extends TestBuilder {
 				pathOfFileToFormat.toAbsolutePath(), tempPath, StandardCopyOption.REPLACE_EXISTING);
 
 		try {
-			splitCommand[1] = tempPath.toString();
-			command = String.join(" ", splitCommand);
-
-			cmd.execute(command.split(" "));
-
-			String actualFormattedCode =
-					ScriptReader.readCodeFromSource(tempPath.toString())
-							.replace("\n", "")
-							.replace("\r", "");
-			String expectedFormattedCode =
-					ScriptReader.readCodeFromSource(
-							pathOfFileToFormat.toString().replace("unformatted", "formatted"));
-
-			assertEquals(normalized(expectedFormattedCode), normalized(actualFormattedCode));
+			formatCopy(cmd, splitCommand, tempPath, pathOfFileToFormat);
 		} finally {
 			Files.delete(tempPath);
 			Files.delete(tempDir);
 		}
+	}
+
+	private void formatCopy(
+			CommandLine cmd, String[] splitCommand, Path tempPath, Path pathOfFileToFormat)
+			throws FileNotFoundException {
+		String command;
+		splitCommand[1] = tempPath.toString();
+		command = String.join(" ", splitCommand);
+
+		cmd.execute(command.split(" "));
+
+		String actualFormattedCode =
+				ScriptReader.readCodeFromSource(tempPath.toString())
+						.replace("\n", "")
+						.replace("\r", "");
+		String expectedFormattedCode =
+				ScriptReader.readCodeFromSource(
+						pathOfFileToFormat.toString().replace("unformatted", "formatted"));
+
+		assertEquals(normalized(expectedFormattedCode), normalized(actualFormattedCode));
 	}
 
 	private String normalized(String code) {
