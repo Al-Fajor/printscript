@@ -1,5 +1,5 @@
 {
-  "command": "analyze src/test/resources/pts/declareAndPrint.pts --config=C:src/test/resources/analyzer_configs/snake-case.json",
+  "command": "analyze src/test/resources/pts/declareAndPrint.pts --config=src/test/resources/analyzer_configs/snake-case.json",
   "expectedOutput": [
     "Running analyzer...",
     "Identifier \"helloWorld\" is not in snakeCase"
