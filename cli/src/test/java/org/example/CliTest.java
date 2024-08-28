@@ -23,12 +23,13 @@ import picocli.CommandLine;
 
 class CliTest extends TestBuilder {
 	public static final String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
-  private static final String runOnly = "";
-  public CliTest() {
-    super(runOnly);
-  }
+	private static final String runOnly = "";
 
-  @TestFactory
+	public CliTest() {
+		super(runOnly);
+	}
+
+	@TestFactory
 	protected Stream<DynamicTest> testAllDirectoryCases() {
 		return super.testAllDirectoryCases(TEST_CASE_DIRECTORY);
 	}

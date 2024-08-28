@@ -17,7 +17,7 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
 class SemanticAnalyzerImplTest extends TestBuilder {
-  private static final String runOnly = "";
+	private static final String runOnly = "";
 	public static final String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
 	AstBuilder builder = new AstBuilder();
 	AstValidityChecker checker = new AstValidityChecker();
@@ -30,9 +30,9 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 
 	SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
 
-  public SemanticAnalyzerImplTest(){
-    super(runOnly);
-  }
+	public SemanticAnalyzerImplTest() {
+		super();
+	}
 
 	@TestFactory
 	protected Stream<DynamicTest> testAllDirectoryCases() {
