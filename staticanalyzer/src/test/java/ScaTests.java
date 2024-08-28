@@ -4,7 +4,6 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.stream.Stream;
 
 public class ScaTests extends TestBuilder {

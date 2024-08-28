@@ -10,15 +10,18 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.function.Executable;
 
 public abstract class TestBuilder {
-  private final String runOnly; /* Modify as pleased whenever you want to debug a single test */
+	private final String runOnly; /* Modify as pleased whenever you want to debug a single test */
 
-  /**
-   *
-   * @param runOnly = Write only the file name, not the full directory
-   */
-  public TestBuilder(String runOnly){
-    this.runOnly = runOnly;
-  }
+	/**
+	 * @param runOnly = Write only the file name, not the full directory
+	 */
+	public TestBuilder(String runOnly) {
+		this.runOnly = runOnly;
+	}
+
+	public TestBuilder() {
+		this.runOnly = "";
+	}
 
 	/** Annotate with @TestFactory whenever you want to create tests from a directory. */
 	protected Stream<DynamicTest> testAllDirectoryCases(String testCaseDirectory) {
