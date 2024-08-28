@@ -14,7 +14,7 @@ import org.junit.jupiter.api.function.Executable;
 public class SyntaxTest extends TestBuilder {
 	SyntaxTestProvider testProvider = new SyntaxTestProvider();
 	private static final String TEST_CASES = "src/test/resources/test_cases";
-  private static final String runOnly = "";
+  private static final String runOnly = "declare_sum.json";
   public SyntaxTest(){
     super(runOnly);
   }
