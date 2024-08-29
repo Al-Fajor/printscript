@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import org.example.ConfigReader;
-import org.example.PrintScriptSCA;
+import org.example.PrintScriptSca;
 import org.example.Result;
 import org.example.io.Color;
 import picocli.CommandLine;
@@ -36,7 +36,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 	@Override
 	public Integer call() {
 		String configPathOrDefault = Objects.requireNonNullElse(configPath, DEFAULT_CONFIG_PATH);
-		PrintScriptSCA analyzer = getAnalyzer(configPathOrDefault);
+		PrintScriptSca analyzer = getAnalyzer(configPathOrDefault);
 		String content = getContent(filePath);
 
 		List<Result> results = analyzer.analyze(content);
@@ -57,10 +57,10 @@ public class AnalyzeCommand implements Callable<Integer> {
 		return 0;
 	}
 
-	private PrintScriptSCA getAnalyzer(String configPathOrDefault) {
-		PrintScriptSCA analyzer;
+	private PrintScriptSca getAnalyzer(String configPathOrDefault) {
+		PrintScriptSca analyzer;
 		try {
-			analyzer = new PrintScriptSCA(new ConfigReader(configPathOrDefault));
+			analyzer = new PrintScriptSca(new ConfigReader(configPathOrDefault));
 		} catch (IOException e) {
 			throw new RuntimeException("Could not read config file. Got error:\n" + e);
 		}

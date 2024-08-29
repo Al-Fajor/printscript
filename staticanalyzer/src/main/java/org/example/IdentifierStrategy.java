@@ -1,11 +1,10 @@
 package org.example;
 
-import org.example.lexerresult.LexerSuccess;
-import org.example.token.Token;
+import static org.example.token.BaseTokenTypes.IDENTIFIER;
 
 import java.util.*;
-
-import static org.example.token.BaseTokenTypes.IDENTIFIER;
+import org.example.lexerresult.LexerSuccess;
+import org.example.token.Token;
 
 public class IdentifierStrategy implements AnalyzerStrategy {
 	private final String identifierFormat;
@@ -35,10 +34,14 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 		List<Result> results = new ArrayList<>();
 		for (Token token : identifiers) {
 			String identifierName = token.getValue();
-			if(identifierName.matches(identifierRegex)) {
+			if (identifierName.matches(identifierRegex)) {
 				continue;
 			}
-			results.add(new FailResult("Identifier \"" + token.getValue() + "\" is not in "+ identifierFormat, token.getStart(), token.getEnd()));
+			results.add(
+					new FailResult(
+							"Identifier \"" + token.getValue() + "\" is not in " + identifierFormat,
+							token.getStart(),
+							token.getEnd()));
 		}
 		return results;
 	}
