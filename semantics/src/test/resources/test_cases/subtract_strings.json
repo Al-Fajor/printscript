@@ -1,0 +1,32 @@
+{
+  "valid_semantics": false,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "sub"
+          }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "-"
+            },
+            {
+              "literal": {
+                "value": "Hi"
+              }
+            },
+            {
+              "literal": {
+                "value": "Hello"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
