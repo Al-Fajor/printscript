@@ -10,8 +10,8 @@ public class RuleFactoryImpl implements RuleFactory {
 	@Override
 	public FormatterRules getRules() {
 		RulesFromFile rulesFromFile = new RulesFromFile();
-		String PATH = "src/main/resources/rules.json";
-		List<RuleApplier<? extends AstComponent>> ruleAppliers = rulesFromFile.getMapFromFile(PATH);
+		String path = "src/main/resources/rules.json";
+		List<RuleApplier<? extends AstComponent>> ruleAppliers = rulesFromFile.getMapFromFile(path);
 		return new FormatterRules(ruleAppliers);
 	}
 }

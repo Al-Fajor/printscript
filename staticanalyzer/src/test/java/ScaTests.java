@@ -7,7 +7,7 @@ import org.junit.jupiter.api.function.Executable;
 
 public class ScaTests extends TestBuilder {
 	ScaTester tester = new ScaTester();
-	String TEST_CASES = "src/test/resources/test_cases";
+	String testCases = "src/test/resources/test_cases";
 
 	public ScaTests() {
 		super();
@@ -15,7 +15,7 @@ public class ScaTests extends TestBuilder {
 
 	@TestFactory
 	public Stream<DynamicTest> testAllDirectoryCases() {
-		return super.testAllDirectoryCases(TEST_CASES);
+		return super.testAllDirectoryCases(testCases);
 	}
 
 	@Override

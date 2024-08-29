@@ -41,7 +41,6 @@ public class RulesFromFile {
 			case "spaceAroundOperator" -> new SpaceAroundOperator(jsonObject.getBoolean(key));
 			case "spacesAroundCommasInParameters" ->
 					new SpacesAroundCommasInParameters(jsonObject.getBoolean(key));
-				//            Add more rules here
 			default -> throw new RuntimeException("Unknown rule: " + key);
 		};
 	}

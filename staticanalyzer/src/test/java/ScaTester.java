@@ -14,10 +14,10 @@ public class ScaTester {
 	public ScaTester() {}
 
 	public void test(String path) throws IOException {
-		JSONObject json = getJSONObject(path);
+		JSONObject json = getJsonObject(path);
 		String configPath = json.getString("config");
 		JSONArray cases = json.getJSONArray("cases");
-		PrintScriptSCA analyzer = new PrintScriptSCA(new ConfigReader(configPath));
+		PrintScriptSca analyzer = new PrintScriptSca(new ConfigReader(configPath));
 		for (int i = 0; i < cases.length(); i++) {
 			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");
@@ -27,7 +27,7 @@ public class ScaTester {
 		}
 	}
 
-	private JSONObject getJSONObject(String path) throws IOException {
+	private JSONObject getJsonObject(String path) throws IOException {
 		File file = new File(path);
 		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
 		return new JSONObject(content);

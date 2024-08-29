@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PrintScriptSCA implements StaticCodeAnalyzer {
+public class PrintScriptSca implements StaticCodeAnalyzer {
 	private final Map<ConfigAttribute, String> configMap;
 
-	public PrintScriptSCA(ConfigReader configReader) throws IOException {
+	public PrintScriptSca(ConfigReader configReader) throws IOException {
 		this.configMap = configReader.read();
 	}
 
