@@ -1,13 +1,12 @@
 package org.example;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONObject;
 
 public class ConfigReader {
 	private final File configFile;
@@ -25,7 +24,8 @@ public class ConfigReader {
 			if (attribute.valueIsAllowed(value)) {
 				configMap.put(attribute, value);
 			} else {
-				throw new IllegalArgumentException("Value " + value + " is not allowed for attribute " + key);
+				throw new IllegalArgumentException(
+						"Value " + value + " is not allowed for attribute " + key);
 			}
 		}
 		return configMap;

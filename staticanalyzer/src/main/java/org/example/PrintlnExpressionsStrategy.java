@@ -1,14 +1,13 @@
 package org.example;
 
-import org.example.lexerresult.LexerSuccess;
-import org.example.token.Token;
+import static org.example.token.BaseTokenTypes.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
-
-import static org.example.token.BaseTokenTypes.*;
+import org.example.lexerresult.LexerSuccess;
+import org.example.token.Token;
 
 public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 	private final String value;
@@ -34,7 +33,11 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 		List<Integer> printlnIndexes = getIndexesOfPrintln(tokens);
 		for (Integer index : printlnIndexes) {
 			if (hasExpressions(tokens, index)) {
-				results.add(new FailResult("Expressions in println function not allowed", tokens.get(index).getStart(), tokens.get(index).getEnd()));
+				results.add(
+						new FailResult(
+								"Expressions in println function not allowed",
+								tokens.get(index).getStart(),
+								tokens.get(index).getEnd()));
 			}
 		}
 		return results;

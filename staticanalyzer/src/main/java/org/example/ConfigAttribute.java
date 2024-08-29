@@ -9,7 +9,7 @@ public enum ConfigAttribute {
 	private final List<String> allowedValues;
 	private final String jsonKey;
 
-	ConfigAttribute(String jsonKey, List<String>allowedValues) {
+	ConfigAttribute(String jsonKey, List<String> allowedValues) {
 		this.allowedValues = allowedValues;
 		this.jsonKey = jsonKey;
 	}

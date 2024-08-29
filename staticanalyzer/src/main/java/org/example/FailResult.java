@@ -7,7 +7,10 @@ public class FailResult implements Result {
 	private final Pair<Integer, Integer> errorStart;
 	private final Pair<Integer, Integer> errorEnd;
 
-	public FailResult(String errorMessage, Pair<Integer, Integer> errorStart, Pair<Integer, Integer> errorEnd) {
+	public FailResult(
+			String errorMessage,
+			Pair<Integer, Integer> errorStart,
+			Pair<Integer, Integer> errorEnd) {
 		this.errorMessage = errorMessage;
 		this.errorStart = errorStart;
 		this.errorEnd = errorEnd;
@@ -39,15 +42,21 @@ public class FailResult implements Result {
 			return false;
 		}
 		FailResult other = (FailResult) o;
-		return other.errorMessage.equals(errorMessage) && other.errorStart.equals(errorStart) && other.errorEnd.equals(errorEnd);
+		return other.errorMessage.equals(errorMessage)
+				&& other.errorStart.equals(errorStart)
+				&& other.errorEnd.equals(errorEnd);
 	}
 
 	@Override
 	public String toString() {
-		return "FailResult{" +
-				"errorMessage='" + errorMessage + '\'' +
-				", errorStart=" + errorStart +
-				", errorEnd=" + errorEnd +
-				'}';
+		return "FailResult{"
+				+ "errorMessage='"
+				+ errorMessage
+				+ '\''
+				+ ", errorStart="
+				+ errorStart
+				+ ", errorEnd="
+				+ errorEnd
+				+ '}';
 	}
 }
