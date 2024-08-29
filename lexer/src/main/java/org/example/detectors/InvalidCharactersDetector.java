@@ -37,8 +37,8 @@ public class InvalidCharactersDetector implements LexicalErrorDetector {
 								+ lineNumber
 								+ ", position "
 								+ (positionInLine + 1),
-						new Pair<>(lineNumber, positionInLine),
-						new Pair<>(lineNumber, positionInLine + 1));
+						new Pair<>(lineNumber + 1, positionInLine),
+						new Pair<>(lineNumber + 1, positionInLine + 1));
 			}
 		}
 

@@ -39,8 +39,8 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 									+ lines
 									+ ", position "
 									+ position,
-							new Pair<>(lines, position),
-							new Pair<>(lines, position + 1));
+							new Pair<>(lines + 1, position),
+							new Pair<>(lines + 1, position + 1));
 				}
 				stack.pop();
 			}
@@ -58,8 +58,8 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 							+ lines
 							+ ", position "
 							+ (position + 1),
-					new Pair<>(lines, position),
-					new Pair<>(lines, position + 1));
+					new Pair<>(lines + 1, position),
+					new Pair<>(lines + 1, position + 1));
 		}
 
 		return new ScanSuccess();
