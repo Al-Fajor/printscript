@@ -50,8 +50,8 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 
 			} else {
 				return new SyntaxError(
-						new Pair<>(i, 0),
-						new Pair<>(i, currentSentence.size() - 1),
+						new Pair<>(i + 1, 1),
+						new Pair<>(i + 1, currentSentence.getLast().getEnd().second()),
 						result.second());
 			}
 		}

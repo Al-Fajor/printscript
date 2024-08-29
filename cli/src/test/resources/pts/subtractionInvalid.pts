@@ -1,0 +1,4 @@
+let firstname: string = "John";
+let lastname: string = "Doe";
+let age: number = 30;
+println(age - lastname);

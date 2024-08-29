@@ -28,8 +28,8 @@ public class InvalidChainDetector implements LexicalErrorDetector {
 							+ line
 							+ ", position "
 							+ (positionInLine + matcher.group().length()),
-					new Pair<>(line, positionInLine),
-					new Pair<>(line, positionInLine + matcher.group().length()));
+					new Pair<>(line + 1, positionInLine),
+					new Pair<>(line + 1, positionInLine + matcher.group().length()));
 		}
 		return new ScanSuccess();
 	}

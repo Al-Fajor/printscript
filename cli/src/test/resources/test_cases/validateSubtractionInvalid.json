@@ -1,0 +1,10 @@
+{
+  "command": "validate src/test/resources/pts/subtractionInvalid.pts",
+  "expectedOutput": [
+    "Performing lexical analysis",
+    "Performing syntactic analysis",
+    "Performing semantic analysis",
+    "Semantic Analysis failed with error",
+    "println(\u001B[31mage - lastname\u001B[0m);"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "command": "validate src/test/resources/pts/unmatchedBracket.pts",
+  "expectedOutput": [
+    "Performing lexical analysis",
+    "Lexing failed",
+    "println(20 + 10)\u001B[31m)\u001B[0m;"
+  ]
+}

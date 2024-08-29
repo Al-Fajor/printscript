@@ -32,9 +32,9 @@ public class ExecutionCommand implements Callable<Integer> {
 		List<AstComponent> astList = parser.parse(file);
 
 		if (!astList.isEmpty()) {
-			System.out.println("Completed validation successfully. No errors found.");
+			System.out.println("\nCompleted validation successfully. No errors found.");
 
-			Color.printGreen("Running...");
+			Color.printGreen("\nRunning...");
 			interpreter.interpret(astList);
 			return 0;
 		}

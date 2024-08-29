@@ -253,7 +253,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 			return EvaluableResolution.failure(
 					"Cannot assign value of type "
 							+ assignedType
-							+ " to variable of type"
+							+ " to variable of type "
 							+ identifierType,
 					statement.getStart(),
 					statement.getEnd());
