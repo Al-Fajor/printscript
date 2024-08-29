@@ -3,7 +3,6 @@ package org.example.io;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import org.example.Pair;
 
 public class Color {
@@ -24,24 +23,23 @@ public class Color {
 		return String.join("\n", mutableSegment);
 	}
 
-	private static String getWithFinalEscapeCode(List<String> segment, Pair<Integer, Integer> from, Pair<Integer, Integer> to) {
-
+	private static String getWithFinalEscapeCode(
+			List<String> segment, Pair<Integer, Integer> from, Pair<Integer, Integer> to) {
 
 		return new StringBuilder(segment.getLast())
 				.insert(getEscapeCodePosition(segment, from, to), "\u001B[0m")
 				.toString();
 	}
 
-	private static int getEscapeCodePosition(List<String> segment, Pair<Integer, Integer> from, Pair<Integer, Integer> to) {
-		int extraEscapeCodeLength =
-				bothCodesInSameLine(from, to)
-						? RESET_ESCAPE_CODE.length()
-						: 0;
+	private static int getEscapeCodePosition(
+			List<String> segment, Pair<Integer, Integer> from, Pair<Integer, Integer> to) {
+		int extraEscapeCodeLength = bothCodesInSameLine(from, to) ? RESET_ESCAPE_CODE.length() : 0;
 
 		return Math.min(to.second() + extraEscapeCodeLength, segment.getLast().length());
 	}
 
-	private static boolean bothCodesInSameLine(Pair<Integer, Integer> from, Pair<Integer, Integer> to) {
+	private static boolean bothCodesInSameLine(
+			Pair<Integer, Integer> from, Pair<Integer, Integer> to) {
 		return Objects.equals(from.first(), to.first());
 	}
 
