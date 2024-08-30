@@ -74,8 +74,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 		List<String> combinedResults =
 				getCombinedResults(formatterRules.getAssignationRuleAppliers(), statement);
 
-		String right = statement.getRight().accept(this);
-		String left = statement.getLeft().accept(this);
+		String right = statement.getEvaluableComponent().accept(this);
+		String left = statement.getIdentifier().accept(this);
 		if (right.isEmpty()) {
 			return left;
 		}
@@ -109,11 +109,11 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 				getCombinedResults(formatterRules.getFunctionRuleAppliers(), statement);
 
 		return combinedResults.get(0)
-				+ statement.getLeft().accept(this)
+				+ statement.getIdentifier().accept(this)
 				+ combinedResults.get(1)
 				+ "("
 				+ combinedResults.get(2)
-				+ statement.getRight().accept(this)
+				+ statement.getParameters().accept(this)
 				+ combinedResults.get(3)
 				+ ")"
 				+ combinedResults.get(4);

@@ -16,7 +16,7 @@ public class BreaksBeforePrintln implements RuleApplier<FunctionCallStatement> {
 
 	@Override
 	public List<String> applyRules(FormatterVisitor visitor, FunctionCallStatement statement) {
-		String identifier = statement.getLeft().accept(visitor);
+		String identifier = statement.getIdentifier().accept(visitor);
 		String breaks = "";
 		if (identifier.equals("println")) {
 			//            TODO idk if break after ";" counts

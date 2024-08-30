@@ -2,7 +2,6 @@ package org.example.ast.statement;
 
 import java.util.Objects;
 import org.example.Pair;
-import org.example.ast.AstComponent;
 import org.example.ast.Conditional;
 import org.example.ast.IfClauses;
 import org.example.ast.visitor.AstComponentVisitor;
@@ -35,14 +34,12 @@ public class IfStatement implements Statement {
 		return end;
 	}
 
-	@Override
-	public AstComponent getLeft() {
-		return null;
+	public Conditional getConditional() {
+		return conditional;
 	}
 
-	@Override
-	public AstComponent getRight() {
-		return null;
+	public IfClauses getIfClauses() {
+		return clauses;
 	}
 
 	@Override
