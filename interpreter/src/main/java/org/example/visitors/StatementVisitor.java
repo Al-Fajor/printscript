@@ -20,11 +20,11 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 
 	@Override
 	public Void visit(AssignationStatement statement) {
-		IdentifierComponent identifierComponent = statement.getLeft();
+		IdentifierComponent identifierComponent = statement.getIdentifier();
 		IdentifierComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
 		String identifierName = identifierComponent.accept(identifierVisitor);
 
-		EvaluableComponent evaluableComponent = statement.getRight();
+		EvaluableComponent evaluableComponent = statement.getEvaluableComponent();
 		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
 		EvaluationResult result = evaluableComponent.accept(evaluatorVisitor);
 
@@ -44,13 +44,13 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	@Override
 	public Void visit(FunctionCallStatement statement) {
 		Function function = getFunction(statement);
-		Parameters parameters = statement.getRight();
+		Parameters parameters = statement.getParameters();
 		function.executeFunction(parameters);
 		return null;
 	}
 
 	private Function getFunction(FunctionCallStatement statement) {
-		IdentifierComponent identifier = statement.getLeft();
+		IdentifierComponent identifier = statement.getIdentifier();
 		IdentifierComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
 		String functionName = identifier.accept(identifierVisitor);
 		return state.getFunction(functionName);
