@@ -22,7 +22,7 @@ public class SyntaxTestProvider {
 			return expectedList.isEmpty();
 		}
 
-		List<AstComponent> actualList = result.getComponents();
+		List<AstComponent> actualList = result.getStatement();
 
 		return compareAsts(expectedList, actualList);
 	}

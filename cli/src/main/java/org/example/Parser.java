@@ -57,10 +57,10 @@ public class Parser {
 		if (stepFailed(path, syntaxResult, "Syntax analysis")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming semantic analysis");
-		Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
+		Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getStatement());
 		if (stepFailed(path, semanticResult, "Semantic Analysis")) return Collections.emptyList();
 
-		return syntaxResult.getComponents();
+		return syntaxResult.getStatement();
 	}
 
 	private static boolean stepFailed(String path, Result result, String stepName) {

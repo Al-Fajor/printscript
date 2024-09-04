@@ -1,9 +1,8 @@
 package org.example.result;
 
-import java.util.List;
 import java.util.Optional;
 import org.example.Pair;
-import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 
 public class SyntaxError implements SyntaxResult {
 	private final String reason;
@@ -17,8 +16,8 @@ public class SyntaxError implements SyntaxResult {
 	}
 
 	@Override
-	public List<AstComponent> getComponents() {
-		return List.of();
+	public Statement getStatement() {
+		return null;
 	}
 
 	@Override
