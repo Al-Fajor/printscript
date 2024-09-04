@@ -1,28 +1,34 @@
 package org.example;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.AstComponent;
 import org.example.io.AstBuilder;
 import org.example.io.FileParser;
-import org.example.result.SyntaxResult;
+import org.example.result.SyntaxSuccess;
 import org.example.token.Token;
 
 public class SyntaxTestProvider {
+	private static final SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
 
 	public boolean testSyntax(String filePath) throws IOException {
 		FileParser parser = new FileParser();
 		List<Token> tokens = parser.getTokens(filePath);
 
-		SyntaxResult result = new SyntaxAnalyzerImpl().analyze(tokens);
+		List<Result> results = getSyntaxResults(tokens.iterator());
 		List<AstComponent> expectedList = getAstFromJson(filePath);
 
-		if (!result.isSuccessful()) {
+		if (results.stream().anyMatch(r -> !r.isSuccessful())) {
 			return expectedList.isEmpty();
 		}
 
-		List<AstComponent> actualList = result.getStatement();
+		List<AstComponent> actualList =
+				results.stream()
+						.map(result -> ((SyntaxSuccess) result).getStatement())
+						.collect(Collectors.toList());
 
 		return compareAsts(expectedList, actualList);
 	}
@@ -53,5 +59,13 @@ public class SyntaxTestProvider {
 
 	private List<AstComponent> getAstFromJson(String filePath) throws IOException {
 		return new AstBuilder().buildFromJson(filePath);
+	}
+
+	private List<Result> getSyntaxResults(Iterator<Token> tokens) {
+		List<Result> results = new ArrayList<>();
+		while (tokens.hasNext()) {
+			results.add(syntaxAnalyzer.analyze(tokens));
+		}
+		return results;
 	}
 }
