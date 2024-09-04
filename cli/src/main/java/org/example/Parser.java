@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.example.ast.AstComponent;
 import org.example.ast.DeclarationType;
-import org.example.ast.statement.Statement;
 import org.example.io.Color;
 import org.example.io.ScriptReader;
 import org.example.lexerresult.LexerSuccess;
@@ -62,12 +61,12 @@ public class Parser {
 						.collect(Collectors.toList());
 
 		Color.printGreen("\nPerforming semantic analysis");
-        Iterator<AstComponent> syntaxOutputIterator = components.iterator();
-        while (syntaxOutputIterator.hasNext()) {
-            Result semanticResult =
-                    semanticAnalyzer.analyze(syntaxOutputIterator);
-            if (stepFailed(path, semanticResult, "Semantic Analysis")) return Collections.emptyList();
-        }
+		Iterator<AstComponent> syntaxOutputIterator = components.iterator();
+		while (syntaxOutputIterator.hasNext()) {
+			Result semanticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
+			if (stepFailed(path, semanticResult, "Semantic Analysis"))
+				return Collections.emptyList();
+		}
 
 		return components;
 	}

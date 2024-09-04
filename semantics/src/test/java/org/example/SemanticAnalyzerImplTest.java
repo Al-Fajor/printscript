@@ -42,15 +42,15 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 	protected Executable getTestExecutable(File testFile) {
 		return () -> {
 			try {
-                SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
-                List<AstComponent> astList = builder.buildFromJson(testFile.getAbsolutePath());
+				SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
+				List<AstComponent> astList = builder.buildFromJson(testFile.getAbsolutePath());
 
-                Result analyticResult = new SemanticSuccess();
-                Iterator<AstComponent> syntaxOutputIterator = astList.iterator();
+				Result analyticResult = new SemanticSuccess();
+				Iterator<AstComponent> syntaxOutputIterator = astList.iterator();
 
-                while (syntaxOutputIterator.hasNext() && analyticResult.isSuccessful()) {
-                    analyticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
-                }
+				while (syntaxOutputIterator.hasNext() && analyticResult.isSuccessful()) {
+					analyticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
+				}
 
 				boolean validity = checker.readValidityFromJson(testFile.getAbsolutePath());
 
