@@ -9,6 +9,7 @@ import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.AssignationStatement;
 import org.example.ast.statement.FunctionCallStatement;
+import org.example.ast.statement.Statement;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.*;
 import org.example.sentence.validator.validity.Validity;
@@ -17,19 +18,19 @@ import org.example.token.Token;
 import org.example.token.TokenType;
 
 public class SentenceBuilder {
-	public Pair<Optional<AstComponent>, String> buildSentence(List<Token> tokens) {
+	public Pair<Optional<Statement>, String> buildSentence(List<Token> tokens) {
 		var sentence = getAstComponent(tokens);
 		if (sentence == null) {
 			return new Pair<>(
 					Optional.empty(),
 					"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
 		}
-		Optional<AstComponent> component =
+		Optional<Statement> component =
 				sentence.first() == null ? Optional.empty() : Optional.of(sentence.first());
 		return new Pair<>(component, sentence.second());
 	}
 
-	private Pair<AstComponent, String> buildReassignationSentence(List<Token> tokens) {
+	private Pair<Statement, String> buildReassignationSentence(List<Token> tokens) {
 		SentenceValidator validator =
 				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
@@ -49,7 +50,7 @@ public class SentenceBuilder {
 				"Not an error");
 	}
 
-	private Pair<AstComponent, String> buildFunctionSentence(List<Token> tokens) {
+	private Pair<Statement, String> buildFunctionSentence(List<Token> tokens) {
 		SentenceValidator validator =
 				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
@@ -73,7 +74,7 @@ public class SentenceBuilder {
 				validity.getErrorMessage());
 	}
 
-	private Pair<AstComponent, String> buildLetSentence(List<Token> tokens) {
+	private Pair<Statement, String> buildLetSentence(List<Token> tokens) {
 		SentenceValidator validator =
 				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
@@ -113,7 +114,7 @@ public class SentenceBuilder {
 		return declarationTypeMap.get(type.toLowerCase());
 	}
 
-	private Pair<AstComponent, String> getAstComponent(List<Token> tokens) {
+	private Pair<Statement, String> getAstComponent(List<Token> tokens) {
 		return switch (tokens.getFirst().getType()) {
 			case LET -> buildLetSentence(tokens);
 			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens);

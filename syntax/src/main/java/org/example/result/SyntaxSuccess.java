@@ -1,20 +1,19 @@
 package org.example.result;
 
-import java.util.List;
 import java.util.Optional;
 import org.example.Pair;
-import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 
 public class SyntaxSuccess implements SyntaxResult {
-	List<AstComponent> components;
+	Statement statement;
 
-	public SyntaxSuccess(List<AstComponent> components) {
-		this.components = components;
+	public SyntaxSuccess(Statement statement) {
+		this.statement = statement;
 	}
 
 	@Override
-	public List<AstComponent> getComponents() {
-		return components;
+	public Statement getStatement() {
+		return statement;
 	}
 
 	@Override
