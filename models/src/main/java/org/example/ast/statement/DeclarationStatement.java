@@ -15,10 +15,12 @@ public class DeclarationStatement implements Statement {
 	private Pair<Integer, Integer> end;
 
 	public DeclarationStatement(
-			DeclarationType declarationType, IdentifierType identifierType, Identifier identifier) {
+			DeclarationType declarationType, IdentifierType identifierType, Identifier identifier, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
 		this.declarationType = declarationType;
 		this.identifierType = identifierType;
 		this.identifier = identifier;
+		this.start = start;
+		this.end = end;
 	}
 
 	public DeclarationType getDeclarationType() {

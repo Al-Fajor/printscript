@@ -1,6 +1,8 @@
 package org.example;
 
 import java.util.List;
+
+import org.example.ast.DeclarationType;
 import org.example.observer.BrokerObserver;
 
 public interface InterpreterState {
@@ -16,7 +18,7 @@ public interface InterpreterState {
 
 	void setStringVariable(String name, String value);
 
-	VariableType getVariableType(String name);
+	DeclarationType getVariableType(String name);
 
 	Function getFunction(String name);
 

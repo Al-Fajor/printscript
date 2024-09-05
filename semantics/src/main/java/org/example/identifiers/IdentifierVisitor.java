@@ -4,7 +4,6 @@ import java.util.Optional;
 import org.example.SemanticSuccess;
 import org.example.ast.Declaration;
 import org.example.ast.Identifier;
-import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class IdentifierVisitor implements IdentifierComponentVisitor<IdentifierResolution> {
 	@Override
