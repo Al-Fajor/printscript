@@ -34,7 +34,7 @@ public class InterpreterTester {
 	}
 
 	private void interpretTree(Interpreter interpreter, String path) throws IOException {
-		interpreter.interpret(new AstBuilder().buildFromJson(path));
+		interpreter.interpret(new AstBuilder().buildFromJson(path).iterator());
 	}
 
 	private void readExpectedPrintLines(String path, List<String> printLines) throws IOException {
