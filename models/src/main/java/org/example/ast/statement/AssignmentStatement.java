@@ -7,13 +7,13 @@ import org.example.ast.IdentifierComponent;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
-public class AssignationStatement implements Statement {
+public class AssignmentStatement implements Statement {
 	private final IdentifierComponent identifier;
 	private final EvaluableComponent expression;
 	private final Pair<Integer, Integer> start;
 	private final Pair<Integer, Integer> end;
 
-	public AssignationStatement(
+	public AssignmentStatement(
 			IdentifierComponent leftComponent,
 			EvaluableComponent rightComponent,
 			Pair<Integer, Integer> start,
@@ -56,7 +56,7 @@ public class AssignationStatement implements Statement {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		AssignationStatement that = (AssignationStatement) o;
+		AssignmentStatement that = (AssignmentStatement) o;
 		return Objects.equals(identifier, that.identifier)
 				&& Objects.equals(expression, that.expression);
 	}

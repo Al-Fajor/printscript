@@ -3,7 +3,7 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
@@ -15,8 +15,8 @@ public class FormatterRules {
 		this.ruleAppliers = ruleAppliers;
 	}
 
-	public List<RuleApplier<AssignationStatement>> getAssignationRuleAppliers() {
-		List<RuleApplier<AssignationStatement>> ruleAppliersOfType = new ArrayList<>();
+	public List<RuleApplier<AssignmentStatement>> getAssignationRuleAppliers() {
+		List<RuleApplier<AssignmentStatement>> ruleAppliersOfType = new ArrayList<>();
 		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.ASSIGNATION);
 	}
 

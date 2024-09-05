@@ -5,13 +5,13 @@ import static org.example.evaluables.EvaluableVisitor.SUCCESS;
 import java.util.Optional;
 import org.example.Environment;
 import org.example.ast.DeclarationType;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
 import org.example.evaluables.EvaluableResolution;
 import org.example.identifiers.IdentifierResolution;
 
 public class AssignationStatementTree {
 	public static EvaluableResolution validateDeclarationOrAssignation(
-			AssignationStatement statement,
+			AssignmentStatement statement,
 			IdentifierResolution identifierResolution,
 			EvaluableResolution assignedValueResolution,
 			Environment env) {
@@ -29,7 +29,7 @@ public class AssignationStatementTree {
 	}
 
 	private static EvaluableResolution checkIdentifierExists(
-			AssignationStatement statement,
+			AssignmentStatement statement,
 			IdentifierResolution identifierResolution,
 			EvaluableResolution assignedValueResolution,
 			Environment env) {
@@ -45,7 +45,7 @@ public class AssignationStatementTree {
 	}
 
 	private static EvaluableResolution checkAssigningToValidValue(
-			AssignationStatement statement,
+			AssignmentStatement statement,
 			IdentifierResolution identifierResolution,
 			EvaluableResolution assignedValueResolution,
 			Environment env) {
@@ -73,7 +73,7 @@ public class AssignationStatementTree {
 	}
 
 	private static EvaluableResolution checkIdentifierDoesNotExist(
-			AssignationStatement statement,
+			AssignmentStatement statement,
 			IdentifierResolution identifierResolution,
 			EvaluableResolution assignedValueResolution,
 			Environment env) {
@@ -87,7 +87,7 @@ public class AssignationStatementTree {
 	}
 
 	private static EvaluableResolution checkIsSimpleDeclaration(
-			AssignationStatement statement,
+			AssignmentStatement statement,
 			IdentifierResolution identifierResolution,
 			EvaluableResolution assignedValueResolution) {
 		if (isSimpleDeclaration(assignedValueResolution)) {
@@ -110,7 +110,7 @@ public class AssignationStatementTree {
 	}
 
 	private static EvaluableResolution checkDeclaringWithValidValue(
-			AssignationStatement statement,
+			AssignmentStatement statement,
 			DeclarationType identifierType,
 			DeclarationType assignedType,
 			String name) {

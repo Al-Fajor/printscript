@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.AstComponentVisitor;
@@ -70,7 +70,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(AssignationStatement statement) {
+	public String visit(AssignmentStatement statement) {
 		List<String> combinedResults =
 				getCombinedResults(formatterRules.getAssignationRuleAppliers(), statement);
 
@@ -89,17 +89,17 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(Declaration statement) {
+	public String visit(Declaration declaration) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), statement);
+				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), declaration);
 
 		return "let "
 				+ combinedResults.get(0)
-				+ statement.getName()
+				+ declaration.getName()
 				+ combinedResults.get(1)
 				+ ":"
 				+ combinedResults.get(2)
-				+ statement.getType().toString().toLowerCase()
+				+ declaration.getType().toString().toLowerCase()
 				+ combinedResults.get(3);
 	}
 

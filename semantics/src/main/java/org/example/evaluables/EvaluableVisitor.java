@@ -22,7 +22,7 @@ import org.example.ast.Identifier;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
 import org.example.ast.StatementBlock;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.AstComponentVisitor;
@@ -90,7 +90,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	}
 
 	@Override
-	public EvaluableResolution visit(AssignationStatement statement) {
+	public EvaluableResolution visit(AssignmentStatement statement) {
 		IdentifierResolution identifierResolution =
 				statement.getIdentifier().accept(identifierVisitor);
 		EvaluableResolution assignedValueResolution =
@@ -103,7 +103,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	}
 
 	@Override
-	public EvaluableResolution visit(Declaration statement) {
+	public EvaluableResolution visit(Declaration declaration) {
 		return null;
 	}
 

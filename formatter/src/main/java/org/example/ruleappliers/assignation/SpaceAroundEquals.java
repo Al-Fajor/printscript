@@ -3,11 +3,11 @@ package org.example.ruleappliers.assignation;
 import java.util.List;
 import org.example.FormatterVisitor;
 import org.example.ast.AstComponent;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
 
-public class SpaceAroundEquals implements RuleApplier<AssignationStatement> {
+public class SpaceAroundEquals implements RuleApplier<AssignmentStatement> {
 	private boolean spaceAroundEquals;
 
 	public SpaceAroundEquals(boolean spaceAroundEquals) {
@@ -15,7 +15,7 @@ public class SpaceAroundEquals implements RuleApplier<AssignationStatement> {
 	}
 
 	@Override
-	public List<String> applyRules(FormatterVisitor visitor, AssignationStatement statement) {
+	public List<String> applyRules(FormatterVisitor visitor, AssignmentStatement statement) {
 		return List.of("", (spaceAroundEquals ? " " : ""), (spaceAroundEquals ? " " : ""), "");
 	}
 
@@ -26,6 +26,6 @@ public class SpaceAroundEquals implements RuleApplier<AssignationStatement> {
 
 	@Override
 	public boolean isApplicable(AstComponent component) {
-		return component instanceof AssignationStatement;
+		return component instanceof AssignmentStatement;
 	}
 }

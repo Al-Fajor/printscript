@@ -5,7 +5,7 @@ import org.example.Function;
 import org.example.InterpreterState;
 import org.example.VariableType;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.visitor.EvaluableComponentVisitor;
@@ -19,7 +19,7 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	}
 
 	@Override
-	public Void visit(AssignationStatement statement) {
+	public Void visit(AssignmentStatement statement) {
 		IdentifierComponent identifierComponent = statement.getIdentifier();
 		IdentifierComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
 		String identifierName = identifierComponent.accept(identifierVisitor);

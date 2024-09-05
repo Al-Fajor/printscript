@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.example.Pair;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -111,7 +111,7 @@ public class AstBuilder {
 				String secondComponentName = jsonArray.getJSONObject(1).keys().next();
 				Object secondComponent = jsonArray.getJSONObject(1).get(secondComponentName);
 
-				return new AssignationStatement(
+				return new AssignmentStatement(
 						(IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
 						(EvaluableComponent)
 								mapToAstComponent(secondComponent, secondComponentName),
