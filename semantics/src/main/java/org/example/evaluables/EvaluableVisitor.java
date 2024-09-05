@@ -16,7 +16,6 @@ import org.example.Environment;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
 import org.example.ast.Conditional;
-import org.example.ast.Declaration;
 import org.example.ast.DeclarationType;
 import org.example.ast.Identifier;
 import org.example.ast.Literal;
