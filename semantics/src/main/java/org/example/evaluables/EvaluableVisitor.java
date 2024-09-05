@@ -22,9 +22,7 @@ import org.example.ast.Identifier;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
 import org.example.ast.StatementBlock;
-import org.example.ast.statement.AssignmentStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
+import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.conditiontrees.FunctionCallStatementTree;
 import org.example.conditiontrees.LiteralTree;
@@ -100,6 +98,16 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 				.orElse(
 						validateDeclarationOrAssignation(
 								statement, identifierResolution, assignedValueResolution, env));
+	}
+
+	@Override
+	public EvaluableResolution visit(DeclarationAssignmentStatement statement) {
+		return null;
+	}
+
+	@Override
+	public EvaluableResolution visit(DeclarationStatement statement) {
+		return null;
 	}
 
 	@Override

@@ -5,9 +5,7 @@ import org.example.Function;
 import org.example.InterpreterState;
 import org.example.VariableType;
 import org.example.ast.*;
-import org.example.ast.statement.AssignmentStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
+import org.example.ast.statement.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 import org.example.ast.visitor.IdentifierComponentVisitor;
 
@@ -29,6 +27,16 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 		EvaluationResult result = evaluableComponent.accept(evaluatorVisitor);
 
 		assignValueToIdentifier(identifierName, result);
+		return null;
+	}
+
+	@Override
+	public Void visit(DeclarationAssignmentStatement statement) {
+		return null;
+	}
+
+	@Override
+	public Void visit(DeclarationStatement statement) {
 		return null;
 	}
 

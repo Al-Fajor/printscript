@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.*;
-import org.example.ast.statement.AssignmentStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
+import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.factories.RuleFactory;
 import org.example.ruleappliers.RuleApplier;
@@ -86,6 +84,16 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 				+ combinedResults.get(2)
 				+ right
 				+ combinedResults.get(3);
+	}
+
+	@Override
+	public String visit(DeclarationAssignmentStatement statement) {
+		return "";
+	}
+
+	@Override
+	public String visit(DeclarationStatement statement) {
+		return "";
 	}
 
 	@Override
