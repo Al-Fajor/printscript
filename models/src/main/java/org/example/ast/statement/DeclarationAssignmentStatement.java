@@ -7,7 +7,7 @@ import org.example.ast.visitor.StatementVisitor;
 
 public class DeclarationAssignmentStatement implements Statement {
 	private DeclarationType declarationType;
-	private IdentifierType variableType;
+	private IdentifierType identifierType;
 	private Identifier identifier;
 	private EvaluableComponent evaluableComponent;
 	private Pair<Integer, Integer> start;
@@ -15,11 +15,11 @@ public class DeclarationAssignmentStatement implements Statement {
 
 	public DeclarationAssignmentStatement(
 			DeclarationType declarationType,
-			IdentifierType variableType,
+			IdentifierType identifierType,
 			Identifier identifier,
 			EvaluableComponent evaluableComponent) {
 		this.declarationType = declarationType;
-		this.variableType = variableType;
+		this.identifierType = identifierType;
 		this.identifier = identifier;
 		this.evaluableComponent = evaluableComponent;
 	}
@@ -28,8 +28,8 @@ public class DeclarationAssignmentStatement implements Statement {
 		return declarationType;
 	}
 
-	public IdentifierType getVariableType() {
-		return variableType;
+	public IdentifierType getIdentifierType() {
+		return identifierType;
 	}
 
 	public Identifier getIdentifier() {
