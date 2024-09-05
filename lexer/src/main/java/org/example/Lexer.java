@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Iterator;
+
 public interface Lexer {
-	Result lex(String input);
+	Result lex(Iterator<String> input);
 }
