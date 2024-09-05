@@ -9,13 +9,18 @@ import java.util.List;
 import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.AssignmentStatement;
+import org.example.ast.statement.DeclarationAssignmentStatement;
+import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.Statement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AstBuilder {
-	public List<Statement> buildFromJson(String filePath) throws IOException {
+
+    public static final Pair<Integer, Integer> PLACEHOLDER = new Pair<>(1, 1);
+
+    public List<Statement> buildFromJson(String filePath) throws IOException {
 		File file = new File(filePath);
 		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
 		JSONObject json = new JSONObject(content);
@@ -46,8 +51,8 @@ public class AstBuilder {
 							(Parameters)
 									mapToAstComponent(
 											astComponentJson.getJSONArray("params"), "params"),
-							new Pair<>(1, 1),
-							new Pair<>(1, 1));
+							PLACEHOLDER,
+							PLACEHOLDER);
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
 							"Not implemented yet: case '" + astComponentJsonName + "'");
@@ -66,13 +71,13 @@ public class AstBuilder {
 				// This condition seems stupid, but it is how the Null object
 				// is implemented in org.json
 				if (value.equals(null))
-					yield new Literal<>(null, new Pair<>(1, 1), new Pair<>(1, 1));
+					yield new Literal<>(null, PLACEHOLDER, PLACEHOLDER);
 
 				yield switch (value) {
 					case String ignored ->
-							new Literal<>((String) value, new Pair<>(1, 1), new Pair<>(1, 1));
+							new Literal<>((String) value, PLACEHOLDER, PLACEHOLDER);
 					case Number ignored ->
-							new Literal<>((Number) value, new Pair<>(1, 1), new Pair<>(1, 1));
+							new Literal<>((Number) value, PLACEHOLDER, PLACEHOLDER);
 					default ->
 							throw new IllegalArgumentException(
 									"Cannot parse JSON: Unsupported value "
@@ -82,7 +87,9 @@ public class AstBuilder {
 			}
 			case "identifier" ->
 					new Identifier(
-							astComponentJson.getString("name"), new Pair<>(1, 1), new Pair<>(1, 1));
+							astComponentJson.getString("name"), PLACEHOLDER, PLACEHOLDER);
+            case "declaration" ->
+                    null;
 
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
@@ -102,12 +109,45 @@ public class AstBuilder {
 				String secondComponentName = jsonArray.getJSONObject(1).keys().next();
 				Object secondComponent = jsonArray.getJSONObject(1).get(secondComponentName);
 
-				return new AssignmentStatement(
-						(Identifier) mapToAstComponent(firstComponent, firstComponentName),
-						(EvaluableComponent)
-								mapToAstComponent(secondComponent, secondComponentName),
-						new Pair<>(1, 1),
-						new Pair<>(1, 1));
+                AstComponent mappedFirstComponent = mapToAstComponent(firstComponent, firstComponentName);
+                EvaluableComponent mappedSecondComponent = (EvaluableComponent) mapToAstComponent(secondComponent, firstComponentName);
+
+                if (mappedFirstComponent instanceof Identifier) {
+                   
+
+                   return new AssignmentStatement(
+                           (Identifier) mappedFirstComponent,
+                           mappedSecondComponent,
+                           PLACEHOLDER,
+                           PLACEHOLDER
+                   );
+                }
+
+                if (secondComponent instanceof Literal<?> && ((Literal<?>) secondComponent).getValue() == null) {
+                    JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
+
+                    return new DeclarationStatement(
+                            mapToDeclarationType(subObject.getString("declarationType")),
+                            IdentifierType.VARIABLE,
+                            new Identifier(subObject.getString("name"),
+                                    PLACEHOLDER,
+                                    PLACEHOLDER
+                            )
+                    );
+                }
+
+                JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
+				return new DeclarationAssignmentStatement(
+                        mapToDeclarationType(subObject.getString("declarationType")),
+                        IdentifierType.VARIABLE,
+                        new Identifier(subObject.getString("name"),
+                                PLACEHOLDER,
+                                PLACEHOLDER
+                        ),
+                        (EvaluableComponent) secondComponent,
+						PLACEHOLDER,
+						PLACEHOLDER
+                );
 
 			default:
 				throw new IllegalArgumentException(
@@ -127,7 +167,7 @@ public class AstBuilder {
 					parameters.add((EvaluableComponent) mapToAstComponent(subComponent, key));
 				}
 
-				return new Parameters(parameters, new Pair<>(1, 1), new Pair<>(1, 1));
+				return new Parameters(parameters, PLACEHOLDER, PLACEHOLDER);
 
 			case "binaryExpression":
 				String firstOperandName = jsonArray.getJSONObject(1).keys().next();
@@ -139,8 +179,8 @@ public class AstBuilder {
 						mapToOperator(jsonArray.getJSONObject(0).getString("op")),
 						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
 						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName),
-						new Pair<>(1, 1),
-						new Pair<>(1, 1));
+						PLACEHOLDER,
+						PLACEHOLDER);
 
 			default:
 				throw new IllegalArgumentException(

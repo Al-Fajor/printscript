@@ -14,12 +14,12 @@ public class AssignmentStatement implements Statement {
 	private final Pair<Integer, Integer> end;
 
 	public AssignmentStatement(
-			Identifier leftComponent,
-			EvaluableComponent rightComponent,
+			Identifier identifier,
+			EvaluableComponent evaluable,
 			Pair<Integer, Integer> start,
 			Pair<Integer, Integer> end) {
-		this.identifier = leftComponent;
-		this.expression = rightComponent;
+		this.identifier = identifier;
+		this.expression = evaluable;
 		this.start = start;
 		this.end = end;
 	}
