@@ -10,8 +10,10 @@ import org.example.SemanticSuccess;
 import org.example.ast.DeclarationType;
 
 public record EvaluableResolution(
-		Result result, Optional<DeclarationType> evaluatedType, Optional<String> identifierName)
-		implements Resolution {
+		Result result,
+        Optional<DeclarationType> evaluatedType,
+        Optional<String> identifierName
+) implements Resolution {
 
 	public static final String BAD_USAGE_ERROR_MESSAGE =
 			"EvaluableResolution.failure(Resolution) must be called with a failed Resolution";

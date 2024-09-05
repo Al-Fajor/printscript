@@ -1,9 +1,10 @@
 package org.example.evaluables;
 
 import static org.example.Resolution.getFirstFailedResolution;
-import static org.example.conditiontrees.AssignationStatementTree.validateDeclarationOrAssignation;
+import static org.example.conditiontrees.AssignmentStatementTree.checkIdentifierExists;
 import static org.example.conditiontrees.BinaryExpressionTree.anyTypeEmpty;
 import static org.example.conditiontrees.BinaryExpressionTree.validateOperationTypes;
+import static org.example.conditiontrees.DeclarationStatementTree.checkIdentifierDoesNotExist;
 import static org.example.conditiontrees.FunctionCallStatementTree.getAllParameterTypes;
 import static org.example.conditiontrees.FunctionCallStatementTree.getInvalidResolutionIfAny;
 import static org.example.conditiontrees.FunctionCallStatementTree.resolveEachParameter;
@@ -23,25 +24,22 @@ import org.example.ast.Parameters;
 import org.example.ast.StatementBlock;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.conditiontrees.DeclarationAssignmentStatementTree;
 import org.example.conditiontrees.FunctionCallStatementTree;
 import org.example.conditiontrees.LiteralTree;
 import org.example.externalization.Language;
-import org.example.identifiers.IdentifierResolution;
-import org.example.identifiers.IdentifierVisitor;
 
 public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
 	public static final SemanticSuccess SUCCESS = new SemanticSuccess();
 	private final Environment env;
-	private final IdentifierVisitor identifierVisitor;
 	private final Language lang = new Language();
 
-	public EvaluableVisitor(Environment env, IdentifierVisitor identifierVisitor) {
+	public EvaluableVisitor(Environment env) {
 		this.env = env;
-		this.identifierVisitor = identifierVisitor;
 	}
 
 	public EvaluableVisitor withEnv(Environment env) {
-		return new EvaluableVisitor(env, identifierVisitor);
+		return new EvaluableVisitor(env);
 	}
 
 	@Override
@@ -88,39 +86,32 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(AssignmentStatement statement) {
-		IdentifierResolution identifierResolution =
-				statement.getIdentifier().accept(identifierVisitor);
+		Identifier identifier = statement.getIdentifier();
 		EvaluableResolution assignedValueResolution =
 				statement.getEvaluableComponent().accept(this);
 
 		return getFirstFailedResolution(assignedValueResolution)
-				.orElse(
-						validateDeclarationOrAssignation(
-								statement, identifierResolution, assignedValueResolution, env));
+				.orElse(checkIdentifierExists(statement, identifier, assignedValueResolution, env));
 	}
 
 	@Override
 	public EvaluableResolution visit(DeclarationAssignmentStatement statement) {
-		return null;
+		EvaluableResolution assignedValueResolution =
+				statement.getEvaluableComponent().accept(this);
+
+		return DeclarationAssignmentStatementTree.checkIdentifierDoesNotExist(
+				statement, assignedValueResolution, env);
 	}
 
 	@Override
 	public EvaluableResolution visit(DeclarationStatement statement) {
-		return null;
-	}
-
-	@Override
-	public EvaluableResolution visit(Declaration declaration) {
-		return null;
+		return checkIdentifierDoesNotExist(statement, env);
 	}
 
 	@Override
 	public EvaluableResolution visit(FunctionCallStatement statement) {
-		IdentifierResolution functionCallResolution =
-				statement.getIdentifier().accept(identifierVisitor);
-		Parameters parameters = statement.getParameters();
-
-		List<EvaluableResolution> resolvedParameters = resolveEachParameter(parameters, this);
+        List<EvaluableResolution> resolvedParameters =
+                resolveEachParameter(statement.getParameters(), this);
 
 		Optional<EvaluableResolution> firstInvalidParameterResolution =
 				getInvalidResolutionIfAny(resolvedParameters);
@@ -130,13 +121,10 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		List<DeclarationType> types = getAllParameterTypes(resolvedParameters);
 
-		String functionName = functionCallResolution.name();
+		String functionName = statement.getIdentifier().getName();
 
-		return getFirstFailedResolution(functionCallResolution)
-				.map(EvaluableResolution::castFrom)
-				.orElse(
-						FunctionCallStatementTree.isFunctionDeclared(
-								env, statement, types, functionName));
+		return FunctionCallStatementTree.isFunctionDeclared(
+                env, statement, types, functionName);
 	}
 
 	@Override
