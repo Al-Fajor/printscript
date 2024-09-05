@@ -39,7 +39,7 @@ public class AstBuilder {
 		return switch (astComponentJsonName) {
 			case "functionCall" ->
 					new FunctionCallStatement(
-							(IdentifierComponent)
+							(Identifier)
 									mapToAstComponent(
 											astComponentJson.getJSONObject("identifier"),
 											"identifier"),
@@ -60,12 +60,6 @@ public class AstBuilder {
 	private AstComponent mapToAstComponent(
 			JSONObject astComponentJson, String astComponentJsonName) {
 		return switch (astComponentJsonName) {
-			case "declaration" ->
-					new Declaration(
-							mapToDeclarationType(astComponentJson.getString("declarationType")),
-							astComponentJson.getString("name"),
-							new Pair<>(1, 1),
-							new Pair<>(1, 1)); // TODO: use real locations and add them to JSONs
 			case "literal" -> {
 				Object value = astComponentJson.get("value");
 
@@ -88,10 +82,7 @@ public class AstBuilder {
 			}
 			case "identifier" ->
 					new Identifier(
-							astComponentJson.getString("name"),
-							mapToIdentifierType(astComponentJson.getString("identifierType")),
-							new Pair<>(1, 1),
-							new Pair<>(1, 1));
+							astComponentJson.getString("name"), new Pair<>(1, 1), new Pair<>(1, 1));
 
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
@@ -112,7 +103,7 @@ public class AstBuilder {
 				Object secondComponent = jsonArray.getJSONObject(1).get(secondComponentName);
 
 				return new AssignmentStatement(
-						(IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
+						(Identifier) mapToAstComponent(firstComponent, firstComponentName),
 						(EvaluableComponent)
 								mapToAstComponent(secondComponent, secondComponentName),
 						new Pair<>(1, 1),
