@@ -20,7 +20,6 @@ public interface AstComponentVisitor<T> {
 
 	T visit(DeclarationStatement statement);
 
-
 	T visit(FunctionCallStatement statement);
 
 	T visit(StatementBlock statementBlock);

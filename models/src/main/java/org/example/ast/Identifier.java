@@ -4,7 +4,6 @@ import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.EvaluableComponentVisitor;
-import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class Identifier implements EvaluableComponent {
 	private final String name;
@@ -51,11 +50,6 @@ public class Identifier implements EvaluableComponent {
 
 	@Override
 	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
-
-	@Override
-	public <T> T accept(IdentifierComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 }

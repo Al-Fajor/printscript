@@ -3,11 +3,10 @@ package org.example.visitors;
 import org.example.EvaluationResult;
 import org.example.Function;
 import org.example.InterpreterState;
-import org.example.VariableType;
+import org.example.Variable;
 import org.example.ast.*;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
-import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class StatementVisitor implements org.example.ast.visitor.StatementVisitor<Void> {
 	private final InterpreterState state;
@@ -18,9 +17,8 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 
 	@Override
 	public Void visit(AssignmentStatement statement) {
-		IdentifierComponent identifierComponent = statement.getIdentifier();
-		IdentifierComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
-		String identifierName = identifierComponent.accept(identifierVisitor);
+		Identifier identifier = statement.getIdentifier();
+		String identifierName = identifier.getName();
 
 		EvaluableComponent evaluableComponent = statement.getEvaluableComponent();
 		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
@@ -31,17 +29,48 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	}
 
 	@Override
-	public Void visit(DeclarationAssignmentStatement statement) {
+	public Void visit(DeclarationStatement statement) {
+		DeclarationType declarationType = statement.getDeclarationType();
+		Identifier identifier = statement.getIdentifier();
+
+		switch (declarationType) {
+			case STRING ->
+					state.addStringVariable(
+							new Variable<>(declarationType, identifier.getName(), null));
+			case NUMBER ->
+					state.addNumericVariable(
+							new Variable<>(declarationType, identifier.getName(), null));
+			default ->
+					throw new RuntimeException("Unexpected declaration type: " + declarationType);
+		}
 		return null;
 	}
 
 	@Override
-	public Void visit(DeclarationStatement statement) {
+	public Void visit(DeclarationAssignmentStatement statement) {
+		DeclarationType declarationType = statement.getDeclarationType();
+		IdentifierType identifierType = statement.getIdentifierType();
+		Identifier identifier = statement.getIdentifier();
+
+		DeclarationStatement declarationStatement =
+				new DeclarationStatement(
+						declarationType,
+						identifierType,
+						identifier,
+						statement.getStart(),
+						statement.getEnd());
+		this.visit(declarationStatement);
+
+		EvaluableComponent evaluableComponent = statement.getEvaluableComponent();
+		AssignmentStatement assignmentStatement =
+				new AssignmentStatement(
+						identifier, evaluableComponent, statement.getStart(), statement.getEnd());
+		this.visit(assignmentStatement);
 		return null;
 	}
 
 	private void assignValueToIdentifier(String identifierName, EvaluationResult result) {
-		VariableType varType = state.getVariableType(identifierName);
+		DeclarationType varType = state.getVariableType(identifierName);
 		switch (varType) {
 			case STRING -> state.setStringVariable(identifierName, result.getStringResult());
 			case NUMBER -> state.setNumericVariable(identifierName, result.getNumericResult());
@@ -58,9 +87,8 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	}
 
 	private Function getFunction(FunctionCallStatement statement) {
-		IdentifierComponent identifier = statement.getIdentifier();
-		IdentifierComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
-		String functionName = identifier.accept(identifierVisitor);
+		Identifier identifier = statement.getIdentifier();
+		String functionName = identifier.getName();
 		return state.getFunction(functionName);
 	}
 

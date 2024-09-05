@@ -14,17 +14,19 @@ public class DeclarationAssignmentStatement implements Statement {
 	private Pair<Integer, Integer> end;
 
 	public DeclarationAssignmentStatement(
-            DeclarationType declarationType,
-            IdentifierType identifierType,
-            Identifier identifier,
-            EvaluableComponent evaluableComponent, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
+			DeclarationType declarationType,
+			IdentifierType identifierType,
+			Identifier identifier,
+			EvaluableComponent evaluableComponent,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end) {
 		this.declarationType = declarationType;
 		this.identifierType = identifierType;
 		this.identifier = identifier;
 		this.evaluableComponent = evaluableComponent;
-        this.start = start;
-        this.end = end;
-    }
+		this.start = start;
+		this.end = end;
+	}
 
 	public DeclarationType getDeclarationType() {
 		return declarationType;

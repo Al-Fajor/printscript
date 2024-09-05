@@ -18,9 +18,9 @@ import org.json.JSONObject;
 
 public class AstBuilder {
 
-    public static final Pair<Integer, Integer> PLACEHOLDER = new Pair<>(1, 1);
+	public static final Pair<Integer, Integer> PLACEHOLDER = new Pair<>(1, 1);
 
-    public List<Statement> buildFromJson(String filePath) throws IOException {
+	public List<Statement> buildFromJson(String filePath) throws IOException {
 		File file = new File(filePath);
 		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
 		JSONObject json = new JSONObject(content);
@@ -70,14 +70,11 @@ public class AstBuilder {
 
 				// This condition seems stupid, but it is how the Null object
 				// is implemented in org.json
-				if (value.equals(null))
-					yield new Literal<>(null, PLACEHOLDER, PLACEHOLDER);
+				if (value.equals(null)) yield new Literal<>(null, PLACEHOLDER, PLACEHOLDER);
 
 				yield switch (value) {
-					case String ignored ->
-							new Literal<>((String) value, PLACEHOLDER, PLACEHOLDER);
-					case Number ignored ->
-							new Literal<>((Number) value, PLACEHOLDER, PLACEHOLDER);
+					case String ignored -> new Literal<>((String) value, PLACEHOLDER, PLACEHOLDER);
+					case Number ignored -> new Literal<>((Number) value, PLACEHOLDER, PLACEHOLDER);
 					default ->
 							throw new IllegalArgumentException(
 									"Cannot parse JSON: Unsupported value "
@@ -86,10 +83,8 @@ public class AstBuilder {
 				};
 			}
 			case "identifier" ->
-					new Identifier(
-							astComponentJson.getString("name"), PLACEHOLDER, PLACEHOLDER);
-            case "declaration" ->
-                    null;
+					new Identifier(astComponentJson.getString("name"), PLACEHOLDER, PLACEHOLDER);
+			case "declaration" -> null;
 
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
@@ -109,45 +104,38 @@ public class AstBuilder {
 				String secondComponentName = jsonArray.getJSONObject(1).keys().next();
 				Object secondComponent = jsonArray.getJSONObject(1).get(secondComponentName);
 
-                AstComponent mappedFirstComponent = mapToAstComponent(firstComponent, firstComponentName);
-                EvaluableComponent mappedSecondComponent = (EvaluableComponent) mapToAstComponent(secondComponent, firstComponentName);
+				AstComponent mappedFirstComponent =
+						mapToAstComponent(firstComponent, firstComponentName);
+				EvaluableComponent mappedSecondComponent =
+						(EvaluableComponent) mapToAstComponent(secondComponent, firstComponentName);
 
-                if (mappedFirstComponent instanceof Identifier) {
-                   
+				if (mappedFirstComponent instanceof Identifier) {
 
-                   return new AssignmentStatement(
-                           (Identifier) mappedFirstComponent,
-                           mappedSecondComponent,
-                           PLACEHOLDER,
-                           PLACEHOLDER
-                   );
-                }
+					return new AssignmentStatement(
+							(Identifier) mappedFirstComponent,
+							mappedSecondComponent,
+							PLACEHOLDER,
+							PLACEHOLDER);
+				}
 
-                if (secondComponent instanceof Literal<?> && ((Literal<?>) secondComponent).getValue() == null) {
-                    JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
+				if (secondComponent instanceof Literal<?>
+						&& ((Literal<?>) secondComponent).getValue() == null) {
+					JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
 
-                    return new DeclarationStatement(
-                            mapToDeclarationType(subObject.getString("declarationType")),
-                            IdentifierType.VARIABLE,
-                            new Identifier(subObject.getString("name"),
-                                    PLACEHOLDER,
-                                    PLACEHOLDER
-                            )
-                    );
-                }
+					return new DeclarationStatement(
+							mapToDeclarationType(subObject.getString("declarationType")),
+							IdentifierType.VARIABLE,
+							new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER));
+				}
 
-                JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
+				JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
 				return new DeclarationAssignmentStatement(
-                        mapToDeclarationType(subObject.getString("declarationType")),
-                        IdentifierType.VARIABLE,
-                        new Identifier(subObject.getString("name"),
-                                PLACEHOLDER,
-                                PLACEHOLDER
-                        ),
-                        (EvaluableComponent) secondComponent,
+						mapToDeclarationType(subObject.getString("declarationType")),
+						IdentifierType.VARIABLE,
+						new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
+						(EvaluableComponent) secondComponent,
 						PLACEHOLDER,
-						PLACEHOLDER
-                );
+						PLACEHOLDER);
 
 			default:
 				throw new IllegalArgumentException(

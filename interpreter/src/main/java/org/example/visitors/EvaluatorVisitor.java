@@ -1,11 +1,10 @@
 package org.example.visitors;
 
-import static org.example.VariableType.NUMBER;
-import static org.example.VariableType.STRING;
+import static org.example.ast.DeclarationType.NUMBER;
+import static org.example.ast.DeclarationType.STRING;
 
 import org.example.EvaluationResult;
 import org.example.InterpreterState;
-import org.example.VariableType;
 import org.example.ast.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 
@@ -49,28 +48,22 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	@Override
-	public EvaluationResult visit(Identifier identifier) {
-		if (identifier.getType() == IdentifierType.VARIABLE) {
-			VariableType variableType = state.getVariableType(identifier.getName());
-			switch (variableType) {
-				case NUMBER -> {
-					return new EvaluationResult(getNumericValue(identifier));
-				}
-				case STRING -> {
-					return new EvaluationResult(getStringValue(identifier));
-				}
-				case BOOLEAN ->
-						throw new UnsupportedOperationException("Implement Boolean variables");
-				default -> throw new IllegalArgumentException("Invalid variable type");
-			}
-		} else {
-			throw new UnsupportedOperationException("Implement function evaluation");
-		}
+	public EvaluationResult visit(Conditional conditional) {
+		return null;
 	}
 
 	@Override
-	public EvaluationResult visit(Conditional conditional) {
-		throw new UnsupportedOperationException("Implement Conditional variables");
+	public EvaluationResult visit(Identifier identifier) {
+		DeclarationType variableType = state.getVariableType(identifier.getName());
+		switch (variableType) {
+			case NUMBER -> {
+				return new EvaluationResult(getNumericValue(identifier));
+			}
+			case STRING -> {
+				return new EvaluationResult(getStringValue(identifier));
+			}
+			default -> throw new IllegalArgumentException("Invalid variable type");
+		}
 	}
 
 	private String getStringValue(Identifier identifier) {
@@ -82,8 +75,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	private EvaluationResult addResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		VariableType leftTermType = leftTerm.getType();
-		VariableType rightTermType = rightTerm.getType();
+		DeclarationType leftTermType = leftTerm.getType();
+		DeclarationType rightTermType = rightTerm.getType();
 		if (termsAreConcatenable(leftTermType, rightTermType)) {
 			String leftString = getStringResult(leftTerm);
 			String rightString = getStringResult(rightTerm);
@@ -99,8 +92,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	private EvaluationResult subtractResults(
 			EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		VariableType leftTermType = leftTerm.getType();
-		VariableType rightTermType = rightTerm.getType();
+		DeclarationType leftTermType = leftTerm.getType();
+		DeclarationType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -111,8 +104,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	private EvaluationResult multiplyResults(
 			EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		VariableType leftTermType = leftTerm.getType();
-		VariableType rightTermType = rightTerm.getType();
+		DeclarationType leftTermType = leftTerm.getType();
+		DeclarationType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -122,8 +115,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	private EvaluationResult divideResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		VariableType leftTermType = leftTerm.getType();
-		VariableType rightTermType = rightTerm.getType();
+		DeclarationType leftTermType = leftTerm.getType();
+		DeclarationType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -140,18 +133,15 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 			case NUMBER -> {
 				return result.getNumericResult().toString().replaceAll("\\.0\\b", "");
 			}
-			case BOOLEAN -> {
-				return result.getBoolResult().toString();
-			}
 			default -> throw new IllegalArgumentException("Result cannot be turned into string");
 		}
 	}
 
-	private boolean termsAreNumeric(VariableType leftType, VariableType rightType) {
+	private boolean termsAreNumeric(DeclarationType leftType, DeclarationType rightType) {
 		return leftType == NUMBER && rightType == NUMBER;
 	}
 
-	private boolean termsAreConcatenable(VariableType leftType, VariableType rightType) {
+	private boolean termsAreConcatenable(DeclarationType leftType, DeclarationType rightType) {
 		if (leftType == rightType) {
 			return leftType == STRING;
 		}
