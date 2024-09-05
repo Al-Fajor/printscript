@@ -58,7 +58,10 @@ public class SyntaxTestProvider {
 	}
 
 	private List<AstComponent> getAstFromJson(String filePath) throws IOException {
-		return new AstBuilder().buildFromJson(filePath);
+		return new AstBuilder()
+				.buildFromJson(filePath).stream()
+						.map(statement -> (AstComponent) statement)
+						.toList();
 	}
 
 	private List<Result> getSyntaxResults(Iterator<Token> tokens) {

@@ -10,17 +10,18 @@ import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.FunctionCallStatement;
+import org.example.ast.statement.Statement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AstBuilder {
-	public List<AstComponent> buildFromJson(String filePath) throws IOException {
+	public List<Statement> buildFromJson(String filePath) throws IOException {
 		File file = new File(filePath);
 		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
 		JSONObject json = new JSONObject(content);
 		JSONArray astArray = json.getJSONArray("ast_list");
 
-		List<AstComponent> result = new ArrayList<>();
+		List<Statement> result = new ArrayList<>();
 
 		for (int i = 0; i < astArray.length(); i++) {
 			JSONObject jsonObject = astArray.getJSONObject(i);
@@ -28,10 +29,32 @@ public class AstBuilder {
 			String rootComponentName = jsonObject.keys().next();
 			Object rootComponent = jsonObject.get(rootComponentName);
 
-			result.add(mapToAstComponent(rootComponent, rootComponentName));
+			result.add(mapToStatement(rootComponent, rootComponentName));
 		}
 
 		return result;
+	}
+
+	private Statement mapToStatement(JSONObject astComponentJson, String astComponentJsonName) {
+		return switch (astComponentJsonName) {
+			case "functionCall" ->
+					new FunctionCallStatement(
+							(IdentifierComponent)
+									mapToAstComponent(
+											astComponentJson.getJSONObject("identifier"),
+											"identifier"),
+							(Parameters)
+									mapToAstComponent(
+											astComponentJson.getJSONArray("params"), "params"),
+							new Pair<>(1, 1),
+							new Pair<>(1, 1));
+			case "conditional", "if", "ifClauses", "statementBlock" ->
+					throw new RuntimeException(
+							"Not implemented yet: case '" + astComponentJsonName + "'");
+			default ->
+					throw new IllegalArgumentException(
+							astComponentJsonName + " is not a valid statement");
+		};
 	}
 
 	private AstComponent mapToAstComponent(
@@ -69,17 +92,7 @@ public class AstBuilder {
 							mapToIdentifierType(astComponentJson.getString("identifierType")),
 							new Pair<>(1, 1),
 							new Pair<>(1, 1));
-			case "functionCall" ->
-					new FunctionCallStatement(
-							(IdentifierComponent)
-									mapToAstComponent(
-											astComponentJson.getJSONObject("identifier"),
-											"identifier"),
-							(Parameters)
-									mapToAstComponent(
-											astComponentJson.getJSONArray("params"), "params"),
-							new Pair<>(1, 1),
-							new Pair<>(1, 1));
+
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
 							"Not implemented yet: case '" + astComponentJsonName + "'");
@@ -89,21 +102,8 @@ public class AstBuilder {
 		};
 	}
 
-	private AstComponent mapToAstComponent(JSONArray jsonArray, String astComponentJsonName) {
+	private Statement mapToStatement(JSONArray jsonArray, String astComponentJsonName) {
 		switch (astComponentJsonName) {
-			case "binaryExpression":
-				String firstOperandName = jsonArray.getJSONObject(1).keys().next();
-				Object firstOperand = jsonArray.getJSONObject(1).get(firstOperandName);
-				String secondOperandName = jsonArray.getJSONObject(2).keys().next();
-				Object secondOperand = jsonArray.getJSONObject(2).get(secondOperandName);
-
-				return new BinaryExpression(
-						mapToOperator(jsonArray.getJSONObject(0).getString("op")),
-						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
-						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName),
-						new Pair<>(1, 1),
-						new Pair<>(1, 1));
-
 			case "assignation":
 				String firstComponentName = jsonArray.getJSONObject(0).keys().next();
 				JSONObject firstComponent =
@@ -118,6 +118,14 @@ public class AstBuilder {
 						new Pair<>(1, 1),
 						new Pair<>(1, 1));
 
+			default:
+				throw new IllegalArgumentException(
+						astComponentJsonName + " is not a valid ast statement");
+		}
+	}
+
+	private AstComponent mapToAstComponent(JSONArray jsonArray, String astComponentJsonName) {
+		switch (astComponentJsonName) {
 			case "params":
 				List<EvaluableComponent> parameters = new ArrayList<>();
 				for (Object object : jsonArray) {
@@ -130,9 +138,34 @@ public class AstBuilder {
 
 				return new Parameters(parameters, new Pair<>(1, 1), new Pair<>(1, 1));
 
+			case "binaryExpression":
+				String firstOperandName = jsonArray.getJSONObject(1).keys().next();
+				Object firstOperand = jsonArray.getJSONObject(1).get(firstOperandName);
+				String secondOperandName = jsonArray.getJSONObject(2).keys().next();
+				Object secondOperand = jsonArray.getJSONObject(2).get(secondOperandName);
+
+				return new BinaryExpression(
+						mapToOperator(jsonArray.getJSONObject(0).getString("op")),
+						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
+						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName),
+						new Pair<>(1, 1),
+						new Pair<>(1, 1));
+
 			default:
 				throw new IllegalArgumentException(
 						astComponentJsonName + " is not a valid ast component");
+		}
+	}
+
+	private Statement mapToStatement(Object object, String objectName) {
+		if (object instanceof JSONObject jsonObject) {
+			return mapToStatement(jsonObject, objectName);
+		}
+
+		if (object instanceof JSONArray jsonArray) {
+			return mapToStatement(jsonArray, objectName);
+		} else {
+			throw new IllegalArgumentException("Can only map JSON objects and JSON arrays");
 		}
 	}
 
