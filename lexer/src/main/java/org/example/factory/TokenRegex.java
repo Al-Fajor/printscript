@@ -9,12 +9,12 @@ public class TokenRegex {
 
 	public static Map<TokenType, String> getRegexMap() {
 		Map<TokenType, String> regexMap = new LinkedHashMap<>();
-		regexMap.put(BaseTokenTypes.LET, "let");
-		regexMap.put(BaseTokenTypes.TYPE, "number|string");
-		regexMap.put(BaseTokenTypes.IF, "if");
-		regexMap.put(BaseTokenTypes.ELSE, "else");
-		regexMap.put(BaseTokenTypes.PRINTLN, "println");
-		regexMap.put(BaseTokenTypes.FUNCTION, "function");
+		regexMap.put(BaseTokenTypes.LET, "\\blet\\b");
+		regexMap.put(BaseTokenTypes.TYPE, "\\bnumber\\b|\\bstring\\b");
+		regexMap.put(BaseTokenTypes.IF, "\\bif\\b");
+		regexMap.put(BaseTokenTypes.ELSE, "\\belse\\b");
+		regexMap.put(BaseTokenTypes.PRINTLN, "\\bprintln\\b");
+		regexMap.put(BaseTokenTypes.FUNCTION, "\\bfunction\\b");
 		regexMap.put(BaseTokenTypes.SEMICOLON, ";");
 		regexMap.put(BaseTokenTypes.COLON, ":");
 		regexMap.put(BaseTokenTypes.ASSIGNATION, "=");
