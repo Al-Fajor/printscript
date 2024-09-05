@@ -3,16 +3,15 @@ package org.example;
 import static org.example.utils.PrintUtils.printFailedCode;
 
 import java.io.FileNotFoundException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.example.ast.AstComponent;
 import org.example.ast.DeclarationType;
 import org.example.io.Color;
 import org.example.io.ScriptReader;
 import org.example.lexerresult.LexerSuccess;
-import org.example.result.SyntaxResult;
+import org.example.result.SyntaxSuccess;
+import org.example.token.Token;
 
 public class Parser {
 	ProgressBarObserver observer = new ProgressBarObserver();
@@ -52,15 +51,37 @@ public class Parser {
 		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming syntactic analysis");
-		SyntaxResult syntaxResult =
-				syntaxAnalyzer.analyze(((LexerSuccess) lexerResult).getTokens());
-		if (stepFailed(path, syntaxResult, "Syntax analysis")) return Collections.emptyList();
+		Iterator<Token> tokens = ((LexerSuccess) lexerResult).getTokens().iterator();
+		List<Result> syntaxResults = getSyntaxResults(tokens);
+		if (anyFailure(syntaxResults, path, "Syntax analysis")) return Collections.emptyList();
+
+		List<AstComponent> components =
+				syntaxResults.stream()
+						.map(result -> ((SyntaxSuccess) result).getStatement())
+						.collect(Collectors.toList());
 
 		Color.printGreen("\nPerforming semantic analysis");
-		Result semanticResult = semanticAnalyzer.analyze(syntaxResult.getComponents());
-		if (stepFailed(path, semanticResult, "Semantic Analysis")) return Collections.emptyList();
+		Iterator<AstComponent> syntaxOutputIterator = components.iterator();
+		while (syntaxOutputIterator.hasNext()) {
+			Result semanticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
+			if (stepFailed(path, semanticResult, "Semantic Analysis"))
+				return Collections.emptyList();
+		}
 
-		return syntaxResult.getComponents();
+		return components;
+	}
+
+	private boolean anyFailure(List<Result> allResults, String path, String stepName) {
+		return allResults.stream()
+				.anyMatch(currentResult -> stepFailed(path, currentResult, stepName));
+	}
+
+	private List<Result> getSyntaxResults(Iterator<Token> tokens) {
+		List<Result> results = new ArrayList<>();
+		while (tokens.hasNext()) {
+			results.add(syntaxAnalyzer.analyze(tokens));
+		}
+		return results;
 	}
 
 	private static boolean stepFailed(String path, Result result, String stepName) {

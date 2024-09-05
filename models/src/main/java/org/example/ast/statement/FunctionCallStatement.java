@@ -34,13 +34,11 @@ public class FunctionCallStatement implements Statement {
 		return end;
 	}
 
-	@Override
-	public IdentifierComponent getLeft() {
+	public IdentifierComponent getIdentifier() {
 		return identifier;
 	}
 
-	@Override
-	public Parameters getRight() {
+	public Parameters getParameters() {
 		return parameters;
 	}
 

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -28,8 +29,6 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 							new Signature("println", List.of(DeclarationType.NUMBER)),
 							new Signature("println", List.of(DeclarationType.STRING))));
 
-	SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
-
 	public SemanticAnalyzerImplTest() {
 		super();
 	}
@@ -43,8 +42,16 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 	protected Executable getTestExecutable(File testFile) {
 		return () -> {
 			try {
+				SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
 				List<AstComponent> astList = builder.buildFromJson(testFile.getAbsolutePath());
-				Result analyticResult = semanticAnalyzer.analyze(astList);
+
+				Result analyticResult = new SemanticSuccess();
+				Iterator<AstComponent> syntaxOutputIterator = astList.iterator();
+
+				while (syntaxOutputIterator.hasNext() && analyticResult.isSuccessful()) {
+					analyticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
+				}
+
 				boolean validity = checker.readValidityFromJson(testFile.getAbsolutePath());
 
 				assertAndPrintError(analyticResult, validity);

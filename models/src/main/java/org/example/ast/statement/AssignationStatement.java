@@ -24,13 +24,11 @@ public class AssignationStatement implements Statement {
 		this.end = end;
 	}
 
-	@Override
-	public IdentifierComponent getLeft() {
+	public IdentifierComponent getIdentifier() {
 		return identifier;
 	}
 
-	@Override
-	public EvaluableComponent getRight() {
+	public EvaluableComponent getEvaluableComponent() {
 		return expression;
 	}
 

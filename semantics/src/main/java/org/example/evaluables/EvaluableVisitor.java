@@ -91,8 +91,10 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(AssignationStatement statement) {
-		IdentifierResolution identifierResolution = statement.getLeft().accept(identifierVisitor);
-		EvaluableResolution assignedValueResolution = statement.getRight().accept(this);
+		IdentifierResolution identifierResolution =
+				statement.getIdentifier().accept(identifierVisitor);
+		EvaluableResolution assignedValueResolution =
+				statement.getEvaluableComponent().accept(this);
 
 		return getFirstFailedResolution(assignedValueResolution)
 				.orElse(
@@ -107,8 +109,9 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(FunctionCallStatement statement) {
-		IdentifierResolution functionCallResolution = statement.getLeft().accept(identifierVisitor);
-		Parameters parameters = statement.getRight();
+		IdentifierResolution functionCallResolution =
+				statement.getIdentifier().accept(identifierVisitor);
+		Parameters parameters = statement.getParameters();
 
 		List<EvaluableResolution> resolvedParameters = resolveEachParameter(parameters, this);
 

@@ -35,7 +35,7 @@ public class ExecutionCommand implements Callable<Integer> {
 			System.out.println("\nCompleted validation successfully. No errors found.");
 
 			Color.printGreen("\nRunning...");
-			interpreter.interpret(astList);
+			interpreter.interpret(astList.iterator());
 			return 0;
 		}
 
