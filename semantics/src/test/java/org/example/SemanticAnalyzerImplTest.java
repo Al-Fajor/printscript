@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.example.ast.*;
+import org.example.ast.statement.Statement;
 import org.example.io.AstBuilder;
 import org.example.test.TestBuilder;
 import org.junit.jupiter.api.DynamicTest;
@@ -43,7 +44,9 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 		return () -> {
 			try {
 				SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
-				List<AstComponent> astList = builder.buildFromJson(testFile.getAbsolutePath());
+				// TODO: delete castToAstComponent once SemanticAnalyzer uses statements
+				List<AstComponent> astList =
+						castToAstComponents(builder.buildFromJson(testFile.getAbsolutePath()));
 
 				Result analyticResult = new SemanticSuccess();
 				Iterator<AstComponent> syntaxOutputIterator = astList.iterator();
@@ -59,6 +62,10 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 				throw new RuntimeException("Couldn't read file to build AST");
 			}
 		};
+	}
+
+	private List<AstComponent> castToAstComponents(List<Statement> statements) {
+		return statements.stream().map(statement -> (AstComponent) statement).toList();
 	}
 
 	private static void assertAndPrintError(Result analyticResult, boolean validity) {

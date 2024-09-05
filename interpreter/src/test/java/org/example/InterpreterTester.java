@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 import org.example.factory.InterpreterFactory;
 import org.example.io.AstBuilder;
 import org.example.observer.BrokerObserver;
@@ -34,7 +36,12 @@ public class InterpreterTester {
 	}
 
 	private void interpretTree(Interpreter interpreter, String path) throws IOException {
-		interpreter.interpret(new AstBuilder().buildFromJson(path).iterator());
+		interpreter.interpret(castToAstComponents(new AstBuilder().buildFromJson(path)).iterator());
+		// TODO: make interpreter use statements and delete castToAstComponents
+	}
+
+	private List<AstComponent> castToAstComponents(List<Statement> statements) {
+		return statements.stream().map(statement -> (AstComponent) statement).toList();
 	}
 
 	private void readExpectedPrintLines(String path, List<String> printLines) throws IOException {
