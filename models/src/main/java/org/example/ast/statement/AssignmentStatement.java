@@ -3,18 +3,18 @@ package org.example.ast.statement;
 import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.EvaluableComponent;
-import org.example.ast.IdentifierComponent;
+import org.example.ast.Identifier;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
 public class AssignmentStatement implements Statement {
-	private final IdentifierComponent identifier;
+	private final Identifier identifier;
 	private final EvaluableComponent expression;
 	private final Pair<Integer, Integer> start;
 	private final Pair<Integer, Integer> end;
 
 	public AssignmentStatement(
-			IdentifierComponent leftComponent,
+			Identifier leftComponent,
 			EvaluableComponent rightComponent,
 			Pair<Integer, Integer> start,
 			Pair<Integer, Integer> end) {
@@ -24,7 +24,7 @@ public class AssignmentStatement implements Statement {
 		this.end = end;
 	}
 
-	public IdentifierComponent getIdentifier() {
+	public Identifier getIdentifier() {
 		return identifier;
 	}
 
