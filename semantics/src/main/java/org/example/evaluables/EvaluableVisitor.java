@@ -99,8 +99,11 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		EvaluableResolution assignedValueResolution =
 				statement.getEvaluableComponent().accept(this);
 
-		return DeclarationAssignmentStatementTree.checkIdentifierDoesNotExist(
-				statement, assignedValueResolution, env);
+		return getFirstFailedResolution(assignedValueResolution)
+                .orElse(
+                        DeclarationAssignmentStatementTree.checkIdentifierDoesNotExist(
+                                statement, assignedValueResolution, env)
+                );
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import java.util.List;
 import org.example.ast.AstComponent;
 import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
-import org.example.identifiers.IdentifierVisitor;
 import org.example.observer.Observer;
 import org.example.utils.DoubleOptional;
 
@@ -19,8 +18,7 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
 	public SemanticAnalyzerImpl(Environment env) {
 		this.env = env;
-		IdentifierVisitor identifierVisitor = new IdentifierVisitor();
-		this.evaluableVisitor = new EvaluableVisitor(env, identifierVisitor);
+		this.evaluableVisitor = new EvaluableVisitor(env);
 	}
 
 	@Override

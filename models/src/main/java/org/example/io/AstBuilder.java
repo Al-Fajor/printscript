@@ -107,7 +107,7 @@ public class AstBuilder {
 				AstComponent mappedFirstComponent =
 						mapToAstComponent(firstComponent, firstComponentName);
 				EvaluableComponent mappedSecondComponent =
-						(EvaluableComponent) mapToAstComponent(secondComponent, firstComponentName);
+						(EvaluableComponent) mapToAstComponent(secondComponent, secondComponentName);
 
 				if (mappedFirstComponent instanceof Identifier) {
 
