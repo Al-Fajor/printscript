@@ -23,10 +23,10 @@ public class AssignmentStatementTree {
 	}
 
 	private static EvaluableResolution checkAssigningToValidValue(
-            AssignmentStatement statement,
-            Identifier identifier,
-            EvaluableResolution assignedValueResolution,
-            Environment env) {
+			AssignmentStatement statement,
+			Identifier identifier,
+			EvaluableResolution assignedValueResolution,
+			Environment env) {
 
 		DeclarationType identifierType = env.getDeclarationType(identifier.getName());
 		DeclarationType assignedValueType =

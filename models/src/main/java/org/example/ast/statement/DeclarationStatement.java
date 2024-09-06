@@ -1,5 +1,6 @@
 package org.example.ast.statement;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.DeclarationType;
 import org.example.ast.Identifier;
@@ -8,11 +9,11 @@ import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
 public class DeclarationStatement implements Statement {
-	private DeclarationType declarationType;
-	private IdentifierType identifierType;
-	private Identifier identifier;
-	private Pair<Integer, Integer> start;
-	private Pair<Integer, Integer> end;
+	private final DeclarationType declarationType;
+	private final IdentifierType identifierType;
+	private final Identifier identifier;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
 	public DeclarationStatement(
 			DeclarationType declarationType,
@@ -57,5 +58,19 @@ public class DeclarationStatement implements Statement {
 	@Override
 	public <T> T accept(StatementVisitor<T> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof DeclarationStatement that)) return false;
+		return declarationType == that.declarationType
+				&& identifierType == that.identifierType
+				&& Objects.equals(identifier, that.identifier);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(declarationType, identifierType, identifier);
 	}
 }

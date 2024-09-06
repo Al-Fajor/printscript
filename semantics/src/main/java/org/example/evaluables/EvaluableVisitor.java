@@ -100,10 +100,9 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 				statement.getEvaluableComponent().accept(this);
 
 		return getFirstFailedResolution(assignedValueResolution)
-                .orElse(
-                        DeclarationAssignmentStatementTree.checkIdentifierDoesNotExist(
-                                statement, assignedValueResolution, env)
-                );
+				.orElse(
+						DeclarationAssignmentStatementTree.checkIdentifierDoesNotExist(
+								statement, assignedValueResolution, env));
 	}
 
 	@Override
@@ -113,8 +112,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(FunctionCallStatement statement) {
-        List<EvaluableResolution> resolvedParameters =
-                resolveEachParameter(statement.getParameters(), this);
+		List<EvaluableResolution> resolvedParameters =
+				resolveEachParameter(statement.getParameters(), this);
 
 		Optional<EvaluableResolution> firstInvalidParameterResolution =
 				getInvalidResolutionIfAny(resolvedParameters);
@@ -126,8 +125,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		String functionName = statement.getIdentifier().getName();
 
-		return FunctionCallStatementTree.isFunctionDeclared(
-                env, statement, types, functionName);
+		return FunctionCallStatementTree.isFunctionDeclared(env, statement, types, functionName);
 	}
 
 	@Override

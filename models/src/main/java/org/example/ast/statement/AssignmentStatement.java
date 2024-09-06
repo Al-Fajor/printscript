@@ -55,8 +55,7 @@ public class AssignmentStatement implements Statement {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		AssignmentStatement that = (AssignmentStatement) o;
+		if (!(o instanceof AssignmentStatement that)) return false;
 		return Objects.equals(identifier, that.identifier)
 				&& Objects.equals(expression, that.expression);
 	}
@@ -68,15 +67,11 @@ public class AssignmentStatement implements Statement {
 
 	@Override
 	public String toString() {
-		return "AssignationStatement{"
+		return "AssignmentStatement{"
 				+ "identifier="
 				+ identifier
 				+ ", expression="
 				+ expression
-				+ ", start="
-				+ start
-				+ ", end="
-				+ end
 				+ '}';
 	}
 }
