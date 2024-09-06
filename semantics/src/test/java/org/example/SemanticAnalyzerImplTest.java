@@ -19,7 +19,7 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
 class SemanticAnalyzerImplTest extends TestBuilder {
-	private static final String runOnly = "";
+	private static final String RUN_ONLY = "";
 	public static final String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
 	AstBuilder builder = new AstBuilder();
 	AstValidityChecker checker = new AstValidityChecker();
@@ -31,7 +31,7 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 							new Signature("println", List.of(DeclarationType.STRING))));
 
 	public SemanticAnalyzerImplTest() {
-		super();
+		super(RUN_ONLY);
 	}
 
 	@TestFactory
