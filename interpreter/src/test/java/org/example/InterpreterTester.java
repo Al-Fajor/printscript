@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import org.example.ast.AstComponent;
-import org.example.ast.statement.Statement;
 import org.example.factory.InterpreterFactory;
 import org.example.io.AstBuilder;
 import org.example.observer.BrokerObserver;
