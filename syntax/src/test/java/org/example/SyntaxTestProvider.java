@@ -54,7 +54,7 @@ public class SyntaxTestProvider {
 	}
 
 	private String printWholeList(List<AstComponent> list) {
-		return list.stream().map(String::valueOf).collect(Collectors.joining());
+		return list.stream().map(String::valueOf).collect(Collectors.joining(", "));
 	}
 
 	private List<AstComponent> getAstFromJson(String filePath) throws IOException {

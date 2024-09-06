@@ -3,11 +3,11 @@ package org.example.ruleappliers.declaration;
 import java.util.List;
 import org.example.FormatterVisitor;
 import org.example.ast.AstComponent;
-import org.example.ast.Declaration;
+import org.example.ast.statement.DeclarationStatement;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
 
-public class SpaceAfterColon implements RuleApplier<Declaration> {
+public class SpaceAfterColon implements RuleApplier<DeclarationStatement> {
 	private final boolean spaceAfterColon;
 
 	public SpaceAfterColon(boolean spaceAfterColon) {
@@ -15,7 +15,7 @@ public class SpaceAfterColon implements RuleApplier<Declaration> {
 	}
 
 	@Override
-	public List<String> applyRules(FormatterVisitor visitor, Declaration declaration) {
+	public List<String> applyRules(FormatterVisitor visitor, DeclarationStatement declaration) {
 		return List.of("", "", (spaceAfterColon ? " " : ""), "");
 	}
 
@@ -26,6 +26,6 @@ public class SpaceAfterColon implements RuleApplier<Declaration> {
 
 	@Override
 	public boolean isApplicable(AstComponent component) {
-		return component instanceof Declaration;
+		return component instanceof DeclarationStatement;
 	}
 }

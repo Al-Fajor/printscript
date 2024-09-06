@@ -1,17 +1,19 @@
 package org.example;
 
+import org.example.ast.DeclarationType;
+
 public class Variable<T> {
-	private final VariableType type;
+	private final DeclarationType type;
 	private final String name;
 	private T value;
 
-	public Variable(VariableType type, String name, T value) {
+	public Variable(DeclarationType type, String name, T value) {
 		this.type = type;
 		this.name = name;
 		this.value = value;
 	}
 
-	public VariableType getType() {
+	public DeclarationType getType() {
 		return type;
 	}
 

@@ -4,21 +4,14 @@ import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.EvaluableComponentVisitor;
-import org.example.ast.visitor.IdentifierComponentVisitor;
 
-public class Identifier implements IdentifierComponent, EvaluableComponent {
-	private final IdentifierType type;
+public class Identifier implements EvaluableComponent {
 	private final String name;
 	private final Pair<Integer, Integer> start;
 	private final Pair<Integer, Integer> end;
 
-	public Identifier(
-			String name,
-			IdentifierType type,
-			Pair<Integer, Integer> start,
-			Pair<Integer, Integer> end) {
+	public Identifier(String name, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
 		this.name = name;
-		this.type = type;
 		this.start = start;
 		this.end = end;
 	}
@@ -37,21 +30,17 @@ public class Identifier implements IdentifierComponent, EvaluableComponent {
 		return name;
 	}
 
-	public IdentifierType getType() {
-		return type;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Identifier that = (Identifier) o;
-		return Objects.equals(name, that.name) && type == that.type;
+		return Objects.equals(name, that.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, type);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -61,11 +50,6 @@ public class Identifier implements IdentifierComponent, EvaluableComponent {
 
 	@Override
 	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
-
-	@Override
-	public <T> T accept(IdentifierComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
 }

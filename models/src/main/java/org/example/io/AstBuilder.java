@@ -8,13 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import org.example.Pair;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
+import org.example.ast.statement.AssignmentStatement;
+import org.example.ast.statement.DeclarationAssignmentStatement;
+import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.Statement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AstBuilder {
+
+	public static final Pair<Integer, Integer> PLACEHOLDER = new Pair<>(1, 1);
+
 	public List<Statement> buildFromJson(String filePath) throws IOException {
 		File file = new File(filePath);
 		String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
@@ -39,15 +44,15 @@ public class AstBuilder {
 		return switch (astComponentJsonName) {
 			case "functionCall" ->
 					new FunctionCallStatement(
-							(IdentifierComponent)
+							(Identifier)
 									mapToAstComponent(
 											astComponentJson.getJSONObject("identifier"),
 											"identifier"),
 							(Parameters)
 									mapToAstComponent(
 											astComponentJson.getJSONArray("params"), "params"),
-							new Pair<>(1, 1),
-							new Pair<>(1, 1));
+							PLACEHOLDER,
+							PLACEHOLDER);
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
 							"Not implemented yet: case '" + astComponentJsonName + "'");
@@ -60,25 +65,16 @@ public class AstBuilder {
 	private AstComponent mapToAstComponent(
 			JSONObject astComponentJson, String astComponentJsonName) {
 		return switch (astComponentJsonName) {
-			case "declaration" ->
-					new Declaration(
-							mapToDeclarationType(astComponentJson.getString("declarationType")),
-							astComponentJson.getString("name"),
-							new Pair<>(1, 1),
-							new Pair<>(1, 1)); // TODO: use real locations and add them to JSONs
 			case "literal" -> {
 				Object value = astComponentJson.get("value");
 
 				// This condition seems stupid, but it is how the Null object
 				// is implemented in org.json
-				if (value.equals(null))
-					yield new Literal<>(null, new Pair<>(1, 1), new Pair<>(1, 1));
+				if (value.equals(null)) yield new Literal<>(null, PLACEHOLDER, PLACEHOLDER);
 
 				yield switch (value) {
-					case String ignored ->
-							new Literal<>((String) value, new Pair<>(1, 1), new Pair<>(1, 1));
-					case Number ignored ->
-							new Literal<>((Number) value, new Pair<>(1, 1), new Pair<>(1, 1));
+					case String ignored -> new Literal<>((String) value, PLACEHOLDER, PLACEHOLDER);
+					case Number ignored -> new Literal<>((Number) value, PLACEHOLDER, PLACEHOLDER);
 					default ->
 							throw new IllegalArgumentException(
 									"Cannot parse JSON: Unsupported value "
@@ -87,11 +83,8 @@ public class AstBuilder {
 				};
 			}
 			case "identifier" ->
-					new Identifier(
-							astComponentJson.getString("name"),
-							mapToIdentifierType(astComponentJson.getString("identifierType")),
-							new Pair<>(1, 1),
-							new Pair<>(1, 1));
+					new Identifier(astComponentJson.getString("name"), PLACEHOLDER, PLACEHOLDER);
+			case "declaration" -> null;
 
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
@@ -111,12 +104,41 @@ public class AstBuilder {
 				String secondComponentName = jsonArray.getJSONObject(1).keys().next();
 				Object secondComponent = jsonArray.getJSONObject(1).get(secondComponentName);
 
-				return new AssignationStatement(
-						(IdentifierComponent) mapToAstComponent(firstComponent, firstComponentName),
+				AstComponent mappedFirstComponent =
+						mapToAstComponent(firstComponent, firstComponentName);
+				EvaluableComponent mappedSecondComponent =
 						(EvaluableComponent)
-								mapToAstComponent(secondComponent, secondComponentName),
-						new Pair<>(1, 1),
-						new Pair<>(1, 1));
+								mapToAstComponent(secondComponent, secondComponentName);
+
+				if (mappedFirstComponent != null) {
+
+					return new AssignmentStatement(
+							(Identifier) mappedFirstComponent,
+							mappedSecondComponent,
+							PLACEHOLDER,
+							PLACEHOLDER);
+				}
+
+				if (mappedSecondComponent instanceof Literal<?>
+						&& ((Literal<?>) mappedSecondComponent).getValue() == null) {
+					JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
+
+					return new DeclarationStatement(
+							mapToDeclarationType(subObject.getString("declarationType")),
+							IdentifierType.VARIABLE,
+							new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
+							PLACEHOLDER,
+							PLACEHOLDER);
+				}
+
+				JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
+				return new DeclarationAssignmentStatement(
+						mapToDeclarationType(subObject.getString("declarationType")),
+						IdentifierType.VARIABLE,
+						new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
+						mappedSecondComponent,
+						PLACEHOLDER,
+						PLACEHOLDER);
 
 			default:
 				throw new IllegalArgumentException(
@@ -136,7 +158,7 @@ public class AstBuilder {
 					parameters.add((EvaluableComponent) mapToAstComponent(subComponent, key));
 				}
 
-				return new Parameters(parameters, new Pair<>(1, 1), new Pair<>(1, 1));
+				return new Parameters(parameters, PLACEHOLDER, PLACEHOLDER);
 
 			case "binaryExpression":
 				String firstOperandName = jsonArray.getJSONObject(1).keys().next();
@@ -148,8 +170,8 @@ public class AstBuilder {
 						mapToOperator(jsonArray.getJSONObject(0).getString("op")),
 						(EvaluableComponent) mapToAstComponent(firstOperand, firstOperandName),
 						(EvaluableComponent) mapToAstComponent(secondOperand, secondOperandName),
-						new Pair<>(1, 1),
-						new Pair<>(1, 1));
+						PLACEHOLDER,
+						PLACEHOLDER);
 
 			default:
 				throw new IllegalArgumentException(
@@ -188,15 +210,6 @@ public class AstBuilder {
 			case "/" -> BinaryOperator.DIVISION;
 			case "*" -> BinaryOperator.MULTIPLICATION;
 			default -> throw new IllegalArgumentException("Invalid operator: " + op);
-		};
-	}
-
-	private IdentifierType mapToIdentifierType(String identifierType) {
-		return switch (identifierType) {
-			case "variable" -> IdentifierType.VARIABLE;
-			case "function" -> IdentifierType.FUNCTION;
-			default ->
-					throw new IllegalArgumentException("Invalid identifierType: " + identifierType);
 		};
 	}
 

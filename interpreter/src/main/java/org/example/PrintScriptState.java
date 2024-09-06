@@ -3,6 +3,7 @@ package org.example;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.example.ast.DeclarationType;
 import org.example.observer.BrokerObserver;
 
 public class PrintScriptState implements InterpreterState {
@@ -43,11 +44,11 @@ public class PrintScriptState implements InterpreterState {
 		stringVariables.get(name).setValue(value);
 	}
 
-	public VariableType getVariableType(String name) {
+	public DeclarationType getVariableType(String name) { // TODO fix horrible code
 		if (numericVariables.get(name) != null) {
-			return VariableType.NUMBER;
+			return DeclarationType.NUMBER;
 		} else {
-			return VariableType.STRING;
+			return DeclarationType.STRING;
 		}
 	}
 

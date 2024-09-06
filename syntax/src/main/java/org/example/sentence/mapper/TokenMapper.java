@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.example.ast.*;
+import org.example.ast.BinaryOperator;
+import org.example.ast.EvaluableComponent;
+import org.example.ast.Identifier;
+import org.example.ast.Literal;
 import org.example.sentence.builder.ExpressionBuilder;
 import org.example.sentence.reader.TokenReader;
 import org.example.token.Token;
@@ -38,23 +41,10 @@ public class TokenMapper {
 				Map.of(
 						LITERAL, translateToLiteral(token),
 						IDENTIFIER,
-								new Identifier(
-										token.getValue(),
-										IdentifierType.VARIABLE,
-										token.getStart(),
-										token.getEnd()),
+								new Identifier(token.getValue(), token.getStart(), token.getEnd()),
 						FUNCTION,
-								new Identifier(
-										token.getValue(),
-										IdentifierType.FUNCTION,
-										token.getStart(),
-										token.getEnd()),
-						PRINTLN,
-								new Identifier(
-										"println",
-										IdentifierType.FUNCTION,
-										token.getStart(),
-										token.getEnd()));
+								new Identifier(token.getValue(), token.getStart(), token.getEnd()),
+						PRINTLN, new Identifier("println", token.getStart(), token.getEnd()));
 		return map.get(token.getType());
 	}
 

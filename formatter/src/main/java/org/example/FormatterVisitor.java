@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
+import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.factories.RuleFactory;
 import org.example.ruleappliers.RuleApplier;
@@ -70,9 +68,9 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(AssignationStatement statement) {
+	public String visit(AssignmentStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getAssignationRuleAppliers(), statement);
+				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), statement);
 
 		String right = statement.getEvaluableComponent().accept(this);
 		String left = statement.getIdentifier().accept(this);
@@ -89,17 +87,49 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(Declaration statement) {
+	public String visit(DeclarationAssignmentStatement statement) {
+		AssignmentStatement assignmentStatement =
+				new AssignmentStatement(
+						statement.getIdentifier(),
+						statement.getEvaluableComponent(),
+						statement.getStart(),
+						statement.getEnd());
+		List<String> combinedResults =
+				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), assignmentStatement);
+
+		String right = statement.getEvaluableComponent().accept(this);
+		DeclarationStatement declaration =
+				new DeclarationStatement(
+						statement.getDeclarationType(),
+						statement.getIdentifierType(),
+						statement.getIdentifier(),
+						statement.getStart(),
+						statement.getEnd());
+		String left = declaration.accept(this);
+		if (right.isEmpty()) {
+			return left;
+		}
+		return combinedResults.get(0)
+				+ left
+				+ combinedResults.get(1)
+				+ "="
+				+ combinedResults.get(2)
+				+ right
+				+ combinedResults.get(3);
+	}
+
+	@Override
+	public String visit(DeclarationStatement statement) {
 		List<String> combinedResults =
 				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), statement);
 
 		return "let "
 				+ combinedResults.get(0)
-				+ statement.getName()
+				+ statement.getIdentifier().getName()
 				+ combinedResults.get(1)
 				+ ":"
 				+ combinedResults.get(2)
-				+ statement.getType().toString().toLowerCase()
+				+ statement.getDeclarationType().toString().toLowerCase()
 				+ combinedResults.get(3);
 	}
 

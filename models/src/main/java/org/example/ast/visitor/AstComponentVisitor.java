@@ -1,9 +1,7 @@
 package org.example.ast.visitor;
 
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
+import org.example.ast.statement.*;
 
 public interface AstComponentVisitor<T> {
 	T visit(BinaryExpression expression);
@@ -16,9 +14,11 @@ public interface AstComponentVisitor<T> {
 
 	T visit(Parameters parameters);
 
-	T visit(AssignationStatement statement);
+	T visit(AssignmentStatement statement);
 
-	T visit(Declaration statement);
+	T visit(DeclarationAssignmentStatement statement);
+
+	T visit(DeclarationStatement statement);
 
 	T visit(FunctionCallStatement statement);
 
