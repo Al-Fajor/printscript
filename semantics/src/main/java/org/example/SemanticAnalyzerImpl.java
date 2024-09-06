@@ -3,7 +3,7 @@ package org.example;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
 import org.example.observer.Observer;
@@ -22,8 +22,8 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 	}
 
 	@Override
-	public Result analyze(Iterator<AstComponent> asts) {
-		EvaluableResolution resolution = asts.next().accept(evaluableVisitor);
+	public Result analyze(Iterator<Statement> statements) {
+		EvaluableResolution resolution = statements.next().accept(evaluableVisitor);
 		notifyObservers(completed, ESTIMATED_TOTAL);
 
 		Pair<EvaluableVisitor, Environment> updated =

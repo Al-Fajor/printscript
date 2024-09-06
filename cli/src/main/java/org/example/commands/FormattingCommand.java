@@ -10,6 +10,7 @@ import org.example.Formatter;
 import org.example.Parser;
 import org.example.PrintScriptFormatter;
 import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 import org.example.factories.RuleFactoryWithCustomPath;
 import org.example.io.Color;
 import picocli.CommandLine;
@@ -44,18 +45,22 @@ public class FormattingCommand implements Callable<Integer> {
 
 		Formatter formatter = getFormatter(configPathOrDefault);
 
-		List<AstComponent> validatedComponents = parser.parse(filePath);
+		List<Statement> validatedComponents = parser.parse(filePath);
 		if (validatedComponents.isEmpty()) {
 			return 1;
 		}
 
 		Color.printGreen("\nRunning formatter...");
-		String formattedCode = formatter.format(validatedComponents);
+		String formattedCode = formatter.format(toAstList(validatedComponents));
 		System.out.println(formattedCode);
 
 		overwriteOriginalFile(formattedCode);
 
 		return 0;
+	}
+
+	private List<AstComponent> toAstList(List<Statement> statementList) {
+		return statementList.stream().map(statement -> (AstComponent) statement).toList();
 	}
 
 	private void overwriteOriginalFile(String formattedCode) {
