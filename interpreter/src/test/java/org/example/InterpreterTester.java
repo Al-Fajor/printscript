@@ -36,12 +36,7 @@ public class InterpreterTester {
 	}
 
 	private void interpretTree(Interpreter interpreter, String path) throws IOException {
-		interpreter.interpret(castToAstComponents(new AstBuilder().buildFromJson(path)).iterator());
-		// TODO: make interpreter use statements and delete castToAstComponents
-	}
-
-	private List<AstComponent> castToAstComponents(List<Statement> statements) {
-		return statements.stream().map(statement -> (AstComponent) statement).toList();
+		interpreter.interpret(new AstBuilder().buildFromJson(path).iterator());
 	}
 
 	private void readExpectedPrintLines(String path, List<String> printLines) throws IOException {

@@ -12,9 +12,9 @@ public class PrintScriptInterpreter implements Interpreter {
 		statementVisitor = new StatementVisitor(state);
 	}
 
-	public void interpret(Iterator<AstComponent> statements) {
+	public void interpret(Iterator<Statement> statements) {
 		while (statements.hasNext()) {
-			((Statement) statements.next()).accept(statementVisitor);
+			(statements.next()).accept(statementVisitor);
 		}
 	}
 }
