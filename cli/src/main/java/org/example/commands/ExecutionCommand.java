@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import org.example.Interpreter;
 import org.example.Parser;
-import org.example.ast.AstComponent;
 import org.example.ast.statement.Statement;
 import org.example.factory.InterpreterFactory;
 import org.example.io.Color;
@@ -36,15 +35,11 @@ public class ExecutionCommand implements Callable<Integer> {
 			System.out.println("\nCompleted validation successfully. No errors found.");
 
 			Color.printGreen("\nRunning...");
-			interpreter.interpret(toAstList(astList).iterator());
+			interpreter.interpret(astList.iterator());
 			return 0;
 		}
 
 		return 1;
-	}
-
-	private List<AstComponent> toAstList(List<Statement> statementList) {
-		return statementList.stream().map(statement -> (AstComponent) statement).toList();
 	}
 
 	// TODO: duplicate from InterpreterTester

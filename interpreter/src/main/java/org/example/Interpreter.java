@@ -1,8 +1,8 @@
 package org.example;
 
 import java.util.Iterator;
-import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 
 public interface Interpreter {
-	void interpret(Iterator<AstComponent> statements);
+	void interpret(Iterator<Statement> statements);
 }
