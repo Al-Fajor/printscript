@@ -70,7 +70,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(AssignmentStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getAssignationRuleAppliers(), statement);
+				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), statement);
 
 		String right = statement.getEvaluableComponent().accept(this);
 		String left = statement.getIdentifier().accept(this);
@@ -88,26 +88,48 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(DeclarationAssignmentStatement statement) {
-		return "";
+		AssignmentStatement assignmentStatement =
+				new AssignmentStatement(
+						statement.getIdentifier(),
+						statement.getEvaluableComponent(),
+						statement.getStart(),
+						statement.getEnd());
+		List<String> combinedResults =
+				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), assignmentStatement);
+
+		String right = statement.getEvaluableComponent().accept(this);
+		DeclarationStatement declaration =
+				new DeclarationStatement(
+						statement.getDeclarationType(),
+						statement.getIdentifierType(),
+						statement.getIdentifier(),
+						statement.getStart(),
+						statement.getEnd());
+		String left = declaration.accept(this);
+		if (right.isEmpty()) {
+			return left;
+		}
+		return combinedResults.get(0)
+				+ left
+				+ combinedResults.get(1)
+				+ "="
+				+ combinedResults.get(2)
+				+ right
+				+ combinedResults.get(3);
 	}
 
 	@Override
 	public String visit(DeclarationStatement statement) {
-		return "";
-	}
-
-	@Override
-	public String visit(Declaration declaration) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), declaration);
+				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), statement);
 
 		return "let "
 				+ combinedResults.get(0)
-				+ declaration.getName()
+				+ statement.getIdentifier().getName()
 				+ combinedResults.get(1)
 				+ ":"
 				+ combinedResults.get(2)
-				+ declaration.getType().toString().toLowerCase()
+				+ statement.getDeclarationType().toString().toLowerCase()
 				+ combinedResults.get(3);
 	}
 
