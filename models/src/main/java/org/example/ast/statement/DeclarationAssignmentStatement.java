@@ -5,13 +5,15 @@ import org.example.ast.*;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
+import java.util.Objects;
+
 public class DeclarationAssignmentStatement implements Statement {
-	private DeclarationType declarationType;
-	private IdentifierType identifierType;
-	private Identifier identifier;
-	private EvaluableComponent evaluableComponent;
-	private Pair<Integer, Integer> start;
-	private Pair<Integer, Integer> end;
+	private final DeclarationType declarationType;
+	private final IdentifierType identifierType;
+	private final Identifier identifier;
+	private final EvaluableComponent evaluableComponent;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
 	public DeclarationAssignmentStatement(
 			DeclarationType declarationType,
@@ -63,4 +65,28 @@ public class DeclarationAssignmentStatement implements Statement {
 	public Pair<Integer, Integer> getEnd() {
 		return end;
 	}
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(declarationType, identifierType, identifier, evaluableComponent);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof DeclarationAssignmentStatement that &&
+      Objects.equals(declarationType, that.declarationType) &&
+      Objects.equals(identifierType, that.identifierType) &&
+      Objects.equals(identifier, that.identifier) &&
+      Objects.equals(evaluableComponent, that.evaluableComponent);
+  }
+
+  @Override
+  public String toString() {
+    return "DeclarationAssignmentStatement{" +
+      "evaluableComponent=" + evaluableComponent +
+      ", identifier=" + identifier +
+      ", identifierType=" + identifierType +
+      ", declarationType=" + declarationType +
+      '}';
+  }
 }

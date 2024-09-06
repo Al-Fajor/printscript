@@ -1,20 +1,17 @@
 package org.example.io;
 
+import org.example.Pair;
+import org.example.ast.*;
+import org.example.ast.statement.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.example.Pair;
-import org.example.ast.*;
-import org.example.ast.statement.AssignmentStatement;
-import org.example.ast.statement.DeclarationAssignmentStatement;
-import org.example.ast.statement.DeclarationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.Statement;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class AstBuilder {
 
@@ -107,9 +104,9 @@ public class AstBuilder {
 				AstComponent mappedFirstComponent =
 						mapToAstComponent(firstComponent, firstComponentName);
 				EvaluableComponent mappedSecondComponent =
-						(EvaluableComponent) mapToAstComponent(secondComponent, firstComponentName);
+						(EvaluableComponent) mapToAstComponent(secondComponent, secondComponentName);
 
-				if (mappedFirstComponent instanceof Identifier) {
+				if (mappedFirstComponent != null) {
 
 					return new AssignmentStatement(
 							(Identifier) mappedFirstComponent,
@@ -118,8 +115,8 @@ public class AstBuilder {
 							PLACEHOLDER);
 				}
 
-				if (secondComponent instanceof Literal<?>
-						&& ((Literal<?>) secondComponent).getValue() == null) {
+				if (mappedSecondComponent instanceof Literal<?>
+						&& ((Literal<?>) mappedSecondComponent).getValue() == null) {
 					JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
 
 					return new DeclarationStatement(
@@ -136,7 +133,7 @@ public class AstBuilder {
 						mapToDeclarationType(subObject.getString("declarationType")),
 						IdentifierType.VARIABLE,
 						new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
-						(EvaluableComponent) secondComponent,
+						mappedSecondComponent,
 						PLACEHOLDER,
 						PLACEHOLDER);
 
@@ -210,15 +207,6 @@ public class AstBuilder {
 			case "/" -> BinaryOperator.DIVISION;
 			case "*" -> BinaryOperator.MULTIPLICATION;
 			default -> throw new IllegalArgumentException("Invalid operator: " + op);
-		};
-	}
-
-	private IdentifierType mapToIdentifierType(String identifierType) {
-		return switch (identifierType) {
-			case "variable" -> IdentifierType.VARIABLE;
-			case "function" -> IdentifierType.FUNCTION;
-			default ->
-					throw new IllegalArgumentException("Invalid identifierType: " + identifierType);
 		};
 	}
 

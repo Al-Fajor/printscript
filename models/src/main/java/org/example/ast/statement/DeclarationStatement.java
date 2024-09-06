@@ -7,12 +7,14 @@ import org.example.ast.IdentifierType;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
+import java.util.Objects;
+
 public class DeclarationStatement implements Statement {
-	private DeclarationType declarationType;
-	private IdentifierType identifierType;
-	private Identifier identifier;
-	private Pair<Integer, Integer> start;
-	private Pair<Integer, Integer> end;
+	private final DeclarationType declarationType;
+	private final IdentifierType identifierType;
+	private final Identifier identifier;
+	private final Pair<Integer, Integer> start;
+	private final Pair<Integer, Integer> end;
 
 	public DeclarationStatement(
 			DeclarationType declarationType,
@@ -58,4 +60,16 @@ public class DeclarationStatement implements Statement {
 	public <T> T accept(StatementVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof DeclarationStatement that)) return false;
+    return declarationType == that.declarationType && identifierType == that.identifierType && Objects.equals(identifier, that.identifier);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(declarationType, identifierType, identifier);
+  }
 }

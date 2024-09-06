@@ -3,7 +3,7 @@ separator="====================="
 
 set -e
 echo $separator
-echo "Bringing changes from dev-gradle"
-git pull origin dev-gradle
+echo "Applying Spotless"
+./gradlew spotlessApply
 echo $separator
 

@@ -1,16 +1,20 @@
 package org.example.sentence.mapper;
 
-import static org.example.token.BaseTokenTypes.*;
+import org.example.ast.BinaryOperator;
+import org.example.ast.EvaluableComponent;
+import org.example.ast.Identifier;
+import org.example.ast.Literal;
+import org.example.sentence.builder.ExpressionBuilder;
+import org.example.sentence.reader.TokenReader;
+import org.example.token.Token;
+import org.example.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.example.ast.*;
-import org.example.sentence.builder.ExpressionBuilder;
-import org.example.sentence.reader.TokenReader;
-import org.example.token.Token;
-import org.example.token.TokenType;
+
+import static org.example.token.BaseTokenTypes.*;
 
 public class TokenMapper {
 	public List<EvaluableComponent> buildExpression(List<Token> tokens) {
@@ -40,19 +44,16 @@ public class TokenMapper {
 						IDENTIFIER,
 								new Identifier(
 										token.getValue(),
-										IdentifierType.VARIABLE,
 										token.getStart(),
 										token.getEnd()),
 						FUNCTION,
 								new Identifier(
 										token.getValue(),
-										IdentifierType.FUNCTION,
 										token.getStart(),
 										token.getEnd()),
 						PRINTLN,
 								new Identifier(
 										"println",
-										IdentifierType.FUNCTION,
 										token.getStart(),
 										token.getEnd()));
 		return map.get(token.getType());
