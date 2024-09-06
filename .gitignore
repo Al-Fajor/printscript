@@ -41,3 +41,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/diagrams/models_component_diagram.svg

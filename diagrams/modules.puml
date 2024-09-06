@@ -1,20 +1,41 @@
 @startuml
-
+interface Cli {
+    + run(R runnable,String ...args): void
+}
 interface Lexer {
-    + lex(String code): List<Token>
+    + lex(Iterator<String> code): Token
 }
 interface SyntaxAnalyzer {
-    + analyze(List<Token> tokens): List<Ast>
+    + analyze(Iterator<Token> tokens): Statement
 }
 interface SemanticAnalyzer {
-    + analyze(List<Ast> tokens): List<Ast>
+    + analyze(Iterator<Statement> statements): Statement
 }
 interface Interpreter {
-    + interpret(List<Ast>)
-}
-interface Runner {
-    + run(String code)
+    + interpret(Iterator<Statement> statements): void
 }
 
+interface Formatter {
+    + format(Iterator<Statement> statements): String
+}
 
+interface StaticCodeAnalyzer{
+    + analyze(Iterator<String> code): List<Result>
+}
+
+interface Models {
+    + Token
+    + Statement
+    + Result
+}
+
+'Runnable is an external module
+
+Lexer <-- Cli
+SyntaxAnalyzer <-- Cli
+SemanticAnalyzer <-- Cli
+Interpreter <-- Cli
+Formatter <-- Cli
+StaticCodeAnalyzer <-- Cli
+Models <-- Cli
 @enduml
