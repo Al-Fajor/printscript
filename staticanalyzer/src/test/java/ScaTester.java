@@ -22,7 +22,7 @@ public class ScaTester {
 			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");
 			List<Result> expectedResults = getExpectedResults(testCase);
-			List<Result> results = analyzer.analyze(code);
+			List<Result> results = analyzer.analyze(code.lines().iterator());
 			compareResults(expectedResults, results);
 		}
 	}

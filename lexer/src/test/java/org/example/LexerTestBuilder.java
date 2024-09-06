@@ -26,14 +26,14 @@ public class LexerTestBuilder {
 	}
 
 	private void compareTokens(Iterator<Token> expectedList, Iterator<Token> actualList) {
-        while (expectedList.hasNext() && actualList.hasNext()) {
-            Token expected = expectedList.next();
-            Token actual = actualList.next();
-            assertEquals(expected.getType(), actual.getType());
-            assertEquals(expected.getValue(), actual.getValue());
-        }
-        assertFalse(expectedList.hasNext());
-        assertFalse(actualList.hasNext());
+		while (expectedList.hasNext() && actualList.hasNext()) {
+			Token expected = expectedList.next();
+			Token actual = actualList.next();
+			assertEquals(expected.getType(), actual.getType());
+			assertEquals(expected.getValue(), actual.getValue());
+		}
+		assertFalse(expectedList.hasNext());
+		assertFalse(actualList.hasNext());
 	}
 
 	public void testLexicalErrorDetection(String filePath) throws IOException {

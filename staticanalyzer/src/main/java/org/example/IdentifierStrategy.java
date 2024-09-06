@@ -47,9 +47,9 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 	}
 
 	private List<Token> getTokens(String input) {
-		Result lexerResult = lexer.lex(input);
+		Result lexerResult = lexer.lex(input.lines().iterator());
 		if (Objects.requireNonNull(lexerResult) instanceof LexerSuccess lexerSuccess) {
-			return lexerSuccess.getTokens();
+			return iteratorToList(lexerSuccess.getTokens());
 		}
 		throw new RuntimeException("Lexer failed: " + lexerResult);
 	}
@@ -62,5 +62,13 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 			}
 		}
 		return identifierTokens;
+	}
+
+	private List<Token> iteratorToList(Iterator<Token> iterator) {
+		List<Token> tokens = new ArrayList<>();
+		while (iterator.hasNext()) {
+			tokens.add(iterator.next());
+		}
+		return tokens;
 	}
 }

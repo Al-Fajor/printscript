@@ -2,10 +2,7 @@ package org.example;
 
 import static org.example.token.BaseTokenTypes.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
 
@@ -79,10 +76,18 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 	}
 
 	private List<Token> getTokens(String input) {
-		Result lexerResult = lexer.lex(input);
+		Result lexerResult = lexer.lex(input.lines().iterator());
 		if (Objects.requireNonNull(lexerResult) instanceof LexerSuccess lexerSuccess) {
-			return lexerSuccess.getTokens();
+			return iteratorToList(lexerSuccess.getTokens());
 		}
 		throw new RuntimeException("Lexer failed: " + lexerResult);
+	}
+
+	private List<Token> iteratorToList(Iterator<Token> iterator) {
+		List<Token> tokens = new ArrayList<>();
+		while (iterator.hasNext()) {
+			tokens.add(iterator.next());
+		}
+		return tokens;
 	}
 }
