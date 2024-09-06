@@ -21,16 +21,16 @@ public class DeclarationAssignmentStatementTree {
 		}
 	}
 
-	@SuppressWarnings("OptionalGetWithoutIsPresent") // Safe because Resolution is successful at this point
-    private static EvaluableResolution checkDeclaringWithValidValue(
-            DeclarationAssignmentStatement statement,
-			EvaluableResolution assignedValueResolution) {
+	@SuppressWarnings(
+			"OptionalGetWithoutIsPresent") // Safe because Resolution is successful at this point
+	private static EvaluableResolution checkDeclaringWithValidValue(
+			DeclarationAssignmentStatement statement, EvaluableResolution assignedValueResolution) {
 
-        DeclarationType identifierType = statement.getDeclarationType();
-        DeclarationType assignedType = assignedValueResolution.evaluatedType().get();
-        if (identifierType == assignedType) {
-            String name = statement.getIdentifier().getName();
-            return new EvaluableResolution(SUCCESS, Optional.of(identifierType), Optional.of(name));
+		DeclarationType identifierType = statement.getDeclarationType();
+		DeclarationType assignedType = assignedValueResolution.evaluatedType().get();
+		if (identifierType == assignedType) {
+			String name = statement.getIdentifier().getName();
+			return new EvaluableResolution(SUCCESS, Optional.of(identifierType), Optional.of(name));
 		} else {
 			return EvaluableResolution.failure(
 					"Cannot assign value of type "

@@ -107,9 +107,10 @@ public class AstBuilder {
 				AstComponent mappedFirstComponent =
 						mapToAstComponent(firstComponent, firstComponentName);
 				EvaluableComponent mappedSecondComponent =
-						(EvaluableComponent) mapToAstComponent(secondComponent, secondComponentName);
+						(EvaluableComponent)
+								mapToAstComponent(secondComponent, secondComponentName);
 
-				if (mappedFirstComponent instanceof Identifier) {
+				if (mappedFirstComponent != null) {
 
 					return new AssignmentStatement(
 							(Identifier) mappedFirstComponent,
@@ -118,17 +119,16 @@ public class AstBuilder {
 							PLACEHOLDER);
 				}
 
-				if (secondComponent instanceof Literal<?>
-						&& ((Literal<?>) secondComponent).getValue() == null) {
+				if (mappedSecondComponent instanceof Literal<?>
+						&& ((Literal<?>) mappedSecondComponent).getValue() == null) {
 					JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
 
 					return new DeclarationStatement(
 							mapToDeclarationType(subObject.getString("declarationType")),
 							IdentifierType.VARIABLE,
 							new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
-                            PLACEHOLDER,
-                            PLACEHOLDER
-                    );
+							PLACEHOLDER,
+							PLACEHOLDER);
 				}
 
 				JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
@@ -136,7 +136,7 @@ public class AstBuilder {
 						mapToDeclarationType(subObject.getString("declarationType")),
 						IdentifierType.VARIABLE,
 						new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
-						(EvaluableComponent) secondComponent,
+						mappedSecondComponent,
 						PLACEHOLDER,
 						PLACEHOLDER);
 
@@ -210,15 +210,6 @@ public class AstBuilder {
 			case "/" -> BinaryOperator.DIVISION;
 			case "*" -> BinaryOperator.MULTIPLICATION;
 			default -> throw new IllegalArgumentException("Invalid operator: " + op);
-		};
-	}
-
-	private IdentifierType mapToIdentifierType(String identifierType) {
-		return switch (identifierType) {
-			case "variable" -> IdentifierType.VARIABLE;
-			case "function" -> IdentifierType.FUNCTION;
-			default ->
-					throw new IllegalArgumentException("Invalid identifierType: " + identifierType);
 		};
 	}
 

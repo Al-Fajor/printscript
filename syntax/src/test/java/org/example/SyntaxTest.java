@@ -27,7 +27,7 @@ public class SyntaxTest extends TestBuilder {
 
 	@Test
 	public void debug() throws IOException {
-		test("declare_sum.json");
+		test("number_reassignation.json");
 	}
 
 	@Override
