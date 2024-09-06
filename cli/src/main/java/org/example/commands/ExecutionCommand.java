@@ -5,6 +5,7 @@ import java.util.concurrent.Callable;
 import org.example.Interpreter;
 import org.example.Parser;
 import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 import org.example.factory.InterpreterFactory;
 import org.example.io.Color;
 import org.example.observer.BrokerObserver;
@@ -29,17 +30,21 @@ public class ExecutionCommand implements Callable<Integer> {
 
 	@Override
 	public Integer call() {
-		List<AstComponent> astList = parser.parse(file);
+		List<Statement> astList = parser.parse(file);
 
 		if (!astList.isEmpty()) {
 			System.out.println("\nCompleted validation successfully. No errors found.");
 
 			Color.printGreen("\nRunning...");
-			interpreter.interpret(astList.iterator());
+			interpreter.interpret(toAstList(astList).iterator());
 			return 0;
 		}
 
 		return 1;
+	}
+
+	private List<AstComponent> toAstList(List<Statement> statementList) {
+		return statementList.stream().map(statement -> (AstComponent) statement).toList();
 	}
 
 	// TODO: duplicate from InterpreterTester

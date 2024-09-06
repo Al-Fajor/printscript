@@ -45,11 +45,10 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 			try {
 				SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
 				// TODO: delete castToAstComponent once SemanticAnalyzer uses statements
-				List<AstComponent> astList =
-						castToAstComponents(builder.buildFromJson(testFile.getAbsolutePath()));
+				List<Statement> astList = builder.buildFromJson(testFile.getAbsolutePath());
 
 				Result analyticResult = new SemanticSuccess();
-				Iterator<AstComponent> syntaxOutputIterator = astList.iterator();
+				Iterator<Statement> syntaxOutputIterator = astList.iterator();
 
 				while (syntaxOutputIterator.hasNext() && analyticResult.isSuccessful()) {
 					analyticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
@@ -62,10 +61,6 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 				throw new RuntimeException("Couldn't read file to build AST");
 			}
 		};
-	}
-
-	private List<AstComponent> castToAstComponents(List<Statement> statements) {
-		return statements.stream().map(statement -> (AstComponent) statement).toList();
 	}
 
 	private static void assertAndPrintError(Result analyticResult, boolean validity) {
