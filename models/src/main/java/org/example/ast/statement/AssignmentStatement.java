@@ -1,12 +1,11 @@
 package org.example.ast.statement;
 
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Identifier;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
-
-import java.util.Objects;
 
 public class AssignmentStatement implements Statement {
 	private final Identifier identifier;
@@ -53,23 +52,26 @@ public class AssignmentStatement implements Statement {
 		return statementVisitor.visit(this);
 	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof AssignmentStatement that)) return false;
-    return Objects.equals(identifier, that.identifier) && Objects.equals(expression, that.expression);
-  }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof AssignmentStatement that)) return false;
+		return Objects.equals(identifier, that.identifier)
+				&& Objects.equals(expression, that.expression);
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(identifier, expression);
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(identifier, expression);
+	}
 
-  @Override
-  public String toString() {
-    return "AssignmentStatement{" +
-      "identifier=" + identifier +
-      ", expression=" + expression +
-      '}';
-  }
+	@Override
+	public String toString() {
+		return "AssignmentStatement{"
+				+ "identifier="
+				+ identifier
+				+ ", expression="
+				+ expression
+				+ '}';
+	}
 }

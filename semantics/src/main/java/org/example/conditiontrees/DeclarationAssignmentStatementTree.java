@@ -5,7 +5,6 @@ import static org.example.evaluables.EvaluableVisitor.SUCCESS;
 import java.util.Optional;
 import org.example.Environment;
 import org.example.ast.DeclarationType;
-import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.DeclarationAssignmentStatement;
 import org.example.evaluables.EvaluableResolution;
 
@@ -29,8 +28,7 @@ public class DeclarationAssignmentStatementTree {
 	}
 
 	private static EvaluableResolution checkDeclaringWithValidValue(
-            DeclarationAssignmentStatement statement,
-			EvaluableResolution assignedValueResolution) {
+			DeclarationAssignmentStatement statement, EvaluableResolution assignedValueResolution) {
 
 		if (statement.getDeclarationType() == assignedValueResolution.evaluatedType()) {
 			return new EvaluableResolution(SUCCESS, Optional.of(identifierType), Optional.of(name));

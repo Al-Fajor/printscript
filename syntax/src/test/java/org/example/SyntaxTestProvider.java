@@ -1,16 +1,15 @@
 package org.example;
 
-import org.example.ast.AstComponent;
-import org.example.io.AstBuilder;
-import org.example.io.FileParser;
-import org.example.result.SyntaxSuccess;
-import org.example.token.Token;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.example.ast.AstComponent;
+import org.example.io.AstBuilder;
+import org.example.io.FileParser;
+import org.example.result.SyntaxSuccess;
+import org.example.token.Token;
 
 public class SyntaxTestProvider {
 	private static final SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();

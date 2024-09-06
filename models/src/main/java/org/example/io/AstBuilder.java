@@ -1,17 +1,16 @@
 package org.example.io;
 
-import org.example.Pair;
-import org.example.ast.*;
-import org.example.ast.statement.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import org.example.Pair;
+import org.example.ast.*;
+import org.example.ast.statement.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class AstBuilder {
 
@@ -104,7 +103,8 @@ public class AstBuilder {
 				AstComponent mappedFirstComponent =
 						mapToAstComponent(firstComponent, firstComponentName);
 				EvaluableComponent mappedSecondComponent =
-						(EvaluableComponent) mapToAstComponent(secondComponent, secondComponentName);
+						(EvaluableComponent)
+								mapToAstComponent(secondComponent, secondComponentName);
 
 				if (mappedFirstComponent != null) {
 
@@ -123,9 +123,8 @@ public class AstBuilder {
 							mapToDeclarationType(subObject.getString("declarationType")),
 							IdentifierType.VARIABLE,
 							new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
-                            PLACEHOLDER,
-                            PLACEHOLDER
-                    );
+							PLACEHOLDER,
+							PLACEHOLDER);
 				}
 
 				JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");

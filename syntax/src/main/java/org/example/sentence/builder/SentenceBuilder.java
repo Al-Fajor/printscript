@@ -1,5 +1,10 @@
 package org.example.sentence.builder;
 
+import static org.example.token.BaseTokenTypes.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.*;
@@ -9,12 +14,6 @@ import org.example.sentence.validator.validity.Validity;
 import org.example.sentence.validator.validity.rule.*;
 import org.example.token.Token;
 import org.example.token.TokenType;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.example.token.BaseTokenTypes.*;
 
 public class SentenceBuilder {
 	public Pair<Optional<Statement>, String> buildSentence(List<Token> tokens) {
@@ -27,9 +26,11 @@ public class SentenceBuilder {
 	}
 
 	private Pair<Statement, String> buildReassignationSentence(List<Token> tokens) {
-		SentenceValidator validator = new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
+		SentenceValidator validator =
+				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
-		if (tokens.size() <= 2 || !validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
+		if (tokens.size() <= 2 || !validity.isValid())
+			return new Pair<>(null, validity.getErrorMessage());
 		TokenMapper mapper = new TokenMapper();
 
 		// TODO: eliminate casting
@@ -45,9 +46,8 @@ public class SentenceBuilder {
 	}
 
 	private Pair<Statement, String> buildFunctionSentence(List<Token> tokens) {
-    Token function = tokens.getFirst();
-    SentenceValidator validator =
-				new SentenceValidator(getSentenceRules(function.getType()));
+		Token function = tokens.getFirst();
+		SentenceValidator validator = new SentenceValidator(getSentenceRules(function.getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
 		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
@@ -55,7 +55,7 @@ public class SentenceBuilder {
 				new TokenMapper().buildExpression(tokens.subList(1, tokens.size()));
 		Pair<Integer, Integer> functionStart = function.getStart();
 		Pair<Integer, Integer> functionEnd = function.getEnd();
-    String name = function.getType() == PRINTLN ? "println" : function.getValue();
+		String name = function.getType() == PRINTLN ? "println" : function.getValue();
 
 		Identifier id = new Identifier(name, functionStart, functionEnd);
 
@@ -81,35 +81,52 @@ public class SentenceBuilder {
 		Token identifier = tokens.get(1);
 		Token semicolon = tokens.getLast();
 
-    Identifier identifierComponent = (Identifier) mapper.mapToken(identifier);
+		Identifier identifierComponent = (Identifier) mapper.mapToken(identifier);
 
 		DeclarationType declarationType = getDeclarationType(type.getValue());
-    IdentifierType identifierType = getIdentifierType(identifier);
+		IdentifierType identifierType = getIdentifierType(identifier);
 		// let x: number;
-    boolean isSemicolon = tokens.get(4).getType() == SEMICOLON;
+		boolean isSemicolon = tokens.get(4).getType() == SEMICOLON;
 		EvaluableComponent value =
 				isSemicolon
 						? new Literal<>(null, semicolon.getStart(), semicolon.getEnd())
 						: mapper.buildExpression(tokens.subList(5, tokens.size())).getFirst();
 
-    Pair<Integer, Integer> start = tokens.getFirst().getStart();
-    Pair<Integer, Integer> end = semicolon.getEnd();
+		Pair<Integer, Integer> start = tokens.getFirst().getStart();
+		Pair<Integer, Integer> end = semicolon.getEnd();
 
-    Statement statement = getStatement(isSemicolon, declarationType, identifierType,identifierComponent, start, end, value);
+		Statement statement =
+				getStatement(
+						isSemicolon,
+						declarationType,
+						identifierType,
+						identifierComponent,
+						start,
+						end,
+						value);
 
-    return new Pair<>(statement, validity.getErrorMessage());
+		return new Pair<>(statement, validity.getErrorMessage());
 	}
 
-  private Statement getStatement(boolean isSemicolon, DeclarationType declarationType, IdentifierType identifierType, Identifier identifier, Pair<Integer, Integer> start, Pair<Integer, Integer> end, EvaluableComponent value) {
-    return isSemicolon ? new DeclarationStatement(declarationType, identifierType, identifier,start,end) :
-      new DeclarationAssignmentStatement(declarationType, identifierType, identifier, value ,start, end);
-  }
+	private Statement getStatement(
+			boolean isSemicolon,
+			DeclarationType declarationType,
+			IdentifierType identifierType,
+			Identifier identifier,
+			Pair<Integer, Integer> start,
+			Pair<Integer, Integer> end,
+			EvaluableComponent value) {
+		return isSemicolon
+				? new DeclarationStatement(declarationType, identifierType, identifier, start, end)
+				: new DeclarationAssignmentStatement(
+						declarationType, identifierType, identifier, value, start, end);
+	}
 
-  private IdentifierType getIdentifierType(Token identifier) {
-    return identifier.getType() != FUNCTION ? IdentifierType.VARIABLE : IdentifierType.FUNCTION;
-  }
+	private IdentifierType getIdentifierType(Token identifier) {
+		return identifier.getType() != FUNCTION ? IdentifierType.VARIABLE : IdentifierType.FUNCTION;
+	}
 
-  private DeclarationType getDeclarationType(String type) {
+	private DeclarationType getDeclarationType(String type) {
 		Map<String, DeclarationType> declarationTypeMap =
 				Map.of(
 						"number", DeclarationType.NUMBER,
@@ -123,7 +140,10 @@ public class SentenceBuilder {
 			case LET -> buildAssignationSentence(tokens);
 			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens);
 			case IDENTIFIER -> buildReassignationSentence(tokens);
-			default -> new Pair<>(null, "Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
+			default ->
+					new Pair<>(
+							null,
+							"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
 		};
 	}
 
