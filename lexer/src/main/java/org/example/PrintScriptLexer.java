@@ -27,8 +27,7 @@ public class PrintScriptLexer implements Lexer {
 				return new LexerFailure(scanResult);
 			}
 			tokenIterators.add(tokenizer.tokenize(line, lineNumber));
-            System.out.println(PositionServices.getLines(line));
-            lineNumber += PositionServices.getLines(line) - 1;
+            lineNumber += PositionServices.getLines(line) -1;
 		}
 
 		Iterator<Token> concatenatedTokens = new ConcatenatedIterator(tokenIterators);

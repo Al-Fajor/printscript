@@ -3,7 +3,7 @@ package org.example.utils;
 public class PositionServices {
 
     public static int getLines(String input) {
-        int lines = 1;
+        int lines = 0;
         for (int i = 0; i < input.length(); i++) {
             if (input.charAt(i) == '\n') {
                 lines++;

@@ -19,7 +19,7 @@ public class ScriptReader {
 	}
 
     public static Iterator<String> readCodeFromSourceByLine(String path) throws FileNotFoundException {
-        return new Scanner(new File(path)).useDelimiter("\\Z");
+        return new Scanner(new File(path)).useDelimiter("(?<=}|;)");
     }
 
 	public static String readAndHighlightRange(
