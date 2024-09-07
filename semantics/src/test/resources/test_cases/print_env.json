@@ -9,7 +9,7 @@
         },
         "params": [
           {
-            "readInput": {
+            "readEnv": {
               "variable": "EMAIL"
             }
           }
