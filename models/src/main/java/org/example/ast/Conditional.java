@@ -33,12 +33,12 @@ public class Conditional implements EvaluableComponent {
 
 	@Override
 	public <T> T accept(AstComponentVisitor<T> visitor) {
-		return visitor.visit(this);
+		throw new RuntimeException("Component 'Conditional' is no longer supported");
 	}
 
 	@Override
 	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
-		return visitor.visit(this);
+		throw new RuntimeException("Component 'Conditional' is no longer supported");
 	}
 
 	@Override

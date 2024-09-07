@@ -35,11 +35,6 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(Conditional conditional) {
-		return conditional.getCondition().accept(this);
-	}
-
-	@Override
 	public String visit(IfStatement ifStatement) {
 		return "";
 	}
@@ -161,12 +156,12 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(ReadInput readInput) {
-		return "";
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override
 	public String visit(ReadEnv readEnv) {
-		return "";
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	private List<String> combineStringsLists(List<List<String>> listOfLists) {

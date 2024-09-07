@@ -6,12 +6,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.DeclarationAssignmentStatement;
 import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.statement.FunctionCallStatement;
+import org.example.ast.statement.IfElseStatement;
+import org.example.ast.statement.IfStatement;
 import org.example.ast.statement.Statement;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,13 +56,50 @@ public class AstBuilder {
 											astComponentJson.getJSONArray("params"), "params"),
 							PLACEHOLDER,
 							PLACEHOLDER);
-			case "conditional", "if", "ifClauses", "statementBlock" ->
-					throw new RuntimeException(
-							"Not implemented yet: case '" + astComponentJsonName + "'");
+			case "if" -> {
+				JSONArray trueClause = astComponentJson.getJSONArray("trueClause");
+				ArrayList<Statement> trueClauseList = getStatements(trueClause);
+
+				if (!astComponentJson.keySet().contains("falseClause")) {
+					yield new IfStatement(
+							new Identifier(
+									astComponentJson.getString("conditional"),
+									PLACEHOLDER,
+									PLACEHOLDER),
+							trueClauseList,
+							PLACEHOLDER,
+							PLACEHOLDER);
+				} else {
+					JSONArray falseClause = astComponentJson.getJSONArray("falseClause");
+					ArrayList<Statement> falseClauseList = getStatements(falseClause);
+
+					yield new IfElseStatement(
+							new Identifier(
+									astComponentJson.getString("conditional"),
+									PLACEHOLDER,
+									PLACEHOLDER),
+							trueClauseList,
+							falseClauseList,
+							PLACEHOLDER,
+							PLACEHOLDER);
+				}
+			}
 			default ->
 					throw new IllegalArgumentException(
 							astComponentJsonName + " is not a valid statement");
 		};
+	}
+
+	private ArrayList<Statement> getStatements(JSONArray statementArray) {
+		ArrayList<Statement> statementList = new ArrayList<>();
+
+		for (int i = 0; i < statementArray.length(); i++) {
+			JSONObject statementJson = statementArray.getJSONObject(i);
+			String statementJsonName = statementJson.keys().next();
+			JSONObject innerJson = statementJson.getJSONObject(statementJsonName);
+			statementList.add(mapToStatement(innerJson, statementJsonName));
+		}
+		return statementList;
 	}
 
 	private AstComponent mapToAstComponent(
@@ -75,6 +115,8 @@ public class AstBuilder {
 				yield switch (value) {
 					case String ignored -> new Literal<>((String) value, PLACEHOLDER, PLACEHOLDER);
 					case Number ignored -> new Literal<>((Number) value, PLACEHOLDER, PLACEHOLDER);
+					case Boolean ignored ->
+							new Literal<>((Boolean) value, PLACEHOLDER, PLACEHOLDER);
 					default ->
 							throw new IllegalArgumentException(
 									"Cannot parse JSON: Unsupported value "
@@ -85,6 +127,14 @@ public class AstBuilder {
 			case "identifier" ->
 					new Identifier(astComponentJson.getString("name"), PLACEHOLDER, PLACEHOLDER);
 			case "declaration" -> null;
+			case "readEnv" -> {
+				String variable = astComponentJson.getString("variable");
+				yield new ReadEnv(variable, PLACEHOLDER, PLACEHOLDER);
+			}
+			case "readInput" -> {
+				String message = astComponentJson.getString("message");
+				yield new ReadInput(message, PLACEHOLDER, PLACEHOLDER);
+			}
 
 			case "conditional", "if", "ifClauses", "statementBlock" ->
 					throw new RuntimeException(
@@ -125,7 +175,7 @@ public class AstBuilder {
 
 					return new DeclarationStatement(
 							mapToDeclarationType(subObject.getString("declarationType")),
-							IdentifierType.LET,
+							getIdentifierType(subObject),
 							new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
 							PLACEHOLDER,
 							PLACEHOLDER);
@@ -143,6 +193,24 @@ public class AstBuilder {
 			default:
 				throw new IllegalArgumentException(
 						astComponentJsonName + " is not a valid ast statement");
+		}
+	}
+
+	private IdentifierType getIdentifierType(JSONObject subObject) {
+		boolean isLetExplicitlyOrImplicitly =
+				!subObject.keySet().contains("identifierType")
+						|| Objects.equals(subObject.getString("identifierType"), "let");
+		if (isLetExplicitlyOrImplicitly) {
+			return IdentifierType.LET;
+		}
+
+		String identifierType = subObject.getString("identifierType");
+
+		if (Objects.equals(identifierType, "const")) {
+			return IdentifierType.CONST;
+		} else {
+			throw new IllegalArgumentException(
+					"Cannot create identifier of type " + identifierType);
 		}
 	}
 
@@ -217,6 +285,7 @@ public class AstBuilder {
 		return switch (declarationType) {
 			case "String" -> DeclarationType.STRING;
 			case "Number" -> DeclarationType.NUMBER;
+			case "Boolean" -> DeclarationType.BOOLEAN;
 			default ->
 					throw new IllegalArgumentException(
 							"Invalid declarationType " + declarationType);

@@ -16,7 +16,6 @@ import java.util.Optional;
 import org.example.Environment;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
-import org.example.ast.Conditional;
 import org.example.ast.DeclarationType;
 import org.example.ast.Identifier;
 import org.example.ast.Literal;
@@ -63,13 +62,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	}
 
 	@Override
-	public EvaluableResolution visit(Conditional conditional) {
-		return null;
-	}
-
-	@Override
 	public EvaluableResolution visit(IfStatement ifStatement) {
-		return null;
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override
@@ -146,11 +140,11 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(ReadInput readInput) {
-		return null;
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override
 	public EvaluableResolution visit(ReadEnv readEnv) {
-		return null;
+		throw new RuntimeException("Not implemented yet");
 	}
 }

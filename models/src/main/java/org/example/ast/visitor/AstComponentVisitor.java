@@ -6,8 +6,6 @@ import org.example.ast.statement.*;
 public interface AstComponentVisitor<T> {
 	T visit(BinaryExpression expression);
 
-	T visit(Conditional conditional);
-
 	T visit(IfStatement ifStatement);
 
 	T visit(IfElseStatement ifElseStatement);

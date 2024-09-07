@@ -48,11 +48,6 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	@Override
-	public EvaluationResult visit(Conditional conditional) {
-		return null;
-	}
-
-	@Override
 	public EvaluationResult visit(Identifier identifier) {
 		DeclarationType variableType = state.getVariableType(identifier.getName());
 		switch (variableType) {
@@ -68,12 +63,12 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	@Override
 	public EvaluationResult visit(ReadInput readInput) {
-		return null;
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override
 	public EvaluationResult visit(ReadEnv readEnv) {
-		return null;
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	private String getStringValue(Identifier identifier) {
