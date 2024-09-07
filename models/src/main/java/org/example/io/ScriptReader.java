@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -18,8 +17,7 @@ public class ScriptReader {
 		return code;
 	}
 
-	public static Scanner readCodeFromSourceByLine(String path)
-			throws FileNotFoundException {
+	public static Scanner readCodeFromSourceByLine(String path) throws FileNotFoundException {
 		return new Scanner(new File(path));
 	}
 

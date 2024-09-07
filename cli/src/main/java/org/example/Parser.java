@@ -50,7 +50,7 @@ public class Parser {
 		Color.printGreen("\nPerforming lexical analysis");
 		Result lexerResult = lexer.lex(codeScanner.useDelimiter("(?<=}|;)"));
 		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
-        codeScanner.close();
+		codeScanner.close();
 
 		Color.printGreen("\nPerforming syntactic analysis");
 		Iterator<Token> tokens = ((LexerSuccess) lexerResult).getTokens();
