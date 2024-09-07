@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,10 +11,11 @@ import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
 public class PrintScriptSca implements StaticCodeAnalyzer {
+	private final ConfigReader configReader = new ConfigReader();
 	private final Map<ConfigAttribute, String> configMap;
 
-	public PrintScriptSca(ConfigReader configReader) throws IOException {
-		this.configMap = configReader.read();
+	public PrintScriptSca(InputStream config) throws IOException {
+		this.configMap = configReader.read(config);
 	}
 
 	@Override

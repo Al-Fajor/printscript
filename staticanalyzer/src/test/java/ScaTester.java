@@ -1,7 +1,9 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,9 +18,11 @@ public class ScaTester {
 
 	public void test(String path) throws IOException {
 		JSONObject json = getJsonObject(path);
+
 		String configPath = json.getString("config");
+		PrintScriptSca analyzer = new PrintScriptSca(getStream(configPath));
+
 		JSONArray cases = json.getJSONArray("cases");
-		PrintScriptSca analyzer = new PrintScriptSca(new ConfigReader(configPath));
 		for (int i = 0; i < cases.length(); i++) {
 			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");
@@ -27,6 +31,10 @@ public class ScaTester {
 			List<Result> results = analyzer.analyze(linesWithNewlines.iterator());
 			compareResults(expectedResults, results);
 		}
+	}
+
+	private InputStream getStream(String path) throws IOException {
+		return new FileInputStream(path);
 	}
 
 	private JSONObject getJsonObject(String path) throws IOException {

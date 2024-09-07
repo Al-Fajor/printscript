@@ -3,11 +3,11 @@ package org.example.commands;
 import static org.example.utils.PrintUtils.printFailedCode;
 import static org.example.utils.ReadUtils.getContent;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
-import org.example.ConfigReader;
 import org.example.PrintScriptSca;
 import org.example.Result;
 import org.example.io.Color;
@@ -60,7 +60,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 	private PrintScriptSca getAnalyzer(String configPathOrDefault) {
 		PrintScriptSca analyzer;
 		try {
-			analyzer = new PrintScriptSca(new ConfigReader(configPathOrDefault));
+			analyzer = new PrintScriptSca(new FileInputStream(configPathOrDefault));
 		} catch (IOException e) {
 			throw new RuntimeException("Could not read config file. Got error:\n" + e);
 		}
