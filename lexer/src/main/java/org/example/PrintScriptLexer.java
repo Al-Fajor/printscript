@@ -18,16 +18,16 @@ public class PrintScriptLexer implements Lexer {
 		//        TODO change this if not memory efficient enough
 		List<Iterator<Token>> tokenIterators = new ArrayList<>();
 
-        int lineNumber = 0;
+		int lineNumber = 0;
 		while (input.hasNext()) {
-            lineNumber++;
+			lineNumber++;
 			String line = input.next();
 			Result scanResult = scanner.scan(line, lineNumber);
 			if (!scanResult.isSuccessful()) {
 				return new LexerFailure(scanResult);
 			}
 			tokenIterators.add(tokenizer.tokenize(line, lineNumber));
-            lineNumber += PositionServices.getLines(line) -1;
+			lineNumber += PositionServices.getLines(line) - 1;
 		}
 
 		Iterator<Token> concatenatedTokens = new ConcatenatedIterator(tokenIterators);

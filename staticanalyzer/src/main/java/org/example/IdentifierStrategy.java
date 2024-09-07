@@ -3,7 +3,6 @@ package org.example;
 import static org.example.token.BaseTokenTypes.IDENTIFIER;
 
 import java.util.*;
-import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
 
 public class IdentifierStrategy implements AnalyzerStrategy {
@@ -28,21 +27,24 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 		throw new RuntimeException("Unknown identifier format: " + identifierFormat);
 	}
 
-    private List<Result> analyzeWithRegex(Iterator<Token> input, String identifierRegex) {
-        List<Result> results = new ArrayList<>();
-        while (input.hasNext()) {
-            Token token = input.next();
-            if (token.getType() == IDENTIFIER) {
-                String identifierName = token.getValue();
-                if (!identifierName.matches(identifierRegex)) {
-                    results.add(
-                            new FailResult(
-                                    "Identifier \"" + token.getValue() + "\" is not in " + identifierFormat,
-                                    token.getStart(),
-                                    token.getEnd()));
-                }
-            }
-        }
-        return results;
-    }
+	private List<Result> analyzeWithRegex(Iterator<Token> input, String identifierRegex) {
+		List<Result> results = new ArrayList<>();
+		while (input.hasNext()) {
+			Token token = input.next();
+			if (token.getType() == IDENTIFIER) {
+				String identifierName = token.getValue();
+				if (!identifierName.matches(identifierRegex)) {
+					results.add(
+							new FailResult(
+									"Identifier \""
+											+ token.getValue()
+											+ "\" is not in "
+											+ identifierFormat,
+									token.getStart(),
+									token.getEnd()));
+				}
+			}
+		}
+		return results;
+	}
 }

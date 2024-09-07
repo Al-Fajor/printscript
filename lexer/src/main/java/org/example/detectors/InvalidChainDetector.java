@@ -16,22 +16,22 @@ public class InvalidChainDetector implements LexicalErrorDetector {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(input);
 		if (matcher.find()) {
-            int currentLine = line + PositionServices.getLine(input, matcher.start());
-            int positionInLine = line + PositionServices.getPositionInLine(input, matcher.start());
-            return new ScanFailure(
-                    "Invalid chain of characters: "
-                            + matcher.group()
-                            + " at line "
-                            + line
-                            + ", position "
-                            + positionInLine
-                            + " to line "
-                            + line
-                            + ", position "
-                            + (positionInLine + matcher.group().length()),
-                    new Pair<>(currentLine, positionInLine),
-                    new Pair<>(currentLine, positionInLine + matcher.group().length()));
-        }
+			int currentLine = line + PositionServices.getLine(input, matcher.start());
+			int positionInLine = line + PositionServices.getPositionInLine(input, matcher.start());
+			return new ScanFailure(
+					"Invalid chain of characters: "
+							+ matcher.group()
+							+ " at line "
+							+ line
+							+ ", position "
+							+ positionInLine
+							+ " to line "
+							+ line
+							+ ", position "
+							+ (positionInLine + matcher.group().length()),
+					new Pair<>(currentLine, positionInLine),
+					new Pair<>(currentLine, positionInLine + matcher.group().length()));
+		}
 		return new ScanSuccess();
 	}
 }

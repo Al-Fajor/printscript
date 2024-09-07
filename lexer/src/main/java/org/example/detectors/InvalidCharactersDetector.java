@@ -20,8 +20,8 @@ public class InvalidCharactersDetector implements LexicalErrorDetector {
 			if (c == '\"') {
 				insideString = !insideString;
 			} else if (!insideString && invalidChars.contains(c)) {
-                int currentLine = line + PositionServices.getLine(input, i);
-                int positionInLine = line + PositionServices.getPositionInLine(input, i);
+				int currentLine = line + PositionServices.getLine(input, i);
+				int positionInLine = line + PositionServices.getPositionInLine(input, i);
 				return new ScanFailure(
 						"Invalid character detected: '"
 								+ c
@@ -29,13 +29,15 @@ public class InvalidCharactersDetector implements LexicalErrorDetector {
 								+ " at line "
 								+ currentLine
 								+ ", position "
-								+ positionInLine + 1
+								+ positionInLine
+								+ 1
 								+ " to line "
 								+ currentLine
 								+ ", position "
-								+ positionInLine + 2,
+								+ positionInLine
+								+ 2,
 						new Pair<>(currentLine, positionInLine + 1),
-						new Pair<>(currentLine, positionInLine  + 2));
+						new Pair<>(currentLine, positionInLine + 2));
 			}
 		}
 

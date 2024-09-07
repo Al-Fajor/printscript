@@ -18,15 +18,15 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 		int position = 0;
 		for (int i = 0; i < input.length(); i++) {
 			char charAtI = input.charAt(i);
-            position++;
+			position++;
 			if (charAtI == '\"') {
 				isString = dealWithDoubleQuotes(isString, stack, charAtI);
 			} else if (!isString && contains(openingChars, charAtI)) {
 				stack.push(charAtI);
 			} else if (!isString && contains(closingChars, charAtI)) {
 				if (stack.isEmpty() || !matches(stack.peek(), charAtI)) {
-                    int currentLine = line + PositionServices.getLine(input, i);
-                    int positionInLine = line + PositionServices.getPositionInLine(input, i);
+					int currentLine = line + PositionServices.getLine(input, i);
+					int positionInLine = line + PositionServices.getPositionInLine(input, i);
 					return new ScanFailure(
 							"Unmatched closing character '"
 									+ charAtI
@@ -41,8 +41,8 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 			}
 		}
 
-        int finalLine = line + PositionServices.getLines(input);
-        int finalPosition = line + PositionServices.getPositionInLine(input, input.length());
+		int finalLine = line + PositionServices.getLines(input);
+		int finalPosition = line + PositionServices.getPositionInLine(input, input.length());
 
 		if (!stack.isEmpty()) {
 			return new ScanFailure(

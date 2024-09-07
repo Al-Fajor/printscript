@@ -18,9 +18,10 @@ public class ScriptReader {
 		return code;
 	}
 
-    public static Iterator<String> readCodeFromSourceByLine(String path) throws FileNotFoundException {
-        return new Scanner(new File(path)).useDelimiter("(?<=}|;)");
-    }
+	public static Iterator<String> readCodeFromSourceByLine(String path)
+			throws FileNotFoundException {
+		return new Scanner(new File(path)).useDelimiter("(?<=}|;)");
+	}
 
 	public static String readAndHighlightRange(
 			String filePath,
