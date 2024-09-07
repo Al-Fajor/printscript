@@ -5,61 +5,59 @@ import org.example.Pair;
 import org.example.Result;
 import org.example.lexerresult.ScanFailure;
 import org.example.lexerresult.ScanSuccess;
+import org.example.utils.PositionServices;
 
 public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 	@Override
-	public Result detect(String input) {
+	public Result detect(String input, int line) {
 		Stack<Character> stack = new Stack<>();
 		char[] openingChars = new char[] {'(', '{', '[', '\"'};
 		char[] closingChars = new char[] {')', '}', ']', '\"'};
 		boolean isString = false;
 
-		int lines = 0;
 		int position = 0;
 		for (int i = 0; i < input.length(); i++) {
 			char charAtI = input.charAt(i);
-
-			if (charAtI == '\n') {
-				lines++;
-				position = 0;
-			} else {
-				position++;
-			}
-
+			position++;
 			if (charAtI == '\"') {
 				isString = dealWithDoubleQuotes(isString, stack, charAtI);
 			} else if (!isString && contains(openingChars, charAtI)) {
 				stack.push(charAtI);
 			} else if (!isString && contains(closingChars, charAtI)) {
 				if (stack.isEmpty() || !matches(stack.peek(), charAtI)) {
+					int currentLine = line + PositionServices.getLine(input, i);
+					int positionInLine = line + PositionServices.getPositionInLine(input, i);
 					return new ScanFailure(
 							"Unmatched closing character '"
 									+ charAtI
 									+ "' at line "
-									+ lines
+									+ currentLine
 									+ ", position "
-									+ position,
-							new Pair<>(lines + 1, position),
-							new Pair<>(lines + 1, position + 1));
+									+ positionInLine,
+							new Pair<>(currentLine, positionInLine),
+							new Pair<>(currentLine, positionInLine + 1));
 				}
 				stack.pop();
 			}
 		}
+
+		int finalLine = line + PositionServices.getLines(input);
+		int finalPosition = line + PositionServices.getPositionInLine(input, input.length());
 
 		if (!stack.isEmpty()) {
 			return new ScanFailure(
 					"Unfinished separator '"
 							+ stack.peek()
 							+ "' at line "
-							+ lines
+							+ finalLine
 							+ ", position "
-							+ position
+							+ finalPosition
 							+ " to line "
-							+ lines
+							+ finalLine
 							+ ", position "
-							+ (position + 1),
-					new Pair<>(lines + 1, position),
-					new Pair<>(lines + 1, position + 1));
+							+ (finalPosition + 1),
+					new Pair<>(finalLine, finalPosition),
+					new Pair<>(finalLine, finalPosition + 1));
 		}
 
 		return new ScanSuccess();

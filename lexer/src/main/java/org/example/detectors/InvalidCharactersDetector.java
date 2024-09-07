@@ -5,40 +5,39 @@ import org.example.Pair;
 import org.example.Result;
 import org.example.lexerresult.ScanFailure;
 import org.example.lexerresult.ScanSuccess;
+import org.example.utils.PositionServices;
 
 public class InvalidCharactersDetector implements LexicalErrorDetector {
 
 	@Override
-	public Result detect(String input) {
+	public Result detect(String input, int line) {
 		List<Character> invalidChars = List.of('!', '@', '#', '$', '%', '^', '&', '|', '\\', '?');
 		boolean insideString = false;
-		int lineNumber = 1;
-		int positionInLine = 0;
 
 		for (int i = 0; i < input.length(); i++) {
 			char c = input.charAt(i);
-			positionInLine++;
 
-			if (c == '\n') {
-				lineNumber++;
-				positionInLine = 0;
-			} else if (c == '\"') {
+			if (c == '\"') {
 				insideString = !insideString;
 			} else if (!insideString && invalidChars.contains(c)) {
+				int currentLine = line + PositionServices.getLine(input, i);
+				int positionInLine = line + PositionServices.getPositionInLine(input, i);
 				return new ScanFailure(
 						"Invalid character detected: '"
 								+ c
 								+ "'"
 								+ " at line "
-								+ lineNumber
+								+ currentLine
 								+ ", position "
 								+ positionInLine
+								+ 1
 								+ " to line "
-								+ lineNumber
+								+ currentLine
 								+ ", position "
-								+ (positionInLine + 1),
-						new Pair<>(lineNumber + 1, positionInLine),
-						new Pair<>(lineNumber + 1, positionInLine + 1));
+								+ positionInLine
+								+ 2,
+						new Pair<>(currentLine, positionInLine + 1),
+						new Pair<>(currentLine, positionInLine + 2));
 			}
 		}
 

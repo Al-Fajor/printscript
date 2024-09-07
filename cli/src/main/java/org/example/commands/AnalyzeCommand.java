@@ -39,7 +39,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 		PrintScriptSca analyzer = getAnalyzer(configPathOrDefault);
 		String content = getContent(filePath);
 
-		List<Result> results = analyzer.analyze(content);
+		List<Result> results = analyzer.analyze(content.lines().iterator());
 
 		Color.printGreen("Running analyzer...");
 
