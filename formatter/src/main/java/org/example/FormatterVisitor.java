@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
+import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.factories.RuleFactory;
 import org.example.ruleappliers.RuleApplier;
@@ -37,12 +35,12 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(Conditional conditional) {
-		return conditional.getCondition().accept(this);
+	public String visit(IfStatement ifStatement) {
+		return "";
 	}
 
 	@Override
-	public String visit(IfStatement ifStatement) {
+	public String visit(IfElseStatement ifElseStatement) {
 		//        TODO implement
 		return "";
 	}
@@ -70,12 +68,12 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(AssignationStatement statement) {
+	public String visit(AssignmentStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getAssignationRuleAppliers(), statement);
+				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), statement);
 
-		String right = statement.getRight().accept(this);
-		String left = statement.getLeft().accept(this);
+		String right = statement.getEvaluableComponent().accept(this);
+		String left = statement.getIdentifier().accept(this);
 		if (right.isEmpty()) {
 			return left;
 		}
@@ -89,17 +87,49 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(Declaration statement) {
+	public String visit(DeclarationAssignmentStatement statement) {
+		AssignmentStatement assignmentStatement =
+				new AssignmentStatement(
+						statement.getIdentifier(),
+						statement.getEvaluableComponent(),
+						statement.start(),
+						statement.end());
+		List<String> combinedResults =
+				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), assignmentStatement);
+
+		String right = statement.getEvaluableComponent().accept(this);
+		DeclarationStatement declaration =
+				new DeclarationStatement(
+						statement.getDeclarationType(),
+						statement.getIdentifierType(),
+						statement.getIdentifier(),
+						statement.start(),
+						statement.end());
+		String left = declaration.accept(this);
+		if (right.isEmpty()) {
+			return left;
+		}
+		return combinedResults.get(0)
+				+ left
+				+ combinedResults.get(1)
+				+ "="
+				+ combinedResults.get(2)
+				+ right
+				+ combinedResults.get(3);
+	}
+
+	@Override
+	public String visit(DeclarationStatement statement) {
 		List<String> combinedResults =
 				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), statement);
 
 		return "let "
 				+ combinedResults.get(0)
-				+ statement.getName()
+				+ statement.getIdentifier().getName()
 				+ combinedResults.get(1)
 				+ ":"
 				+ combinedResults.get(2)
-				+ statement.getType().toString().toLowerCase()
+				+ statement.getDeclarationType().toString().toLowerCase()
 				+ combinedResults.get(3);
 	}
 
@@ -109,26 +139,29 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 				getCombinedResults(formatterRules.getFunctionRuleAppliers(), statement);
 
 		return combinedResults.get(0)
-				+ statement.getLeft().accept(this)
+				+ statement.getIdentifier().accept(this)
 				+ combinedResults.get(1)
 				+ "("
 				+ combinedResults.get(2)
-				+ statement.getRight().accept(this)
+				+ statement.getParameters().accept(this)
 				+ combinedResults.get(3)
 				+ ")"
 				+ combinedResults.get(4);
 	}
 
 	@Override
-	public String visit(StatementBlock statementBlock) {
-		return statementBlock.getStatements().stream()
-				.map(statement -> statement.accept(this))
-				.collect(Collectors.joining(", "));
+	public String visit(Identifier identifier) {
+		return identifier.getName();
 	}
 
 	@Override
-	public String visit(Identifier identifier) {
-		return identifier.getName();
+	public String visit(ReadInput readInput) {
+		throw new RuntimeException("Not implemented yet");
+	}
+
+	@Override
+	public String visit(ReadEnv readEnv) {
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	private List<String> combineStringsLists(List<List<String>> listOfLists) {

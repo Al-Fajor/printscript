@@ -22,23 +22,23 @@ public class Conditional implements EvaluableComponent {
 	}
 
 	@Override
-	public Pair<Integer, Integer> getStart() {
+	public Pair<Integer, Integer> start() {
 		return start;
 	}
 
 	@Override
-	public Pair<Integer, Integer> getEnd() {
+	public Pair<Integer, Integer> end() {
 		return end;
 	}
 
 	@Override
 	public <T> T accept(AstComponentVisitor<T> visitor) {
-		return visitor.visit(this);
+		throw new RuntimeException("Component 'Conditional' is no longer supported");
 	}
 
 	@Override
 	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
-		return visitor.visit(this);
+		throw new RuntimeException("Component 'Conditional' is no longer supported");
 	}
 
 	@Override

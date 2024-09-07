@@ -3,44 +3,42 @@ package org.example.ast.statement;
 import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.EvaluableComponent;
-import org.example.ast.IdentifierComponent;
+import org.example.ast.Identifier;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
-public class AssignationStatement implements Statement {
-	private final IdentifierComponent identifier;
+public class AssignmentStatement implements Statement {
+	private final Identifier identifier;
 	private final EvaluableComponent expression;
 	private final Pair<Integer, Integer> start;
 	private final Pair<Integer, Integer> end;
 
-	public AssignationStatement(
-			IdentifierComponent leftComponent,
-			EvaluableComponent rightComponent,
+	public AssignmentStatement(
+			Identifier identifier,
+			EvaluableComponent evaluable,
 			Pair<Integer, Integer> start,
 			Pair<Integer, Integer> end) {
-		this.identifier = leftComponent;
-		this.expression = rightComponent;
+		this.identifier = identifier;
+		this.expression = evaluable;
 		this.start = start;
 		this.end = end;
 	}
 
-	@Override
-	public IdentifierComponent getLeft() {
+	public Identifier getIdentifier() {
 		return identifier;
 	}
 
-	@Override
-	public EvaluableComponent getRight() {
+	public EvaluableComponent getEvaluableComponent() {
 		return expression;
 	}
 
 	@Override
-	public Pair<Integer, Integer> getStart() {
+	public Pair<Integer, Integer> start() {
 		return start;
 	}
 
 	@Override
-	public Pair<Integer, Integer> getEnd() {
+	public Pair<Integer, Integer> end() {
 		return end;
 	}
 
@@ -57,8 +55,7 @@ public class AssignationStatement implements Statement {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		AssignationStatement that = (AssignationStatement) o;
+		if (!(o instanceof AssignmentStatement that)) return false;
 		return Objects.equals(identifier, that.identifier)
 				&& Objects.equals(expression, that.expression);
 	}
@@ -70,15 +67,11 @@ public class AssignationStatement implements Statement {
 
 	@Override
 	public String toString() {
-		return "AssignationStatement{"
+		return "AssignmentStatement{"
 				+ "identifier="
 				+ identifier
 				+ ", expression="
 				+ expression
-				+ ", start="
-				+ start
-				+ ", end="
-				+ end
 				+ '}';
 	}
 }

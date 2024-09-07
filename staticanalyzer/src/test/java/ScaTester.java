@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.example.*;
 import org.json.JSONArray;
@@ -22,7 +23,8 @@ public class ScaTester {
 			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");
 			List<Result> expectedResults = getExpectedResults(testCase);
-			List<Result> results = analyzer.analyze(code);
+			List<String> linesWithNewlines = Arrays.stream(code.split("(?<=\n)")).toList();
+			List<Result> results = analyzer.analyze(linesWithNewlines.iterator());
 			compareResults(expectedResults, results);
 		}
 	}
@@ -59,6 +61,8 @@ public class ScaTester {
 	}
 
 	private void compareResults(List<Result> expectedResults, List<Result> results) {
+		System.out.println("Expected results: " + expectedResults);
+		System.out.println("Actual results: " + results);
 		assertTrue(expectedResults.containsAll(results));
 	}
 }

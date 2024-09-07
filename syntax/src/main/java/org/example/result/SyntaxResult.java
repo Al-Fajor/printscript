@@ -1,9 +1,8 @@
 package org.example.result;
 
-import java.util.List;
 import org.example.Result;
-import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 
 public interface SyntaxResult extends Result {
-	List<AstComponent> getComponents();
+	Statement getStatement();
 }

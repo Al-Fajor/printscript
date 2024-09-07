@@ -3,13 +3,10 @@ package org.example.visitors;
 import org.example.EvaluationResult;
 import org.example.Function;
 import org.example.InterpreterState;
-import org.example.VariableType;
+import org.example.Variable;
 import org.example.ast.*;
-import org.example.ast.statement.AssignationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfStatement;
+import org.example.ast.statement.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
-import org.example.ast.visitor.IdentifierComponentVisitor;
 
 public class StatementVisitor implements org.example.ast.visitor.StatementVisitor<Void> {
 	private final InterpreterState state;
@@ -19,12 +16,11 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	}
 
 	@Override
-	public Void visit(AssignationStatement statement) {
-		IdentifierComponent identifierComponent = statement.getLeft();
-		IdentifierComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
-		String identifierName = identifierComponent.accept(identifierVisitor);
+	public Void visit(AssignmentStatement statement) {
+		Identifier identifier = statement.getIdentifier();
+		String identifierName = identifier.getName();
 
-		EvaluableComponent evaluableComponent = statement.getRight();
+		EvaluableComponent evaluableComponent = statement.getEvaluableComponent();
 		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
 		EvaluationResult result = evaluableComponent.accept(evaluatorVisitor);
 
@@ -32,8 +28,49 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 		return null;
 	}
 
+	@Override
+	public Void visit(DeclarationStatement statement) {
+		DeclarationType declarationType = statement.getDeclarationType();
+		Identifier identifier = statement.getIdentifier();
+
+		switch (declarationType) {
+			case STRING ->
+					state.addStringVariable(
+							new Variable<>(declarationType, identifier.getName(), null));
+			case NUMBER ->
+					state.addNumericVariable(
+							new Variable<>(declarationType, identifier.getName(), null));
+			default ->
+					throw new RuntimeException("Unexpected declaration type: " + declarationType);
+		}
+		return null;
+	}
+
+	@Override
+	public Void visit(DeclarationAssignmentStatement statement) {
+		DeclarationType declarationType = statement.getDeclarationType();
+		IdentifierType identifierType = statement.getIdentifierType();
+		Identifier identifier = statement.getIdentifier();
+
+		DeclarationStatement declarationStatement =
+				new DeclarationStatement(
+						declarationType,
+						identifierType,
+						identifier,
+						statement.start(),
+						statement.end());
+		this.visit(declarationStatement);
+
+		EvaluableComponent evaluableComponent = statement.getEvaluableComponent();
+		AssignmentStatement assignmentStatement =
+				new AssignmentStatement(
+						identifier, evaluableComponent, statement.start(), statement.end());
+		this.visit(assignmentStatement);
+		return null;
+	}
+
 	private void assignValueToIdentifier(String identifierName, EvaluationResult result) {
-		VariableType varType = state.getVariableType(identifierName);
+		DeclarationType varType = state.getVariableType(identifierName);
 		switch (varType) {
 			case STRING -> state.setStringVariable(identifierName, result.getStringResult());
 			case NUMBER -> state.setNumericVariable(identifierName, result.getNumericResult());
@@ -44,20 +81,24 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	@Override
 	public Void visit(FunctionCallStatement statement) {
 		Function function = getFunction(statement);
-		Parameters parameters = statement.getRight();
+		Parameters parameters = statement.getParameters();
 		function.executeFunction(parameters);
 		return null;
 	}
 
+	@Override
+	public Void visit(IfStatement ifStatement) {
+		return null;
+	}
+
 	private Function getFunction(FunctionCallStatement statement) {
-		IdentifierComponent identifier = statement.getLeft();
-		IdentifierComponentVisitor<String> identifierVisitor = new IdentifierVisitor(state);
-		String functionName = identifier.accept(identifierVisitor);
+		Identifier identifier = statement.getIdentifier();
+		String functionName = identifier.getName();
 		return state.getFunction(functionName);
 	}
 
 	@Override
-	public Void visit(IfStatement ifStatement) {
+	public Void visit(IfElseStatement ifElseStatement) {
 		return null;
 	}
 }

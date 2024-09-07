@@ -72,8 +72,8 @@ public class ExpressionBuilder {
 		EvaluableComponent right = parseExpression(reader, bindingPower);
 
 		TokenMapper mapper = new TokenMapper();
-		Pair<Integer, Integer> start = left != null ? left.getStart() : currentToken.getStart();
-		Pair<Integer, Integer> end = right.getEnd();
+		Pair<Integer, Integer> start = left != null ? left.start() : currentToken.getStart();
+		Pair<Integer, Integer> end = right.end();
 
 		return left != null
 				? new BinaryExpression(

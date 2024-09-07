@@ -1,6 +1,7 @@
 package org.example.ast;
 
 public enum IdentifierType {
-	VARIABLE,
+	LET,
+	CONST,
 	FUNCTION
 }

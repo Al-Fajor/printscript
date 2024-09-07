@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+component Lexer
+note left of Lexer : Receives a code\nand returns a token
+
+component SyntaxAnalyzer
+note left of SyntaxAnalyzer : Receives a token iterator\nand returns a statement
+
+component SemanticAnalyzer
+note left of SemanticAnalyzer : Receives a statement iterator\nand returns a statement
+
+component Interpreter
+note left of Interpreter : Receives a statement iterator\nand interprets it
+
+component Formatter
+note left of Formatter : Receives a statement iterator\nand returns a formatted string
+
+component StaticCodeAnalyzer
+note left of StaticCodeAnalyzer : Receives a code iterator\nand returns a list of results
+
+component Models
+note left of Models : Represents the data types we use, \nsuch as Token, Statement, and Result
+
+component Cli
+note right of Cli : Runs the program\n depending on all other modules
+note left of Cli: All modules depend on org.json for JSON parsing
+
+' Cli dependencies
+Cli -down--> Lexer
+Cli -down--> SyntaxAnalyzer
+Cli -down--> SemanticAnalyzer
+Cli -down--> Interpreter
+Cli -down--> Formatter
+Cli -down--> StaticCodeAnalyzer
+Cli -down-> Models
+
+' Models dependencies
+Lexer -up-> Models
+SyntaxAnalyzer -up-> Models
+SemanticAnalyzer -up-> Models
+Interpreter -up-> Models
+Formatter -up-> Models
+StaticCodeAnalyzer -up-> Models
+
+@enduml

@@ -1,0 +1,33 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+	{
+	  "assignation": [
+		{
+		  "declaration": {
+			"declarationType": "String",
+			"name": "a"
+		  }
+		},
+		{
+		  "literal": {
+			"value": null
+		  }
+		}
+	  ],
+	  "assignation_1": [
+		{
+		  "declaration": {
+			"declarationType": "Number",
+			"name": "b"
+		  }
+		},
+		{
+		  "literal": {
+			"value": null
+		  }
+		}
+	  ]
+	}
+  ]
+}

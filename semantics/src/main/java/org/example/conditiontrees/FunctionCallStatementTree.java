@@ -21,8 +21,8 @@ public class FunctionCallStatementTree {
 		} else {
 			return EvaluableResolution.failure(
 					"Cannot resolve function signature " + functionName + "(" + types + ").",
-					statement.getStart(),
-					statement.getEnd());
+					statement.start(),
+					statement.end());
 		}
 	}
 

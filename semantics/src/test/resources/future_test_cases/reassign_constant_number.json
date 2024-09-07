@@ -1,0 +1,36 @@
+{
+  "valid_semantics": false,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "identifierType": "const",
+            "name": "pi"
+          }
+        },
+        {
+          "literal": {
+            "value": 3.14159265
+          }
+        }
+      ]
+    },
+    {
+      "assignation": [
+        {
+          "identifier": {
+            "name": "pi",
+            "identifierType": "variable"
+          }
+        },
+        {
+          "literal": {
+            "value": 10
+          }
+        }
+      ]
+    }
+  ]
+}

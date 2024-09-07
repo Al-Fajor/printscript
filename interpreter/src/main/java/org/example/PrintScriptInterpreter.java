@@ -1,7 +1,6 @@
 package org.example;
 
-import java.util.List;
-import org.example.ast.AstComponent;
+import java.util.Iterator;
 import org.example.ast.statement.Statement;
 import org.example.visitors.StatementVisitor;
 
@@ -12,10 +11,9 @@ public class PrintScriptInterpreter implements Interpreter {
 		statementVisitor = new StatementVisitor(state);
 	}
 
-	@Override
-	public void interpret(List<AstComponent> astList) {
-		for (AstComponent statement : astList) {
-			((Statement) statement).accept(statementVisitor); // TODO avoid cast
+	public void interpret(Iterator<Statement> statements) {
+		while (statements.hasNext()) {
+			(statements.next()).accept(statementVisitor);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package org.example;
 
-import java.util.List;
-import org.example.ast.AstComponent;
+import java.util.Iterator;
+import org.example.ast.statement.Statement;
 
 public interface Interpreter {
-	void interpret(List<AstComponent> astList);
+	void interpret(Iterator<Statement> statements);
 }

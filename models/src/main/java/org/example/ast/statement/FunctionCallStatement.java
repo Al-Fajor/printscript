@@ -2,19 +2,19 @@ package org.example.ast.statement;
 
 import java.util.Objects;
 import org.example.Pair;
-import org.example.ast.IdentifierComponent;
+import org.example.ast.Identifier;
 import org.example.ast.Parameters;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
 public class FunctionCallStatement implements Statement {
-	private final IdentifierComponent identifier;
+	private final Identifier identifier;
 	private final Parameters parameters;
 	private final Pair<Integer, Integer> start;
 	private final Pair<Integer, Integer> end;
 
 	public FunctionCallStatement(
-			IdentifierComponent identifier,
+			Identifier identifier,
 			Parameters parameters,
 			Pair<Integer, Integer> start,
 			Pair<Integer, Integer> end) {
@@ -25,22 +25,20 @@ public class FunctionCallStatement implements Statement {
 	}
 
 	@Override
-	public Pair<Integer, Integer> getStart() {
+	public Pair<Integer, Integer> start() {
 		return start;
 	}
 
 	@Override
-	public Pair<Integer, Integer> getEnd() {
+	public Pair<Integer, Integer> end() {
 		return end;
 	}
 
-	@Override
-	public IdentifierComponent getLeft() {
+	public Identifier getIdentifier() {
 		return identifier;
 	}
 
-	@Override
-	public Parameters getRight() {
+	public Parameters getParameters() {
 		return parameters;
 	}
 

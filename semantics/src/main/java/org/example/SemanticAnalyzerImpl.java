@@ -3,56 +3,38 @@ package org.example;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
-import org.example.identifiers.IdentifierVisitor;
 import org.example.observer.Observer;
 import org.example.utils.DoubleOptional;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
-	// TODO: may define externally, such as in a config file
-	private final Environment baseEnvironment;
-	private final EvaluableVisitor evaluableVisitor;
+	public static final int ESTIMATED_TOTAL = 100;
+	private Environment env;
+	private EvaluableVisitor evaluableVisitor;
 	private final List<Observer<Pair<Integer, Integer>>> observers = new LinkedList<>();
+	private int completed;
 
-	public SemanticAnalyzerImpl(Environment baseEnvironment) {
-		this.baseEnvironment = baseEnvironment;
-		IdentifierVisitor identifierVisitor = new IdentifierVisitor();
-		this.evaluableVisitor = new EvaluableVisitor(baseEnvironment, identifierVisitor);
+	public SemanticAnalyzerImpl(Environment env) {
+		this.env = env;
+		this.evaluableVisitor = new EvaluableVisitor(env);
 	}
 
 	@Override
-	public Result analyze(List<AstComponent> asts) {
-		return resolveNextAst(asts.iterator(), evaluableVisitor, baseEnvironment, 0, asts.size());
-	}
-
-	private Result resolveNextAst(
-			Iterator<AstComponent> asts,
-			EvaluableVisitor currentVisitor,
-			Environment currentEnv,
-			int completed,
-			int total) {
-
-		if (resolvedAllAsts(asts)) {
-			return new SemanticSuccess();
-		}
-
-		EvaluableResolution resolution = asts.next().accept(currentVisitor);
-		notifyObservers(completed, total);
-
-		if (resolution.failed()) {
-			return resolution.result();
-		}
+	public Result analyze(Iterator<Statement> statements) {
+		EvaluableResolution resolution = statements.next().accept(evaluableVisitor);
+		notifyObservers(completed, ESTIMATED_TOTAL);
 
 		Pair<EvaluableVisitor, Environment> updated =
-				updateVisitor(resolution, currentVisitor, currentEnv);
+				updateVisitor(resolution, evaluableVisitor, env);
 
-		return resolveNextAst(asts, updated.first(), updated.second(), completed + 1, total);
-	}
+		this.evaluableVisitor = updated.first();
+		this.env = updated.second();
 
-	private static boolean resolvedAllAsts(Iterator<AstComponent> asts) {
-		return !asts.hasNext();
+		completed++;
+
+		return resolution.result();
 	}
 
 	private void notifyObservers(int completed, int total) {

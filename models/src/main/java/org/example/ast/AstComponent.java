@@ -4,7 +4,7 @@ import org.example.Pair;
 import org.example.ast.visitor.AstComponentVisitable;
 
 public interface AstComponent extends AstComponentVisitable {
-	Pair<Integer, Integer> getStart();
+	Pair<Integer, Integer> start();
 
-	Pair<Integer, Integer> getEnd();
+	Pair<Integer, Integer> end();
 }

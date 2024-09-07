@@ -1,9 +1,18 @@
 package org.example.utils;
 
-import org.example.Pair;
-
 public class PositionServices {
-	private static int getLine(String input, int index) {
+
+	public static int getLines(String input) {
+		int lines = 0;
+		for (int i = 0; i < input.length(); i++) {
+			if (input.charAt(i) == '\n') {
+				lines++;
+			}
+		}
+		return lines;
+	}
+
+	public static int getLine(String input, int index) {
 		int line = 0;
 		for (int i = 0; i < index; i++) {
 			if (input.charAt(i) == '\n') {
@@ -13,7 +22,7 @@ public class PositionServices {
 		return line;
 	}
 
-	private static int getPositionInLine(String input, int index) {
+	public static int getPositionInLine(String input, int index) {
 		int position = 0;
 		for (int i = 0; i < index; i++) {
 			if (input.charAt(i) == '\n') {
@@ -23,9 +32,5 @@ public class PositionServices {
 			}
 		}
 		return position;
-	}
-
-	public static Pair<Integer, Integer> getPositionPair(String input, int index) {
-		return new Pair<>(getLine(input, index) + 1, getPositionInLine(input, index) + 1);
 	}
 }

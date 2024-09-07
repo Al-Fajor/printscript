@@ -3,7 +3,7 @@ package org.example.commands;
 import java.util.List;
 import java.util.concurrent.Callable;
 import org.example.Parser;
-import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -22,7 +22,7 @@ public class ValidationCommand implements Callable<Integer> {
 
 	@Override
 	public Integer call() {
-		List<AstComponent> astList = parser.parse(file);
+		List<Statement> astList = parser.parse(file);
 
 		if (!astList.isEmpty()) {
 			System.out.println("Completed validation successfully. No errors found.");
