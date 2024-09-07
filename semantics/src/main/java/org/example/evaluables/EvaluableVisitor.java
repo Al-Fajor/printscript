@@ -152,7 +152,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		String functionName = statement.getIdentifier().getName();
 
-		return FunctionCallStatementTree.isFunctionDeclared(env, statement, types, functionName);
+		return FunctionCallStatementTree.checkFunctionIsDeclared(
+				env, statement, types, functionName);
 	}
 
 	@Override

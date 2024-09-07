@@ -1,0 +1,72 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Boolean",
+            "name": "isTrue"
+          }
+        },
+        {
+          "literal": {
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "outerVariable"
+          }
+        },
+        {
+          "literal": {
+            "value": "Should be accessible from inside"
+          }
+        }
+      ]
+    },
+    {
+      "if": {
+        "conditional": "isTrue",
+        "trueClause": [
+          {
+            "assignation": [
+              {
+                "identifier": {
+                  "name": "outerVariable"
+                }
+              },
+              {
+                "literal": {
+                  "value": "Valid true-clause assignation"
+                }
+              }
+            ]
+          }
+        ],
+        "falseClause": [
+          {
+            "assignation": [
+              {
+                "identifier": {
+                  "name": "outerVariable"
+                }
+              },
+              {
+                "literal": {
+                  "value": "Valid false-clause assignation"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -29,6 +29,10 @@ public class AstBuilder {
 		JSONObject json = new JSONObject(content);
 		JSONArray astArray = json.getJSONArray("ast_list");
 
+		return mapAllToStatements(astArray);
+	}
+
+	private List<Statement> mapAllToStatements(JSONArray astArray) {
 		List<Statement> result = new ArrayList<>();
 
 		for (int i = 0; i < astArray.length(); i++) {
@@ -58,7 +62,7 @@ public class AstBuilder {
 							PLACEHOLDER);
 			case "if" -> {
 				JSONArray trueClause = astComponentJson.getJSONArray("trueClause");
-				ArrayList<Statement> trueClauseList = getStatements(trueClause);
+				List<Statement> trueClauseList = mapAllToStatements(trueClause);
 
 				if (!astComponentJson.keySet().contains("falseClause")) {
 					yield new IfStatement(
@@ -71,7 +75,7 @@ public class AstBuilder {
 							PLACEHOLDER);
 				} else {
 					JSONArray falseClause = astComponentJson.getJSONArray("falseClause");
-					ArrayList<Statement> falseClauseList = getStatements(falseClause);
+					List<Statement> falseClauseList = mapAllToStatements(falseClause);
 
 					yield new IfElseStatement(
 							new Identifier(
@@ -88,18 +92,6 @@ public class AstBuilder {
 					throw new IllegalArgumentException(
 							astComponentJsonName + " is not a valid statement");
 		};
-	}
-
-	private ArrayList<Statement> getStatements(JSONArray statementArray) {
-		ArrayList<Statement> statementList = new ArrayList<>();
-
-		for (int i = 0; i < statementArray.length(); i++) {
-			JSONObject statementJson = statementArray.getJSONObject(i);
-			String statementJsonName = statementJson.keys().next();
-			JSONObject innerJson = statementJson.getJSONObject(statementJsonName);
-			statementList.add(mapToStatement(innerJson, statementJsonName));
-		}
-		return statementList;
 	}
 
 	private AstComponent mapToAstComponent(
