@@ -5,7 +5,6 @@ import static org.example.utils.PrintUtils.printFailedCode;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.example.ast.AstComponent;
 import org.example.ast.DeclarationType;
 import org.example.ast.statement.Statement;
 import org.example.io.Color;
@@ -39,7 +38,7 @@ public class Parser {
 	}
 
 	public List<Statement> parse(String path) {
-		String code;
+		Iterator<String> code;
 		try {
 			code = ScriptReader.readCodeFromSourceByLine(path);
 		} catch (FileNotFoundException e) {
