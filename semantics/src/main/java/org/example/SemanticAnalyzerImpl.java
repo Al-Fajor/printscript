@@ -7,7 +7,6 @@ import org.example.ast.statement.Statement;
 import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
 import org.example.observer.Observer;
-import org.example.utils.DoubleOptional;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 	public static final int ESTIMATED_TOTAL = 100;
@@ -46,10 +45,14 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 			EvaluableVisitor currentVisitor,
 			Environment currentEnv) {
 
-		return DoubleOptional.from(resolution.evaluatedType(), resolution.identifierName())
+		return resolution
+				.asTripleOptional()
 				.map(
-						(type, identifier) -> {
-							Environment newEnv = currentEnv.declareVariable(identifier, type);
+						(evaluatedType, identifierType, identifierName) -> {
+							Environment newEnv =
+									currentEnv.declareVariable(
+											identifierName, evaluatedType, identifierType);
+
 							EvaluableVisitor newVisitor = currentVisitor.withEnv(newEnv);
 							return new Pair<>(newVisitor, newEnv);
 						})

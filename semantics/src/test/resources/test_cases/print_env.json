@@ -1,0 +1,20 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
+        },
+        "params": [
+          {
+            "readEnv": {
+              "variable": "EMAIL"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

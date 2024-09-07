@@ -11,7 +11,7 @@ import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
 
 public class FunctionCallStatementTree {
-	public static EvaluableResolution isFunctionDeclared(
+	public static EvaluableResolution checkFunctionIsDeclared(
 			Environment env,
 			FunctionCallStatement statement,
 			List<DeclarationType> types,
@@ -31,8 +31,13 @@ public class FunctionCallStatementTree {
 	public static List<DeclarationType> getAllParameterTypes(
 			List<EvaluableResolution> resolvedParameters) {
 		return resolvedParameters.stream()
-				.map(resolution -> resolution.evaluatedType().get())
+				.map(resolution -> getDeclarationType(resolution))
 				.toList();
+	}
+
+	private static DeclarationType getDeclarationType(EvaluableResolution resolution) {
+		// readInput and readEnv have type string when printed
+		return resolution.evaluatedType().orElse(DeclarationType.STRING);
 	}
 
 	public static Optional<EvaluableResolution> getInvalidResolutionIfAny(

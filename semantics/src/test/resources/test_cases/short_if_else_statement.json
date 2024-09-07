@@ -1,0 +1,57 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Boolean",
+            "name": "isTrue"
+          }
+        },
+        {
+          "literal": {
+            "value": false
+          }
+        }
+      ]
+    },
+    {
+      "if": {
+        "conditional": "isTrue",
+        "trueClause": [
+          {
+            "functionCall": {
+              "identifier": {
+                "name": "println"
+              },
+              "params": [
+                {
+                  "literal": {
+                    "value": "Should not be printed"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "falseClause": [
+          {
+            "functionCall": {
+              "identifier": {
+                "name": "println"
+              },
+              "params": [
+                {
+                  "literal": {
+                    "value": "Should be printed"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

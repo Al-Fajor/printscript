@@ -3,6 +3,7 @@ package org.example.conditiontrees;
 import org.example.Environment;
 import org.example.ast.DeclarationType;
 import org.example.ast.Identifier;
+import org.example.ast.IdentifierType;
 import org.example.ast.statement.AssignmentStatement;
 import org.example.evaluables.EvaluableResolution;
 
@@ -13,10 +14,24 @@ public class AssignmentStatementTree {
 			EvaluableResolution assignedValueResolution,
 			Environment env) {
 		if (env.isVariableDeclared(identifier.getName())) {
-			return checkAssigningToValidValue(statement, identifier, assignedValueResolution, env);
+			return checkNotConstant(statement, identifier, assignedValueResolution, env);
 		} else {
 			return EvaluableResolution.failure(
 					"Cannot assign non-existing identifier", statement.start(), statement.end());
+		}
+	}
+
+	private static EvaluableResolution checkNotConstant(
+			AssignmentStatement statement,
+			Identifier identifier,
+			EvaluableResolution assignedValueResolution,
+			Environment env) {
+		boolean isConst = env.getIdentifierType(identifier.getName()) == IdentifierType.CONST;
+		if (isConst) {
+			return EvaluableResolution.failure(
+					"Cannot reassign constant", statement.start(), statement.end());
+		} else {
+			return checkAssigningToValidValue(statement, identifier, assignedValueResolution, env);
 		}
 	}
 
@@ -33,13 +48,13 @@ public class AssignmentStatementTree {
 						.orElseThrow(
 								() ->
 										new IllegalStateException(
-												"Received invalid AST: Assigning to value with no type"));
+												"Received invalid AST: Assigning to value with no declarationType"));
 
 		if (identifierType == assignedValueType) {
 			return EvaluableResolution.emptySuccess();
 		} else {
 			return EvaluableResolution.failure(
-					"Cannot assign type "
+					"Cannot assign declarationType "
 							+ assignedValueResolution.evaluatedType().get()
 							+ " to "
 							+ env.getDeclarationType(identifier.getName()),

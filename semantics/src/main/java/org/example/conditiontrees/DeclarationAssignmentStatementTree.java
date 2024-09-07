@@ -21,24 +21,36 @@ public class DeclarationAssignmentStatementTree {
 		}
 	}
 
-	@SuppressWarnings(
-			"OptionalGetWithoutIsPresent") // Safe because Resolution is successful at this point
 	private static EvaluableResolution checkDeclaringWithValidValue(
 			DeclarationAssignmentStatement statement, EvaluableResolution assignedValueResolution) {
 
 		DeclarationType identifierType = statement.getDeclarationType();
-		DeclarationType assignedType = assignedValueResolution.evaluatedType().get();
-		if (identifierType == assignedType) {
+		Optional<DeclarationType> assignedType = assignedValueResolution.evaluatedType();
+
+		if (typesMatch(identifierType, assignedType)) {
 			String name = statement.getIdentifier().getName();
-			return new EvaluableResolution(SUCCESS, Optional.of(identifierType), Optional.of(name));
+			return new EvaluableResolution(
+					SUCCESS,
+					Optional.of(identifierType),
+					Optional.of(statement.getIdentifierType()),
+					Optional.of(name));
 		} else {
 			return EvaluableResolution.failure(
-					"Cannot assign value of type "
+					"Cannot assign value of declarationType "
 							+ assignedType
-							+ " to variable of type "
+							+ " to variable of declarationType "
 							+ identifierType,
 					statement.start(),
 					statement.end());
 		}
+	}
+
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	// Need to pass the optional because it's necessary for the boolean logic
+	private static boolean typesMatch(
+			DeclarationType identifierType, Optional<DeclarationType> assignedType) {
+		// e.g. declarationType is determined at runtime for readEnv
+		boolean isRuntimeType = assignedType.isEmpty();
+		return isRuntimeType || identifierType == assignedType.get();
 	}
 }

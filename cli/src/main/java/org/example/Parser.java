@@ -4,6 +4,7 @@ import static org.example.utils.PrintUtils.printFailedCode;
 
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import org.example.ast.DeclarationType;
 import org.example.ast.statement.Statement;
@@ -38,17 +39,18 @@ public class Parser {
 	}
 
 	public List<Statement> parse(String path) {
-		Iterator<String> code;
+		Scanner codeScanner;
 		try {
-			code = ScriptReader.readCodeFromSourceByLine(path);
+			codeScanner = ScriptReader.readCodeFromSourceByLine(path);
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not read file; got error: \n" + e);
 			return Collections.emptyList();
 		}
 
 		Color.printGreen("\nPerforming lexical analysis");
-		Result lexerResult = lexer.lex(code);
+		Result lexerResult = lexer.lex(codeScanner.useDelimiter("(?<=}|;)"));
 		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
+		codeScanner.close();
 
 		Color.printGreen("\nPerforming syntactic analysis");
 		Iterator<Token> tokens = ((LexerSuccess) lexerResult).getTokens();
