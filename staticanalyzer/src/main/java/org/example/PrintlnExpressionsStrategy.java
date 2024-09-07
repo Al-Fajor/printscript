@@ -3,91 +3,71 @@ package org.example;
 import static org.example.token.BaseTokenTypes.*;
 
 import java.util.*;
-import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
 
 public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
-	private final String value;
-	private final Lexer lexer;
+    private final String value;
 
-	public PrintlnExpressionsStrategy(String value) {
-		this.value = value;
-		lexer = new PrintScriptLexer();
-	}
+    public PrintlnExpressionsStrategy(String value) {
+        this.value = value;
+    }
 
-	@Override
-	public List<Result> analyze(String input) {
-		if (value.equals("true")) {
-			return List.of();
-		} else {
-			List<Token> tokens = getTokens(input);
-			return analyzePrintln(tokens);
-		}
-	}
+    @Override
+    public List<Result> analyze(Iterator<Token> input) {
+        if (value.equals("true")) {
+            return List.of();
+        } else {
+            return analyzePrintln(input);
+        }
+    }
 
-	private List<Result> analyzePrintln(List<Token> tokens) {
-		List<Result> results = new ArrayList<>();
-		List<Integer> printlnIndexes = getIndexesOfPrintln(tokens);
-		for (Integer index : printlnIndexes) {
-			if (hasExpressions(tokens, index)) {
-				results.add(
-						new FailResult(
-								"Expressions in println function not allowed",
-								tokens.get(index).getStart(),
-								tokens.get(index).getEnd()));
-			}
-		}
-		return results;
-	}
+    private List<Result> analyzePrintln(Iterator<Token> tokens) {
+        List<Result> results = new ArrayList<>();
+        Stack<Boolean> stack = new Stack<>();
+        int expressionCounter = 0;
+        boolean insidePrintln = false;
+        Pair<Integer, Integer> start = null;
+        Pair<Integer, Integer> end = null;
 
-	private boolean hasExpressions(List<Token> tokens, int index) {
-		Stack<Boolean> stack = new Stack<>();
-		int expressionCounter = 0;
-		for (int i = index + 1; i < tokens.size(); i++) {
-			Token token = tokens.get(i);
-			switch (token.getType()) {
-				case SEPARATOR -> {
-					if (token.getValue().equals("(")) {
-						stack.push(true);
-					} else if (token.getValue().equals(")")) {
-						stack.pop();
-					}
-				}
-				case IDENTIFIER, LITERAL -> expressionCounter++;
-				default -> {
-					continue;
-				}
-			}
-			if (stack.isEmpty()) {
-				break;
-			}
-		}
-		return expressionCounter != 1;
-	}
+        while (tokens.hasNext()) {
+            Token token = tokens.next();
+            if (token.getType() == PRINTLN) {
+                insidePrintln = true;
+                expressionCounter = 0;
+                stack.clear();
+                start = token.getStart();
+                end = token.getEnd();
+            } else if (insidePrintln) {
+                switch (token.getType()) {
+                    case SEPARATOR -> {
+                        if (token.getValue().equals("(")) {
+                            stack.push(true);
+                        } else if (token.getValue().equals(")")) {
+                            stack.pop();
+                            insidePrintln = !stack.isEmpty();
+                            addFailResult(results, start, end, expressionCounter, stack);
+                        }
+                    }
+                    case IDENTIFIER, LITERAL -> expressionCounter++;
+                    default -> {
+                        continue;
+                    }
+                }
+            }
+        }
+        return results;
+    }
 
-	private List<Integer> getIndexesOfPrintln(List<Token> tokens) {
-		List<Integer> indexes = new ArrayList<>();
-		for (int i = 0; i < tokens.size(); i++) {
-			if (tokens.get(i).getType() == PRINTLN) {
-				indexes.add(i);
-			}
-		}
-		return indexes;
-	}
+    private void addFailResult(List<Result> results, Pair<Integer, Integer> start, Pair<Integer, Integer> end, int expressionCounter, Stack<Boolean> stack) {
+        if (stack.isEmpty()) {
+            if (expressionCounter != 1) {
+                results.add(new FailResult(
+                        "Expressions in println function not allowed",
+                        start,
+                        end));
+            }
+        }
+    }
 
-	private List<Token> getTokens(String input) {
-		Result lexerResult = lexer.lex(input.lines().iterator());
-		if (Objects.requireNonNull(lexerResult) instanceof LexerSuccess lexerSuccess) {
-			return iteratorToList(lexerSuccess.getTokens());
-		}
-		throw new RuntimeException("Lexer failed: " + lexerResult);
-	}
 
-	private List<Token> iteratorToList(Iterator<Token> iterator) {
-		List<Token> tokens = new ArrayList<>();
-		while (iterator.hasNext()) {
-			tokens.add(iterator.next());
-		}
-		return tokens;
-	}
 }

@@ -20,7 +20,7 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 	}
 
 	@Override
-	public List<Result> analyze(String input) {
+	public List<Result> analyze(Iterator<Token> input) {
 		String identifierRegex = regexMap.get(identifierFormat);
 		if (identifierRegex != null) {
 			return analyzeWithRegex(input, identifierRegex);
@@ -28,47 +28,21 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 		throw new RuntimeException("Unknown identifier format: " + identifierFormat);
 	}
 
-	private List<Result> analyzeWithRegex(String input, String identifierRegex) {
-		List<Token> tokens = getTokens(input);
-		List<Token> identifiers = getIdentifierTokens(tokens);
-		List<Result> results = new ArrayList<>();
-		for (Token token : identifiers) {
-			String identifierName = token.getValue();
-			if (identifierName.matches(identifierRegex)) {
-				continue;
-			}
-			results.add(
-					new FailResult(
-							"Identifier \"" + token.getValue() + "\" is not in " + identifierFormat,
-							token.getStart(),
-							token.getEnd()));
-		}
-		return results;
-	}
-
-	private List<Token> getTokens(String input) {
-		Result lexerResult = lexer.lex(input.lines().iterator());
-		if (Objects.requireNonNull(lexerResult) instanceof LexerSuccess lexerSuccess) {
-			return iteratorToList(lexerSuccess.getTokens());
-		}
-		throw new RuntimeException("Lexer failed: " + lexerResult);
-	}
-
-	private List<Token> getIdentifierTokens(List<Token> tokens) {
-		List<Token> identifierTokens = new ArrayList<>();
-		for (Token token : tokens) {
-			if (token.getType() == IDENTIFIER) {
-				identifierTokens.add(token);
-			}
-		}
-		return identifierTokens;
-	}
-
-	private List<Token> iteratorToList(Iterator<Token> iterator) {
-		List<Token> tokens = new ArrayList<>();
-		while (iterator.hasNext()) {
-			tokens.add(iterator.next());
-		}
-		return tokens;
-	}
+    private List<Result> analyzeWithRegex(Iterator<Token> input, String identifierRegex) {
+        List<Result> results = new ArrayList<>();
+        while (input.hasNext()) {
+            Token token = input.next();
+            if (token.getType() == IDENTIFIER) {
+                String identifierName = token.getValue();
+                if (!identifierName.matches(identifierRegex)) {
+                    results.add(
+                            new FailResult(
+                                    "Identifier \"" + token.getValue() + "\" is not in " + identifierFormat,
+                                    token.getStart(),
+                                    token.getEnd()));
+                }
+            }
+        }
+        return results;
+    }
 }

@@ -59,6 +59,8 @@ public class ScaTester {
 	}
 
 	private void compareResults(List<Result> expectedResults, List<Result> results) {
-		assertTrue(expectedResults.containsAll(results));
+        System.out.println("Expected results: " + expectedResults);
+        System.out.println("Actual results: " + results);
+        assertTrue(expectedResults.containsAll(results));
 	}
 }
