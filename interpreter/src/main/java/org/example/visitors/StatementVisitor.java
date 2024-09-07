@@ -57,14 +57,14 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 						declarationType,
 						identifierType,
 						identifier,
-						statement.getStart(),
-						statement.getEnd());
+						statement.start(),
+						statement.end());
 		this.visit(declarationStatement);
 
 		EvaluableComponent evaluableComponent = statement.getEvaluableComponent();
 		AssignmentStatement assignmentStatement =
 				new AssignmentStatement(
-						identifier, evaluableComponent, statement.getStart(), statement.getEnd());
+						identifier, evaluableComponent, statement.start(), statement.end());
 		this.visit(assignmentStatement);
 		return null;
 	}
@@ -86,6 +86,11 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 		return null;
 	}
 
+	@Override
+	public Void visit(IfStatement ifStatement) {
+		return null;
+	}
+
 	private Function getFunction(FunctionCallStatement statement) {
 		Identifier identifier = statement.getIdentifier();
 		String functionName = identifier.getName();
@@ -93,7 +98,7 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	}
 
 	@Override
-	public Void visit(IfStatement ifStatement) {
+	public Void visit(IfElseStatement ifElseStatement) {
 		return null;
 	}
 }

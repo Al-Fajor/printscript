@@ -16,9 +16,7 @@ public class AssignmentStatementTree {
 			return checkAssigningToValidValue(statement, identifier, assignedValueResolution, env);
 		} else {
 			return EvaluableResolution.failure(
-					"Cannot assign non-existing identifier",
-					statement.getStart(),
-					statement.getEnd());
+					"Cannot assign non-existing identifier", statement.start(), statement.end());
 		}
 	}
 
@@ -45,8 +43,8 @@ public class AssignmentStatementTree {
 							+ assignedValueResolution.evaluatedType().get()
 							+ " to "
 							+ env.getDeclarationType(identifier.getName()),
-					statement.getStart(),
-					statement.getEnd());
+					statement.start(),
+					statement.end());
 		}
 	}
 }

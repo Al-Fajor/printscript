@@ -21,7 +21,8 @@ import org.example.ast.DeclarationType;
 import org.example.ast.Identifier;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
-import org.example.ast.StatementBlock;
+import org.example.ast.ReadEnv;
+import org.example.ast.ReadInput;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.conditiontrees.DeclarationAssignmentStatementTree;
@@ -68,6 +69,11 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(IfStatement ifStatement) {
+		return null;
+	}
+
+	@Override
+	public EvaluableResolution visit(IfElseStatement ifElseStatement) {
 		return null;
 	}
 
@@ -130,16 +136,21 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	}
 
 	@Override
-	public EvaluableResolution visit(StatementBlock statementBlock) {
-		return null;
-	}
-
-	@Override
 	public EvaluableResolution visit(Identifier identifier) {
 		if (env.isVariableDeclared(identifier.getName())) {
 			return existingIdentifier(env, identifier);
 		} else {
 			return identifierNotFound(identifier);
 		}
+	}
+
+	@Override
+	public EvaluableResolution visit(ReadInput readInput) {
+		return null;
+	}
+
+	@Override
+	public EvaluableResolution visit(ReadEnv readEnv) {
+		return null;
 	}
 }

@@ -25,12 +25,12 @@ public class FunctionCallStatement implements Statement {
 	}
 
 	@Override
-	public Pair<Integer, Integer> getStart() {
+	public Pair<Integer, Integer> start() {
 		return start;
 	}
 
 	@Override
-	public Pair<Integer, Integer> getEnd() {
+	public Pair<Integer, Integer> end() {
 		return end;
 	}
 

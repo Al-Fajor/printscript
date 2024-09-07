@@ -66,6 +66,16 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 		}
 	}
 
+	@Override
+	public EvaluationResult visit(ReadInput readInput) {
+		return null;
+	}
+
+	@Override
+	public EvaluationResult visit(ReadEnv readEnv) {
+		return null;
+	}
+
 	private String getStringValue(Identifier identifier) {
 		return state.getStringVariable(identifier.getName()).getValue();
 	}

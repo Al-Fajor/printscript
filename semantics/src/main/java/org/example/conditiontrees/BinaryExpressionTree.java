@@ -50,8 +50,8 @@ public class BinaryExpressionTree {
 						+ " "
 						+ leftType
 						+ " ",
-				expression.getStart(),
-				expression.getEnd());
+				expression.start(),
+				expression.end());
 	}
 
 	private static String getSymbol(BinaryOperator operator) {

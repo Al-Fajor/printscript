@@ -15,7 +15,7 @@ public class DeclarationAssignmentStatementTree {
 			Environment env) {
 		if (env.isVariableDeclared(statement.getIdentifier().getName())) {
 			return EvaluableResolution.failure(
-					"Variable has already been declared", statement.getStart(), statement.getEnd());
+					"Variable has already been declared", statement.start(), statement.end());
 		} else {
 			return checkDeclaringWithValidValue(statement, assignedValueResolution);
 		}
@@ -37,8 +37,8 @@ public class DeclarationAssignmentStatementTree {
 							+ assignedType
 							+ " to variable of type "
 							+ identifierType,
-					statement.getStart(),
-					statement.getEnd());
+					statement.start(),
+					statement.end());
 		}
 	}
 }

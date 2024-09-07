@@ -13,7 +13,7 @@ public class DeclarationStatementTree {
 		String name = statement.getIdentifier().getName();
 		if (env.isVariableDeclared(name)) {
 			return EvaluableResolution.failure(
-					"Variable has already been declared", statement.getStart(), statement.getEnd());
+					"Variable has already been declared", statement.start(), statement.end());
 		} else {
 			return new EvaluableResolution(
 					SUCCESS, Optional.of(statement.getDeclarationType()), Optional.of(name));

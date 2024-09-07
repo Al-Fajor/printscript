@@ -10,4 +10,8 @@ public interface EvaluableComponentVisitor<T> {
 	T visit(Literal<?> literal);
 
 	T visit(Identifier identifier);
+
+	T visit(ReadInput readInput);
+
+	T visit(ReadEnv readEnv);
 }

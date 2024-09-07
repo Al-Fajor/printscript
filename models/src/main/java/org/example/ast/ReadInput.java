@@ -5,20 +5,32 @@ import org.example.Pair;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 
-public class Conditional implements EvaluableComponent {
-	private final AstComponent condition;
+public class ReadInput implements EvaluableComponent {
+	private final String message;
 	private final Pair<Integer, Integer> start;
 	private final Pair<Integer, Integer> end;
 
-	public Conditional(
-			AstComponent condition, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
-		this.condition = condition;
+	public ReadInput(String message, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
+		this.message = message;
 		this.start = start;
 		this.end = end;
 	}
 
-	public AstComponent getCondition() {
-		return condition;
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ReadInput literal = (ReadInput) o;
+		return Objects.equals(message, literal.message);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(message);
 	}
 
 	@Override
@@ -39,18 +51,5 @@ public class Conditional implements EvaluableComponent {
 	@Override
 	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
 		return visitor.visit(this);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(condition);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Conditional that = (Conditional) o;
-		return Objects.equals(condition, that.condition);
 	}
 }

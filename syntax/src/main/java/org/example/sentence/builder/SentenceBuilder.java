@@ -123,7 +123,7 @@ public class SentenceBuilder {
 	}
 
 	private IdentifierType getIdentifierType(Token identifier) {
-		return identifier.getType() != FUNCTION ? IdentifierType.VARIABLE : IdentifierType.FUNCTION;
+		return identifier.getType() != FUNCTION ? IdentifierType.LET : IdentifierType.FUNCTION;
 	}
 
 	private DeclarationType getDeclarationType(String type) {

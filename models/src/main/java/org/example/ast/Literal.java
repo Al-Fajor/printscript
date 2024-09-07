@@ -34,12 +34,12 @@ public class Literal<K> implements EvaluableComponent {
 	}
 
 	@Override
-	public Pair<Integer, Integer> getStart() {
+	public Pair<Integer, Integer> start() {
 		return start;
 	}
 
 	@Override
-	public Pair<Integer, Integer> getEnd() {
+	public Pair<Integer, Integer> end() {
 		return end;
 	}
 

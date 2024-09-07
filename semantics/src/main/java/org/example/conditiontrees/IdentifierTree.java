@@ -20,8 +20,8 @@ public class IdentifierTree {
 		return new EvaluableResolution(
 				new SemanticFailure(
 						"Cannot find identifier " + identifier.getName(),
-						Optional.of(identifier.getStart()),
-						Optional.of(identifier.getEnd())),
+						Optional.of(identifier.start()),
+						Optional.of(identifier.end())),
 				Optional.empty(),
 				Optional.of(identifier.getName()));
 	}

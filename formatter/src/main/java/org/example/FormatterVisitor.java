@@ -41,6 +41,11 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(IfStatement ifStatement) {
+		return "";
+	}
+
+	@Override
+	public String visit(IfElseStatement ifElseStatement) {
 		//        TODO implement
 		return "";
 	}
@@ -92,8 +97,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 				new AssignmentStatement(
 						statement.getIdentifier(),
 						statement.getEvaluableComponent(),
-						statement.getStart(),
-						statement.getEnd());
+						statement.start(),
+						statement.end());
 		List<String> combinedResults =
 				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), assignmentStatement);
 
@@ -103,8 +108,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 						statement.getDeclarationType(),
 						statement.getIdentifierType(),
 						statement.getIdentifier(),
-						statement.getStart(),
-						statement.getEnd());
+						statement.start(),
+						statement.end());
 		String left = declaration.accept(this);
 		if (right.isEmpty()) {
 			return left;
@@ -150,15 +155,18 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	@Override
-	public String visit(StatementBlock statementBlock) {
-		return statementBlock.getStatements().stream()
-				.map(statement -> statement.accept(this))
-				.collect(Collectors.joining(", "));
+	public String visit(Identifier identifier) {
+		return identifier.getName();
 	}
 
 	@Override
-	public String visit(Identifier identifier) {
-		return identifier.getName();
+	public String visit(ReadInput readInput) {
+		return "";
+	}
+
+	@Override
+	public String visit(ReadEnv readEnv) {
+		return "";
 	}
 
 	private List<String> combineStringsLists(List<List<String>> listOfLists) {

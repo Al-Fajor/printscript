@@ -10,6 +10,8 @@ public interface AstComponentVisitor<T> {
 
 	T visit(IfStatement ifStatement);
 
+	T visit(IfElseStatement ifElseStatement);
+
 	T visit(Literal<?> literal);
 
 	T visit(Parameters parameters);
@@ -22,7 +24,9 @@ public interface AstComponentVisitor<T> {
 
 	T visit(FunctionCallStatement statement);
 
-	T visit(StatementBlock statementBlock);
-
 	T visit(Identifier identifier);
+
+	T visit(ReadInput readInput);
+
+	T visit(ReadEnv readEnv);
 }
