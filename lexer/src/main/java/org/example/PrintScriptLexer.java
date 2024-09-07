@@ -7,6 +7,7 @@ import org.example.iterators.ConcatenatedIterator;
 import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
+import org.example.utils.PositionServices;
 
 public class PrintScriptLexer implements Lexer {
 
@@ -26,6 +27,8 @@ public class PrintScriptLexer implements Lexer {
 				return new LexerFailure(scanResult);
 			}
 			tokenIterators.add(tokenizer.tokenize(line, lineNumber));
+            System.out.println(PositionServices.getLines(line));
+            lineNumber += PositionServices.getLines(line) - 1;
 		}
 
 		Iterator<Token> concatenatedTokens = new ConcatenatedIterator(tokenIterators);

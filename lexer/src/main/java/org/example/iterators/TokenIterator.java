@@ -11,20 +11,21 @@ import org.example.factory.TokenPatternFactory;
 import org.example.factory.TokenRegex;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
+import org.example.utils.PositionServices;
 
 public class TokenIterator implements Iterator<Token> {
 	private final Queue<Token> tokenQueue;
 	private final Pattern pattern;
-	private final String line;
+	private final String input;
 	private final Matcher matcher;
     private final int lineNumber;
 
 	public TokenIterator(String input, int lineNumber) {
-		this.line = input;
+		this.input = input;
         this.lineNumber = lineNumber;
 		this.tokenQueue = new ArrayDeque<>();
 		this.pattern = TokenPatternFactory.createPattern(TokenRegex.getRegexMap());
-		this.matcher = pattern.matcher(line);
+		this.matcher = pattern.matcher(this.input);
 	}
 
 	@Override
@@ -43,12 +44,18 @@ public class TokenIterator implements Iterator<Token> {
 	private void addToken(Queue<Token> tokens, Matcher matcher) {
 		for (BaseTokenTypes baseTokenTypes : BaseTokenTypes.values()) {
 			if (matcher.group(baseTokenTypes.name()) != null) {
+                int currentLine = lineNumber + PositionServices.getLine(input, matcher.start());
+                System.out.println(new Token(
+                        baseTokenTypes,
+                        new Pair<>(currentLine, PositionServices.getPositionInLine(input, matcher.start()) + 1),
+                        new Pair<>(currentLine, PositionServices.getPositionInLine(input, matcher.end()) + 1),
+                        matcher.group(baseTokenTypes.name())));
 				tokens.add(
 						new Token(
-								baseTokenTypes,
-                                new Pair<>(lineNumber, matcher.start() + 1),
-                                new Pair<>(lineNumber, matcher.end() + 1),
-								matcher.group(baseTokenTypes.name())));
+                                baseTokenTypes,
+                                new Pair<>(currentLine, PositionServices.getPositionInLine(input, matcher.start()) + 1),
+                                new Pair<>(currentLine, PositionServices.getPositionInLine(input, matcher.end()) + 1),
+                                matcher.group(baseTokenTypes.name())));
 			}
 		}
 	}

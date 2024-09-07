@@ -5,6 +5,7 @@ import org.example.Pair;
 import org.example.Result;
 import org.example.lexerresult.ScanFailure;
 import org.example.lexerresult.ScanSuccess;
+import org.example.utils.PositionServices;
 
 public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 	@Override
@@ -24,34 +25,39 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 				stack.push(charAtI);
 			} else if (!isString && contains(closingChars, charAtI)) {
 				if (stack.isEmpty() || !matches(stack.peek(), charAtI)) {
+                    int currentLine = line + PositionServices.getLine(input, i);
+                    int positionInLine = line + PositionServices.getPositionInLine(input, i);
 					return new ScanFailure(
 							"Unmatched closing character '"
 									+ charAtI
 									+ "' at line "
-									+ line
+									+ currentLine
 									+ ", position "
-									+ position,
-							new Pair<>(line, position),
-							new Pair<>(line, position + 1));
+									+ positionInLine,
+							new Pair<>(currentLine, positionInLine),
+							new Pair<>(currentLine, positionInLine + 1));
 				}
 				stack.pop();
 			}
 		}
+
+        int finalLine = line + PositionServices.getLines(input);
+        int finalPosition = line + PositionServices.getPositionInLine(input, input.length());
 
 		if (!stack.isEmpty()) {
 			return new ScanFailure(
 					"Unfinished separator '"
 							+ stack.peek()
 							+ "' at line "
-							+ line
+							+ finalLine
 							+ ", position "
-							+ position
+							+ finalPosition
 							+ " to line "
-							+ line
+							+ finalLine
 							+ ", position "
-							+ (position + 1),
-					new Pair<>(line, position),
-					new Pair<>(line, position + 1));
+							+ (finalPosition + 1),
+					new Pair<>(finalLine, finalPosition),
+					new Pair<>(finalLine, finalPosition + 1));
 		}
 
 		return new ScanSuccess();

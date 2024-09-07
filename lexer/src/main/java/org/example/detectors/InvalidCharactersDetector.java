@@ -5,6 +5,7 @@ import org.example.Pair;
 import org.example.Result;
 import org.example.lexerresult.ScanFailure;
 import org.example.lexerresult.ScanSuccess;
+import org.example.utils.PositionServices;
 
 public class InvalidCharactersDetector implements LexicalErrorDetector {
 
@@ -19,20 +20,22 @@ public class InvalidCharactersDetector implements LexicalErrorDetector {
 			if (c == '\"') {
 				insideString = !insideString;
 			} else if (!insideString && invalidChars.contains(c)) {
+                int currentLine = line + PositionServices.getLine(input, i);
+                int positionInLine = line + PositionServices.getPositionInLine(input, i);
 				return new ScanFailure(
 						"Invalid character detected: '"
 								+ c
 								+ "'"
 								+ " at line "
-								+ line
+								+ currentLine
 								+ ", position "
-								+ i + 1
+								+ positionInLine + 1
 								+ " to line "
-								+ line
+								+ currentLine
 								+ ", position "
-								+ i + 2,
-						new Pair<>(line, i + 1),
-						new Pair<>(line, i  + 2));
+								+ positionInLine + 2,
+						new Pair<>(currentLine, positionInLine + 1),
+						new Pair<>(currentLine, positionInLine  + 2));
 			}
 		}
 
