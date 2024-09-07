@@ -9,20 +9,14 @@ import org.example.lexerresult.ScanSuccess;
 public class InvalidCharactersDetector implements LexicalErrorDetector {
 
 	@Override
-	public Result detect(String input) {
+	public Result detect(String input, int line) {
 		List<Character> invalidChars = List.of('!', '@', '#', '$', '%', '^', '&', '|', '\\', '?');
 		boolean insideString = false;
-		int lineNumber = 1;
-		int positionInLine = 0;
 
 		for (int i = 0; i < input.length(); i++) {
 			char c = input.charAt(i);
-			positionInLine++;
 
-			if (c == '\n') {
-				lineNumber++;
-				positionInLine = 0;
-			} else if (c == '\"') {
+			if (c == '\"') {
 				insideString = !insideString;
 			} else if (!insideString && invalidChars.contains(c)) {
 				return new ScanFailure(
@@ -30,15 +24,15 @@ public class InvalidCharactersDetector implements LexicalErrorDetector {
 								+ c
 								+ "'"
 								+ " at line "
-								+ lineNumber
+								+ line
 								+ ", position "
-								+ positionInLine
+								+ i + 1
 								+ " to line "
-								+ lineNumber
+								+ line
 								+ ", position "
-								+ (positionInLine + 1),
-						new Pair<>(lineNumber + 1, positionInLine),
-						new Pair<>(lineNumber + 1, positionInLine + 1));
+								+ i + 2,
+						new Pair<>(line, i + 1),
+						new Pair<>(line, i  + 2));
 			}
 		}
 

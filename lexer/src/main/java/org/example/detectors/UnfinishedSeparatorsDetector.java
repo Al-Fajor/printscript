@@ -8,24 +8,16 @@ import org.example.lexerresult.ScanSuccess;
 
 public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 	@Override
-	public Result detect(String input) {
+	public Result detect(String input, int line) {
 		Stack<Character> stack = new Stack<>();
 		char[] openingChars = new char[] {'(', '{', '[', '\"'};
 		char[] closingChars = new char[] {')', '}', ']', '\"'};
 		boolean isString = false;
 
-		int lines = 0;
 		int position = 0;
 		for (int i = 0; i < input.length(); i++) {
 			char charAtI = input.charAt(i);
-
-			if (charAtI == '\n') {
-				lines++;
-				position = 0;
-			} else {
-				position++;
-			}
-
+            position++;
 			if (charAtI == '\"') {
 				isString = dealWithDoubleQuotes(isString, stack, charAtI);
 			} else if (!isString && contains(openingChars, charAtI)) {
@@ -36,11 +28,11 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 							"Unmatched closing character '"
 									+ charAtI
 									+ "' at line "
-									+ lines
+									+ line
 									+ ", position "
 									+ position,
-							new Pair<>(lines + 1, position),
-							new Pair<>(lines + 1, position + 1));
+							new Pair<>(line, position),
+							new Pair<>(line, position + 1));
 				}
 				stack.pop();
 			}
@@ -51,15 +43,15 @@ public class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
 					"Unfinished separator '"
 							+ stack.peek()
 							+ "' at line "
-							+ lines
+							+ line
 							+ ", position "
 							+ position
 							+ " to line "
-							+ lines
+							+ line
 							+ ", position "
 							+ (position + 1),
-					new Pair<>(lines + 1, position),
-					new Pair<>(lines + 1, position + 1));
+					new Pair<>(line, position),
+					new Pair<>(line, position + 1));
 		}
 
 		return new ScanSuccess();
