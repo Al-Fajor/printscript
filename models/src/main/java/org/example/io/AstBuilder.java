@@ -184,7 +184,7 @@ public class AstBuilder {
 				JSONObject subObject = jsonArray.getJSONObject(0).getJSONObject("declaration");
 				return new DeclarationAssignmentStatement(
 						mapToDeclarationType(subObject.getString("declarationType")),
-						IdentifierType.LET,
+						getIdentifierType(subObject),
 						new Identifier(subObject.getString("name"), PLACEHOLDER, PLACEHOLDER),
 						mappedSecondComponent,
 						PLACEHOLDER,

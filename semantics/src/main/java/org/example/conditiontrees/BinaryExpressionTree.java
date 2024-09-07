@@ -37,6 +37,7 @@ public class BinaryExpressionTree {
 		return new EvaluableResolution(
 				SUCCESS,
 				Optional.of(lang.getResolvedType(leftType, expression.getOperator(), rightType)),
+				Optional.empty(),
 				Optional.empty());
 	}
 
@@ -65,7 +66,7 @@ public class BinaryExpressionTree {
 					throw new RuntimeException(
 							"Invalid operator: "
 									+ operator
-									+ "(EvaluableResolution return for this type yet to be implemented)");
+									+ "(EvaluableResolution return for this declarationType yet to be implemented)");
 		};
 	}
 }

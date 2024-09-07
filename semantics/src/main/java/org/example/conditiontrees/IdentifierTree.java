@@ -13,16 +13,18 @@ public class IdentifierTree {
 		return new EvaluableResolution(
 				SUCCESS,
 				Optional.of(env.getDeclarationType(identifier.getName())),
+				Optional.of(env.getIdentifierType(identifier.getName())),
 				Optional.of(identifier.getName()));
 	}
 
 	public static EvaluableResolution identifierNotFound(Identifier identifier) {
-		return new EvaluableResolution(
+		SemanticFailure failure =
 				new SemanticFailure(
 						"Cannot find identifier " + identifier.getName(),
 						Optional.of(identifier.start()),
-						Optional.of(identifier.end())),
-				Optional.empty(),
-				Optional.of(identifier.getName()));
+						Optional.of(identifier.end()));
+
+		return new EvaluableResolution(
+				failure, Optional.empty(), Optional.empty(), Optional.of(identifier.getName()));
 	}
 }
