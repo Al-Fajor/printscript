@@ -30,7 +30,7 @@ public class TokenIterator implements Iterator<Token> {
 	@Override
 	public boolean hasNext() {
 		if (matcher.find()) {
-			addToken(tokenQueue, matcher, line);
+			addToken(tokenQueue, matcher);
 		}
 		return !tokenQueue.isEmpty();
 	}
@@ -40,7 +40,7 @@ public class TokenIterator implements Iterator<Token> {
 		return tokenQueue.remove();
 	}
 
-	private void addToken(Queue<Token> tokens, Matcher matcher, String input) {
+	private void addToken(Queue<Token> tokens, Matcher matcher) {
 		for (BaseTokenTypes baseTokenTypes : BaseTokenTypes.values()) {
 			if (matcher.group(baseTokenTypes.name()) != null) {
 				tokens.add(

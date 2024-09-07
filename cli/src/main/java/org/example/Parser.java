@@ -38,9 +38,9 @@ public class Parser {
 	}
 
 	public List<AstComponent> parse(String path) {
-		String code;
+		Iterator<String> code;
 		try {
-			code = ScriptReader.readCodeFromSource(path);
+			code = ScriptReader.readCodeFromSourceByLine(path);
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not read file; got error: \n" + e);
 			return Collections.emptyList();
@@ -51,7 +51,7 @@ public class Parser {
 		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
 
 		Color.printGreen("\nPerforming syntactic analysis");
-		Iterator<Token> tokens = ((LexerSuccess) lexerResult).getTokens().iterator();
+		Iterator<Token> tokens = ((LexerSuccess) lexerResult).getTokens();
 		List<Result> syntaxResults = getSyntaxResults(tokens);
 		if (anyFailure(syntaxResults, path, "Syntax analysis")) return Collections.emptyList();
 
