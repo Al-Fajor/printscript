@@ -8,7 +8,7 @@ public class LiteralTree {
 		return switch (literal.getValue()) {
 			case String ignoredString -> DeclarationType.STRING;
 			case Number ignoredNumber -> DeclarationType.NUMBER;
-			case null -> null;
+			case Boolean ignoredNumber -> DeclarationType.BOOLEAN;
 			default -> throw new IllegalStateException("Unexpected value: " + literal.getValue());
 		};
 	}

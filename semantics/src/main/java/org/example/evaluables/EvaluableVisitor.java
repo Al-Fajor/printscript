@@ -10,9 +10,12 @@ import static org.example.conditiontrees.FunctionCallStatementTree.getInvalidRes
 import static org.example.conditiontrees.FunctionCallStatementTree.resolveEachParameter;
 import static org.example.conditiontrees.IdentifierTree.existingIdentifier;
 import static org.example.conditiontrees.IdentifierTree.identifierNotFound;
+import static org.example.conditiontrees.IfStatementTree.checkIsBooleanIdentifier;
+import static org.example.conditiontrees.IfStatementTree.resolveInnerStatements;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.example.Environment;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
@@ -49,7 +52,7 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		if (anyTypeEmpty(leftResolution, rightResolution)) {
 			throw new IllegalStateException(
-					"PrintScript does not support null values: received BinaryExpression with an empty type");
+					"Invalid AST structure: received BinaryExpression with an empty declarationType");
 		}
 
 		@SuppressWarnings({"OptionalGetWithoutIsPresent"}) // Safe because of anyTypeEmpty
@@ -63,19 +66,42 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(IfStatement ifStatement) {
-		throw new RuntimeException("Not implemented yet");
+		EvaluableVisitor visitorCopy = this.withEnv(env.copy());
+
+		EvaluableResolution[] trueClauseStatementResolutions =
+				resolveInnerStatements(visitorCopy, ifStatement.trueClause())
+						.toArray(EvaluableResolution[]::new);
+
+		return getFirstFailedResolution(trueClauseStatementResolutions)
+				.orElse(checkIsBooleanIdentifier(ifStatement.conditionalIdentifier(), env));
 	}
 
 	@Override
 	public EvaluableResolution visit(IfElseStatement ifElseStatement) {
-		return null;
+		// Copy visitor to avoid local scopes from merging with the global one
+		EvaluableVisitor trueClauseVisitor = this.withEnv(env.copy());
+		EvaluableVisitor falseClauseVisitor = this.withEnv(env.copy());
+
+		Stream<EvaluableResolution> trueClauseResolutions =
+				resolveInnerStatements(trueClauseVisitor, ifElseStatement.trueClause());
+
+		Stream<EvaluableResolution> falseClauseResolutions =
+				resolveInnerStatements(falseClauseVisitor, ifElseStatement.falseClause());
+
+		EvaluableResolution[] allResolutions =
+				Stream.concat(trueClauseResolutions, falseClauseResolutions)
+						.toArray(EvaluableResolution[]::new);
+
+		return getFirstFailedResolution(allResolutions)
+				.orElse(checkIsBooleanIdentifier(ifElseStatement.conditionalIdentifier(), env));
 	}
 
 	@Override
 	public EvaluableResolution visit(Literal<?> literal) {
 		return new EvaluableResolution(
 				SUCCESS,
-				Optional.ofNullable(LiteralTree.mapToDeclarationType(literal)),
+				Optional.of(LiteralTree.mapToDeclarationType(literal)),
+				Optional.empty(),
 				Optional.empty());
 	}
 
@@ -126,7 +152,8 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		String functionName = statement.getIdentifier().getName();
 
-		return FunctionCallStatementTree.isFunctionDeclared(env, statement, types, functionName);
+		return FunctionCallStatementTree.checkFunctionIsDeclared(
+				env, statement, types, functionName);
 	}
 
 	@Override
@@ -140,11 +167,11 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 	@Override
 	public EvaluableResolution visit(ReadInput readInput) {
-		throw new RuntimeException("Not implemented yet");
+		return EvaluableResolution.emptySuccess();
 	}
 
 	@Override
 	public EvaluableResolution visit(ReadEnv readEnv) {
-		throw new RuntimeException("Not implemented yet");
+		return EvaluableResolution.emptySuccess();
 	}
 }

@@ -16,7 +16,10 @@ public class DeclarationStatementTree {
 					"Variable has already been declared", statement.start(), statement.end());
 		} else {
 			return new EvaluableResolution(
-					SUCCESS, Optional.of(statement.getDeclarationType()), Optional.of(name));
+					SUCCESS,
+					Optional.of(statement.getDeclarationType()),
+					Optional.of(statement.getIdentifierType()),
+					Optional.of(name));
 		}
 	}
 }
