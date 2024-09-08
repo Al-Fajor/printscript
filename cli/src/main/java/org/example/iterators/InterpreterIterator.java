@@ -13,14 +13,14 @@ import java.util.Set;
 import static org.example.utils.PrintUtils.printFailedCode;
 
 public class InterpreterIterator implements Iterator<Statement> {
-    private final interpreter.SemanticAnalyzerIterator semanticIterator;
+    private final SemanticAnalyzerIterator semanticIterator;
     private final SemanticAnalyzer semanticAnalyzer = createSemanticAnalyzer();
     private final String path;
 
     public InterpreterIterator(java.util.Scanner src, String path) {
         this.path = path;
-        this.semanticIterator = new interpreter.SemanticAnalyzerIterator(
-                new interpreter.SyntaxAnalyzerIterator(src, path),
+        this.semanticIterator = new SemanticAnalyzerIterator(
+                new SyntaxAnalyzerIterator(src, path),
                 path
         );
     }

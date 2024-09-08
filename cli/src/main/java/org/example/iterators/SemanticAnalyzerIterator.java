@@ -1,3 +1,4 @@
+package org.example.iterators;
 
 import org.example.Result;
 import org.example.SyntaxAnalyzer;
@@ -13,12 +14,12 @@ import java.util.Iterator;
 import static org.example.utils.PrintUtils.printFailedCode;
 
 public class SemanticAnalyzerIterator implements Iterator<Statement> {
-    private final interpreter.SyntaxAnalyzerIterator syntaxIterator;
+    private final SyntaxAnalyzerIterator syntaxIterator;
     private final SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzerImpl();
     private final String path;
     private Statement next;
 
-    public SemanticAnalyzerIterator(interpreter.SyntaxAnalyzerIterator syntaxIterator, String path) {
+    public SemanticAnalyzerIterator(SyntaxAnalyzerIterator syntaxIterator, String path) {
         this.syntaxIterator = syntaxIterator;
         this.path = path;
     }
@@ -35,7 +36,7 @@ public class SemanticAnalyzerIterator implements Iterator<Statement> {
 
         return switch (result) {
             case SyntaxError failure -> {
-                stepFailed(path, result, "Syntax Analysis");
+                stepFailed(path, failure, "Syntax Analysis");
                 yield false;
             }
             case SyntaxSuccess success -> {
@@ -48,8 +49,6 @@ public class SemanticAnalyzerIterator implements Iterator<Statement> {
 
     @Override
     public Statement next() {
-//        isBufferedForInterpreter = !isBufferedForInterpreter;
-
         return next;
     }
 

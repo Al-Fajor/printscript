@@ -15,83 +15,82 @@ import org.example.result.SyntaxSuccess;
 import org.example.token.Token;
 
 public class Parser {
-	ProgressBarObserver observer = new ProgressBarObserver();
+//	ProgressBarObserver observer = new ProgressBarObserver();
+//
+//	SyntaxAnalyzer syntaxAnalyzer;
+//
+//	{
+//		syntaxAnalyzer = new SyntaxAnalyzerImpl();
+//		syntaxAnalyzer.addObserver(observer);
+//	}
+//
+//	SemanticAnalyzer semanticAnalyzer;
+//
+//	{
+//		MapEnvironment env =
+//				new MapEnvironment(
+//						new HashMap<>(),
+//						Set.of(
+//								new Signature("println", List.of(DeclarationType.NUMBER)),
+//								new Signature("println", List.of(DeclarationType.STRING))));
+//		semanticAnalyzer = new SemanticAnalyzerImpl(env);
+//		semanticAnalyzer.addObserver(observer);
+//	}
 
-	Lexer lexer = new PrintScriptLexer();
-	SyntaxAnalyzer syntaxAnalyzer;
-
-	{
-		syntaxAnalyzer = new SyntaxAnalyzerImpl();
-		syntaxAnalyzer.addObserver(observer);
-	}
-
-	SemanticAnalyzer semanticAnalyzer;
-
-	{
-		MapEnvironment env =
-				new MapEnvironment(
-						new HashMap<>(),
-						Set.of(
-								new Signature("println", List.of(DeclarationType.NUMBER)),
-								new Signature("println", List.of(DeclarationType.STRING))));
-		semanticAnalyzer = new SemanticAnalyzerImpl(env);
-		semanticAnalyzer.addObserver(observer);
-	}
-
-	public List<Statement> parse(String path) {
-		Scanner codeScanner;
-		try {
-			codeScanner = ScriptReader.readCodeFromSourceByLine(path);
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not read file; got error: \n" + e);
-			return Collections.emptyList();
-		}
-
-		Color.printGreen("\nPerforming lexical analysis");
-		Result lexerResult = lexer.lex(codeScanner.useDelimiter("(?<=}|;)"));
-		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
-		codeScanner.close();
-
-		Color.printGreen("\nPerforming syntactic analysis");
-		Iterator<Token> tokens = ((LexerSuccess) lexerResult).getTokens();
-		List<Result> syntaxResults = getSyntaxResults(tokens);
-		if (anyFailure(syntaxResults, path, "Syntax analysis")) return Collections.emptyList();
-
-		List<Statement> components =
-				syntaxResults.stream()
-						.map(result -> ((SyntaxSuccess) result).getStatement())
-						.collect(Collectors.toList());
-
-		Color.printGreen("\nPerforming semantic analysis");
-		Iterator<Statement> syntaxOutputIterator = components.iterator();
-		while (syntaxOutputIterator.hasNext()) {
-			Result semanticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
-			if (stepFailed(path, semanticResult, "Semantic Analysis"))
-				return Collections.emptyList();
-		}
-
-		return components;
-	}
-
-	private boolean anyFailure(List<Result> allResults, String path, String stepName) {
-		return allResults.stream()
-				.anyMatch(currentResult -> stepFailed(path, currentResult, stepName));
-	}
-
-	private List<Result> getSyntaxResults(Iterator<Token> tokens) {
-		List<Result> results = new ArrayList<>();
-		while (tokens.hasNext()) {
-			results.add(syntaxAnalyzer.analyze(tokens));
-		}
-		return results;
-	}
-
-	private static boolean stepFailed(String path, Result result, String stepName) {
-		if (!result.isSuccessful()) {
-			System.out.println(stepName + " failed with error: '" + result.errorMessage() + "'");
-			printFailedCode(path, result, stepName);
-			return true;
-		}
-		return false;
-	}
+//	public List<Statement> parse(String path) {
+//		Scanner codeScanner;
+//		try {
+//			codeScanner = ScriptReader.readCodeFromSourceByLine(path);
+//		} catch (FileNotFoundException e) {
+//			System.out.println("Could not read file; got error: \n" + e);
+//			return Collections.emptyList();
+//		}
+//
+//		Color.printGreen("\nPerforming lexical analysis");
+//		Result lexerResult = lexer.lex(codeScanner.useDelimiter("(?<=}|;)"));
+//		if (stepFailed(path, lexerResult, "Lexing")) return Collections.emptyList();
+//		codeScanner.close();
+//
+//		Color.printGreen("\nPerforming syntactic analysis");
+//		Iterator<Token> tokens = ((LexerSuccess) lexerResult).getTokens();
+//		List<Result> syntaxResults = getSyntaxResults(tokens);
+//		if (anyFailure(syntaxResults, path, "Syntax analysis")) return Collections.emptyList();
+//
+//		List<Statement> components =
+//				syntaxResults.stream()
+//						.map(result -> ((SyntaxSuccess) result).getStatement())
+//						.collect(Collectors.toList());
+//
+//		Color.printGreen("\nPerforming semantic analysis");
+//		Iterator<Statement> syntaxOutputIterator = components.iterator();
+//		while (syntaxOutputIterator.hasNext()) {
+//			Result semanticResult = semanticAnalyzer.analyze(syntaxOutputIterator);
+//			if (stepFailed(path, semanticResult, "Semantic Analysis"))
+//				return Collections.emptyList();
+//		}
+//
+//		return components;
+//	}
+//
+//	private boolean anyFailure(List<Result> allResults, String path, String stepName) {
+//		return allResults.stream()
+//				.anyMatch(currentResult -> stepFailed(path, currentResult, stepName));
+//	}
+//
+//	private List<Result> getSyntaxResults(Iterator<Token> tokens) {
+//		List<Result> results = new ArrayList<>();
+//		while (tokens.hasNext()) {
+//			results.add(syntaxAnalyzer.analyze(tokens));
+//		}
+//		return results;
+//	}
+//
+//	private static boolean stepFailed(String path, Result result, String stepName) {
+//		if (!result.isSuccessful()) {
+//			System.out.println(stepName + " failed with error: '" + result.errorMessage() + "'");
+//			printFailedCode(path, result, stepName);
+//			return true;
+//		}
+//		return false;
+//	}
 }

@@ -20,7 +20,6 @@ public class PullInterpreter{
 
     public void execute(Scanner src, String version, String path) {
         if(!version.equals("1.0")) return;
-
 //        new Scanner(src).useDelimiter("\\A");
         processLines(src, path);
     }

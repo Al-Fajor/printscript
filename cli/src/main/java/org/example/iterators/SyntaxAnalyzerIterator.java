@@ -1,4 +1,4 @@
-package interpreter;
+package org.example.iterators;
 
 import org.example.Lexer;
 import org.example.PrintScriptLexer;
@@ -8,7 +8,6 @@ import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
 
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Scanner;
 

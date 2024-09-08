@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.Callable;
 import org.example.Formatter;
-import org.example.Parser;
 import org.example.PrintScriptFormatter;
 import org.example.ast.AstComponent;
 import org.example.ast.statement.Statement;
@@ -37,8 +36,6 @@ public class FormattingCommand implements Callable<Integer> {
 			description = "The path to the formatting configuration file")
 	private String configPath;
 
-	private final Parser parser = new Parser();
-
 	@Override
 	public Integer call() {
 		String configPathOrDefault = getAbsolutePath();
@@ -48,12 +45,7 @@ public class FormattingCommand implements Callable<Integer> {
 
 //        TODO change this later
         Scanner scanner;
-        try {
-            scanner = ScriptReader.readCodeFromSourceByLine(filePath);
-        } catch (Exception e) {
-            System.out.println("Could not read file; got error: \n" + e);
-            return 0;
-        }
+        scanner = ScriptReader.readCodeFromSourceByLine(filePath);
         Iterator<Statement> statements =  new InterpreterIterator(scanner, filePath);
 
 		Color.printGreen("\nRunning formatter...");

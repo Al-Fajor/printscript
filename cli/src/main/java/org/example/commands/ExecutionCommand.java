@@ -3,7 +3,6 @@ package org.example.commands;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import org.example.Interpreter;
-import org.example.Parser;
 import org.example.factory.InterpreterFactory;
 import org.example.io.ScriptReader;
 import org.example.PullInterpreter;
@@ -16,7 +15,7 @@ import picocli.CommandLine;
 		description =
 				"Looks for lexical, syntactic or semantic errors in the file and executes the code")
 public class ExecutionCommand implements Callable<Integer> {
-	Parser parser = new Parser();
+//	Parser parser = new Parser();
 	Interpreter interpreter;
 
 	{
@@ -30,13 +29,7 @@ public class ExecutionCommand implements Callable<Integer> {
 	@Override
 	public Integer call() {
         PullInterpreter pullInterpreter = new PullInterpreter();
-        Scanner scanner;
-        try {
-            scanner = ScriptReader.readCodeFromSourceByLine(file);
-        } catch (Exception e) {
-            System.out.println("Could not read file; got error: \n" + e);
-            return 0;
-        }
+        Scanner scanner = ScriptReader.readCodeFromSourceByLine(file);
         pullInterpreter.execute(scanner, "1.0", file);
 //		List<Statement> astList = parser.parse(file);
 //
