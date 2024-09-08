@@ -1,16 +1,15 @@
 package org.example;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.stream.Stream;
 import org.example.test.TestBuilder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SyntaxTest extends TestBuilder {
 	SyntaxTestProvider testProvider = new SyntaxTestProvider();

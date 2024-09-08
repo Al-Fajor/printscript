@@ -1,5 +1,10 @@
 package org.example.sentence.builder;
 
+import static org.example.token.BaseTokenTypes.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.*;
@@ -10,12 +15,6 @@ import org.example.sentence.validator.validity.rule.*;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 import org.example.token.TokenType;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.example.token.BaseTokenTypes.*;
 
 public class SentenceBuilder {
 	public Pair<Optional<Statement>, String> buildSentence(List<Token> tokens) {
@@ -94,9 +93,9 @@ public class SentenceBuilder {
 						? new Literal<>(null, semicolon.getStart(), semicolon.getEnd())
 						: mapper.buildExpression(tokens.subList(5, tokens.size())).getFirst();
 
-    if(identifierType == IdentifierType.CONST && isSemicolon){
-      return new Pair<>(null, "Cannot declare a CONST as null");
-    }
+		if (identifierType == IdentifierType.CONST && isSemicolon) {
+			return new Pair<>(null, "Cannot declare a CONST as null");
+		}
 
 		Pair<Integer, Integer> start = tokens.getFirst().getStart();
 		Pair<Integer, Integer> end = semicolon.getEnd();
@@ -129,21 +128,28 @@ public class SentenceBuilder {
 	}
 
 	private IdentifierType getIdentifierType(Token identifier) {
-    Map<TokenType, IdentifierType> types =
-      Map.of(
-        BaseTokenTypes.LET, IdentifierType.LET,
-        FUNCTION, IdentifierType.FUNCTION,
-        CONST, IdentifierType.CONST);
+		Map<TokenType, IdentifierType> types =
+				Map.of(
+						BaseTokenTypes.LET,
+						IdentifierType.LET,
+						FUNCTION,
+						IdentifierType.FUNCTION,
+						CONST,
+						IdentifierType.CONST);
 		return types.get(identifier.getType());
 	}
 
 	private DeclarationType getDeclarationType(String type) {
 		Map<String, DeclarationType> declarationTypeMap =
 				Map.of(
-						"number", DeclarationType.NUMBER,
-						"string", DeclarationType.STRING,
-						"function", DeclarationType.FUNCTION,
-          "boolean", DeclarationType.BOOLEAN);
+						"number",
+						DeclarationType.NUMBER,
+						"string",
+						DeclarationType.STRING,
+						"function",
+						DeclarationType.FUNCTION,
+						"boolean",
+						DeclarationType.BOOLEAN);
 		return declarationTypeMap.get(type.toLowerCase());
 	}
 

@@ -1,5 +1,11 @@
 package org.example.sentence.mapper;
 
+import static org.example.token.BaseTokenTypes.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 import org.example.ast.BinaryOperator;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Identifier;
@@ -8,13 +14,6 @@ import org.example.sentence.builder.ExpressionBuilder;
 import org.example.sentence.reader.TokenReader;
 import org.example.token.Token;
 import org.example.token.TokenType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import static org.example.token.BaseTokenTypes.*;
 
 public class TokenMapper {
 	public List<EvaluableComponent> buildExpression(List<Token> tokens) {

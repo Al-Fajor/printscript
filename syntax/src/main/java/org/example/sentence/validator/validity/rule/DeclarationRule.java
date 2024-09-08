@@ -1,8 +1,8 @@
 package org.example.sentence.validator.validity.rule;
 
-import org.example.token.Token;
-
 import static org.example.token.BaseTokenTypes.*;
+
+import org.example.token.Token;
 
 public class DeclarationRule implements ValidityRule {
 	@Override
