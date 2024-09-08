@@ -2,7 +2,6 @@ package org.example.commands;
 
 import java.util.Scanner;
 import java.util.concurrent.Callable;
-import org.example.Parser;
 import org.example.io.ScriptReader;
 import org.example.PullInterpreter;
 import picocli.CommandLine;
