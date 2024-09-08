@@ -23,7 +23,7 @@ public class InterpreterIterator implements Iterator<Statement> {
 	private final String path;
 
 	public InterpreterIterator(java.util.Scanner src, String path, String version) {
-        this.path = path;
+		this.path = path;
 		this.semanticIterator =
 				new SemanticAnalyzerIterator(new SyntaxAnalyzerIterator(src, path, version), path);
 	}

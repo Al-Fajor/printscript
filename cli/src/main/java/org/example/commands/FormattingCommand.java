@@ -46,7 +46,7 @@ public class FormattingCommand implements Callable<Integer> {
 		//        TODO change this later
 		Scanner scanner;
 		scanner = ScriptReader.readCodeFromSourceByLine(filePath);
-//        TODO change this
+		//        TODO change this
 		Iterator<Statement> statements = new InterpreterIterator(scanner, filePath, "1.0");
 
 		String formattedCode = runFormatter(formatter, statements);
@@ -82,10 +82,10 @@ public class FormattingCommand implements Callable<Integer> {
 		return new PrintScriptFormatter(ruleFactoryWithCustomPath);
 	}
 
-    private String runFormatter(Formatter formatter, Iterator<Statement> statements) {
-        Color.printGreen("\nRunning formatter...");
-        String formattedCode = formatter.format(toAstList(statements));
-        System.out.println(formattedCode);
-        return formattedCode;
-    }
+	private String runFormatter(Formatter formatter, Iterator<Statement> statements) {
+		Color.printGreen("\nRunning formatter...");
+		String formattedCode = formatter.format(toAstList(statements));
+		System.out.println(formattedCode);
+		return formattedCode;
+	}
 }

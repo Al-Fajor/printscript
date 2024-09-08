@@ -18,7 +18,6 @@ public class PullInterpreter {
 	}
 
 	public void execute(Scanner src, String version, String path) {
-        interpreter.interpret(new InterpreterIterator(src, path, version));
+		interpreter.interpret(new InterpreterIterator(src, path, version));
 	}
-
 }
