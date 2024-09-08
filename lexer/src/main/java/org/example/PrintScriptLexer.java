@@ -10,6 +10,11 @@ import org.example.token.Token;
 import org.example.utils.PositionServices;
 
 public class PrintScriptLexer implements Lexer {
+    private final String version;
+
+    public PrintScriptLexer(String version) {
+        this.version = version;
+    }
 
 	@Override
 	public Result lex(Iterator<String> input) {
@@ -22,7 +27,7 @@ public class PrintScriptLexer implements Lexer {
 		while (input.hasNext()) {
 			lineNumber++;
 			String line = input.next();
-			Result scanResult = scanner.scan(line, lineNumber);
+			Result scanResult = scanner.scan(line, lineNumber, version);
 			if (!scanResult.isSuccessful()) {
 				return new LexerFailure(scanResult);
 			}

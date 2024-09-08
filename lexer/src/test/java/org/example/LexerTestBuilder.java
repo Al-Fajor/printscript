@@ -12,7 +12,7 @@ import org.example.utils.StringToIterator;
 public class LexerTestBuilder {
 
 	public void testTokenDetection(String filePath) throws IOException {
-		Lexer lexer = new PrintScriptLexer();
+		Lexer lexer = new PrintScriptLexer("1.0");
 		FileParser fp = new FileParser();
 		Iterator<Token> expectedList = fp.getTokens(filePath).iterator();
 		Result result = lexer.lex(StringToIterator.convert(fp.getCode(filePath)));
@@ -37,7 +37,7 @@ public class LexerTestBuilder {
 	}
 
 	public void testLexicalErrorDetection(String filePath) throws IOException {
-		Lexer lexer = new PrintScriptLexer();
+		Lexer lexer = new PrintScriptLexer("1.1");
 		FileParser fp = new FileParser();
 		Result result = lexer.lex(StringToIterator.convert(fp.getCode(filePath)));
 		assertFalse(result.isSuccessful());
