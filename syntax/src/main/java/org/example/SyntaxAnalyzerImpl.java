@@ -57,7 +57,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		List<Token> sentences = new ArrayList<>();
 		Token current = tokens.next();
 		sentences.add(current);
-		while (current.getType() != SEMICOLON) {
+		while (current.getType() != SEMICOLON && tokens.hasNext()) {
 			Token toAdd = tokens.next();
 			sentences.add(toAdd);
 			current = toAdd;
