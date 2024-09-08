@@ -1,12 +1,12 @@
 package org.example.commands;
 
-import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
 import org.example.Interpreter;
 import org.example.Parser;
-import org.example.ast.statement.Statement;
 import org.example.factory.InterpreterFactory;
-import org.example.io.Color;
+import org.example.io.ScriptReader;
+import org.example.PullInterpreter;
 import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
 import picocli.CommandLine;
@@ -29,15 +29,24 @@ public class ExecutionCommand implements Callable<Integer> {
 
 	@Override
 	public Integer call() {
-		List<Statement> astList = parser.parse(file);
-
-		if (!astList.isEmpty()) {
-			System.out.println("\nCompleted validation successfully. No errors found.");
-
-			Color.printGreen("\nRunning...");
-			interpreter.interpret(astList.iterator());
-			return 0;
-		}
+        PullInterpreter pullInterpreter = new PullInterpreter();
+        Scanner scanner;
+        try {
+            scanner = ScriptReader.readCodeFromSourceByLine(file);
+        } catch (Exception e) {
+            System.out.println("Could not read file; got error: \n" + e);
+            return 0;
+        }
+        pullInterpreter.execute(scanner, "1.0", file);
+//		List<Statement> astList = parser.parse(file);
+//
+//		if (!astList.isEmpty()) {
+//			System.out.println("\nCompleted validation successfully. No errors found.");
+//
+//			Color.printGreen("\nRunning...");
+//			interpreter.interpret(astList.iterator());
+//			return 0;
+//		}
 
 		return 1;
 	}
