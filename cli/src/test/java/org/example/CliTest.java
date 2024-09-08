@@ -56,13 +56,10 @@ class CliTest extends TestBuilder {
 			String output = outputStream.toString();
 
 			expectedOutput.forEach(
-					outputSegment ->{
-                        boolean a = output.contains(outputSegment);
+					outputSegment ->
                         assertTrue(
                                 output.contains(outputSegment),
-                                "Could not find '" + outputSegment + "' in:\n" + output);
-                    }
-							);
+                                "Could not find '" + outputSegment + "' in:\n" + output));
 		};
 	}
 

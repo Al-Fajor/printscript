@@ -1,4 +1,3 @@
-package interpreter;
 
 import org.example.Result;
 import org.example.SyntaxAnalyzer;
@@ -8,7 +7,6 @@ import org.example.io.Color;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
-import org.xml.sax.ErrorHandler;
 
 import java.util.Iterator;
 
