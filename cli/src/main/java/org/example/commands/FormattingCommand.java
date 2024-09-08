@@ -46,11 +46,10 @@ public class FormattingCommand implements Callable<Integer> {
 		//        TODO change this later
 		Scanner scanner;
 		scanner = ScriptReader.readCodeFromSourceByLine(filePath);
-		Iterator<Statement> statements = new InterpreterIterator(scanner, filePath);
+//        TODO change this
+		Iterator<Statement> statements = new InterpreterIterator(scanner, filePath, "1.0");
 
-		Color.printGreen("\nRunning formatter...");
-		String formattedCode = formatter.format(toAstList(statements));
-		System.out.println(formattedCode);
+		String formattedCode = runFormatter(formatter, statements);
 
 		overwriteOriginalFile(formattedCode);
 
@@ -82,4 +81,11 @@ public class FormattingCommand implements Callable<Integer> {
 		var ruleFactoryWithCustomPath = new RuleFactoryWithCustomPath(configPathOrDefault);
 		return new PrintScriptFormatter(ruleFactoryWithCustomPath);
 	}
+
+    private String runFormatter(Formatter formatter, Iterator<Statement> statements) {
+        Color.printGreen("\nRunning formatter...");
+        String formattedCode = formatter.format(toAstList(statements));
+        System.out.println(formattedCode);
+        return formattedCode;
+    }
 }

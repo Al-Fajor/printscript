@@ -14,12 +14,13 @@ import org.example.token.Token;
 
 public class SyntaxAnalyzerIterator implements Iterator<Token> {
 	Scanner scanner;
-	private final Lexer lexer = new PrintScriptLexer();
+	private final Lexer lexer;
 	Iterator<Token> tokenBufferIterator = new EmptyIterator();
 	private final String path;
 
-	public SyntaxAnalyzerIterator(Scanner src, String path) {
-		this.path = path;
+	public SyntaxAnalyzerIterator(Scanner src, String path, String version) {
+        this.lexer = new PrintScriptLexer();
+        this.path = path;
 		this.scanner = src.useDelimiter("(?<=}|;)");
 	}
 

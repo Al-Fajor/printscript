@@ -18,12 +18,7 @@ public class PullInterpreter {
 	}
 
 	public void execute(Scanner src, String version, String path) {
-		if (!version.equals("1.0")) return;
-		//        new Scanner(src).useDelimiter("\\A");
-		processLines(src, path);
+        interpreter.interpret(new InterpreterIterator(src, path, version));
 	}
 
-	private void processLines(Scanner src, String path) {
-		interpreter.interpret(new InterpreterIterator(src, path));
-	}
 }

@@ -22,10 +22,10 @@ public class InterpreterIterator implements Iterator<Statement> {
 	private final SemanticAnalyzer semanticAnalyzer = createSemanticAnalyzer();
 	private final String path;
 
-	public InterpreterIterator(java.util.Scanner src, String path) {
-		this.path = path;
+	public InterpreterIterator(java.util.Scanner src, String path, String version) {
+        this.path = path;
 		this.semanticIterator =
-				new SemanticAnalyzerIterator(new SyntaxAnalyzerIterator(src, path), path);
+				new SemanticAnalyzerIterator(new SyntaxAnalyzerIterator(src, path, version), path);
 	}
 
 	private SemanticAnalyzer createSemanticAnalyzer() {
