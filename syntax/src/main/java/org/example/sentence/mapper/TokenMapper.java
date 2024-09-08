@@ -1,11 +1,5 @@
 package org.example.sentence.mapper;
 
-import static org.example.token.BaseTokenTypes.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 import org.example.ast.BinaryOperator;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Identifier;
@@ -14,6 +8,13 @@ import org.example.sentence.builder.ExpressionBuilder;
 import org.example.sentence.reader.TokenReader;
 import org.example.token.Token;
 import org.example.token.TokenType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import static org.example.token.BaseTokenTypes.*;
 
 public class TokenMapper {
 	public List<EvaluableComponent> buildExpression(List<Token> tokens) {
@@ -27,11 +28,13 @@ public class TokenMapper {
 		if (token.getType() != SEPARATOR) {
 			return false;
 		}
-		if (separatorType.equals("opening")) {
-			return List.of("(", "{").contains(new TokenMapper().clearInvCommas(token.getValue()));
+		if (separatorType.contains("opening")) {
+			String value = new TokenMapper().clearInvCommas(token.getValue());
+			return separatorType.contains("parenthesis") ? value.equals("(") : value.equals("{");
 		}
-		if (separatorType.equals("closing")) {
-			return List.of(")", "}").contains(new TokenMapper().clearInvCommas(token.getValue()));
+		if (separatorType.contains("closing")) {
+			String value = new TokenMapper().clearInvCommas(token.getValue());
+			return separatorType.contains("parenthesis") ? value.equals(")") : value.equals("}");
 		}
 		return false;
 	}
@@ -52,6 +55,10 @@ public class TokenMapper {
 
 	public Literal<?> translateToLiteral(Token token) {
 		String value = token.getValue();
+		boolean isBoolean = value.equals("true") || value.equals("false");
+		if (isBoolean) {
+			return new Literal<>(value.equals("true"), token.getStart(), token.getEnd());
+		}
 		if (value.contains("\"") || !isNumeric(value)) {
 			return new Literal<>(clearInvCommas(value), token.getStart(), token.getEnd());
 		}

@@ -1,19 +1,21 @@
 package org.example;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.stream.Stream;
 import org.example.test.TestBuilder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class SyntaxTest extends TestBuilder {
 	SyntaxTestProvider testProvider = new SyntaxTestProvider();
-	private static final String TEST_CASES = "src/test/resources/test_cases";
+	private static final String TEST_CASES_1_0 = "src/test/resources/test_cases/1.0";
+	private static final String TEST_CASES_1_1 = "src/test/resources/test_cases/1.1";
 	private static final String runOnly = "";
 
 	public SyntaxTest() {
@@ -21,13 +23,18 @@ public class SyntaxTest extends TestBuilder {
 	}
 
 	@TestFactory
-	protected Stream<DynamicTest> testAllDirectoryCases() {
-		return super.testAllDirectoryCases(TEST_CASES);
+	protected Stream<DynamicTest> testFirstVersionCases() {
+		return super.testAllDirectoryCases(TEST_CASES_1_0);
+	}
+
+	@TestFactory
+	protected Stream<DynamicTest> testOneDotOneVersionCases() {
+		return super.testAllDirectoryCases(TEST_CASES_1_1);
 	}
 
 	@Test
 	public void debug() throws IOException {
-		test("number_reassignation.json");
+		test(TEST_CASES_1_1 + "/" + "const_assignation.json");
 	}
 
 	@Override
@@ -42,6 +49,6 @@ public class SyntaxTest extends TestBuilder {
 	}
 
 	private void test(String filePath) throws IOException {
-		assertTrue(testProvider.testSyntax(TEST_CASES + "/" + filePath));
+		assertTrue(testProvider.testSyntax(filePath));
 	}
 }

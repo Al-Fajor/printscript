@@ -1,14 +1,13 @@
 package org.example.sentence.validator.validity.rule;
 
-import static org.example.token.BaseTokenTypes.IDENTIFIER;
-import static org.example.token.BaseTokenTypes.LET;
-
 import org.example.token.Token;
+
+import static org.example.token.BaseTokenTypes.*;
 
 public class DeclarationRule implements ValidityRule {
 	@Override
 	public boolean isValidRule(Token token, Token nextToken) {
-		if (token.getType() != LET) return true;
+		if (token.getType() != LET || token.getType() != CONST) return true;
 		return nextToken.getType() == IDENTIFIER;
 	}
 

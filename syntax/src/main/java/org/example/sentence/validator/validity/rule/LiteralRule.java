@@ -12,7 +12,7 @@ public class LiteralRule implements ValidityRule {
 		if (token.getType() != LITERAL) return true;
 		TokenMapper mapper = new TokenMapper();
 		return List.of(OPERATOR, SEMICOLON, SEPARATOR).contains(nextToken.getType())
-				|| mapper.matchesSeparatorType(nextToken, "closing");
+				|| mapper.matchesSeparatorType(nextToken, "closing parenthesis");
 	}
 
 	@Override

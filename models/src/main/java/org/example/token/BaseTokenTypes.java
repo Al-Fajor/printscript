@@ -14,7 +14,7 @@ public enum BaseTokenTypes implements TokenType {
 	PRINTLN,
 	SEPARATOR,
 	FUNCTION,
-    CONST,
-    READENV,
-    READINPUT
+	CONST,
+	READENV,
+	READINPUT
 }
