@@ -25,24 +25,24 @@ public class ScaTester {
 		String configPath = json.getString("config");
 		JSONArray cases = json.getJSONArray("cases");
 
-        for (int i = 0; i < cases.length(); i++) {
-            Lexer lexer = new PrintScriptLexer();
-            PrintScriptSca analyzer = new PrintScriptSca(getStream(configPath));
-            JSONObject testCase = cases.getJSONObject(i);
+		for (int i = 0; i < cases.length(); i++) {
+			Lexer lexer = new PrintScriptLexer();
+			PrintScriptSca analyzer = new PrintScriptSca(getStream(configPath));
+			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");
 			List<Result> expectedResults = getExpectedResults(testCase);
 			List<String> linesWithNewlines = Arrays.stream(code.split("(?<=\n)")).toList();
-            Iterator<String> lines = linesWithNewlines.iterator();
-            List<Result> results = new ArrayList<>();
-            while (lines.hasNext()) {
-                Result lexerResult = lexer.lex(lines);
-                if (!lexerResult.isSuccessful()) {
-                    throw new RuntimeException("Lexer failed: " + lexerResult);
-                }
-                Iterator<Token> tokenIterator = ((LexerSuccess) lexerResult).getTokens();
-                results.addAll(analyzer.analyze(tokenIterator));
-            }
-            compareResults(expectedResults, filterResults(results));
+			Iterator<String> lines = linesWithNewlines.iterator();
+			List<Result> results = new ArrayList<>();
+			while (lines.hasNext()) {
+				Result lexerResult = lexer.lex(lines);
+				if (!lexerResult.isSuccessful()) {
+					throw new RuntimeException("Lexer failed: " + lexerResult);
+				}
+				Iterator<Token> tokenIterator = ((LexerSuccess) lexerResult).getTokens();
+				results.addAll(analyzer.analyze(tokenIterator));
+			}
+			compareResults(expectedResults, filterResults(results));
 		}
 	}
 
@@ -87,26 +87,24 @@ public class ScaTester {
 		assertTrue(expectedResults.containsAll(results));
 	}
 
+	private List<Result> filterResults(List<Result> results) {
+		List<Result> filteredResults = new ArrayList<>();
 
-    private List<Result> filterResults(List<Result> results) {
-        List<Result> filteredResults = new ArrayList<>();
+		for (Result result : results) {
+			if (result instanceof FailResult) {
+				filteredResults.add(result);
+			}
+		}
 
-        for (Result result : results) {
-            if (result instanceof FailResult) {
-                filteredResults.add(result);
-            }
-        }
+		if (filteredResults.isEmpty()) {
+			for (Result result : results) {
+				if (result instanceof SuccessResult) {
+					filteredResults.add(result);
+					break;
+				}
+			}
+		}
 
-        if (filteredResults.isEmpty()) {
-            for (Result result : results) {
-                if (result instanceof SuccessResult) {
-                    filteredResults.add(result);
-                    break;
-                }
-            }
-        }
-
-        return filteredResults;
-    }
-
+		return filteredResults;
+	}
 }

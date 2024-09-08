@@ -2,8 +2,8 @@ package org.example.commands;
 
 import java.util.Scanner;
 import java.util.concurrent.Callable;
-import org.example.io.ScriptReader;
 import org.example.PullInterpreter;
+import org.example.io.ScriptReader;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -21,16 +21,16 @@ public class ValidationCommand implements Callable<Integer> {
 
 	@Override
 	public Integer call() {
-        PullInterpreter pullInterpreter = new PullInterpreter();
-        Scanner scanner = ScriptReader.readCodeFromSourceByLine(file);
-        pullInterpreter.execute(scanner, "1.0", file);
+		PullInterpreter pullInterpreter = new PullInterpreter();
+		Scanner scanner = ScriptReader.readCodeFromSourceByLine(file);
+		pullInterpreter.execute(scanner, "1.0", file);
 
-//		List<Statement> astList = parser.parse(file);
-//
-//		if (!astList.isEmpty()) {
-//			System.out.println("Completed validation successfully. No errors found.");
-//			return 0;
-//		}
+		//		List<Statement> astList = parser.parse(file);
+		//
+		//		if (!astList.isEmpty()) {
+		//			System.out.println("Completed validation successfully. No errors found.");
+		//			return 0;
+		//		}
 
 		return 1;
 	}

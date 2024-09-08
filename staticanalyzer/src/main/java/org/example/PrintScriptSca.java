@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.example.lexerresult.LexerSuccess;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 

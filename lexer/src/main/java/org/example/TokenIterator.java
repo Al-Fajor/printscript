@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.example.factory.TokenPatternFactory;
 import org.example.factory.TokenRegex;
 import org.example.token.BaseTokenTypes;

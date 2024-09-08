@@ -43,10 +43,10 @@ public class FormattingCommand implements Callable<Integer> {
 
 		Formatter formatter = getFormatter(configPathOrDefault);
 
-//        TODO change this later
-        Scanner scanner;
-        scanner = ScriptReader.readCodeFromSourceByLine(filePath);
-        Iterator<Statement> statements =  new InterpreterIterator(scanner, filePath);
+		//        TODO change this later
+		Scanner scanner;
+		scanner = ScriptReader.readCodeFromSourceByLine(filePath);
+		Iterator<Statement> statements = new InterpreterIterator(scanner, filePath);
 
 		Color.printGreen("\nRunning formatter...");
 		String formattedCode = formatter.format(toAstList(statements));
@@ -57,13 +57,13 @@ public class FormattingCommand implements Callable<Integer> {
 		return 0;
 	}
 
-    private List<AstComponent> toAstList(Iterator<Statement> statementIterator) {
-        List<AstComponent> statementList = new ArrayList<>();
-        while (statementIterator.hasNext()) {
-            statementList.add( statementIterator.next());
-        }
-        return statementList;
-    }
+	private List<AstComponent> toAstList(Iterator<Statement> statementIterator) {
+		List<AstComponent> statementList = new ArrayList<>();
+		while (statementIterator.hasNext()) {
+			statementList.add(statementIterator.next());
+		}
+		return statementList;
+	}
 
 	private void overwriteOriginalFile(String formattedCode) {
 		try {
