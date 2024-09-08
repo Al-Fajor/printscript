@@ -1,16 +1,15 @@
 package org.example.commands;
 
-import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
-import org.example.Parser;
-import org.example.ast.statement.Statement;
+import org.example.PullInterpreter;
+import org.example.io.ScriptReader;
 import picocli.CommandLine;
 
 @CommandLine.Command(
 		name = "validate",
 		description = "Looks for lexical, syntactic or semantic errors in the file")
 public class ValidationCommand implements Callable<Integer> {
-	Parser parser = new Parser();
 
 	@CommandLine.Parameters(index = "0", description = "The file to be validated.")
 	private String file;
@@ -22,12 +21,16 @@ public class ValidationCommand implements Callable<Integer> {
 
 	@Override
 	public Integer call() {
-		List<Statement> astList = parser.parse(file);
+		PullInterpreter pullInterpreter = new PullInterpreter();
+		Scanner scanner = ScriptReader.readCodeFromSourceByLine(file);
+		pullInterpreter.execute(scanner, "1.0", file);
 
-		if (!astList.isEmpty()) {
-			System.out.println("Completed validation successfully. No errors found.");
-			return 0;
-		}
+		//		List<Statement> astList = parser.parse(file);
+		//
+		//		if (!astList.isEmpty()) {
+		//			System.out.println("Completed validation successfully. No errors found.");
+		//			return 0;
+		//		}
 
 		return 1;
 	}

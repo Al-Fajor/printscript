@@ -2,9 +2,6 @@ plugins {
     id 'groovy-gradle-plugin'
 }
 
-group = "org.example"
-version = "1.0.1-SNAPSHOT"
-
 repositories {
     gradlePluginPortal()
 }

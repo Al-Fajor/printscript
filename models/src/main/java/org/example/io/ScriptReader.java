@@ -17,8 +17,13 @@ public class ScriptReader {
 		return code;
 	}
 
-	public static Scanner readCodeFromSourceByLine(String path) throws FileNotFoundException {
-		return new Scanner(new File(path));
+	public static Scanner readCodeFromSourceByLine(String path) {
+		try {
+			return new Scanner(new File(path));
+		} catch (FileNotFoundException e) {
+			System.out.println("Could not read file; got error: \n" + e);
+			return new Scanner("");
+		}
 	}
 
 	public static String readAndHighlightRange(
