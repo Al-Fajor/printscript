@@ -1,5 +1,8 @@
 package org.example.sentence.builder;
 
+import static org.example.sentence.builder.SentenceBuilder.errorPair;
+
+import java.util.List;
 import org.example.Pair;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Identifier;
@@ -9,10 +12,6 @@ import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.Validity;
 import org.example.token.Token;
-
-import java.util.List;
-
-import static org.example.sentence.builder.SentenceBuilder.errorPair;
 
 public class ReassignmentStatementBuilder extends StatementBuilder {
 

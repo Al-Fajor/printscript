@@ -1,5 +1,9 @@
 package org.example.sentence.builder;
 
+import static org.example.sentence.builder.SentenceBuilder.errorPair;
+import static org.example.token.BaseTokenTypes.SEMICOLON;
+
+import java.util.List;
 import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.DeclarationAssignmentStatement;
@@ -9,11 +13,6 @@ import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.Validity;
 import org.example.token.Token;
-
-import java.util.List;
-
-import static org.example.sentence.builder.SentenceBuilder.errorPair;
-import static org.example.token.BaseTokenTypes.SEMICOLON;
 
 public class DeclarationStatementBuilder extends StatementBuilder {
 	private final TokenMapper mapper = new TokenMapper();
