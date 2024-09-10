@@ -1,41 +1,26 @@
 package org.example;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import org.example.iterators.ConcatenatedIterator;
 import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerSuccess;
-import org.example.token.Token;
 import org.example.utils.PositionServices;
 
 public class PrintScriptLexer implements Lexer {
-    private final String version;
-
-    public PrintScriptLexer(String version) {
-        this.version = version;
-    }
+	private int lines = 1;
 
 	@Override
 	public Result lex(Iterator<String> input) {
+		String line = input.next();
 		Scanner scanner = new Scanner();
-		Tokenizer tokenizer = new Tokenizer();
-		//        TODO change this if not memory efficient enough
-		List<Iterator<Token>> tokenIterators = new ArrayList<>();
+		System.out.println(line);
 
-		int lineNumber = 0;
-		while (input.hasNext()) {
-			lineNumber++;
-			String line = input.next();
-			Result scanResult = scanner.scan(line, lineNumber, version);
-			if (!scanResult.isSuccessful()) {
-				return new LexerFailure(scanResult);
-			}
-			tokenIterators.add(tokenizer.tokenize(line, lineNumber));
-			lineNumber += PositionServices.getLines(line) - 1;
+		Result scanResult = scanner.scan(line, lines);
+		if (!scanResult.isSuccessful()) {
+			return new LexerFailure(scanResult);
 		}
+		TokenIterator tokenIterator = new TokenIterator(line, lines);
 
-		Iterator<Token> concatenatedTokens = new ConcatenatedIterator(tokenIterators);
-		return new LexerSuccess(concatenatedTokens);
+		this.lines += PositionServices.getLines(line);
+		return new LexerSuccess(tokenIterator);
 	}
 }

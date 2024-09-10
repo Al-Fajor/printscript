@@ -8,8 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import org.example.*;
+import org.example.lexerresult.LexerSuccess;
+import org.example.token.Token;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,16 +23,26 @@ public class ScaTester {
 		JSONObject json = getJsonObject(path);
 
 		String configPath = json.getString("config");
-		PrintScriptSca analyzer = new PrintScriptSca(getStream(configPath));
-
 		JSONArray cases = json.getJSONArray("cases");
+
 		for (int i = 0; i < cases.length(); i++) {
+			Lexer lexer = new PrintScriptLexer();
+			PrintScriptSca analyzer = new PrintScriptSca(getStream(configPath));
 			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");
 			List<Result> expectedResults = getExpectedResults(testCase);
 			List<String> linesWithNewlines = Arrays.stream(code.split("(?<=\n)")).toList();
-			List<Result> results = analyzer.analyze(linesWithNewlines.iterator());
-			compareResults(expectedResults, results);
+			Iterator<String> lines = linesWithNewlines.iterator();
+			List<Result> results = new ArrayList<>();
+			while (lines.hasNext()) {
+				Result lexerResult = lexer.lex(lines);
+				if (!lexerResult.isSuccessful()) {
+					throw new RuntimeException("Lexer failed: " + lexerResult);
+				}
+				Iterator<Token> tokenIterator = ((LexerSuccess) lexerResult).getTokens();
+				results.addAll(analyzer.analyze(tokenIterator));
+			}
+			compareResults(expectedResults, filterResults(results));
 		}
 	}
 
@@ -72,5 +85,26 @@ public class ScaTester {
 		System.out.println("Expected results: " + expectedResults);
 		System.out.println("Actual results: " + results);
 		assertTrue(expectedResults.containsAll(results));
+	}
+
+	private List<Result> filterResults(List<Result> results) {
+		List<Result> filteredResults = new ArrayList<>();
+
+		for (Result result : results) {
+			if (result instanceof FailResult) {
+				filteredResults.add(result);
+			}
+		}
+
+		if (filteredResults.isEmpty()) {
+			for (Result result : results) {
+				if (result instanceof SuccessResult) {
+					filteredResults.add(result);
+					break;
+				}
+			}
+		}
+
+		return filteredResults;
 	}
 }
