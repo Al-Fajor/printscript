@@ -55,7 +55,8 @@ public class SentenceBuilder {
 
 		return switch (tokens.getFirst().getType()) {
 			case LET, CONST -> buildAssignationSentence(tokens, getValidator(tokens));
-			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens, getValidator(tokens));
+			case FUNCTION, PRINTLN, READENV, READINPUT ->
+					buildFunctionSentence(tokens, getValidator(tokens));
 			case IDENTIFIER -> buildReassignationSentence(tokens, getValidator(tokens));
 			case IF -> buildConditionalSentence(tokens);
 			default -> errorPair;

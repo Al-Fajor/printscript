@@ -40,6 +40,11 @@ public class RuleProvider {
 				commonRules.add(new ReassignationRule());
 				yield commonRules;
 			}
+			case READENV, READINPUT -> {
+				List<ValidityRule> readRules = commonRules.subList(0, commonRules.size() - 1);
+				readRules.add(new ReadArgumentRule());
+				yield readRules;
+			}
 			default -> null;
 		};
 	}

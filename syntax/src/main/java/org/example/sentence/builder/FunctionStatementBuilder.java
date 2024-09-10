@@ -1,7 +1,7 @@
 package org.example.sentence.builder;
 
 import static org.example.sentence.builder.SentenceBuilder.errorPair;
-import static org.example.token.BaseTokenTypes.PRINTLN;
+import static org.example.token.BaseTokenTypes.FUNCTION;
 
 import java.util.List;
 import org.example.Pair;
@@ -32,7 +32,10 @@ public class FunctionStatementBuilder extends StatementBuilder {
 				mapper.buildExpression(tokens.subList(1, tokens.size()));
 		Pair<Integer, Integer> functionStart = function.getStart();
 		Pair<Integer, Integer> functionEnd = function.getEnd();
-		String name = function.getType() == PRINTLN ? "println" : function.getValue();
+		String name =
+				function.getType() == FUNCTION
+						? function.getValue()
+						: function.getType().toString().toLowerCase();
 
 		Identifier id = new Identifier(name, functionStart, functionEnd);
 
