@@ -7,17 +7,17 @@ import org.example.utils.PositionServices;
 
 public class PrintScriptLexer implements Lexer {
 	private int lines = 1;
-    private final String version;
+	private final String version;
 
-    public PrintScriptLexer(String version) {
-        if (version == null) {
-            this.version = "1.1";
-        } else if (!version.equals("1.0") && !version.equals("1.1")) {
-            throw new IllegalArgumentException("Invalid version: " + version);
-        } else {
-            this.version = version;
-        }
-    }
+	public PrintScriptLexer(String version) {
+		if (version == null) {
+			this.version = "1.1";
+		} else if (!version.equals("1.0") && !version.equals("1.1")) {
+			throw new IllegalArgumentException("Invalid version: " + version);
+		} else {
+			this.version = version;
+		}
+	}
 
 	@Override
 	public Result lex(Iterator<String> input) {

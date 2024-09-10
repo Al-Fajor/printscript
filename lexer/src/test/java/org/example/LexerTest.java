@@ -22,10 +22,10 @@ class LexerTest extends TestBuilder {
 		return super.testAllDirectoryCases(testCaseDirectory + "1-0/valid");
 	}
 
-    @TestFactory
-    protected Stream<DynamicTest> testValidCases1_1() {
-        return super.testAllDirectoryCases(testCaseDirectory + "1-1/valid");
-    }
+	@TestFactory
+	protected Stream<DynamicTest> testValidCases1_1() {
+		return super.testAllDirectoryCases(testCaseDirectory + "1-1/valid");
+	}
 
 	//    Token Error Detection
 	@TestFactory
@@ -33,28 +33,28 @@ class LexerTest extends TestBuilder {
 		return super.testAllDirectoryCases(testCaseDirectory + "1-0/invalid");
 	}
 
-    @TestFactory
-    protected Stream<DynamicTest> testInvalidCases1_1() {
-        return super.testAllDirectoryCases(testCaseDirectory + "1-1/invalid");
-    }
+	@TestFactory
+	protected Stream<DynamicTest> testInvalidCases1_1() {
+		return super.testAllDirectoryCases(testCaseDirectory + "1-1/invalid");
+	}
 
 	@Override
 	protected Executable getTestExecutable(File testFile) {
 		String filePath = String.valueOf(testFile);
 		boolean isTestingFailure = filePath.contains(File.separator + "invalid" + File.separator);
-        String version = extractVersionFromPath(filePath);
-        return isTestingFailure
+		String version = extractVersionFromPath(filePath);
+		return isTestingFailure
 				? () -> lexerTestBuilder.testLexicalErrorDetection(filePath, version)
 				: () -> lexerTestBuilder.testTokenDetection(filePath, version);
 	}
 
-    private String extractVersionFromPath(String filePath) {
-        String[] parts = filePath.split(File.separator);
-        for (int i = 0; i < parts.length; i++) {
-            if (parts[i].equals("valid") || parts[i].equals("invalid")) {
-                return parts[i - 1].replace('-', '.');
-            }
-        }
-        return "";
-    }
+	private String extractVersionFromPath(String filePath) {
+		String[] parts = filePath.split(File.separator);
+		for (int i = 0; i < parts.length; i++) {
+			if (parts[i].equals("valid") || parts[i].equals("invalid")) {
+				return parts[i - 1].replace('-', '.');
+			}
+		}
+		return "";
+	}
 }

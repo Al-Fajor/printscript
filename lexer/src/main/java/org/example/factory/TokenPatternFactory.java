@@ -2,7 +2,6 @@ package org.example.factory;
 
 import java.util.Map;
 import java.util.regex.Pattern;
-
 import org.example.token.BaseTokenTypes;
 
 public class TokenPatternFactory {

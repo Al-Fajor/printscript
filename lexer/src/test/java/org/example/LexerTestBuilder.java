@@ -30,8 +30,6 @@ public class LexerTestBuilder {
 		assertFalse(expectedList.hasNext());
 	}
 
-
-
 	private void compareTokens(Iterator<Token> expectedList, Iterator<Token> actualList) {
 		while (expectedList.hasNext() && actualList.hasNext()) {
 			Token expected = expectedList.next();

@@ -8,16 +8,18 @@ import org.example.detectors.UnfinishedSeparatorsDetector;
 
 public class ErrorDetectorFactory {
 	public static List<LexicalErrorDetector> create(String version) {
-        return switch (version) {
-            case "1.0" -> List.of(
-                    new UnfinishedSeparatorsDetector(),
-                    new InvalidChainDetector(),
-                    new InvalidCharactersDetector());
-            case "1.1" -> List.of(
-                    new UnfinishedSeparatorsDetector(),
-                    new InvalidChainDetector(),
-                    new InvalidCharactersDetector());
-            default -> throw new IllegalArgumentException("Invalid version: " + version);
-        };
-    }
+		return switch (version) {
+			case "1.0" ->
+					List.of(
+							new UnfinishedSeparatorsDetector(),
+							new InvalidChainDetector(),
+							new InvalidCharactersDetector());
+			case "1.1" ->
+					List.of(
+							new UnfinishedSeparatorsDetector(),
+							new InvalidChainDetector(),
+							new InvalidCharactersDetector());
+			default -> throw new IllegalArgumentException("Invalid version: " + version);
+		};
+	}
 }

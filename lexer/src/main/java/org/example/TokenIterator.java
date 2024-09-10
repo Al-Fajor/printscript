@@ -18,13 +18,13 @@ public class TokenIterator implements Iterator<Token> {
 	private final String input;
 	private final Matcher matcher;
 	private final int lineNumber;
-    private final Map<BaseTokenTypes, String> regexMap;
+	private final Map<BaseTokenTypes, String> regexMap;
 
 	public TokenIterator(String input, int lineNumber, String version) {
 		this.input = input;
 		this.lineNumber = lineNumber;
 		this.tokenQueue = new ArrayDeque<>();
-        this.regexMap = TokenRegex.getRegexMap(version);
+		this.regexMap = TokenRegex.getRegexMap(version);
 		this.pattern = TokenPatternFactory.createPattern(regexMap);
 		this.matcher = pattern.matcher(this.input);
 	}
