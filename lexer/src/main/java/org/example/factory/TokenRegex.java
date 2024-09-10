@@ -43,8 +43,8 @@ public class TokenRegex {
 		regexMap.put(LET, "\\blet\\b");
 		regexMap.put(TYPE, "\\bnumber\\b|\\bstring\\b|\\boolean\\b");
 		regexMap.put(CONST, "\\bconst\\b");
-		regexMap.put(READENV, "\\breadenv\\b");
-		regexMap.put(READINPUT, "\\breadinput\\b");
+		regexMap.put(READENV, "\\breadEnv\\b");
+		regexMap.put(READINPUT, "\\breadInput\\b");
 		regexMap.put(IF, "\\bif\\b");
 		regexMap.put(ELSE, "\\belse\\b");
 		regexMap.put(PRINTLN, "\\bprintln\\b");
