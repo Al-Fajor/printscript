@@ -26,11 +26,11 @@ public class TokenMapper {
 			return false;
 		}
 		if (separatorType.contains("opening")) {
-			String value = new TokenMapper().clearInvCommas(token.getValue());
+			String value = clearInvCommas(token.getValue());
 			return separatorType.contains("parenthesis") ? value.equals("(") : value.equals("{");
 		}
 		if (separatorType.contains("closing")) {
-			String value = new TokenMapper().clearInvCommas(token.getValue());
+			String value = clearInvCommas(token.getValue());
 			return separatorType.contains("parenthesis") ? value.equals(")") : value.equals("}");
 		}
 		return false;
@@ -59,11 +59,15 @@ public class TokenMapper {
 		if (value.contains("\"") || !isNumeric(value)) {
 			return new Literal<>(clearInvCommas(value), token.getStart(), token.getEnd());
 		}
-		return new Literal<>(Integer.valueOf(value), token.getStart(), token.getEnd());
+
+		boolean isDouble = value.contains(".");
+		return isDouble
+				? new Literal<>(Double.parseDouble(value), token.getStart(), token.getEnd())
+				: new Literal<>(Integer.parseInt(value), token.getStart(), token.getEnd());
 	}
 
 	private boolean isNumeric(String value) {
-		Pattern pattern = Pattern.compile("-?[0-9]+");
+		Pattern pattern = Pattern.compile("-?[0-9]+(\\.[0-9]+)*");
 		return pattern.matcher(value).matches();
 	}
 

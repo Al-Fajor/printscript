@@ -9,6 +9,7 @@ import org.example.sentence.validator.validity.Validity;
 import org.example.sentence.validator.validity.rule.RuleProvider;
 import org.example.token.Token;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +30,7 @@ public class SentenceBuilder {
 	private Pair<Statement, String> buildReassignationSentence(
 			List<Token> tokens, SentenceValidator validator) {
 		Validity validity = validator.getSentenceValidity(tokens);
-		if (tokens.size() <= 2 || !validity.isValid())
-			return new Pair<>(null, validity.getErrorMessage());
+		if (tokens.size() <= 2 || !validity.isValid()) return errorPair(validity.getErrorMessage());
 
 		// TODO: eliminate casting
 		Identifier identifier = (Identifier) mapper.mapToken(tokens.getFirst());
@@ -48,7 +48,7 @@ public class SentenceBuilder {
 			List<Token> tokens, SentenceValidator validator) {
 		Token function = tokens.getFirst();
 		Validity validity = validator.getSentenceValidity(tokens);
-		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
+		if (!validity.isValid()) return errorPair(validity.getErrorMessage());
 
 		List<EvaluableComponent> parameters =
 				mapper.buildExpression(tokens.subList(1, tokens.size()));
@@ -71,7 +71,7 @@ public class SentenceBuilder {
 	private Pair<Statement, String> buildAssignationSentence(
 			List<Token> tokens, SentenceValidator validator) {
 		Validity validity = validator.getSentenceValidity(tokens);
-		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
+		if (!validity.isValid()) return errorPair(validity.getErrorMessage());
 
 		// May need to change method
 		Token type = tokens.get(3);
@@ -90,7 +90,7 @@ public class SentenceBuilder {
 						: mapper.buildExpression(tokens.subList(5, tokens.size())).getFirst();
 
 		if (identifierType == IdentifierType.CONST && isSemicolon) {
-			return new Pair<>(null, "Cannot declare a CONST as null");
+			return errorPair("Cannot declare a CONST and not assign it");
 		}
 
 		Pair<Integer, Integer> start = tokens.getFirst().getStart();
@@ -108,46 +108,85 @@ public class SentenceBuilder {
 		return new Pair<>(declarationStatement, validity.getErrorMessage());
 	}
 
-	private Pair<Statement, String> buildConditionalSentence(
-			List<Token> tokens, SentenceValidator validator) {
-		Validity validity = validator.getSentenceValidity(tokens);
+	private Pair<Statement, String> errorPair(String errorMessage) {
+		return new Pair<>(null, errorMessage);
+	}
 
-		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
+	private Pair<Statement, String> buildConditionalSentence(List<Token> tokens) {
+		if (!tokens.get(1).getValue().equals("(")) {
+			return errorPair("Expected '(' after 'if'");
+		}
 
-		// IF -> PARENTH -> IDENT -> PARENTH -> BRACE -> STATEMENT ... -> BRACE -> OPTIONAL(ELSE)
-		// ...
-		Identifier identifier = (Identifier) mapper.mapToken(tokens.get(2));
+		int condEndIndex = findMatchingParenthesis(tokens, 1);
+		if (condEndIndex == -1) {
+			return errorPair("Unbalanced parentheses in 'if' condition");
+		}
+		List<Token> conditionTokens = tokens.subList(2, condEndIndex);
 
-		Iterable<Statement> codeBlock = buildSentenceIterable(tokens.subList(5, tokens.size()));
-		boolean hasElseCondition = tokens.stream().anyMatch(token -> token.getType() == ELSE);
+		if (conditionTokens.getFirst().getType() != IDENTIFIER || conditionTokens.size() > 1) {
+			return errorPair("Incorrect condition");
+		}
 
+		if (!tokens.get(condEndIndex + 1).getValue().equals("{")) {
+			return errorPair("Expected '{' after 'if' condition");
+		}
+
+		int ifBlockStart = condEndIndex + 2;
+		int ifBlockEnd = findMatchingBrace(tokens, ifBlockStart - 1);
+		if (ifBlockEnd == -1) {
+			return errorPair("Unbalanced braces in 'if' block");
+		}
+		Iterable<Statement> ifBlock =
+				buildSentenceIterable(tokens.subList(ifBlockStart, ifBlockEnd));
+
+		boolean hasElseCondition =
+				tokens.size() > ifBlockEnd + 1 && tokens.get(ifBlockEnd).getType() == ELSE;
 		if (hasElseCondition) {
-			int elseIndex = getFirstElseIndex(tokens);
-			Iterable<Statement> secondCodeBlock =
-					buildSentenceIterable(tokens.subList(elseIndex, tokens.size()));
-			Statement ifElse =
+
+			if (!tokens.get(ifBlockEnd + 1).getValue().equals("{")) {
+				return errorPair("Expected '{' after 'else'");
+			}
+
+			int elseBlockStart = ifBlockEnd + 2;
+			int elseBlockEnd = findMatchingBrace(tokens, elseBlockStart - 1);
+			if (elseBlockEnd == -1) {
+				return errorPair("Unbalanced braces in 'else' block");
+			}
+			Iterable<Statement> elseBlock =
+					buildSentenceIterable(tokens.subList(elseBlockStart, elseBlockEnd));
+
+			Statement ifElseStatement =
 					new IfElseStatement(
-							identifier,
-							codeBlock,
-							secondCodeBlock,
+							(Identifier) mapper.mapToken(tokens.get(2)),
+							ifBlock,
+							elseBlock,
 							tokens.getFirst().getStart(),
 							tokens.getLast().getEnd());
-			return new Pair<>(ifElse, validity.getErrorMessage());
+			return new Pair<>(ifElseStatement, "Not an error");
 		}
 
 		Statement ifStatement =
 				new IfStatement(
-						identifier,
-						codeBlock,
+						(Identifier) mapper.mapToken(tokens.get(2)),
+						ifBlock,
 						tokens.getFirst().getStart(),
 						tokens.getLast().getEnd());
-		return new Pair<>(ifStatement, validity.getErrorMessage());
+		return new Pair<>(ifStatement, "Not an error");
 	}
 
-	private int getFirstElseIndex(List<Token> tokens) {
-		Optional<Token> firstElse =
-				tokens.stream().filter(token -> token.getType() == ELSE).findFirst();
-		return firstElse.map(tokens::indexOf).orElse(-1);
+	private int findMatchingParenthesis(List<Token> tokens, int startIndex) {
+		int parenCount = 0;
+		for (int i = startIndex; i < tokens.size(); i++) {
+			if (tokens.get(i).getValue().equals("(")) {
+				parenCount++;
+			} else if (tokens.get(i).getValue().equals(")")) {
+				parenCount--;
+				if (parenCount == 0) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 
 	private Iterable<Statement> buildSentenceIterable(List<Token> tokens) {
@@ -162,8 +201,49 @@ public class SentenceBuilder {
 	}
 
 	private List<List<Token>> splitTokens(List<Token> tokens) {
-		// TODO
-		return null;
+		List<List<Token>> sentences = new ArrayList<>();
+		List<Token> currentSentence = new ArrayList<>();
+		int braceCount = 0;
+
+		for (Token token : tokens) {
+			if (token.getType() == SEPARATOR) {
+				if (token.getValue().equals("{")) {
+					braceCount++;
+				} else if (token.getValue().equals("}")) {
+					braceCount--;
+				}
+			}
+
+			currentSentence.add(token);
+
+			if ((token.getType() == SEMICOLON
+							|| (token.getType() == SEPARATOR && token.getValue().equals("}")))
+					&& braceCount == 0) {
+				sentences.add(new ArrayList<>(currentSentence));
+				currentSentence.clear();
+			}
+		}
+
+		if (!currentSentence.isEmpty()) {
+			sentences.add(currentSentence);
+		}
+
+		return sentences;
+	}
+
+	private int findMatchingBrace(List<Token> tokens, int startIndex) {
+		int braceCount = 0;
+		for (int i = startIndex; i < tokens.size(); i++) {
+			if (mapper.matchesSeparatorType(tokens.get(i), "opening brace")) {
+				braceCount++;
+			} else if (mapper.matchesSeparatorType(tokens.get(i), "closing brace")) {
+				braceCount--;
+				if (braceCount == 0) {
+					return i + 1;
+				}
+			}
+		}
+		return -1;
 	}
 
 	private Statement getDeclarationStatement(
@@ -184,7 +264,7 @@ public class SentenceBuilder {
 		Pair<Statement, String> errorPair =
 				new Pair<>(
 						null,
-						"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
+						"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER, DECLARATION or IF");
 
 		if (tokens == null) return errorPair;
 
@@ -192,7 +272,7 @@ public class SentenceBuilder {
 			case LET, CONST -> buildAssignationSentence(tokens, getValidator(tokens));
 			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens, getValidator(tokens));
 			case IDENTIFIER -> buildReassignationSentence(tokens, getValidator(tokens));
-			case IF, ELSE -> buildConditionalSentence(tokens, getValidator(tokens));
+			case IF -> buildConditionalSentence(tokens);
 			default -> errorPair;
 		};
 	}

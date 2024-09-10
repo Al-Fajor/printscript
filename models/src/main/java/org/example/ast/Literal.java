@@ -52,4 +52,9 @@ public class Literal<K> implements EvaluableComponent {
 	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public String toString() {
+		return "Literal{" + "value=" + value + ", type=" + value.getClass() + '}';
+	}
 }

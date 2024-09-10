@@ -1,11 +1,5 @@
 package org.example;
 
-import static org.example.token.BaseTokenTypes.SEMICOLON;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
 import org.example.ast.statement.Statement;
 import org.example.observer.Observer;
 import org.example.result.SyntaxError;
@@ -13,6 +7,13 @@ import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
 import org.example.sentence.builder.SentenceBuilder;
 import org.example.token.Token;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
+import static org.example.token.BaseTokenTypes.*;
 
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 	List<Observer<Pair<Integer, Integer>>> observers = new ArrayList<>();
@@ -56,11 +57,34 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		List<Token> sentences = new ArrayList<>();
 		Token current = tokens.next();
 		sentences.add(current);
-		while (current.getType() != SEMICOLON && tokens.hasNext()) {
-			Token toAdd = tokens.next();
-			sentences.add(toAdd);
-			current = toAdd;
+
+		if (current.getType() == IF || current.getType() == ELSE) {
+			int braceCount =
+					0; // start with 0 because we don't even know if the sentence is correctly
+			// written
+			while (tokens.hasNext()) {
+				Token toAdd = tokens.next();
+				sentences.add(toAdd);
+				if (toAdd.getType() == SEPARATOR) {
+					if (toAdd.getValue().equals("{")) {
+						braceCount++;
+					} else if (toAdd.getValue().equals("}")) {
+						braceCount--;
+						if (braceCount == 0) {
+							if (tokens.hasNext()) continue;
+							break;
+						}
+					}
+				}
+			}
+		} else {
+			while (current.getType() != SEMICOLON && tokens.hasNext()) {
+				Token toAdd = tokens.next();
+				sentences.add(toAdd);
+				current = toAdd;
+			}
 		}
+
 		return sentences;
 	}
 
