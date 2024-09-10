@@ -1,16 +1,15 @@
 package org.example.sentence.builder;
 
+import static org.example.token.BaseTokenTypes.*;
+
+import java.util.List;
+import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.statement.Statement;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.rule.RuleProvider;
 import org.example.sentence.validator.validity.rule.ValidityRule;
 import org.example.token.Token;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.example.token.BaseTokenTypes.*;
 
 public class SentenceBuilder {
 

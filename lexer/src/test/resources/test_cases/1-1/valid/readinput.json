@@ -1,0 +1,4 @@
+{
+  "code": "let input: string = readInput(\"What is the best football club in the world?\");",
+  "tokens": "LET(let) -> IDENTIFIER(input) -> COLON(:) -> TYPE(string) -> ASSIGNATION(=) -> READINPUT(readInput) -> SEPARATOR(() -> LITERAL(\"What is the best football club in the world?\") -> SEPARATOR()) -> SEMICOLON(;)"
+}

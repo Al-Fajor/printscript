@@ -1,18 +1,17 @@
 package org.example.sentence.builder;
 
+import static org.example.sentence.builder.SentenceBuilder.errorPair;
+import static org.example.token.BaseTokenTypes.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.Identifier;
 import org.example.ast.statement.IfElseStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.statement.Statement;
 import org.example.token.Token;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.example.sentence.builder.SentenceBuilder.errorPair;
-import static org.example.token.BaseTokenTypes.*;
 
 public class IfStatementBuilder extends StatementBuilder {
 

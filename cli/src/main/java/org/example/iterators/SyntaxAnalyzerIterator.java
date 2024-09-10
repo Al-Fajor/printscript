@@ -18,7 +18,7 @@ public class SyntaxAnalyzerIterator implements Iterator<Token> {
 	private final String path;
 
 	public SyntaxAnalyzerIterator(Scanner src, String path, String version) {
-		this.lexer = new PrintScriptLexer();
+		this.lexer = new PrintScriptLexer(version);
 		this.path = path;
 		this.scanner = src.useDelimiter("(?<=}|;)");
 	}

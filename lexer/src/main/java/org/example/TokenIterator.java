@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,12 +18,14 @@ public class TokenIterator implements Iterator<Token> {
 	private final String input;
 	private final Matcher matcher;
 	private final int lineNumber;
+	private final Map<BaseTokenTypes, String> regexMap;
 
-	public TokenIterator(String input, int lineNumber) {
+	public TokenIterator(String input, int lineNumber, String version) {
 		this.input = input;
 		this.lineNumber = lineNumber;
 		this.tokenQueue = new ArrayDeque<>();
-		this.pattern = TokenPatternFactory.createPattern(TokenRegex.getRegexMap());
+		this.regexMap = TokenRegex.getRegexMap(version);
+		this.pattern = TokenPatternFactory.createPattern(regexMap);
 		this.matcher = pattern.matcher(this.input);
 	}
 
@@ -40,7 +43,7 @@ public class TokenIterator implements Iterator<Token> {
 	}
 
 	private void addToken(Queue<Token> tokens, Matcher matcher) {
-		for (BaseTokenTypes baseTokenTypes : BaseTokenTypes.values()) {
+		for (BaseTokenTypes baseTokenTypes : regexMap.keySet()) {
 			if (matcher.group(baseTokenTypes.name()) != null) {
 				int currentLine = lineNumber + PositionServices.getLine(input, matcher.start());
 				tokens.add(
