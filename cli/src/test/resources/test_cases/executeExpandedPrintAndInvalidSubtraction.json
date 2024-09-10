@@ -1,9 +1,6 @@
 {
   "command": "execute src/test/resources/pts/expandedPrintAndInvalidSubtraction.pts",
   "expectedOutput": [
-    "Performing lexical analysis",
-    "Performing syntactic analysis",
-    "Performing semantic analysis",
     "Semantic Analysis failed",
     "\u001B[31m\"Hello!\"",
     "+ \" I'm\"",

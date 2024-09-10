@@ -49,14 +49,12 @@ public class AnalyzeCommand implements Callable<Integer> {
 		while (iterator.hasNext()) {
 			Result lexerResult = lexer.lex(iterator);
 			if (!lexerResult.isSuccessful()) {
-				printFailedCode(filePath, lexerResult, "Lexing");
+				printFailedCode(filePath, lexerResult);
 				return 1;
 			}
 			LexerSuccess lexerSuccess = (LexerSuccess) lexerResult;
 			results.addAll(analyzer.analyze(lexerSuccess.getTokens()));
 		}
-
-		Color.printGreen("Running analyzer...");
 
 		if (results.getFirst().isSuccessful()) {
 			Color.printGreen("Static Code Analyzer found no errors.");
@@ -65,7 +63,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 			results.forEach(
 					result -> {
 						System.out.println("- " + result.errorMessage());
-						printFailedCode(filePath, result, "Static Code Analysis");
+						printFailedCode(filePath, result);
 					});
 		}
 

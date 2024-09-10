@@ -1,13 +1,11 @@
 package org.example.iterators;
 
-import static org.example.utils.PrintUtils.printFailedCode;
+import static org.example.utils.PrintUtils.printFailedStep;
 
 import java.util.Iterator;
-import org.example.Result;
 import org.example.SyntaxAnalyzer;
 import org.example.SyntaxAnalyzerImpl;
 import org.example.ast.statement.Statement;
-import org.example.io.Color;
 import org.example.result.SyntaxError;
 import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
@@ -30,12 +28,11 @@ public class SemanticAnalyzerIterator implements Iterator<Statement> {
 	}
 
 	private boolean loadNextAndEvaluateResult() {
-		Color.printGreen("\nPerforming syntactic analysis");
 		SyntaxResult result = syntaxAnalyzer.analyze(syntaxIterator);
 
 		return switch (result) {
 			case SyntaxError failure -> {
-				stepFailed(path, failure, "Syntax Analysis");
+				printFailedStep(path, failure, "Syntax Analysis");
 				yield false;
 			}
 			case SyntaxSuccess success -> {
@@ -51,12 +48,5 @@ public class SemanticAnalyzerIterator implements Iterator<Statement> {
 	@Override
 	public Statement next() {
 		return next;
-	}
-
-	private static void stepFailed(String path, Result result, String stepName) {
-		if (!result.isSuccessful()) {
-			System.out.println(stepName + " failed with error: '" + result.errorMessage() + "'");
-			printFailedCode(path, result, stepName);
-		}
 	}
 }

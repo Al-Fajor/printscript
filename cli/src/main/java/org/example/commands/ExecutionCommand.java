@@ -15,7 +15,6 @@ import picocli.CommandLine;
 		description =
 				"Looks for lexical, syntactic or semantic errors in the file and executes the code")
 public class ExecutionCommand implements Callable<Integer> {
-	//	Parser parser = new Parser();
 	Interpreter interpreter;
 
 	{
@@ -23,28 +22,24 @@ public class ExecutionCommand implements Callable<Integer> {
 		interpreter = createInterpreter(brokerObserver);
 	}
 
-	@CommandLine.Parameters(index = "0", description = "The file to be executed.")
-	private String file;
+	@CommandLine.Parameters(index = "0", description = "The path of the file to be executed.")
+	private String filePath;
+
+	@CommandLine.Option(
+			names = "--version",
+			description = "The PrintScript version of the code being executed",
+			defaultValue = "1.0")
+	private String version;
 
 	@Override
 	public Integer call() {
 		PullInterpreter pullInterpreter = new PullInterpreter();
-		Scanner scanner = ScriptReader.readCodeFromSourceByLine(file);
-		pullInterpreter.execute(scanner, "1.0", file);
-		//		List<Statement> astList = parser.parse(file);
-		//
-		//		if (!astList.isEmpty()) {
-		//			System.out.println("\nCompleted validation successfully. No errors found.");
-		//
-		//			Color.printGreen("\nRunning...");
-		//			interpreter.interpret(astList.iterator());
-		//			return 0;
-		//		}
+		Scanner scanner = ScriptReader.readCodeFromSourceByLine(filePath);
 
+		pullInterpreter.execute(scanner, version, filePath);
 		return 1;
 	}
 
-	// TODO: duplicate from InterpreterTester
 	private Interpreter createInterpreter(BrokerObserver<String> printObserver) {
 		InterpreterFactory factory = new InterpreterFactory();
 
