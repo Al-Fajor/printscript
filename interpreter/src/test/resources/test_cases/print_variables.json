@@ -1,5 +1,5 @@
 {
-  "expectedPrintLines": ["Ronal Macdonal :D", "7.0"],
+  "expectedPrintLines": ["Ronal Macdonal :D", "7"],
   "ast_list": [
     {
       "assignation": [
