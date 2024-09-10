@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 public class FileParser {
 
+	private static final Pair<Integer, Integer> PLACEHOLDER = new Pair<>(0, 0);
+
 	public String getCode(String filePath) throws IOException {
 		JSONObject json = getJsonObject(filePath);
 		return json.get("code").toString();
@@ -33,13 +35,7 @@ public class FileParser {
 		return tempTokenList.stream()
 				.map(this::getToken)
 				//                TODO use actual positions.
-				.map(
-						pair ->
-								new Token(
-										pair.first(),
-										new Pair<>(0, 0),
-										new Pair<>(0, 0),
-										pair.second()))
+				.map(pair -> new Token(pair.first(), PLACEHOLDER, PLACEHOLDER, pair.second()))
 				.collect(Collectors.toList());
 	}
 

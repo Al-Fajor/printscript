@@ -1,7 +1,6 @@
 package org.example.sentence.validator.validity.rule;
 
 import static org.example.token.BaseTokenTypes.*;
-import static org.example.token.BaseTokenTypes.FUNCTION;
 
 import java.util.List;
 import org.example.sentence.mapper.TokenMapper;
@@ -13,7 +12,7 @@ public class OperatorRule implements ValidityRule {
 		if (token.getType() != OPERATOR) return true;
 		TokenMapper mapper = new TokenMapper();
 		return List.of(IDENTIFIER, LITERAL, FUNCTION).contains(nextToken.getType())
-				|| mapper.matchesSeparatorType(nextToken, "opening");
+				|| mapper.matchesSeparatorType(nextToken, "opening parenthesis");
 	}
 
 	@Override

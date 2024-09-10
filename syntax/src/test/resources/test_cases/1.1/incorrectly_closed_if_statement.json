@@ -1,0 +1,2 @@
+{"tokens": "IF -> SEPARATOR(() -> IDENTIFIER(a) -> SEPARATOR()) -> SEPARATOR({) -> PRINTLN -> SEPARATOR(() -> LITERAL(\"hello\") -> SEPARATOR()) -> SEMICOLON",
+"ast_list": []}
