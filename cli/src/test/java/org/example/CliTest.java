@@ -1,6 +1,7 @@
 package org.example;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -45,7 +46,8 @@ class CliTest extends TestBuilder {
 
 			String path = testFile.getAbsolutePath();
 			String command = CliTestReader.readCommand(path);
-			List<String> expectedOutput = CliTestReader.readOutput(path);
+			List<String> expectedOutput = CliTestReader.readOutput(path, "expectedOutput");
+			List<String> unexpectedOutput = CliTestReader.readOutput(path, "unexpectedOutput");
 
 			if (command.startsWith("format")) {
 				createTempCopyAndExecuteCommand(command, cmd);
@@ -55,15 +57,28 @@ class CliTest extends TestBuilder {
 
 			String output = outputStream.toString();
 
-			expectedOutput.forEach(
-					outputSegment ->
-							assertTrue(
-									output.contains(outputSegment),
-									"Could not find '" + outputSegment + "' in:\n" + output));
-		};
+            assertExpected(expectedOutput, output);
+            assertUnexpected(unexpectedOutput, output);
+        };
 	}
 
-	private void createTempCopyAndExecuteCommand(String command, CommandLine cmd)
+    private static void assertUnexpected(List<String> expectedOutput, String output) {
+        expectedOutput.forEach(
+                outputSegment ->
+                        assertFalse(
+                                output.contains(outputSegment),
+                                "Could not find '" + outputSegment + "' in:\n" + output));
+    }
+
+    private static void assertExpected(List<String> expectedOutput, String output) {
+        expectedOutput.forEach(
+                outputSegment ->
+                        assertTrue(
+                                output.contains(outputSegment),
+                                "Could not find '" + outputSegment + "' in:\n" + output));
+    }
+
+    private void createTempCopyAndExecuteCommand(String command, CommandLine cmd)
 			throws IOException {
 		String[] splitCommand = command.split(" ");
 

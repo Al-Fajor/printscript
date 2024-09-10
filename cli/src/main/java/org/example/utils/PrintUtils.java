@@ -5,6 +5,13 @@ import org.example.Result;
 import org.example.io.ScriptReader;
 
 public class PrintUtils {
+	public static void printFailedStep(String path, Result result, String stepName) {
+		if (!result.isSuccessful()) {
+			System.out.println(stepName + " failed with error: '" + result.errorMessage() + "'");
+			printFailedCode(path, result, stepName);
+		}
+	}
+
 	public static void printFailedCode(String path, Result result, String stepName) {
 		String coloredSegment;
 		try {

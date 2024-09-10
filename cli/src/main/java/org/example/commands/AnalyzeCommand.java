@@ -56,8 +56,6 @@ public class AnalyzeCommand implements Callable<Integer> {
 			results.addAll(analyzer.analyze(lexerSuccess.getTokens()));
 		}
 
-		Color.printGreen("Running analyzer...");
-
 		if (results.getFirst().isSuccessful()) {
 			Color.printGreen("Static Code Analyzer found no errors.");
 		} else {
