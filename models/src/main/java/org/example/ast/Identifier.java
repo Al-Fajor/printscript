@@ -52,4 +52,9 @@ public class Identifier implements EvaluableComponent {
 	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public String toString() {
+		return "Identifier{" + "name='" + name + '\'' + ", start=" + start + ", end=" + end + '}';
+	}
 }

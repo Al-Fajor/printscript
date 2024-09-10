@@ -10,9 +10,9 @@ public class FunctionCallRule implements ValidityRule {
 
 	@Override
 	public boolean isValidRule(Token token, Token nextToken) {
-		if (token.getType() != BaseTokenTypes.PRINTLN || token.getType() != FUNCTION) return true;
+		if (token.getType() != BaseTokenTypes.PRINTLN && token.getType() != FUNCTION) return true;
 		TokenMapper mapper = new TokenMapper();
-		return mapper.matchesSeparatorType(nextToken, "opening");
+		return mapper.matchesSeparatorType(nextToken, "opening parenthesis");
 	}
 
 	@Override

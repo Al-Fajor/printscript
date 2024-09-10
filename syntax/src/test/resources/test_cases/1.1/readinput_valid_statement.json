@@ -1,0 +1,18 @@
+{"tokens": "READINPUT -> SEPARATOR(\"(\") -> LITERAL(\"Hi Johnny!\") -> SEPARATOR(\")\") -> SEMICOLON" ,
+  "ast_list":[
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "readinput",
+          "identifierType": "function"
+        },
+        "params": [
+          {
+            "literal": {
+              "value": "Hi Johnny!"
+            }
+          }
+        ]
+      }
+    }
+  ]}

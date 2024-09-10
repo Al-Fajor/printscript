@@ -5,12 +5,17 @@ import static org.example.utils.ReadUtils.getContent;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import org.example.Lexer;
+import org.example.PrintScriptLexer;
 import org.example.PrintScriptSca;
 import org.example.Result;
 import org.example.io.Color;
+import org.example.lexerresult.LexerSuccess;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -38,10 +43,18 @@ public class AnalyzeCommand implements Callable<Integer> {
 		String configPathOrDefault = Objects.requireNonNullElse(configPath, DEFAULT_CONFIG_PATH);
 		PrintScriptSca analyzer = getAnalyzer(configPathOrDefault);
 		String content = getContent(filePath);
-
-		List<Result> results = analyzer.analyze(content.lines().iterator());
-
-		Color.printGreen("Running analyzer...");
+		Iterator<String> iterator = content.lines().iterator();
+		Lexer lexer = new PrintScriptLexer();
+		List<Result> results = new ArrayList<>();
+		while (iterator.hasNext()) {
+			Result lexerResult = lexer.lex(iterator);
+			if (!lexerResult.isSuccessful()) {
+				printFailedCode(filePath, lexerResult);
+				return 1;
+			}
+			LexerSuccess lexerSuccess = (LexerSuccess) lexerResult;
+			results.addAll(analyzer.analyze(lexerSuccess.getTokens()));
+		}
 
 		if (results.getFirst().isSuccessful()) {
 			Color.printGreen("Static Code Analyzer found no errors.");
@@ -50,7 +63,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 			results.forEach(
 					result -> {
 						System.out.println("- " + result.errorMessage());
-						printFailedCode(filePath, result, "Static Code Analysis");
+						printFailedCode(filePath, result);
 					});
 		}
 

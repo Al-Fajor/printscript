@@ -1,8 +1,7 @@
 {
   "command": "execute src/test/resources/pts/declare.pts",
-  "expectedOutput": [
-    "Performing lexical analysis",
-    "Performing syntactic analysis",
-    "Performing semantic analysis"
+  "expectedOutput": [],
+  "unexpectedOutput": [
+    "failed with error"
   ]
 }

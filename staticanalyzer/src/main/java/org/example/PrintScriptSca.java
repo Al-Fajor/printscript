@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.example.lexerresult.LexerSuccess;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
@@ -19,17 +18,11 @@ public class PrintScriptSca implements StaticCodeAnalyzer {
 	}
 
 	@Override
-	public List<Result> analyze(Iterator<String> input) {
+	public List<Result> analyze(Iterator<Token> input) {
 		List<Result> results = new ArrayList<>();
-		Lexer lexer = new PrintScriptLexer();
-		Result lexerResult = lexer.lex(input);
-		if (!lexerResult.isSuccessful()) {
-			throw new RuntimeException("Lexer failed: " + lexerResult);
-		}
-		Iterator<Token> tokenIterator = ((LexerSuccess) lexerResult).getTokens();
 		List<Token> tokenList = new ArrayList<>();
-		while (tokenIterator.hasNext()) {
-			Token token = tokenIterator.next();
+		while (input.hasNext()) {
+			Token token = input.next();
 			tokenList.add(token);
 			if (isEndOfBlock(token)) {
 				analyzeTokens(tokenList, results);

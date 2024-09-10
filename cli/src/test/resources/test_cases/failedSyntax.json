@@ -1,0 +1,7 @@
+{
+  "command": "validate src/test/resources/pts/failingSyntax.pts",
+  "expectedOutput": [
+    "Syntax Analysis failed with error",
+    "let a b number = 5;"
+  ]
+}
