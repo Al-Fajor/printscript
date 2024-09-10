@@ -1,0 +1,19 @@
+{"tokens": "CONST -> IDENTIFIER(a) -> COLON -> TYPE(boolean) -> ASSIGNATION -> LITERAL(true) -> SEMICOLON",
+  "ast_list":[
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "identifierType": "const",
+            "declarationType": "Boolean",
+            "name": "a"
+          }
+        },
+        {
+          "literal": {
+            "value" : true
+          }
+        }
+      ]
+    }
+  ]}

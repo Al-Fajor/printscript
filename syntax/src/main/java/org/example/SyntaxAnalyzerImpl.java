@@ -1,6 +1,6 @@
 package org.example;
 
-import static org.example.token.BaseTokenTypes.SEMICOLON;
+import static org.example.token.BaseTokenTypes.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,48 +20,70 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 
 	@Override
 	public SyntaxResult analyze(Iterator<Token> tokens) {
-		if (!tokens.hasNext()) return new SyntaxSuccess(null);
+		if (!tokens.hasNext()) return new SyntaxError(null, null, "No tokens provided");
 		return buildSentences(tokens);
 	}
 
 	private SyntaxResult buildSentences(Iterator<Token> tokens) {
-		List<Token> sentences = getSentencesWithTokens(tokens); // Separate sentences by semicolons
+		List<Token> statementTokens =
+				getStatementTokens(
+						tokens); // Separate sentences by semicolons, or by braces whenever
+		// encountering ifs
 
-		return getSyntaxResult(sentences); // Return it
+		return getSyntaxResult(statementTokens); // Return it
 	}
 
 	private SyntaxResult getSyntaxResult(List<Token> tokens) {
-		Pair<Optional<Statement>, String> sentenceResult = buildSentence(tokens);
+		SentenceBuilder builder = new SentenceBuilder();
+		Pair<Optional<Statement>, String> sentenceOptional = builder.buildSentence(tokens);
 
 		for (int i = 1; i < LIMIT; i++) {
 			final int completed = i;
 			observers.forEach(observer -> observer.notifyChange(new Pair<>(completed + 1, LIMIT)));
 		}
 
-		if (sentenceResult.first().isEmpty()) {
+		if (sentenceOptional.first().isEmpty()) {
 			return new SyntaxError(
 					tokens.getFirst().getStart(),
 					tokens.getLast().getEnd(),
-					sentenceResult.second());
+					sentenceOptional.second());
 		}
 
-		return new SyntaxSuccess(sentenceResult.first().get());
+		return new SyntaxSuccess(sentenceOptional.first().get());
 	}
 
-	private Pair<Optional<Statement>, String> buildSentence(List<Token> sentence) {
-		SentenceBuilder builder = new SentenceBuilder();
-		return builder.buildSentence(sentence);
-	}
-
-	private List<Token> getSentencesWithTokens(Iterator<Token> tokens) {
+	private List<Token> getStatementTokens(Iterator<Token> tokens) {
 		List<Token> sentences = new ArrayList<>();
 		Token current = tokens.next();
 		sentences.add(current);
-		while (current.getType() != SEMICOLON && tokens.hasNext()) {
-			Token toAdd = tokens.next();
-			sentences.add(toAdd);
-			current = toAdd;
+
+		if (current.getType() == IF || current.getType() == ELSE) {
+			int braceCount =
+					0; // start with 0 because we don't even know if the sentence is correctly
+			// written
+			while (tokens.hasNext()) {
+				Token toAdd = tokens.next();
+				sentences.add(toAdd);
+				if (toAdd.getType() == SEPARATOR) {
+					if (toAdd.getValue().equals("{")) {
+						braceCount++;
+					} else if (toAdd.getValue().equals("}")) {
+						braceCount--;
+						if (braceCount == 0) {
+							if (tokens.hasNext()) continue;
+							break;
+						}
+					}
+				}
+			}
+		} else {
+			while (current.getType() != SEMICOLON && tokens.hasNext()) {
+				Token toAdd = tokens.next();
+				sentences.add(toAdd);
+				current = toAdd;
+			}
 		}
+
 		return sentences;
 	}
 

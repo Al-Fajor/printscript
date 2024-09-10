@@ -1,7 +1,6 @@
 package org.example.sentence.validator.validity.rule;
 
 import static org.example.token.BaseTokenTypes.*;
-import static org.example.token.BaseTokenTypes.SEPARATOR;
 
 import java.util.List;
 import org.example.sentence.mapper.TokenMapper;
@@ -12,10 +11,10 @@ public class SeparatorRule implements ValidityRule {
 	public boolean isValidRule(Token token, Token nextToken) {
 		if (token.getType() != SEPARATOR) return true;
 		TokenMapper mapper = new TokenMapper();
-		if (mapper.matchesSeparatorType(token, "opening")
+		if (mapper.matchesSeparatorType(token, "opening parenthesis")
 				&& !List.of(IDENTIFIER, LITERAL, FUNCTION, SEPARATOR).contains(nextToken.getType())
 				&& !nextToken.getValue().equals("-")) return false;
-		if (mapper.matchesSeparatorType(token, "closing")) {
+		if (mapper.matchesSeparatorType(token, "closing parenthesis")) {
 			return nextToken != null;
 		}
 		return true;

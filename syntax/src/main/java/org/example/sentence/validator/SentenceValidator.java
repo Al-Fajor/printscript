@@ -1,13 +1,13 @@
 package org.example.sentence.validator;
 
-import static org.example.token.BaseTokenTypes.*;
+import static org.example.token.BaseTokenTypes.SEPARATOR;
 
 import java.util.List;
 import java.util.Stack;
 import org.example.sentence.validator.validity.InvalidSentence;
 import org.example.sentence.validator.validity.ValidSentence;
 import org.example.sentence.validator.validity.Validity;
-import org.example.sentence.validator.validity.rule.*;
+import org.example.sentence.validator.validity.rule.ValidityRule;
 import org.example.token.Token;
 
 public class SentenceValidator {
@@ -22,7 +22,7 @@ public class SentenceValidator {
 	public Validity getSentenceValidity(List<Token> tokens) {
 		if (rules == null)
 			return new InvalidSentence(
-					"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
+					"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER, IF or DECLARATION");
 
 		for (int i = 0; i < tokens.size(); i++) {
 			Token token = tokens.get(i);
@@ -30,8 +30,8 @@ public class SentenceValidator {
 
 			// Hardcoded SEPARATOR case, may need optimization
 			if (token.getType() == SEPARATOR) {
-				if (!areParenthesesBalanced(tokens))
-					return new InvalidSentence("Unbalanced Parenthesis");
+				if (!areSeparatorsBalanced(tokens))
+					return new InvalidSentence("Unbalanced Separators");
 			}
 
 			String ownValidityMessage = getOwnMessage(token, nextToken, rules);
@@ -42,22 +42,28 @@ public class SentenceValidator {
 	}
 
 	private String getOwnMessage(Token token, Token nextToken, List<ValidityRule> rules) {
-		for (ValidityRule rule : rules) {
-			if (!rule.isValidRule(token, nextToken)) return rule.getErrorMessage();
-		}
-		return notAnError;
+		return rules.stream()
+				.filter(rule -> !rule.isValidRule(token, nextToken))
+				.findFirst()
+				.map(ValidityRule::getErrorMessage)
+				.orElse(notAnError);
 	}
 
-	private boolean areParenthesesBalanced(List<Token> tokens) {
+	private boolean areSeparatorsBalanced(List<Token> tokens) {
 		Stack<String> stack = new Stack<>();
-		// TODO: when we add them, add the "{" keys case
 
 		for (Token token : tokens) {
-			if (token.getValue().equals("(")) {
-				stack.push(token.getValue());
-			} else if (token.getValue().equals(")")) {
-				if (stack.isEmpty() || !stack.pop().equals("(")) {
-					return false;
+			switch (token.getValue()) {
+				case "(", "{" -> stack.push(token.getValue());
+				case ")" -> {
+					if (stack.isEmpty() || !stack.pop().equals("(")) {
+						return false;
+					}
+				}
+				case "}" -> {
+					if (stack.isEmpty() || !stack.pop().equals("{")) {
+						return false;
+					}
 				}
 			}
 		}
