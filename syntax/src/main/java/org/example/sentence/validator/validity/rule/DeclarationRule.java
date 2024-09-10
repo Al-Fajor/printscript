@@ -7,7 +7,7 @@ import org.example.token.Token;
 public class DeclarationRule implements ValidityRule {
 	@Override
 	public boolean isValidRule(Token token, Token nextToken) {
-		if (token.getType() != LET || token.getType() != CONST) return true;
+		if (token.getType() != LET && token.getType() != CONST) return true;
 		return nextToken.getType() == IDENTIFIER;
 	}
 

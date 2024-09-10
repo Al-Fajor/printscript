@@ -20,18 +20,22 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 
 	@Override
 	public SyntaxResult analyze(Iterator<Token> tokens) {
-		if (!tokens.hasNext()) return new SyntaxSuccess(null);
+		if (!tokens.hasNext()) return new SyntaxError(null, null, "No tokens provided");
 		return buildSentences(tokens);
 	}
 
 	private SyntaxResult buildSentences(Iterator<Token> tokens) {
-		List<Token> sentences = getSentencesWithTokens(tokens); // Separate sentences by semicolons
+		List<Token> statementTokens =
+				getStatementTokens(
+						tokens); // Separate sentences by semicolons, or by braces whenever
+		// encountering ifs
 
-		return getSyntaxResult(sentences); // Return it
+		return getSyntaxResult(statementTokens); // Return it
 	}
 
 	private SyntaxResult getSyntaxResult(List<Token> tokens) {
-		Pair<Optional<Statement>, String> sentenceResult = buildSentence(tokens);
+		SentenceBuilder builder = new SentenceBuilder();
+		Pair<Optional<Statement>, String> sentenceResult = builder.buildSentence(tokens);
 
 		for (int i = 1; i < LIMIT; i++) {
 			final int completed = i;
@@ -48,16 +52,11 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		return new SyntaxSuccess(sentenceResult.first().get());
 	}
 
-	private Pair<Optional<Statement>, String> buildSentence(List<Token> sentence) {
-		SentenceBuilder builder = new SentenceBuilder();
-		return builder.buildSentence(sentence);
-	}
-
-	private List<Token> getSentencesWithTokens(Iterator<Token> tokens) {
+	private List<Token> getStatementTokens(Iterator<Token> tokens) {
 		List<Token> sentences = new ArrayList<>();
 		Token current = tokens.next();
 		sentences.add(current);
-		while (current.getType() != SEMICOLON) {
+		while (current.getType() != SEMICOLON && tokens.hasNext()) {
 			Token toAdd = tokens.next();
 			sentences.add(toAdd);
 			current = toAdd;

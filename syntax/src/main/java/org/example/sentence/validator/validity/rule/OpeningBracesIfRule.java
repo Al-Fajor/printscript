@@ -1,20 +1,18 @@
 package org.example.sentence.validator.validity.rule;
 
-import static org.example.token.BaseTokenTypes.ELSE;
-
 import org.example.sentence.mapper.TokenMapper;
 import org.example.token.Token;
 
-public class ClosingBracesRule implements ValidityRule {
+public class OpeningBracesIfRule implements ValidityRule {
 	@Override
 	public boolean isValidRule(Token token, Token nextToken) {
 		TokenMapper mapper = new TokenMapper();
-		if (!mapper.matchesSeparatorType(token, "closing braces")) return true;
-		return nextToken == null || nextToken.getType() == ELSE;
+		if (!mapper.matchesSeparatorType(token, "opening braces")) return true;
+		return nextToken != null;
 	}
 
 	@Override
 	public String getErrorMessage() {
-		return shouldBeFollowedBy() + "NO TOKEN or ELSE";
+		return noFollowingToken();
 	}
 }

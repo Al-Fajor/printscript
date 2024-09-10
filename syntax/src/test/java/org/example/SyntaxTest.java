@@ -33,7 +33,7 @@ public class SyntaxTest extends TestBuilder {
 
 	@Test
 	public void debug() throws IOException {
-		test(TEST_CASES_1_1 + "/" + "const_assignation.json");
+		test(TEST_CASES_1_0 + "/" + "no_identifier_in_declaration.json");
 	}
 
 	@Override

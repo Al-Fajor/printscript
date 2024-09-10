@@ -1,13 +1,13 @@
 package org.example.sentence.validator;
 
-import static org.example.token.BaseTokenTypes.*;
+import static org.example.token.BaseTokenTypes.SEPARATOR;
 
 import java.util.List;
 import java.util.Stack;
 import org.example.sentence.validator.validity.InvalidSentence;
 import org.example.sentence.validator.validity.ValidSentence;
 import org.example.sentence.validator.validity.Validity;
-import org.example.sentence.validator.validity.rule.*;
+import org.example.sentence.validator.validity.rule.ValidityRule;
 import org.example.token.Token;
 
 public class SentenceValidator {
@@ -42,10 +42,11 @@ public class SentenceValidator {
 	}
 
 	private String getOwnMessage(Token token, Token nextToken, List<ValidityRule> rules) {
-		for (ValidityRule rule : rules) {
-			if (!rule.isValidRule(token, nextToken)) return rule.getErrorMessage();
-		}
-		return notAnError;
+		return rules.stream()
+				.filter(rule -> !rule.isValidRule(token, nextToken))
+				.findFirst()
+				.map(ValidityRule::getErrorMessage)
+				.orElse(notAnError);
 	}
 
 	private boolean areParenthesesBalanced(List<Token> tokens) {

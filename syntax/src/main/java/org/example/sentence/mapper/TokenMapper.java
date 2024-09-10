@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.example.ast.BinaryOperator;
-import org.example.ast.EvaluableComponent;
-import org.example.ast.Identifier;
-import org.example.ast.Literal;
+import org.example.ast.*;
 import org.example.sentence.builder.ExpressionBuilder;
 import org.example.sentence.reader.TokenReader;
+import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 import org.example.token.TokenType;
 
@@ -79,6 +77,32 @@ public class TokenMapper {
 						"*", BinaryOperator.MULTIPLICATION,
 						"/", BinaryOperator.DIVISION);
 		return map.get(value);
+	}
+
+	public IdentifierType getIdentifierType(Token identifier) {
+		Map<TokenType, IdentifierType> types =
+				Map.of(
+						BaseTokenTypes.LET,
+						IdentifierType.LET,
+						FUNCTION,
+						IdentifierType.FUNCTION,
+						CONST,
+						IdentifierType.CONST);
+		return types.get(identifier.getType());
+	}
+
+	public DeclarationType getDeclarationType(String type) {
+		Map<String, DeclarationType> declarationTypeMap =
+				Map.of(
+						"number",
+						DeclarationType.NUMBER,
+						"string",
+						DeclarationType.STRING,
+						"function",
+						DeclarationType.FUNCTION,
+						"boolean",
+						DeclarationType.BOOLEAN);
+		return declarationTypeMap.get(type.toLowerCase());
 	}
 
 	private String clearInvCommas(String value) {

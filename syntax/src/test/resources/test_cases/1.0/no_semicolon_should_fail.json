@@ -1,0 +1,2 @@
+{"tokens": "PRINTLN -> SEPARATOR(\"(\") -> LITERAL(5) -> SEPARATOR(\")\")" ,
+  "ast_list":[]}

@@ -1,38 +1,36 @@
 package org.example.sentence.builder;
 
-import static org.example.token.BaseTokenTypes.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.*;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.Validity;
-import org.example.sentence.validator.validity.rule.*;
-import org.example.token.BaseTokenTypes;
+import org.example.sentence.validator.validity.rule.RuleProvider;
 import org.example.token.Token;
-import org.example.token.TokenType;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.example.token.BaseTokenTypes.*;
 
 public class SentenceBuilder {
-	public Pair<Optional<Statement>, String> buildSentence(List<Token> tokens) {
-		var sentence = getAstComponent(tokens);
+	private final TokenMapper mapper = new TokenMapper();
 
-		Optional<Statement> component =
+	public Pair<Optional<Statement>, String> buildSentence(List<Token> tokens) {
+		var sentence = getStatementPair(tokens);
+
+		Optional<Statement> statement =
 				sentence.first() == null ? Optional.empty() : Optional.of(sentence.first());
 
-		return new Pair<>(component, sentence.second());
+		return new Pair<>(statement, sentence.second());
 	}
 
-	private Pair<Statement, String> buildReassignationSentence(List<Token> tokens) {
-		SentenceValidator validator =
-				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
+	private Pair<Statement, String> buildReassignationSentence(
+			List<Token> tokens, SentenceValidator validator) {
 		Validity validity = validator.getSentenceValidity(tokens);
 		if (tokens.size() <= 2 || !validity.isValid())
 			return new Pair<>(null, validity.getErrorMessage());
-		TokenMapper mapper = new TokenMapper();
 
 		// TODO: eliminate casting
 		Identifier identifier = (Identifier) mapper.mapToken(tokens.getFirst());
@@ -46,14 +44,14 @@ public class SentenceBuilder {
 				"Not an error");
 	}
 
-	private Pair<Statement, String> buildFunctionSentence(List<Token> tokens) {
+	private Pair<Statement, String> buildFunctionSentence(
+			List<Token> tokens, SentenceValidator validator) {
 		Token function = tokens.getFirst();
-		SentenceValidator validator = new SentenceValidator(getSentenceRules(function.getType()));
 		Validity validity = validator.getSentenceValidity(tokens);
 		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
 		List<EvaluableComponent> parameters =
-				new TokenMapper().buildExpression(tokens.subList(1, tokens.size()));
+				mapper.buildExpression(tokens.subList(1, tokens.size()));
 		Pair<Integer, Integer> functionStart = function.getStart();
 		Pair<Integer, Integer> functionEnd = function.getEnd();
 		String name = function.getType() == PRINTLN ? "println" : function.getValue();
@@ -70,13 +68,11 @@ public class SentenceBuilder {
 				validity.getErrorMessage());
 	}
 
-	private Pair<Statement, String> buildAssignationSentence(List<Token> tokens) {
-		SentenceValidator validator =
-				new SentenceValidator(getSentenceRules(tokens.getFirst().getType()));
+	private Pair<Statement, String> buildAssignationSentence(
+			List<Token> tokens, SentenceValidator validator) {
 		Validity validity = validator.getSentenceValidity(tokens);
 		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
 
-		TokenMapper mapper = new TokenMapper();
 		// May need to change method
 		Token type = tokens.get(3);
 		Token identifier = tokens.get(1);
@@ -84,8 +80,8 @@ public class SentenceBuilder {
 
 		Identifier identifierComponent = (Identifier) mapper.mapToken(identifier);
 
-		DeclarationType declarationType = getDeclarationType(type.getValue());
-		IdentifierType identifierType = getIdentifierType(tokens.getFirst());
+		DeclarationType declarationType = mapper.getDeclarationType(type.getValue());
+		IdentifierType identifierType = mapper.getIdentifierType(tokens.getFirst());
 		// let x: number;
 		boolean isSemicolon = tokens.get(4).getType() == SEMICOLON;
 		EvaluableComponent value =
@@ -100,8 +96,8 @@ public class SentenceBuilder {
 		Pair<Integer, Integer> start = tokens.getFirst().getStart();
 		Pair<Integer, Integer> end = semicolon.getEnd();
 
-		Statement statement =
-				getStatement(
+		Statement declarationStatement =
+				getDeclarationStatement(
 						isSemicolon,
 						declarationType,
 						identifierType,
@@ -109,11 +105,68 @@ public class SentenceBuilder {
 						start,
 						end,
 						value);
-
-		return new Pair<>(statement, validity.getErrorMessage());
+		return new Pair<>(declarationStatement, validity.getErrorMessage());
 	}
 
-	private Statement getStatement(
+	private Pair<Statement, String> buildConditionalSentence(
+			List<Token> tokens, SentenceValidator validator) {
+		Validity validity = validator.getSentenceValidity(tokens);
+
+		if (!validity.isValid()) return new Pair<>(null, validity.getErrorMessage());
+
+		// IF -> PARENTH -> IDENT -> PARENTH -> BRACE -> STATEMENT ... -> BRACE -> OPTIONAL(ELSE)
+		// ...
+		Identifier identifier = (Identifier) mapper.mapToken(tokens.get(2));
+
+		Iterable<Statement> codeBlock = buildSentenceIterable(tokens.subList(5, tokens.size()));
+		boolean hasElseCondition = tokens.stream().anyMatch(token -> token.getType() == ELSE);
+
+		if (hasElseCondition) {
+			int elseIndex = getFirstElseIndex(tokens);
+			Iterable<Statement> secondCodeBlock =
+					buildSentenceIterable(tokens.subList(elseIndex, tokens.size()));
+			Statement ifElse =
+					new IfElseStatement(
+							identifier,
+							codeBlock,
+							secondCodeBlock,
+							tokens.getFirst().getStart(),
+							tokens.getLast().getEnd());
+			return new Pair<>(ifElse, validity.getErrorMessage());
+		}
+
+		Statement ifStatement =
+				new IfStatement(
+						identifier,
+						codeBlock,
+						tokens.getFirst().getStart(),
+						tokens.getLast().getEnd());
+		return new Pair<>(ifStatement, validity.getErrorMessage());
+	}
+
+	private int getFirstElseIndex(List<Token> tokens) {
+		Optional<Token> firstElse =
+				tokens.stream().filter(token -> token.getType() == ELSE).findFirst();
+		return firstElse.map(tokens::indexOf).orElse(-1);
+	}
+
+	private Iterable<Statement> buildSentenceIterable(List<Token> tokens) {
+		List<List<Token>> sentences = splitTokens(tokens);
+		List<Pair<Optional<Statement>, String>> statements =
+				sentences.stream().map(this::buildSentence).toList();
+		return statements.stream()
+				.map(Pair::first)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.toList();
+	}
+
+	private List<List<Token>> splitTokens(List<Token> tokens) {
+		// TODO
+		return null;
+	}
+
+	private Statement getDeclarationStatement(
 			boolean isSemicolon,
 			DeclarationType declarationType,
 			IdentifierType identifierType,
@@ -127,72 +180,25 @@ public class SentenceBuilder {
 						declarationType, identifierType, identifier, value, start, end);
 	}
 
-	private IdentifierType getIdentifierType(Token identifier) {
-		Map<TokenType, IdentifierType> types =
-				Map.of(
-						BaseTokenTypes.LET,
-						IdentifierType.LET,
-						FUNCTION,
-						IdentifierType.FUNCTION,
-						CONST,
-						IdentifierType.CONST);
-		return types.get(identifier.getType());
-	}
+	private Pair<Statement, String> getStatementPair(List<Token> tokens) {
+		Pair<Statement, String> errorPair =
+				new Pair<>(
+						null,
+						"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
 
-	private DeclarationType getDeclarationType(String type) {
-		Map<String, DeclarationType> declarationTypeMap =
-				Map.of(
-						"number",
-						DeclarationType.NUMBER,
-						"string",
-						DeclarationType.STRING,
-						"function",
-						DeclarationType.FUNCTION,
-						"boolean",
-						DeclarationType.BOOLEAN);
-		return declarationTypeMap.get(type.toLowerCase());
-	}
+		if (tokens == null) return errorPair;
 
-	private Pair<Statement, String> getAstComponent(List<Token> tokens) {
 		return switch (tokens.getFirst().getType()) {
-			case LET, CONST -> buildAssignationSentence(tokens);
-			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens);
-			case IDENTIFIER -> buildReassignationSentence(tokens);
-			default ->
-					new Pair<>(
-							null,
-							"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER or DECLARATION");
+			case LET, CONST -> buildAssignationSentence(tokens, getValidator(tokens));
+			case FUNCTION, PRINTLN -> buildFunctionSentence(tokens, getValidator(tokens));
+			case IDENTIFIER -> buildReassignationSentence(tokens, getValidator(tokens));
+			case IF, ELSE -> buildConditionalSentence(tokens, getValidator(tokens));
+			default -> errorPair;
 		};
 	}
 
-	private List<ValidityRule> getSentenceRules(TokenType type) {
-		return switch (type) {
-			case PRINTLN, FUNCTION ->
-					List.of(
-							new NextTokenShouldExist(),
-							new FunctionCallRule(),
-							new LiteralRule(),
-							new IdentifierOnFunctionRule(),
-							new OperatorRule(),
-							new SeparatorRule());
-			case LET, CONST ->
-					List.of(
-							new NextTokenShouldExist(),
-							new DeclarationRule(),
-							new IdentifierOnDeclarationRule(),
-							new ColonRule(),
-							new TypeRule(),
-							new LiteralRule(),
-							new AssignationOnDeclarationRule(),
-							new OperatorRule(),
-							new SeparatorRule());
-			case IDENTIFIER ->
-					List.of(
-							new NextTokenShouldExist(),
-							new ReassignationRule(),
-							new OperatorRule(),
-							new SeparatorRule());
-			default -> null;
-		};
+	private SentenceValidator getValidator(List<Token> tokens) {
+		return new SentenceValidator(
+				new RuleProvider().getSentenceRules(tokens.getFirst().getType()));
 	}
 }
