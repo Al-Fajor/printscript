@@ -1,14 +1,16 @@
 package org.example.sentence.builder;
 
-import static org.example.token.BaseTokenTypes.*;
-
-import java.util.List;
-import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.statement.Statement;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.rule.RuleProvider;
+import org.example.sentence.validator.validity.rule.ValidityRule;
 import org.example.token.Token;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.example.token.BaseTokenTypes.*;
 
 public class SentenceBuilder {
 
@@ -43,13 +45,13 @@ public class SentenceBuilder {
 	}
 
 	private Pair<Statement, String> buildConditionalSentence(List<Token> tokens) {
-		return new IfStatementBuilder().buildSentence(tokens);
+		return new IfStatementBuilder().buildStatement(tokens);
 	}
 
 	private Pair<Statement, String> getStatementPair(List<Token> tokens) {
-		Pair<Statement, String> errorPair =
-				errorPair(
-						"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER, DECLARATION or IF");
+		final String invalidSentence =
+				"Invalid sentence. Should begin with PRINTLN, FUNCTION, IDENTIFIER, DECLARATION or IF";
+		Pair<Statement, String> errorPair = errorPair(invalidSentence);
 
 		if (tokens == null) return errorPair;
 
@@ -64,7 +66,7 @@ public class SentenceBuilder {
 	}
 
 	private SentenceValidator getValidator(List<Token> tokens) {
-		return new SentenceValidator(
-				new RuleProvider().getSentenceRules(tokens.getFirst().getType()));
+		List<ValidityRule> rules = new RuleProvider().getSentenceRules(tokens.getFirst().getType());
+		return new SentenceValidator(rules);
 	}
 }

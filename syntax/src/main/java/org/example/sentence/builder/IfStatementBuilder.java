@@ -1,23 +1,23 @@
 package org.example.sentence.builder;
 
-import static org.example.sentence.builder.SentenceBuilder.errorPair;
-import static org.example.token.BaseTokenTypes.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.Identifier;
 import org.example.ast.statement.IfElseStatement;
 import org.example.ast.statement.IfStatement;
 import org.example.ast.statement.Statement;
-import org.example.sentence.mapper.TokenMapper;
 import org.example.token.Token;
 
-public class IfStatementBuilder {
-	private final TokenMapper mapper = new TokenMapper();
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-	public Pair<Statement, String> buildSentence(List<Token> tokens) {
+import static org.example.sentence.builder.SentenceBuilder.errorPair;
+import static org.example.token.BaseTokenTypes.*;
+
+public class IfStatementBuilder extends StatementBuilder {
+
+	@Override
+	public Pair<Statement, String> buildStatement(List<Token> tokens) {
 		if (!tokens.get(1).getValue().equals("(")) {
 			return errorPair("Expected '(' after 'if'");
 		}
