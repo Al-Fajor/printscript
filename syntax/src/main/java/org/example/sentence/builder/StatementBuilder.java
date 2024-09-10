@@ -1,12 +1,11 @@
 package org.example.sentence.builder;
 
+import java.util.List;
 import org.example.Pair;
 import org.example.ast.statement.Statement;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.token.Token;
-
-import java.util.List;
 
 public abstract class StatementBuilder {
 	protected final SentenceValidator validator;
