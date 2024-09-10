@@ -1,11 +1,5 @@
 package org.example;
 
-import static org.example.token.BaseTokenTypes.*;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
 import org.example.ast.statement.Statement;
 import org.example.observer.Observer;
 import org.example.result.SyntaxError;
@@ -13,6 +7,13 @@ import org.example.result.SyntaxResult;
 import org.example.result.SyntaxSuccess;
 import org.example.sentence.builder.SentenceBuilder;
 import org.example.token.Token;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
+import static org.example.token.BaseTokenTypes.*;
 
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 	List<Observer<Pair<Integer, Integer>>> observers = new ArrayList<>();
