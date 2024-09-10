@@ -1,0 +1,2 @@
+{"tokens": "CONST -> IDENTIFIER(a) -> COLON -> TYPE(boolean) -> SEMICOLON",
+  "ast_list":[]}

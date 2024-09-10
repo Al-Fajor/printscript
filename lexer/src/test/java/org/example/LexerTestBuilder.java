@@ -11,8 +11,8 @@ import org.example.token.Token;
 
 public class LexerTestBuilder {
 
-	public void testTokenDetection(String filePath) throws IOException {
-		Lexer lexer = new PrintScriptLexer();
+	public void testTokenDetection(String filePath, String version) throws IOException {
+		Lexer lexer = new PrintScriptLexer(version);
 		FileParser fp = new FileParser();
 		Iterator<Token> expectedList = fp.getTokens(filePath).iterator();
 		Iterator<String> input = List.of(fp.getCode(filePath).split("(?<=\\R)")).iterator();
@@ -40,8 +40,8 @@ public class LexerTestBuilder {
 		assertFalse(actualList.hasNext());
 	}
 
-	public void testLexicalErrorDetection(String filePath) throws IOException {
-		Lexer lexer = new PrintScriptLexer();
+	public void testLexicalErrorDetection(String filePath, String version) throws IOException {
+		Lexer lexer = new PrintScriptLexer(version);
 		FileParser fp = new FileParser();
 		Result result = lexer.lex(List.of(fp.getCode(filePath).split("\\n")).iterator());
 		assertFalse(result.isSuccessful());

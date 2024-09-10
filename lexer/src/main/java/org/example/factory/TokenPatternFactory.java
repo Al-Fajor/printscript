@@ -2,12 +2,12 @@ package org.example.factory;
 
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.example.token.TokenType;
+import org.example.token.BaseTokenTypes;
 
 public class TokenPatternFactory {
-	public static Pattern createPattern(Map<TokenType, String> regexMap) {
+	public static Pattern createPattern(Map<BaseTokenTypes, String> regexMap) {
 		StringBuilder regex = new StringBuilder();
-		for (Map.Entry<TokenType, String> entry : regexMap.entrySet()) {
+		for (Map.Entry<BaseTokenTypes, String> entry : regexMap.entrySet()) {
 			regex.append("(?<")
 					.append(entry.getKey().toString())
 					.append(">")

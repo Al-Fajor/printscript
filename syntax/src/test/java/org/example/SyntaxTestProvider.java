@@ -48,13 +48,13 @@ public class SyntaxTestProvider {
 	}
 
 	private boolean error(List<AstComponent> expectedList, List<AstComponent> actualList) {
-		System.out.println("Expected: " + printWholeList(expectedList));
-		System.out.println("Actual: " + printWholeList(actualList));
+		System.out.println("Expected: \n" + printWholeList(expectedList));
+		System.out.println("Actual: \n" + printWholeList(actualList));
 		return false;
 	}
 
 	private String printWholeList(List<AstComponent> list) {
-		return list.stream().map(String::valueOf).collect(Collectors.joining(", "));
+		return list.stream().map(String::valueOf).collect(Collectors.joining("\n"));
 	}
 
 	private List<AstComponent> getAstFromJson(String filePath) throws IOException {

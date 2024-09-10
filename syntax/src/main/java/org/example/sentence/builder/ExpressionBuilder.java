@@ -34,11 +34,11 @@ public class ExpressionBuilder {
 				yield mapper.mapToken(current);
 			}
 			case SEPARATOR -> {
-				if (mapper.matchesSeparatorType(current, "opening")) {
+				if (mapper.matchesSeparatorType(current, "opening parenthesis")) {
 					reader.consume();
 					EvaluableComponent expression = parseExpression(reader, 0);
-					if (!mapper.matchesSeparatorType(reader.getCurrentToken(), "closing"))
-						yield null;
+					if (!mapper.matchesSeparatorType(
+							reader.getCurrentToken(), "closing parenthesis")) yield null;
 					reader.consume();
 					yield expression;
 				}

@@ -31,7 +31,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 	@CommandLine.Option(
 			names = "--version",
 			description = "The PrintScript version of the code being analyzed")
-	private int version;
+	private String version;
 
 	@CommandLine.Option(
 			names = "--config",
@@ -44,7 +44,7 @@ public class AnalyzeCommand implements Callable<Integer> {
 		PrintScriptSca analyzer = getAnalyzer(configPathOrDefault);
 		String content = getContent(filePath);
 		Iterator<String> iterator = content.lines().iterator();
-		Lexer lexer = new PrintScriptLexer();
+		Lexer lexer = new PrintScriptLexer(version);
 		List<Result> results = new ArrayList<>();
 		while (iterator.hasNext()) {
 			Result lexerResult = lexer.lex(iterator);

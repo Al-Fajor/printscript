@@ -1,0 +1,4 @@
+{
+  "code": "const x: number = 5;",
+  "tokens": "CONST(const) -> IDENTIFIER(x) -> COLON(:) -> TYPE(number) -> ASSIGNATION(=) -> LITERAL(5) -> SEMICOLON(;)"
+}

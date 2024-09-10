@@ -1,0 +1,4 @@
+{
+  "code": "let if: number = 6;\nlet readEnv: string = \"hello\";println(readEnv);",
+  "tokens": "LET(let) -> IDENTIFIER(if) -> COLON(:) -> TYPE(number) -> ASSIGNATION(=) -> LITERAL(6) -> SEMICOLON(;) -> LET(let) -> IDENTIFIER(readEnv) -> COLON(:) -> TYPE(string) -> ASSIGNATION(=) -> LITERAL(\"hello\") -> SEMICOLON(;) -> PRINTLN(println) -> SEPARATOR(() -> IDENTIFIER(readEnv) -> SEPARATOR()) -> SEMICOLON(;)"
+}
