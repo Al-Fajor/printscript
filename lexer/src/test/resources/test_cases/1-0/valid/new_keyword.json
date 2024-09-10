@@ -1,0 +1,4 @@
+{
+  "code": "let const: number = 5;",
+  "tokens": "LET(let) -> IDENTIFIER(const) -> COLON(:) -> TYPE(number) -> ASSIGNATION(=) -> LITERAL(5) -> SEMICOLON(;)"
+}
