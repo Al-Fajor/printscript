@@ -57,28 +57,28 @@ class CliTest extends TestBuilder {
 
 			String output = outputStream.toString();
 
-            assertExpected(expectedOutput, output);
-            assertUnexpected(unexpectedOutput, output);
-        };
+			assertExpected(expectedOutput, output);
+			assertUnexpected(unexpectedOutput, output);
+		};
 	}
 
-    private static void assertUnexpected(List<String> expectedOutput, String output) {
-        expectedOutput.forEach(
-                outputSegment ->
-                        assertFalse(
-                                output.contains(outputSegment),
-                                "Could not find '" + outputSegment + "' in:\n" + output));
-    }
+	private static void assertUnexpected(List<String> expectedOutput, String output) {
+		expectedOutput.forEach(
+				outputSegment ->
+						assertFalse(
+								output.contains(outputSegment),
+								"Could not find '" + outputSegment + "' in:\n" + output));
+	}
 
-    private static void assertExpected(List<String> expectedOutput, String output) {
-        expectedOutput.forEach(
-                outputSegment ->
-                        assertTrue(
-                                output.contains(outputSegment),
-                                "Could not find '" + outputSegment + "' in:\n" + output));
-    }
+	private static void assertExpected(List<String> expectedOutput, String output) {
+		expectedOutput.forEach(
+				outputSegment ->
+						assertTrue(
+								output.contains(outputSegment),
+								"Could not find '" + outputSegment + "' in:\n" + output));
+	}
 
-    private void createTempCopyAndExecuteCommand(String command, CommandLine cmd)
+	private void createTempCopyAndExecuteCommand(String command, CommandLine cmd)
 			throws IOException {
 		String[] splitCommand = command.split(" ");
 

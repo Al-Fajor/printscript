@@ -17,14 +17,12 @@ public class CliTestReader {
 
 	public static List<String> readOutput(String filePath, String field) throws IOException {
 		JSONObject json = getJsonObject(filePath);
-        if (!json.has(field)) {
-            return Collections.emptyList();
-        }
+		if (!json.has(field)) {
+			return Collections.emptyList();
+		}
 
 		List<String> result = new ArrayList<>();
-		json.getJSONArray(field)
-				.iterator()
-				.forEachRemaining(string -> result.add((String) string));
+		json.getJSONArray(field).iterator().forEachRemaining(string -> result.add((String) string));
 		return result;
 	}
 
