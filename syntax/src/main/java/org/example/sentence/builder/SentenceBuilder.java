@@ -1,5 +1,10 @@
 package org.example.sentence.builder;
 
+import static org.example.token.BaseTokenTypes.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.example.Pair;
 import org.example.ast.*;
 import org.example.ast.statement.*;
@@ -8,12 +13,6 @@ import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.Validity;
 import org.example.sentence.validator.validity.rule.RuleProvider;
 import org.example.token.Token;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.example.token.BaseTokenTypes.*;
 
 public class SentenceBuilder {
 	private final TokenMapper mapper = new TokenMapper();
