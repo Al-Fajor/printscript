@@ -5,9 +5,11 @@ import java.util.Map;
 import org.example.token.BaseTokenTypes;
 import org.example.token.TokenType;
 
+import static org.example.token.BaseTokenTypes.*;
+
 public class TokenRegex {
 
-	public static Map<TokenType, String> getRegexMap(String version) {
+	public static Map<BaseTokenTypes, String> getRegexMap(String version) {
 
         if (version.equals("1.0")) {
             return getRegexMapV1Point0();
@@ -18,30 +20,43 @@ public class TokenRegex {
         }
 	}
 
-    private static Map<TokenType, String> getRegexMapV1Point0() {
-        Map<TokenType, String> regexMap = new LinkedHashMap<>();
-        regexMap.put(BaseTokenTypes.LET, "\\blet\\b");
-        regexMap.put(BaseTokenTypes.TYPE, "\\bnumber\\b|\\bstring\\b");
-        regexMap.put(BaseTokenTypes.IF, "\\bif\\b");
-        regexMap.put(BaseTokenTypes.ELSE, "\\belse\\b");
-        regexMap.put(BaseTokenTypes.PRINTLN, "\\bprintln\\b");
-        regexMap.put(BaseTokenTypes.FUNCTION, "\\bfunction\\b");
-        regexMap.put(BaseTokenTypes.SEMICOLON, ";");
-        regexMap.put(BaseTokenTypes.COLON, ":");
-        regexMap.put(BaseTokenTypes.ASSIGNATION, "=");
-        regexMap.put(BaseTokenTypes.IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*");
+    private static Map<BaseTokenTypes, String> getRegexMapV1Point0() {
+        Map<BaseTokenTypes, String> regexMap = new LinkedHashMap<>();
+        regexMap.put(LET, "\\blet\\b");
+        regexMap.put(TYPE, "\\bnumber\\b|\\bstring\\b");
+        regexMap.put(IF, "\\bif\\b");
+        regexMap.put(ELSE, "\\belse\\b");
+        regexMap.put(PRINTLN, "\\bprintln\\b");
+        regexMap.put(FUNCTION, "\\bfunction\\b");
+        regexMap.put(SEMICOLON, ";");
+        regexMap.put(COLON, ":");
+        regexMap.put(ASSIGNATION, "=");
+        regexMap.put(IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*");
         // detects numbers (whole or decimal) or Strings
-        regexMap.put(BaseTokenTypes.LITERAL, "((0|[1-9]\\d*)(\\.\\d+)?)|(\"[^\"]*\"|'[^']*')");
-        regexMap.put(BaseTokenTypes.OPERATOR, "[-+*/]");
-        regexMap.put(BaseTokenTypes.SEPARATOR, "[\\(\\)\\{\\}]");
+        regexMap.put(LITERAL, "((0|[1-9]\\d*)(\\.\\d+)?)|(\"[^\"]*\"|'[^']*')");
+        regexMap.put(OPERATOR, "[-+*/]");
+        regexMap.put(SEPARATOR, "[\\(\\)\\{\\}]");
         return regexMap;
     }
 
-    private static Map<TokenType, String> getRegexMapV1Point1() {
-        Map<TokenType, String> regexMap = getRegexMapV1Point0();
-        regexMap.put(BaseTokenTypes.CONST, "\\bconst\\b");
-        regexMap.put(BaseTokenTypes.READENV, "\\breadenv\\b");
-        regexMap.put(BaseTokenTypes.READINPUT, "\\breadinput\\b");
+    private static Map<BaseTokenTypes, String> getRegexMapV1Point1() {
+        Map<BaseTokenTypes, String> regexMap = new LinkedHashMap<>();
+        regexMap.put(LET, "\\blet\\b");
+        regexMap.put(TYPE, "\\bnumber\\b|\\bstring\\b|\\boolean\\b");
+        regexMap.put(CONST, "\\bconst\\b");
+        regexMap.put(READENV, "\\breadenv\\b");
+        regexMap.put(READINPUT, "\\breadinput\\b");
+        regexMap.put(IF, "\\bif\\b");
+        regexMap.put(ELSE, "\\belse\\b");
+        regexMap.put(PRINTLN, "\\bprintln\\b");
+        regexMap.put(FUNCTION, "\\bfunction\\b");
+        regexMap.put(SEMICOLON, ";");
+        regexMap.put(COLON, ":");
+        regexMap.put(ASSIGNATION, "=");
+        regexMap.put(LITERAL, "(\\btrue\\b|\\bfalse\\b)|((0|[1-9]\\d*)(\\.\\d+)?)|(\"[^\"]*\"|'[^']*')");
+        regexMap.put(IDENTIFIER, "[a-zA-Z_][a-zA-Z0-9_]*");
+        regexMap.put(OPERATOR, "[-+*/]");
+        regexMap.put(SEPARATOR, "[\\(\\)\\{\\}]");
         return regexMap;
     }
 }
