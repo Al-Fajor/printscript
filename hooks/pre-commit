@@ -4,6 +4,6 @@ separator="====================="
 set -e
 echo $separator
 echo "Applying Spotless"
-./gradlew spotlessApply
+./gradlew spotlessApply --staged
 echo $separator
 
