@@ -10,10 +10,13 @@ public class PrintScriptLexer implements Lexer {
     private final String version;
 
     public PrintScriptLexer(String version) {
-        if (!version.equals("1.0") && !version.equals("1.1")) {
+        if (version == null) {
+            this.version = "1.1";
+        } else if (!version.equals("1.0") && !version.equals("1.1")) {
             throw new IllegalArgumentException("Invalid version: " + version);
+        } else {
+            this.version = version;
         }
-        this.version = version;
     }
 
 	@Override
