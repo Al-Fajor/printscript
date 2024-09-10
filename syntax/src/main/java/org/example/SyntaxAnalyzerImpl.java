@@ -35,21 +35,21 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 
 	private SyntaxResult getSyntaxResult(List<Token> tokens) {
 		SentenceBuilder builder = new SentenceBuilder();
-		Pair<Optional<Statement>, String> sentenceResult = builder.buildSentence(tokens);
+		Pair<Optional<Statement>, String> sentenceOptional = builder.buildSentence(tokens);
 
 		for (int i = 1; i < LIMIT; i++) {
 			final int completed = i;
 			observers.forEach(observer -> observer.notifyChange(new Pair<>(completed + 1, LIMIT)));
 		}
 
-		if (sentenceResult.first().isEmpty()) {
+		if (sentenceOptional.first().isEmpty()) {
 			return new SyntaxError(
 					tokens.getFirst().getStart(),
 					tokens.getLast().getEnd(),
-					sentenceResult.second());
+					sentenceOptional.second());
 		}
 
-		return new SyntaxSuccess(sentenceResult.first().get());
+		return new SyntaxSuccess(sentenceOptional.first().get());
 	}
 
 	private List<Token> getStatementTokens(Iterator<Token> tokens) {
