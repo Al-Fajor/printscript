@@ -10,7 +10,6 @@ import org.example.PrintScriptFormatter;
 import org.example.ast.AstComponent;
 import org.example.ast.statement.Statement;
 import org.example.factories.RuleFactoryWithCustomPath;
-import org.example.io.Color;
 import org.example.io.ScriptReader;
 import org.example.iterators.InterpreterIterator;
 import picocli.CommandLine;
@@ -83,7 +82,6 @@ public class FormattingCommand implements Callable<Integer> {
 	}
 
 	private String runFormatter(Formatter formatter, Iterator<Statement> statements) {
-		Color.printGreen("\nRunning formatter...");
 		String formattedCode = formatter.format(toAstList(statements));
 		System.out.println(formattedCode);
 		return formattedCode;

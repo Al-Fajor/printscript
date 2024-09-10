@@ -1,11 +1,9 @@
 {
   "command": "execute src/test/resources/pts/expandedPrint.pts",
   "expectedOutput": [
-    "Performing lexical analysis",
-    "Performing syntactic analysis",
-    "Performing semantic analysis",
-    "Completed validation successfully. No errors found.",
-    "Running...",
     "Hello!"
+  ],
+  "unexpectedOutput": [
+    "failed with error"
   ]
 }

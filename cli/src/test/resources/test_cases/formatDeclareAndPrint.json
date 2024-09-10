@@ -1,6 +1,7 @@
 {
   "command": "format src/test/resources/unformatted_pts/declareAndPrint.pts --config=src/test/resources/formatter_configs/printConfig.json",
-  "expectedOutput": [
-    "Running formatter..."
+  "expectedOutput": [],
+  "unexpectedOutput": [
+    "failed with error"
   ]
 }

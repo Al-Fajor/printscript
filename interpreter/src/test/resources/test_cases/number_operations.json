@@ -1,5 +1,5 @@
 {
-  "expectedPrintLines": ["46.0"],
+  "expectedPrintLines": ["46.4"],
   "ast_list": [
     {
       "assignation": [
@@ -43,7 +43,7 @@
                     },
                     {
                       "literal": {
-                        "value": 100
+                        "value": 101
                       }
                     },
                     {

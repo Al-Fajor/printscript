@@ -1,8 +1,6 @@
 {
   "command": "validate src/test/resources/pts/failingSyntax.pts",
   "expectedOutput": [
-    "Performing lexical analysis",
-    "Performing syntactic analysis",
     "Syntax Analysis failed with error",
     "let a b number = 5;"
   ]
