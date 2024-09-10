@@ -65,6 +65,9 @@ public class SentenceValidator {
 						return false;
 					}
 				}
+				default -> {
+					break;
+				}
 			}
 		}
 
