@@ -2,6 +2,7 @@ package org.example.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -106,6 +107,11 @@ public class AstBuilder {
 
 				yield switch (value) {
 					case String ignored -> new Literal<>((String) value, PLACEHOLDER, PLACEHOLDER);
+					case BigDecimal ignored ->
+							new Literal<>(
+									Double.parseDouble(String.valueOf(value)),
+									PLACEHOLDER,
+									PLACEHOLDER);
 					case Number ignored -> new Literal<>((Number) value, PLACEHOLDER, PLACEHOLDER);
 					case Boolean ignored ->
 							new Literal<>((Boolean) value, PLACEHOLDER, PLACEHOLDER);

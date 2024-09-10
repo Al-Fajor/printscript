@@ -55,11 +55,16 @@ public class TokenMapper {
 		if (value.contains("\"") || !isNumeric(value)) {
 			return new Literal<>(clearInvCommas(value), token.getStart(), token.getEnd());
 		}
-		return new Literal<>(Integer.valueOf(value), token.getStart(), token.getEnd());
+		boolean isDouble = value.contains(".");
+		if (isDouble) {
+			return new Literal<>(Double.valueOf(value), token.getStart(), token.getEnd());
+		} else {
+			return new Literal<>(Integer.valueOf(value), token.getStart(), token.getEnd());
+		}
 	}
 
 	private boolean isNumeric(String value) {
-		Pattern pattern = Pattern.compile("-?[0-9]+");
+		Pattern pattern = Pattern.compile("-?[0-9]+(\\.[0-9]+)*");
 		return pattern.matcher(value).matches();
 	}
 

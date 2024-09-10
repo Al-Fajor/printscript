@@ -49,7 +49,15 @@ public class EvaluationResult {
 			}
 			case NUMBER -> {
 				Double result = getNumericResult();
-				return result != null ? result.toString() : null;
+				if (result == null) return null;
+
+				// if number ends with .0 show as integer
+				String str = result.toString();
+				if (str.matches("[0-9]+(.0)$")) {
+					return str.substring(0, str.length() - 2);
+				} else {
+					return result.toString();
+				}
 			}
 			default -> throw new IllegalArgumentException("Implement " + getType() + " toString");
 		}

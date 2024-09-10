@@ -1,13 +1,12 @@
 package org.example.iterators;
 
-import static org.example.utils.PrintUtils.printFailedCode;
+import static org.example.utils.PrintUtils.printFailedStep;
 
 import java.util.Iterator;
 import java.util.Scanner;
 import org.example.Lexer;
 import org.example.PrintScriptLexer;
 import org.example.Result;
-import org.example.io.Color;
 import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerSuccess;
 import org.example.token.Token;
@@ -46,12 +45,11 @@ public class SyntaxAnalyzerIterator implements Iterator<Token> {
 	}
 
 	private boolean loadBufferAndEvaluateResult() {
-		Color.printGreen("\nPerforming lexical analysis");
 		Result result = lexer.lex(scanner);
 
 		return switch (result) {
 			case LexerFailure failure -> {
-				stepFailed(path, failure);
+				printFailedStep(path, failure, "Lexing");
 				yield false;
 			}
 			case LexerSuccess success -> {
@@ -65,12 +63,5 @@ public class SyntaxAnalyzerIterator implements Iterator<Token> {
 	@Override
 	public Token next() {
 		return tokenBufferIterator.next();
-	}
-
-	private static void stepFailed(String path, Result result) {
-		if (!result.isSuccessful()) {
-			System.out.println("Lexing" + " failed with error: '" + result.errorMessage() + "'");
-			printFailedCode(path, result, "Lexing");
-		}
 	}
 }

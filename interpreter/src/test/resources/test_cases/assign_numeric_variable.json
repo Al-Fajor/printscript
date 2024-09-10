@@ -1,5 +1,5 @@
 {
-  "expectedPrintLines": ["7.0"],
+  "expectedPrintLines": ["7"],
   "ast_list": [
     {
       "assignation": [

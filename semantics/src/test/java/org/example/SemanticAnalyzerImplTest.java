@@ -44,7 +44,6 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 		return () -> {
 			try {
 				SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
-				// TODO: delete castToAstComponent once SemanticAnalyzer uses statements
 				List<Statement> astList = builder.buildFromJson(testFile.getAbsolutePath());
 
 				Result analyticResult = new SemanticSuccess();
