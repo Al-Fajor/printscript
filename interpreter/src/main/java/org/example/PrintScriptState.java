@@ -1,23 +1,20 @@
 package org.example;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.example.ast.DeclarationType;
-import org.example.observer.BrokerObserver;
 
 public class PrintScriptState implements InterpreterState {
 	private final Map<String, Variable<Double>> numericVariables;
 	private final Map<String, Variable<String>> stringVariables;
+	private final Map<String, Variable<Boolean>> booleanVariables;
 	private final Map<String, Function> functions;
-	private final List<BrokerObserver<?>> observers;
 
-	public PrintScriptState(List<BrokerObserver<?>> observers) {
-		this.observers = observers;
+	public PrintScriptState() {
 		numericVariables = new HashMap<>();
 		stringVariables = new HashMap<>();
+		booleanVariables = new HashMap<>();
 		functions = new HashMap<>();
-		functions.put("println", new PrintlnFunction(this));
 	}
 
 	public void addNumericVariable(Variable<Double> numericVariable) {
@@ -44,12 +41,23 @@ public class PrintScriptState implements InterpreterState {
 		stringVariables.get(name).setValue(value);
 	}
 
-	public DeclarationType getVariableType(String name) { // TODO fix horrible code
-		if (numericVariables.get(name) != null) {
-			return DeclarationType.NUMBER;
-		} else {
-			return DeclarationType.STRING;
-		}
+	public void addBooleanVariable(Variable<Boolean> variable) {
+		booleanVariables.put(variable.getName(), variable);
+	}
+
+	public Variable<Boolean> getBooleanVariable(String name) {
+		return booleanVariables.get(name);
+	}
+
+	public void setBooleanVariable(String name, Boolean value) {
+		booleanVariables.get(name).setValue(value);
+	}
+
+	public DeclarationType getVariableType(String name) {
+		if (numericVariables.containsKey(name)) return DeclarationType.NUMBER;
+		if (stringVariables.containsKey(name)) return DeclarationType.STRING;
+		if (booleanVariables.containsKey(name)) return DeclarationType.BOOLEAN;
+		return null;
 	}
 
 	public Function getFunction(String name) {
@@ -58,10 +66,5 @@ public class PrintScriptState implements InterpreterState {
 
 	public void addFunction(Function function) {
 		functions.put(function.getName(), function);
-	}
-
-	@Override
-	public List<BrokerObserver<?>> getObservers() {
-		return observers;
 	}
 }

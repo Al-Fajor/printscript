@@ -1,5 +1,6 @@
 package org.example;
 
+import static org.example.ObserverType.PRINTLN_OBSERVER;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
@@ -7,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import org.example.factory.InterpreterFactory;
 import org.example.io.AstBuilder;
 import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
@@ -26,11 +26,8 @@ public class InterpreterTester {
 	}
 
 	private Interpreter createInterpreter(BrokerObserver<String> printObserver) {
-		InterpreterFactory factory = new InterpreterFactory();
-
-		factory.addObserver(printObserver);
-
-		return factory.create();
+		return new PrintScriptInterpreter(
+				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)));
 	}
 
 	private void interpretTree(Interpreter interpreter, String path) throws IOException {

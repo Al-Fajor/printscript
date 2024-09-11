@@ -4,15 +4,15 @@ import static org.example.ast.DeclarationType.NUMBER;
 import static org.example.ast.DeclarationType.STRING;
 
 import org.example.EvaluationResult;
-import org.example.InterpreterState;
+import org.example.StatePriorityList;
 import org.example.ast.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 
 public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {
-	private final InterpreterState state;
+	private final StatePriorityList statePriorityList;
 
-	public EvaluatorVisitor(InterpreterState state) {
-		this.state = state;
+	public EvaluatorVisitor(StatePriorityList statePriorityList) {
+		this.statePriorityList = statePriorityList;
 	}
 
 	@Override
@@ -43,19 +43,25 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 			case Number n -> {
 				return new EvaluationResult(n.doubleValue());
 			}
+			case Boolean b -> {
+				return new EvaluationResult(b);
+			}
 			default -> throw new IllegalArgumentException("invalidComponent");
 		}
 	}
 
 	@Override
 	public EvaluationResult visit(Identifier identifier) {
-		DeclarationType variableType = state.getVariableType(identifier.getName());
+		DeclarationType variableType = statePriorityList.getVariableType(identifier.getName());
 		switch (variableType) {
 			case NUMBER -> {
 				return new EvaluationResult(getNumericValue(identifier));
 			}
 			case STRING -> {
 				return new EvaluationResult(getStringValue(identifier));
+			}
+			case BOOLEAN -> {
+				return new EvaluationResult(getBooleanValue(identifier));
 			}
 			default -> throw new IllegalArgumentException("Invalid variable type");
 		}
@@ -72,11 +78,15 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	private String getStringValue(Identifier identifier) {
-		return state.getStringVariable(identifier.getName()).getValue();
+		return statePriorityList.getStringVariable(identifier.getName()).getValue();
 	}
 
 	private Double getNumericValue(Identifier identifier) {
-		return state.getNumericVariable(identifier.getName()).getValue();
+		return statePriorityList.getNumericVariable(identifier.getName()).getValue();
+	}
+
+	private Boolean getBooleanValue(Identifier identifier) {
+		return statePriorityList.getBooleanVariable(identifier.getName()).getValue();
 	}
 
 	private EvaluationResult addResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {

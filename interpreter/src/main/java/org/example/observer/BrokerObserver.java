@@ -1,5 +1,5 @@
 package org.example.observer;
 
-public sealed interface BrokerObserver<T> permits PrintBrokerObserver {
+public interface BrokerObserver<T> {
 	void updateChanges(T change);
 }
