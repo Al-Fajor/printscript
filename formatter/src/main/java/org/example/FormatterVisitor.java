@@ -35,7 +35,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(IfStatement ifStatement) {
-		return "";
+		List<String> combinedResults = getCombinedResults(ruleProvider.getIfRuleAppliers(), ifStatement);
 	}
 
 	@Override
@@ -187,7 +187,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	private void hasNoTwoOrMoreConsecutiveSpaces(List<String> strings) {
-		//        Check this before
+		//        TODO Check this before
 		if (strings.stream().anyMatch(string -> string.equals("  "))) {
 			throw new RuntimeException("Two or more consecutive spaces found");
 		}

@@ -6,4 +6,6 @@ public enum RuleApplierTypes {
 	FUNCTION_CALL,
 	BINARY_EXPRESSION,
 	PARAMETERS,
+    IF,
+    IF_ELSE
 }

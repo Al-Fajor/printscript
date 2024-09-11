@@ -7,12 +7,14 @@ import org.example.ast.*;
 import org.example.ast.statement.AssignmentStatement;
 import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.statement.FunctionCallStatement;
+import org.example.ast.statement.IfStatement;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
 import org.example.ruleappliers.assignation.BaseAssignationRuleApplier;
 import org.example.ruleappliers.declaration.BaseDeclarationRuleApplier;
 import org.example.ruleappliers.expression.BaseExpressionRuleApplier;
 import org.example.ruleappliers.function.BaseFunctionRuleApplier;
+import org.example.ruleappliers.ifconditional.BaseIfRuleApplier;
 import org.example.ruleappliers.parameters.BaseParametersRuleApplier;
 
 public class RuleProvider {
@@ -53,6 +55,12 @@ public class RuleProvider {
 		ruleAppliersOfType.add(new BaseParametersRuleApplier());
 		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.PARAMETERS);
 	}
+
+    public List<RuleApplier<IfStatement>> getIfRuleAppliers() {
+        List<RuleApplier<IfStatement>> ruleAppliersOfType = new ArrayList<>();
+        ruleAppliersOfType.add(new BaseIfRuleApplier());
+        return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.IF);
+    }
 
 	private <T extends AstComponent> List<RuleApplier<T>> getRuleAppliersOfType(
 			List<RuleApplier<T>> ruleAppliersOfType, RuleApplierTypes type) {
