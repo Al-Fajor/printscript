@@ -30,8 +30,7 @@ public class FormatterTestFramework {
 		for (Path testCase : cases) {
 			String jsonPath = testCase.toString();
 			System.out.println(jsonPath);
-			// TODO: delete casting once formatter uses statements
-			String code = formatter.format(castToAstComponents(astBuilder.buildFromJson(jsonPath)));
+			String code = formatter.format(astBuilder.buildFromJson(jsonPath).iterator());
 			assertEquals(codes.get(extractFileNameWithoutExtension(testCase)), code);
 		}
 	}

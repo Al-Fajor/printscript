@@ -1,8 +1,10 @@
 package org.example;
 
+import java.util.Iterator;
 import java.util.List;
 import org.example.ast.AstComponent;
+import org.example.ast.statement.Statement;
 
 public interface Formatter {
-	String format(List<AstComponent> asts);
+	String format(Iterator<Statement> asts);
 }
