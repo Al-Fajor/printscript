@@ -1,0 +1,4 @@
+{
+  "code": "let x: number;",
+  "tokens": "LET(let) -> IDENTIFIER(x) -> COLON(:) -> TYPE(number) -> SEMICOLON(;)"
+}

@@ -1,0 +1,9 @@
+{
+  "command": "analyze src/test/resources/pts/printNameAndAge.pts",
+  "expectedOutput": [
+    "Static Code Analyzer found no errors."
+  ],
+  "unexpectedOutput": [
+    "failed with error"
+  ]
+}

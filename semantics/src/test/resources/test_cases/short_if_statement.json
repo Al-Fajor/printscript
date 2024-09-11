@@ -1,0 +1,41 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Boolean",
+            "name": "isTrue"
+          }
+        },
+        {
+          "literal": {
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "if": {
+        "conditional": "isTrue",
+        "trueClause": [
+          {
+            "functionCall": {
+              "identifier": {
+                "name": "println"
+              },
+              "params": [
+                {
+                  "literal": {
+                    "value": "True conditional"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

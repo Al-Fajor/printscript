@@ -1,0 +1,77 @@
+plugins {
+    id 'java'
+    id 'com.diffplug.spotless'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'maven-publish'
+}
+
+spotless {
+    java {
+        googleJavaFormat().aosp()
+        indentWithTabs()
+        removeUnusedImports()
+    }
+}
+
+// Static code analysis configuration
+checkstyle {
+    toolVersion = '10.3.3'
+    ignoreFailures = false
+    maxWarnings = 0
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+    reportsDirectory = layout.buildDirectory.dir('jacocoReportDir')
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
+    }
+    mustRunAfter jacocoTestReport
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            version = "1.0.1-SNAPSHOT"
+            url = uri("https://maven.pkg.github.com/Al-Fajor/printscript")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}

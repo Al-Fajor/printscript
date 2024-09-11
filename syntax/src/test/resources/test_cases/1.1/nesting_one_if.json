@@ -1,0 +1,45 @@
+{"tokens": "LET -> IDENTIFIER(a) -> COLON -> TYPE(boolean) -> ASSIGNATION -> LITERAL(true) -> SEMICOLON -> IF -> SEPARATOR(() -> IDENTIFIER(a) -> SEPARATOR()) -> SEPARATOR({) -> IF -> SEPARATOR(() -> IDENTIFIER(a) -> SEPARATOR()) -> SEPARATOR({) -> PRINTLN -> SEPARATOR(() -> LITERAL(\"hello\") -> SEPARATOR()) -> SEMICOLON -> SEPARATOR(}) -> SEPARATOR(})",
+  "ast_list":[
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Boolean",
+            "name": "a"
+          }
+        },
+        {
+          "literal": {
+            "value" : true
+          }
+        }
+      ]
+    },
+    {
+      "if": {
+        "conditional":"a",
+        "trueClause": [
+          {
+            "if": {
+              "conditional":"a",
+              "trueClause": [
+                {"functionCall": {
+                  "identifier": {
+                    "name": "println",
+                    "identifierType": "function"
+                  },
+                  "params": [
+                    {
+                      "literal": {
+                        "value": "hello"
+                      }
+                    }
+                  ]
+                }}
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]}

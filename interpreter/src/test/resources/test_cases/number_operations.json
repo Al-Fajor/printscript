@@ -1,0 +1,84 @@
+{
+  "expectedPrintLines": ["46.4"],
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "num"
+          }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "*"
+            },
+            {
+              "binaryExpression": [
+                {
+                  "op": "+"
+                },
+                {
+                  "binaryExpression": [
+                    {
+                      "op": "-"
+                    },
+                    {
+                      "literal": {
+                        "value": 5
+                      }
+                    },
+                    {
+                      "literal": {
+                        "value": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "binaryExpression": [
+                    {
+                      "op": "/"
+                    },
+                    {
+                      "literal": {
+                        "value": 101
+                      }
+                    },
+                    {
+                      "literal": {
+                        "value": 5
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "literal": {
+                "value": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "num"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

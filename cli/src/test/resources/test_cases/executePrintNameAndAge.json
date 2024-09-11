@@ -1,0 +1,9 @@
+{
+  "command": "execute src/test/resources/pts/printNameAndAge.pts",
+  "expectedOutput": [
+    "My name is John Doe and I'm 27 years old"
+  ],
+  "unexpectedOutput": [
+    "failed with error"
+  ]
+}

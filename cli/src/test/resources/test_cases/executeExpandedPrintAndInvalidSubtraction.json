@@ -1,0 +1,9 @@
+{
+  "command": "execute src/test/resources/pts/expandedPrintAndInvalidSubtraction.pts",
+  "expectedOutput": [
+    "Semantic Analysis failed",
+    "\u001B[31m\"Hello!\"",
+    "+ \" I'm\"",
+    "- \" John Doe\"\u001B[0m"
+  ]
+}

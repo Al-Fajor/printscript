@@ -1,0 +1,38 @@
+#!/bin/bash
+separator="====================="
+
+set -e
+echo $separator
+echo "Applying Spotless"
+./gradlew spotlessApply
+echo $separator
+
+#Once applied spotless, move to checkStyle
+
+echo $separator
+echo "Using CheckStyle"
+./gradlew checkstyleMain
+./gradlew checkstyleTest
+echo $separator
+
+
+echo $separator
+echo "RUNNING TESTS"
+echo $separator
+
+./gradlew test
+
+echo "TESTS PASSED"
+echo $separator
+
+echo $separator
+echo "RUNNING COVERAGE VERIFICATION"
+./gradlew jacocoTestCoverageVerification
+echo $separator
+
+echo $separator
+echo "SUCCESSFUL PUSH"
+echo $separator
+
+
+#TODO: customize message

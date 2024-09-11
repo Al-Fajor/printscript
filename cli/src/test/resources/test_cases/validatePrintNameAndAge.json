@@ -1,0 +1,9 @@
+{
+  "command": "validate src/test/resources/pts/printNameAndAge.pts",
+  "expectedOutput": [
+    "Completed validation successfully. No errors found."
+  ],
+  "unexpectedOutput": [
+    "failed with error"
+  ]
+}

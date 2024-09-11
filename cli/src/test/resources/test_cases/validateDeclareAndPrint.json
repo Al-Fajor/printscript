@@ -1,0 +1,7 @@
+{
+  "command": "validate src/test/resources/pts/declareAndPrint.pts",
+  "expectedOutput": [
+    "Semantic Analysis failed",
+    "Cannot find identifier b"
+  ]
+}

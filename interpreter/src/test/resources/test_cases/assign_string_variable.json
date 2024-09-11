@@ -1,0 +1,51 @@
+{
+  "expectedPrintLines": ["This is a string"],
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "string"
+          }
+        },
+        {
+          "literal": {
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "assignation": [
+        {
+          "identifier": {
+            "identifierType": "variable",
+            "name": "string"
+          }
+        },
+        {
+          "literal": {
+            "value": "This is a string"
+          }
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "string"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

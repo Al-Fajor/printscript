@@ -1,0 +1,36 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "num"
+          }
+        },
+        {
+          "literal": {
+            "value": -10
+          }
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
+        },
+        "params": [
+          {
+            "identifier": {
+              "name": "num",
+              "identifierType": "variable"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

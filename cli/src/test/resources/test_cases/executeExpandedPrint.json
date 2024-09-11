@@ -1,0 +1,9 @@
+{
+  "command": "execute src/test/resources/pts/expandedPrint.pts",
+  "expectedOutput": [
+    "Hello!"
+  ],
+  "unexpectedOutput": [
+    "failed with error"
+  ]
+}

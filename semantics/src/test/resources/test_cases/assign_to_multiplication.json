@@ -1,0 +1,32 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "a"
+          }
+        },
+        {
+          "binaryExpression": [
+            {
+              "op": "*"
+            },
+            {
+              "literal": {
+                "value": 2
+              }
+            },
+            {
+              "literal": {
+                "value": 3
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

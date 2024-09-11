@@ -1,0 +1,7 @@
+{
+  "command": "format src/test/resources/unformatted_pts/messyDeclare.pts --config=src/test/resources/formatter_configs/tightConfig.json",
+  "expectedOutput": [],
+  "unexpectedOutput": [
+    "failed with error"
+  ]
+}

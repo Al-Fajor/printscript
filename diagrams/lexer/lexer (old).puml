@@ -1,0 +1,79 @@
+@startuml
+
+class PrintScriptLexer implements Lexer {
+    + lex(String input) : List<Token>
+}
+
+interface Lexer {
+    + lex(String input) : List<Token>
+}
+
+class Token {
+- type: TokenType
+- start
+- end
+- value
+}
+interface TokenType {
+}
+enum TokenTypes implements TokenType {
+LET_KEYWORD
+TYPE
+ASSIGNATION
+IDENTIFIER
+SEMICOLON
+COLON
+IF
+ELSE
+LITERAL
+BINARY_OPERATOR
+
+etc.
+}
+
+class Scanner {
+    + scan(String input) : ScanResult
+}
+
+interface LexicalErrorDetector {
+    + verify(String input) : ScanResult
+}
+
+class InvalidChainDetector implements LexicalErrorDetector {
+    + verify(String input) : ScanResult
+}
+
+class UnfinishedSeparatorsDetector implements LexicalErrorDetector {
+    + verify(String input) : ScanResult
+}
+
+class Tokenizer {
+    + tokenize(String input) : List<Token>
+}
+
+interface ScanResult {
+    + isSuccessful() : boolean
+}
+
+class SuccessfulScanResult implements ScanResult {
+    + isSuccessful() : boolean
+}
+
+class FailedScanResult implements ScanResult {
+    + isSuccessful() : boolean
+    + position() : int
+    + message() : String
+}
+
+Scanner --> ScanResult
+
+PrintScriptLexer o--> Scanner
+PrintScriptLexer o--> Tokenizer
+Scanner o--> LexicalErrorDetector
+LexicalErrorDetector -> ScanResult
+
+Lexer -> Token
+
+Token -> TokenType
+
+@enduml

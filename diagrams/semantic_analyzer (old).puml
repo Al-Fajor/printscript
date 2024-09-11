@@ -1,0 +1,33 @@
+@startuml
+
+interface SemanticAnalyzer {
+    + analyze(List<AstComponent> tokens): SemanticResult
+}
+
+class AnalyzerImpl implements SemanticAnalyzer {
+    - resolvers: Map<Class<? extends AstComponent>, Resolver<?>>
+    + analyze(List<AstComponent> tokens): SemanticResult
+}
+
+interface SemanticResult
+
+class SemanticSuccess implements SemanticResult
+class SemanticFailure implements SemanticResult {
+    - reason: String
+}
+
+interface Resolver {
+    + resolve(Ast ast, Set<Declaration> previousDeclarations): Resolution
+}
+
+class Resolution {
+    - result: SemanticResult
+    - resolvedAst: AstComponent
+    - resolvedDeclarations: Set<Declaration>
+}
+
+SemanticAnalyzer -> SemanticResult
+AnalyzerImpl --> Resolver
+Resolver -> Resolution
+
+@enduml

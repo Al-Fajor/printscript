@@ -1,11 +1,11 @@
 @startuml
 
 class PrintScriptLexer implements Lexer {
-    + lex(String input) : List<Token>
+    + lex(String input) : LexerResult
 }
 
 interface Lexer {
-    + lex(String input) : List<Token>
+    + lex(String input) : LexerResult
 }
 
 class Token {
@@ -65,12 +65,30 @@ class FailedScanResult implements ScanResult {
     + message() : String
 }
 
+interface LexerResult {
+    + getTokens(): List<Token>
+    + isSuccessful(): boolean
+}
+
+class LexerSuccess implements LexerResult {
+    + getTokens(): List<Token>
+    + isSuccessful(): boolean
+}
+
+class LexerFailure implements LexerResult {
+    + getTokens(): List<Token>
+    + isSuccessful(): boolean
+    + position() : int
+    + message() : String
+}
+
 Scanner --> ScanResult
 
 PrintScriptLexer o--> Scanner
 PrintScriptLexer o--> Tokenizer
 Scanner o--> LexicalErrorDetector
 LexicalErrorDetector -> ScanResult
+LexerResult <- Lexer
 
 Lexer -> Token
 

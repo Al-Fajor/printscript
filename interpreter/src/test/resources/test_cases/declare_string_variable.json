@@ -1,0 +1,36 @@
+{
+  "expectedPrintLines": ["null"],
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "string"
+          }
+        },
+        {
+          "literal": {
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "string"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

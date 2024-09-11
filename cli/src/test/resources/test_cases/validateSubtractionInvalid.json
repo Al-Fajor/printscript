@@ -1,0 +1,7 @@
+{
+  "command": "validate src/test/resources/pts/subtractionInvalid.pts",
+  "expectedOutput": [
+    "Semantic Analysis failed with error",
+    "println(\u001B[31mage - lastname\u001B[0m);"
+  ]
+}

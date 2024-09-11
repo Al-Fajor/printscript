@@ -1,0 +1,18 @@
+{"tokens": "LET -> IDENTIFIER(a) -> COLON -> TYPE(number) -> SEMICOLON",
+  "ast_list":[
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "a"
+          }
+        },
+        {
+          "literal": {
+            "value": null
+          }
+        }
+      ]
+    }
+  ]}

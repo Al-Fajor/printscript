@@ -1,0 +1,4 @@
+{
+  "code": "let x: number = 5 + 3;",
+    "tokens": "LET(let) -> IDENTIFIER(x) -> COLON(:) -> TYPE(number) -> ASSIGNATION(=) -> LITERAL(5) -> OPERATOR(+) -> LITERAL(3) -> SEMICOLON(;)"
+}

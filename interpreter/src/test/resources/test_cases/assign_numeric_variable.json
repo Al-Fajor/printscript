@@ -1,0 +1,51 @@
+{
+  "expectedPrintLines": ["7"],
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Number",
+            "name": "num"
+          }
+        },
+        {
+          "literal": {
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "assignation": [
+        {
+          "identifier": {
+            "identifierType": "variable",
+            "name": "num"
+          }
+        },
+        {
+          "literal": {
+            "value": 7
+          }
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "identifier": {
+              "identifierType": "variable",
+              "name": "num"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

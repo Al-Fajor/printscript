@@ -1,0 +1,36 @@
+{
+  "valid_semantics": true,
+  "ast_list": [
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "String",
+            "name": "a"
+          }
+        },
+        {
+          "literal": {
+            "value": "Hi"
+          }
+        }
+      ]
+    },
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "println",
+          "identifierType": "function"
+        },
+        "params": [
+          {
+            "identifier": {
+              "name": "a",
+              "identifierType": "variable"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
