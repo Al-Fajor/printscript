@@ -1,25 +1,26 @@
 package org.example.iterators;
 
-import static org.example.utils.PrintUtils.printFailedStep;
-
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 import org.example.Lexer;
 import org.example.PrintScriptLexer;
 import org.example.Result;
 import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerSuccess;
+import org.example.observer.Observable;
+import org.example.observer.Observer;
 import org.example.token.Token;
 
-public class SyntaxAnalyzerIterator implements Iterator<Token> {
+public class SyntaxAnalyzerIterator implements Iterator<Token>, Observable<Result> {
 	Scanner scanner;
 	private final Lexer lexer;
 	Iterator<Token> tokenBufferIterator = new EmptyIterator();
-	private final String path;
+	private final List<Observer<Result>> observers = new ArrayList<>();
 
 	public SyntaxAnalyzerIterator(Scanner src, String path, String version) {
 		this.lexer = new PrintScriptLexer(version);
-		this.path = path;
 		this.scanner = src.useDelimiter("(?<=}|;)");
 	}
 
@@ -46,12 +47,10 @@ public class SyntaxAnalyzerIterator implements Iterator<Token> {
 
 	private boolean loadBufferAndEvaluateResult() {
 		Result result = lexer.lex(scanner);
+		observers.forEach(observer -> observer.notifyChange(result));
 
 		return switch (result) {
-			case LexerFailure failure -> {
-				printFailedStep(path, failure, "Lexing");
-				yield false;
-			}
+			case LexerFailure ignoredFailure -> false;
 			case LexerSuccess success -> {
 				tokenBufferIterator = success.getTokens();
 				yield true;
@@ -63,5 +62,10 @@ public class SyntaxAnalyzerIterator implements Iterator<Token> {
 	@Override
 	public Token next() {
 		return tokenBufferIterator.next();
+	}
+
+	@Override
+	public void addObserver(Observer<Result> observer) {
+		this.observers.add(observer);
 	}
 }

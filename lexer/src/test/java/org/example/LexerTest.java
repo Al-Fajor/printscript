@@ -49,7 +49,7 @@ class LexerTest extends TestBuilder {
 	}
 
 	private String extractVersionFromPath(String filePath) {
-		String[] parts = filePath.split(File.separator);
+		String[] parts = filePath.split("[/\\\\]");
 		for (int i = 0; i < parts.length; i++) {
 			if (parts[i].equals("valid") || parts[i].equals("invalid")) {
 				return parts[i - 1].replace('-', '.');
