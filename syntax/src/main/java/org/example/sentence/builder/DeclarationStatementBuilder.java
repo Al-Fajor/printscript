@@ -9,13 +9,11 @@ import org.example.ast.*;
 import org.example.ast.statement.DeclarationAssignmentStatement;
 import org.example.ast.statement.DeclarationStatement;
 import org.example.ast.statement.Statement;
-import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.Validity;
 import org.example.token.Token;
 
 public class DeclarationStatementBuilder extends StatementBuilder {
-	private final TokenMapper mapper = new TokenMapper();
 
 	public DeclarationStatementBuilder(SentenceValidator validator) {
 		super(validator);
@@ -37,6 +35,7 @@ public class DeclarationStatementBuilder extends StatementBuilder {
 		IdentifierType identifierType = mapper.getIdentifierType(tokens.getFirst());
 		// let x: number;
 		boolean isSemicolon = tokens.get(4).getType() == SEMICOLON;
+		// First line never covered because of Statement difference
 		EvaluableComponent value =
 				isSemicolon
 						? new Literal<>(null, semicolon.getStart(), semicolon.getEnd())
