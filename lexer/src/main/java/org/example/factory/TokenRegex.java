@@ -39,7 +39,7 @@ public class TokenRegex {
 	private static Map<BaseTokenTypes, String> getRegexMapV1Point1() {
 		Map<BaseTokenTypes, String> regexMap = new LinkedHashMap<>();
 		regexMap.put(LET, "\\blet\\b");
-		regexMap.put(TYPE, "\\bnumber\\b|\\bstring\\b|\\boolean\\b");
+		regexMap.put(TYPE, "\\bnumber\\b|\\bstring\\b|\\bboolean\\b");
 		regexMap.put(CONST, "\\bconst\\b");
 		regexMap.put(READENV, "\\breadEnv\\b");
 		regexMap.put(READINPUT, "\\breadInput\\b");
