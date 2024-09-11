@@ -16,7 +16,7 @@ public class RuleProvider {
 								new SeparatorRule()));
 
 		return switch (type) {
-			case PRINTLN, FUNCTION -> {
+			case PRINTLN, FUNCTION, READENV, READINPUT -> {
 				commonRules.addAll(
 						List.of(
 								new FunctionCallRule(),
@@ -39,11 +39,6 @@ public class RuleProvider {
 			case IDENTIFIER -> {
 				commonRules.add(new ReassignationRule());
 				yield commonRules;
-			}
-			case READENV, READINPUT -> {
-				List<ValidityRule> readRules = commonRules.subList(0, commonRules.size() - 1);
-				readRules.add(new ReadArgumentRule());
-				yield readRules;
 			}
 			default -> null;
 		};
