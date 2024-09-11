@@ -42,6 +42,7 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 					statePriorityList.addBooleanVariable(
 							new Variable<>(declarationType, identifier.getName(), null));
 			case FUNCTION -> throw new RuntimeException("Function declaration not implemented");
+			default -> throw new RuntimeException("Unknown declaration type: " + declarationType);
 		}
 		return null;
 	}

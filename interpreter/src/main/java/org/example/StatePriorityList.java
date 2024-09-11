@@ -15,23 +15,23 @@ public class StatePriorityList {
 	}
 
 	/**
-	 * Sets state object as the higher priority state
+	 * Sets state object as the higher priority state.
 	 *
-	 * @param state
+	 * @param state Added State.
 	 */
 	public void addState(InterpreterState state) {
 		states.addFirst(state);
 	}
 
-	/** Removes the highest priority state */
+	/** Removes the highest priority state. */
 	public void popState() {
 		states.removeFirst();
 	}
 
 	/**
-	 * Adds new numeric variable to the highest priority state
+	 * Adds new numeric variable to the highest priority state.
 	 *
-	 * @param variable
+	 * @param variable Added variable.
 	 */
 	public void addNumericVariable(Variable<Double> variable) {
 		states.getFirst().addNumericVariable(variable);
@@ -39,10 +39,10 @@ public class StatePriorityList {
 
 	/**
 	 * Looks for and returns the variable whose name matches the input, starts looking from the
-	 * highest priority
+	 * highest priority.
 	 *
-	 * @param name The variable name
-	 * @return Variable if found, null if not found
+	 * @param name The variable name.
+	 * @return Variable if found, null if not found.
 	 */
 	public Variable<Double> getNumericVariable(String name) {
 		for (InterpreterState state : states) {
@@ -55,19 +55,19 @@ public class StatePriorityList {
 	}
 
 	/**
-	 * Sets a value to a variable, taking state priority into account
+	 * Sets a value to a variable, taking state priority into account.
 	 *
-	 * @param name The variable name
-	 * @param value The value to be assigned
+	 * @param name The variable name.
+	 * @param value The value to be assigned.
 	 */
 	public void setNumericVariable(String name, Double value) {
 		this.getNumericVariable(name).setValue(value);
 	}
 
 	/**
-	 * Adds new numeric variable to the highest priority state
+	 * Adds new numeric variable to the highest priority state.
 	 *
-	 * @param variable
+	 * @param variable Added variable.
 	 */
 	public void addStringVariable(Variable<String> variable) {
 		states.getFirst().addStringVariable(variable);
@@ -75,10 +75,10 @@ public class StatePriorityList {
 
 	/**
 	 * Looks for and returns the variable whose name matches the input, starts looking from the
-	 * highest priority
+	 * highest priority.
 	 *
-	 * @param name The variable name
-	 * @return Variable if found, null if not found
+	 * @param name The variable name.
+	 * @return Variable if found, null if not found.
 	 */
 	public Variable<String> getStringVariable(String name) {
 		for (InterpreterState state : states) {
@@ -91,19 +91,19 @@ public class StatePriorityList {
 	}
 
 	/**
-	 * Sets a value to a variable, taking state priority into account
+	 * Sets a value to a variable, taking state priority into account.
 	 *
-	 * @param name The variable name
-	 * @param value The value to be assigned
+	 * @param name The variable name.
+	 * @param value The value to be assigned.
 	 */
 	public void setStringVariable(String name, String value) {
 		this.getStringVariable(name).setValue(value);
 	}
 
 	/**
-	 * Adds new numeric variable to the highest priority state
+	 * Adds new numeric variable to the highest priority state.
 	 *
-	 * @param variable
+	 * @param variable Added variable.
 	 */
 	public void addBooleanVariable(Variable<Boolean> variable) {
 		states.getFirst().addBooleanVariable(variable);
@@ -111,10 +111,10 @@ public class StatePriorityList {
 
 	/**
 	 * Looks for and returns the variable whose name matches the input, starts looking from the
-	 * highest priority
+	 * highest priority.
 	 *
-	 * @param name The variable name
-	 * @return Variable if found, null if not found
+	 * @param name The variable name.
+	 * @return Variable if found, null if not found.
 	 */
 	public Variable<Boolean> getBooleanVariable(String name) {
 		for (InterpreterState state : states) {
@@ -127,20 +127,20 @@ public class StatePriorityList {
 	}
 
 	/**
-	 * Sets a value to a variable, taking state priority into account
+	 * Sets a value to a variable, taking state priority into account.
 	 *
-	 * @param name The variable name
-	 * @param value The value to be assigned
+	 * @param name The variable name.
+	 * @param value The value to be assigned.
 	 */
 	public void setBooleanVariable(String name, Boolean value) {
 		this.getBooleanVariable(name).setValue(value);
 	}
 
 	/**
-	 * Returns the DeclarationType of a variable taking state priority into account
+	 * Returns the DeclarationType of a variable taking state priority into account.
 	 *
-	 * @param name The variable name
-	 * @return DeclarationType if found, throws RuntimeException if not found
+	 * @param name The variable name.
+	 * @return DeclarationType if found, throws RuntimeException if not found.
 	 */
 	public DeclarationType getVariableType(String name) {
 		Variable<Double> numericVariable = this.getNumericVariable(name);
