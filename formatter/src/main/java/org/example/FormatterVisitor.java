@@ -6,21 +6,20 @@ import java.util.stream.Collectors;
 import org.example.ast.*;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
-import org.example.factories.RuleFactory;
 import org.example.ruleappliers.RuleApplier;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
 	//    TODO Create own class for rules. Verify rules immediately after getting parsed
-	private final FormatterRules formatterRules;
+	private final RuleProvider ruleProvider;
 
-	public FormatterVisitor(RuleFactory ruleFactory) {
-		this.formatterRules = ruleFactory.getRules();
+	public FormatterVisitor(RuleProvider ruleProvider) {
+		this.ruleProvider = ruleProvider;
 	}
 
 	@Override
 	public String visit(BinaryExpression expression) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getBinaryExpressionRuleAppliers(), expression);
+				getCombinedResults(ruleProvider.getBinaryExpressionRuleAppliers(), expression);
 
 		String left = expression.getLeftComponent().accept(this);
 		String right = expression.getRightComponent().accept(this);
@@ -60,7 +59,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(Parameters parameters) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getParameterRuleAppliers(), parameters);
+				getCombinedResults(ruleProvider.getParameterRuleAppliers(), parameters);
 
 		return parameters.getParameters().stream()
 				.map(parameter -> parameter.accept(this))
@@ -70,7 +69,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(AssignmentStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), statement);
+				getCombinedResults(ruleProvider.getAssignmentRuleAppliers(), statement);
 
 		String right = statement.getEvaluableComponent().accept(this);
 		String left = statement.getIdentifier().accept(this);
@@ -95,7 +94,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 						statement.start(),
 						statement.end());
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), assignmentStatement);
+				getCombinedResults(ruleProvider.getAssignmentRuleAppliers(), assignmentStatement);
 
 		String right = statement.getEvaluableComponent().accept(this);
 		DeclarationStatement declaration =
@@ -121,7 +120,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(DeclarationStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), statement);
+				getCombinedResults(ruleProvider.getDeclarationRuleAppliers(), statement);
 
 		return "let "
 				+ combinedResults.get(0)
@@ -136,7 +135,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(FunctionCallStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getFunctionRuleAppliers(), statement);
+				getCombinedResults(ruleProvider.getFunctionRuleAppliers(), statement);
 
 		return combinedResults.get(0)
 				+ statement.getIdentifier().accept(this)
