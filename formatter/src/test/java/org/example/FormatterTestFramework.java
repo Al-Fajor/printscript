@@ -22,7 +22,7 @@ public class FormatterTestFramework {
 
 	public void testRules(String path) throws IOException {
 		AstBuilder astBuilder = new AstBuilder();
-        RulesFromFile rulesFromFile = new RulesFromFile(path + "/rules.json");
+		RulesFromFile rulesFromFile = new RulesFromFile(path + "/rules.json");
 		Formatter formatter = new PrintScriptFormatter(rulesFromFile.getRuleMap());
 		Map<String, String> codes = getMapFromFile(path + "/codes.json");
 		List<Path> cases = getAllFiles("src/test/resources/asts");

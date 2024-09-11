@@ -20,4 +20,14 @@ class PrintScriptFormatterTest {
 	void rules2() throws IOException {
 		formatterTestFramework.testRules("src/test/resources/rules2");
 	}
+
+	@Test
+	void singleRule() throws IOException {
+		formatterTestFramework.testRules("src/test/resources/single_rule");
+	}
+
+	@Test
+	void twoRules() throws IOException {
+		formatterTestFramework.testRules("src/test/resources/two_rules");
+	}
 }

@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.example.ast.statement.Statement;
 
 public class PrintScriptFormatter implements Formatter {
 	private final Map<String, String> ruleMap;
 
 	public PrintScriptFormatter(Map<String, String> ruleMap) {
-        this.ruleMap = ruleMap;
+		this.ruleMap = ruleMap;
 	}
 
 	@Override

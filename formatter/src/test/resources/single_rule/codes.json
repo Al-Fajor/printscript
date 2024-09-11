@@ -1,0 +1,8 @@
+{
+  "print_operation": "println(2 - 4);",
+  "print_variables": "let num :number=7;\nprintln(num);",
+  "variable_assignation": "let num :number;\nnum=7;",
+  "variable_assignation2": "let a :number=5 + 3;\nlet b :number=a;",
+  "string_concatenation": "let numberString :string=5 + \" Cars\";\nlet stringString :string=\"Hello \" + \"World\";",
+  "string_assignation": "let a :string=\"Hi\";"
+}

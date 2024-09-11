@@ -19,7 +19,6 @@ public class BreaksBeforePrintln implements RuleApplier<FunctionCallStatement> {
 		String identifier = statement.getIdentifier().accept(visitor);
 		String breaks = "";
 		if (identifier.equals("println")) {
-			//            TODO idk if break after ";" counts
 			breaks = "\n".repeat(breaksBeforePrintln);
 		}
 
