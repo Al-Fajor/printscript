@@ -43,6 +43,9 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 			case Number n -> {
 				return new EvaluationResult(n.doubleValue());
 			}
+			case Boolean b -> {
+				return new EvaluationResult(b);
+			}
 			default -> throw new IllegalArgumentException("invalidComponent");
 		}
 	}
@@ -56,6 +59,9 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 			}
 			case STRING -> {
 				return new EvaluationResult(getStringValue(identifier));
+			}
+			case BOOLEAN -> {
+				return new EvaluationResult(getBooleanValue(identifier));
 			}
 			default -> throw new IllegalArgumentException("Invalid variable type");
 		}
@@ -77,6 +83,10 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	private Double getNumericValue(Identifier identifier) {
 		return statePriorityList.getNumericVariable(identifier.getName()).getValue();
+	}
+
+	private Boolean getBooleanValue(Identifier identifier) {
+		return statePriorityList.getBooleanVariable(identifier.getName()).getValue();
 	}
 
 	private EvaluationResult addResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {

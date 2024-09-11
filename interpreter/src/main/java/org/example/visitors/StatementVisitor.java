@@ -77,6 +77,8 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 					statePriorityList.setStringVariable(identifierName, result.getStringResult());
 			case NUMBER ->
 					statePriorityList.setNumericVariable(identifierName, result.getNumericResult());
+			case BOOLEAN ->
+					statePriorityList.setBooleanVariable(identifierName, result.getBoolResult());
 			default -> throw new RuntimeException("Implement variable type: " + varType);
 		}
 	}

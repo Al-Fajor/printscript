@@ -1,7 +1,6 @@
 package org.example;
 
-import static org.example.ast.DeclarationType.NUMBER;
-import static org.example.ast.DeclarationType.STRING;
+import static org.example.ast.DeclarationType.*;
 
 import org.example.ast.DeclarationType;
 
@@ -23,6 +22,13 @@ public class EvaluationResult {
 		this.variableType = NUMBER;
 		this.numericResult = numericResult;
 		this.boolResult = null;
+	}
+
+	public EvaluationResult(Boolean boolResult) {
+		this.stringResult = null;
+		this.variableType = BOOLEAN;
+		this.numericResult = null;
+		this.boolResult = boolResult;
 	}
 
 	public DeclarationType getType() {

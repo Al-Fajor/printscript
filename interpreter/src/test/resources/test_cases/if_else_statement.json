@@ -1,0 +1,113 @@
+{
+  "expectedPrintLines": ["Miami, Amsterdam, Tokyo, Spain", "The polyphonic prayer is here"],
+  "ast_list": [
+	{
+	  "assignation": [
+		{
+		  "declaration": {
+			"declarationType": "Boolean",
+			"name": "trueVariable"
+		  }
+		},
+		{
+		  "literal": {
+			"value" : true
+		  }
+		}
+	  ]
+	},
+	{
+	  "assignation": [
+		{
+		  "declaration": {
+			"declarationType": "Boolean",
+			"name": "falseVariable"
+		  }
+		},
+		{
+		  "literal": {
+			"value" : false
+		  }
+		}
+	  ]
+	},
+	{
+	  "if": {
+		"conditional": "trueVariable",
+		"trueClause": [
+		  {
+			"functionCall": {
+			  "identifier": {
+				"name": "println",
+				"identifierType": "function"
+			  },
+			  "params": [
+				{
+				  "literal": {
+					"value": "Miami, Amsterdam, Tokyo, Spain"
+				  }
+				}
+			  ]
+			}
+		  }
+		],
+		"falseClause": [
+		  {
+			"functionCall": {
+			  "identifier": {
+				"name": "println",
+				"identifierType": "function"
+			  },
+			  "params": [
+				{
+				  "literal": {
+					"value": "DO NOT PRINT THIS"
+				  }
+				}
+			  ]
+			}
+		  }
+		]
+	  }
+	},
+	{
+	  "if": {
+		"conditional": "falseVariable",
+		"trueClause": [
+		  {
+			"functionCall": {
+			  "identifier": {
+				"name": "println",
+				"identifierType": "function"
+			  },
+			  "params": [
+				{
+				  "literal": {
+					"value": "DO NOT PRINT THIS"
+				  }
+				}
+			  ]
+			}
+		  }
+		],
+		"falseClause": [
+		  {
+			"functionCall": {
+			  "identifier": {
+				"name": "println",
+				"identifierType": "function"
+			  },
+			  "params": [
+				{
+				  "literal": {
+					"value": "The polyphonic prayer is here"
+				  }
+				}
+			  ]
+			}
+		  }
+		]
+	  }
+	}
+  ]
+}
