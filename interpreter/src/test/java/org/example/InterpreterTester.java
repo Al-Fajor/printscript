@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import org.example.ast.DeclarationType;
 import org.example.io.AstBuilder;
 import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
@@ -27,7 +28,14 @@ public class InterpreterTester {
 
 	private Interpreter createInterpreter(BrokerObserver<String> printObserver) {
 		return new PrintScriptInterpreter(
-				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)), List.of());
+				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)),
+				List.of(
+						new Variable<>(DeclarationType.NUMBER, "aNumber", 3.14),
+						new Variable<>(
+								DeclarationType.STRING,
+								"aString",
+								"I know that I'm stuck in this misery"),
+						new Variable<>(DeclarationType.BOOLEAN, "aBoolean", true)));
 	}
 
 	private void interpretTree(Interpreter interpreter, String path) throws IOException {

@@ -65,6 +65,10 @@ public class EvaluationResult {
 					return result.toString();
 				}
 			}
+			case BOOLEAN -> {
+				Boolean result = getBoolResult();
+				return result == null ? null : result.toString();
+			}
 			default -> throw new IllegalArgumentException("Implement " + getType() + " toString");
 		}
 	}
