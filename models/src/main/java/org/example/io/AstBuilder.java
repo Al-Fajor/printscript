@@ -117,6 +117,17 @@ public class AstBuilder {
 			case "identifier" ->
 					new Identifier(astComponentJson.getString("name"), PLACEHOLDER, PLACEHOLDER);
 			case "declaration" -> null;
+			case "functionCall" -> {
+				yield new FunctionCallStatement(
+						(Identifier)
+								mapToAstComponent(
+										astComponentJson.getJSONObject("identifier"), "identifier"),
+						(Parameters)
+								mapToAstComponent(
+										astComponentJson.getJSONArray("params"), "params"),
+						PLACEHOLDER,
+						PLACEHOLDER);
+			}
 			case "readEnv" -> {
 				String variable = astComponentJson.getString("variable");
 				yield new ReadEnv(variable, PLACEHOLDER, PLACEHOLDER);

@@ -2,12 +2,14 @@ package org.example.ast.statement;
 
 import java.util.Objects;
 import org.example.Pair;
+import org.example.ast.EvaluableComponent;
 import org.example.ast.Identifier;
 import org.example.ast.Parameters;
 import org.example.ast.visitor.AstComponentVisitor;
+import org.example.ast.visitor.EvaluableComponentVisitor;
 import org.example.ast.visitor.StatementVisitor;
 
-public class FunctionCallStatement implements Statement {
+public class FunctionCallStatement implements Statement, EvaluableComponent {
 	private final Identifier identifier;
 	private final Parameters parameters;
 	private final Pair<Integer, Integer> start;
@@ -50,6 +52,11 @@ public class FunctionCallStatement implements Statement {
 	@Override
 	public <T> T accept(StatementVisitor<T> statementVisitor) {
 		return statementVisitor.visit(this);
+	}
+
+	@Override
+	public <T> T accept(EvaluableComponentVisitor<T> visitor) {
+		return visitor.visit(this);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package org.example;
 
 import static org.example.ObserverType.PRINTLN_OBSERVER;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import org.example.iterators.InterpreterIterator;
@@ -15,7 +16,8 @@ public class PullInterpreter {
 	private final org.example.Interpreter interpreter = createInterpreter(observer);
 
 	private org.example.Interpreter createInterpreter(BrokerObserver<String> observer) {
-		return new PrintScriptInterpreter(Map.ofEntries(Map.entry(PRINTLN_OBSERVER, observer)));
+		return new PrintScriptInterpreter(
+				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, observer)), List.of());
 	}
 
 	public void execute(Scanner src, String version, String path) {

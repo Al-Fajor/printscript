@@ -4,9 +4,11 @@ import static org.example.ast.DeclarationType.NUMBER;
 import static org.example.ast.DeclarationType.STRING;
 
 import org.example.EvaluationResult;
-import org.example.StatePriorityList;
 import org.example.ast.*;
+import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.visitor.EvaluableComponentVisitor;
+import org.example.function.Function;
+import org.example.state.StatePriorityList;
 
 public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {
 	private final StatePriorityList statePriorityList;
@@ -75,6 +77,13 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	@Override
 	public EvaluationResult visit(ReadEnv readEnv) {
 		throw new RuntimeException("Not implemented yet");
+	}
+
+	@Override
+	public EvaluationResult visit(FunctionCallStatement functionCall) {
+		Function function = statePriorityList.getFunction(functionCall.getIdentifier().getName());
+		Parameters parameters = functionCall.getParameters();
+		return function.executeFunction(parameters);
 	}
 
 	private String getStringValue(Identifier identifier) {
