@@ -11,6 +11,7 @@ import org.example.io.Color;
 import org.example.io.ScriptReader;
 import org.example.iterators.SemanticAnalyzerIterator;
 import org.example.iterators.SyntaxAnalyzerIterator;
+import org.example.observers.ParserObserver;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -33,6 +34,7 @@ public class ValidationCommand implements Callable<Integer> {
 		Scanner scanner = ScriptReader.readCodeFromSourceByLine(filePath);
 
 		var semanticAnalyzerIterator = getIterator(scanner, version);
+		semanticAnalyzerIterator.addObserver(new ParserObserver(filePath));
 		while (semanticAnalyzerIterator.hasNext()) {
 			Result result = semanticAnalyzer.analyze(semanticAnalyzerIterator);
 			if (!result.isSuccessful()) {

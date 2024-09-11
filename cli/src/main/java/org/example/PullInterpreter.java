@@ -5,6 +5,7 @@ import org.example.factory.InterpreterFactory;
 import org.example.iterators.InterpreterIterator;
 import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
+import org.example.observers.ParserObserver;
 
 public class PullInterpreter {
 
@@ -18,6 +19,8 @@ public class PullInterpreter {
 	}
 
 	public void execute(Scanner src, String version, String path) {
-		interpreter.interpret(new InterpreterIterator(src, path, version));
+		InterpreterIterator iterator = new InterpreterIterator(src, path, version);
+		iterator.addObserver(new ParserObserver(path));
+		interpreter.interpret(iterator);
 	}
 }
