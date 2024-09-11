@@ -1,23 +1,24 @@
 package org.example.iterators;
 
 import static org.example.SemanticAnalyzerProvider.getStandardSemanticAnalyzer;
-import static org.example.utils.PrintUtils.printFailedStep;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.example.Result;
 import org.example.SemanticAnalyzer;
 import org.example.SemanticFailure;
 import org.example.SemanticSuccess;
 import org.example.ast.statement.Statement;
-import org.example.io.Color;
+import org.example.observer.Observable;
+import org.example.observer.Observer;
 
-public class InterpreterIterator implements Iterator<Statement> {
+public class InterpreterIterator implements Iterator<Statement>, Observable<Result> {
 	private final SemanticAnalyzerIterator semanticIterator;
 	private final SemanticAnalyzer semanticAnalyzer = getStandardSemanticAnalyzer();
-	private final String path;
+	private final List<Observer<Result>> observers = new ArrayList<>();
 
 	public InterpreterIterator(java.util.Scanner src, String path, String version) {
-		this.path = path;
 		this.semanticIterator =
 				new SemanticAnalyzerIterator(new SyntaxAnalyzerIterator(src, path, version), path);
 	}
@@ -30,16 +31,11 @@ public class InterpreterIterator implements Iterator<Statement> {
 
 	private boolean loadNextAndEvaluateResult() {
 		Result result = semanticAnalyzer.analyze(semanticIterator);
+		observers.forEach(observer -> observer.notifyChange(result));
 
 		return switch (result) {
-			case SemanticFailure failure -> {
-				printFailedStep(path, failure, "Semantic Analysis");
-				yield false;
-			}
-			case SemanticSuccess ignored -> {
-				System.out.println("\nCompleted validation successfully. No errors found.");
-				yield true;
-			}
+			case SemanticFailure ignoredFailure -> false;
+			case SemanticSuccess ignoredSuccess -> true;
 			default ->
 					throw new IllegalStateException(
 							"Unexpected result for semantic analyzer: " + result);
@@ -48,7 +44,12 @@ public class InterpreterIterator implements Iterator<Statement> {
 
 	@Override
 	public Statement next() {
-		Color.printGreen("\nRunning...");
 		return semanticIterator.next();
+	}
+
+	@Override
+	public void addObserver(Observer<Result> observer) {
+		this.observers.add(observer);
+		semanticIterator.addObserver(observer);
 	}
 }

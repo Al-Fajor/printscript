@@ -26,7 +26,8 @@ public class ScaTester {
 		JSONArray cases = json.getJSONArray("cases");
 
 		for (int i = 0; i < cases.length(); i++) {
-			Lexer lexer = new PrintScriptLexer();
+			//            TODO test different versions
+			Lexer lexer = new PrintScriptLexer("1.0");
 			PrintScriptSca analyzer = new PrintScriptSca(getStream(configPath));
 			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");

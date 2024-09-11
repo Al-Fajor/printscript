@@ -7,12 +7,10 @@ import org.example.token.Token;
 
 public class IdentifierStrategy implements AnalyzerStrategy {
 	private final String identifierFormat;
-	private final Lexer lexer;
 	private final Map<String, String> regexMap;
 
 	public IdentifierStrategy(String value) {
 		this.identifierFormat = value;
-		lexer = new PrintScriptLexer();
 		regexMap = new HashMap<>();
 		regexMap.put("camelCase", "_*[a-z]+([A-Z]+[a-z]*)*");
 		regexMap.put("snakeCase", "_*[a-z]+(_+[a-z]*)*");

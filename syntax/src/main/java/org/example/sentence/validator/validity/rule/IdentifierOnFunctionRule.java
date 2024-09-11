@@ -12,7 +12,7 @@ public class IdentifierOnFunctionRule implements ValidityRule {
 		if (token.getType() != IDENTIFIER) return true;
 		TokenMapper mapper = new TokenMapper();
 		return List.of(OPERATOR, SEMICOLON, SEPARATOR).contains(nextToken.getType())
-				|| mapper.matchesSeparatorType(nextToken, "closing");
+				|| mapper.matchesSeparatorType(nextToken, "closing parenthesis");
 	}
 
 	@Override

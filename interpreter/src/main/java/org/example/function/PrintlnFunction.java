@@ -1,26 +1,31 @@
-package org.example;
+package org.example.function;
 
 import java.util.List;
+import org.example.EvaluationResult;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Parameters;
 import org.example.ast.visitor.EvaluableComponentVisitor;
 import org.example.observer.BrokerObserver;
-import org.example.observer.PrintBrokerObserver;
+import org.example.state.StatePriorityList;
 import org.example.visitors.EvaluatorVisitor;
 
 public class PrintlnFunction implements Function {
-	private final InterpreterState state;
+	private final StatePriorityList state;
+	private final BrokerObserver<String> printObserver;
 
-	public PrintlnFunction(InterpreterState state) {
-		this.state = state;
+	public PrintlnFunction(
+			StatePriorityList statePriorityList, BrokerObserver<String> printObserver) {
+		this.state = statePriorityList;
+		this.printObserver = printObserver;
 	}
 
 	@Override
-	public void executeFunction(Parameters parameters) {
+	public EvaluationResult executeFunction(Parameters parameters) {
 		List<EvaluableComponent> components = parameters.getParameters();
 		for (EvaluableComponent component : components) {
 			printComponent(component);
 		}
+		return new EvaluationResult((String) null);
 	}
 
 	@Override
@@ -31,16 +36,6 @@ public class PrintlnFunction implements Function {
 	private void printComponent(EvaluableComponent component) {
 		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
 		EvaluationResult result = component.accept(evaluatorVisitor);
-		getPrintObserver().updateChanges(result.toString() + '\n');
-	}
-
-	private PrintBrokerObserver getPrintObserver() {
-		List<BrokerObserver<?>> observers = state.getObservers();
-		for (BrokerObserver<?> observer : observers) {
-			if (observer instanceof PrintBrokerObserver) {
-				return (PrintBrokerObserver) observer;
-			}
-		}
-		throw new RuntimeException("No PrintBrokerObserver found");
+		printObserver.updateChanges(result.toString() + '\n');
 	}
 }

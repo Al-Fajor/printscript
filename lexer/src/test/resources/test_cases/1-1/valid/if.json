@@ -1,0 +1,4 @@
+{
+  "code": "if (true) { const x: number = 5; }",
+  "tokens": "IF(if) -> SEPARATOR(() -> LITERAL(true) -> SEPARATOR()) -> SEPARATOR({) -> CONST(const) -> IDENTIFIER(x) -> COLON(:) -> TYPE(number) -> ASSIGNATION(=) -> LITERAL(5) -> SEMICOLON(;) -> SEPARATOR(})"
+}

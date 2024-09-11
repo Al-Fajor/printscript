@@ -10,8 +10,8 @@ public class ReadEnv implements EvaluableComponent {
 	private final Pair<Integer, Integer> start;
 	private final Pair<Integer, Integer> end;
 
-	public ReadEnv(String message, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
-		this.variableName = message;
+	public ReadEnv(String variableName, Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
+		this.variableName = variableName;
 		this.start = start;
 		this.end = end;
 	}

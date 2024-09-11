@@ -10,13 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import org.example.Pair;
 import org.example.ast.*;
-import org.example.ast.statement.AssignmentStatement;
-import org.example.ast.statement.DeclarationAssignmentStatement;
-import org.example.ast.statement.DeclarationStatement;
-import org.example.ast.statement.FunctionCallStatement;
-import org.example.ast.statement.IfElseStatement;
-import org.example.ast.statement.IfStatement;
-import org.example.ast.statement.Statement;
+import org.example.ast.statement.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -109,9 +103,7 @@ public class AstBuilder {
 					case String ignored -> new Literal<>((String) value, PLACEHOLDER, PLACEHOLDER);
 					case BigDecimal ignored ->
 							new Literal<>(
-									Double.parseDouble(String.valueOf(value)),
-									PLACEHOLDER,
-									PLACEHOLDER);
+									Double.parseDouble(value.toString()), PLACEHOLDER, PLACEHOLDER);
 					case Number ignored -> new Literal<>((Number) value, PLACEHOLDER, PLACEHOLDER);
 					case Boolean ignored ->
 							new Literal<>((Boolean) value, PLACEHOLDER, PLACEHOLDER);
@@ -125,6 +117,17 @@ public class AstBuilder {
 			case "identifier" ->
 					new Identifier(astComponentJson.getString("name"), PLACEHOLDER, PLACEHOLDER);
 			case "declaration" -> null;
+			case "functionCall" -> {
+				yield new FunctionCallStatement(
+						(Identifier)
+								mapToAstComponent(
+										astComponentJson.getJSONObject("identifier"), "identifier"),
+						(Parameters)
+								mapToAstComponent(
+										astComponentJson.getJSONArray("params"), "params"),
+						PLACEHOLDER,
+						PLACEHOLDER);
+			}
 			case "readEnv" -> {
 				String variable = astComponentJson.getString("variable");
 				yield new ReadEnv(variable, PLACEHOLDER, PLACEHOLDER);

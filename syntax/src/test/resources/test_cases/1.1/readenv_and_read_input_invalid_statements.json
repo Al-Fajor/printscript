@@ -1,0 +1,2 @@
+{"tokens": "READENV -> SEPARATOR(\"(\") -> LITERAL(5.21) -> SEPARATOR(\")\") -> READINPUT -> SEPARATOR(\"(\") -> LITERAL(5.0) -> SEPARATOR(\")\") ",
+"ast_list": []}

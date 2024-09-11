@@ -1,10 +1,14 @@
 package org.example.commands;
 
+import static org.example.ObserverType.PRINTLN_OBSERVER;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import org.example.Interpreter;
+import org.example.PrintScriptInterpreter;
 import org.example.PullInterpreter;
-import org.example.factory.InterpreterFactory;
 import org.example.io.ScriptReader;
 import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
@@ -41,9 +45,7 @@ public class ExecutionCommand implements Callable<Integer> {
 	}
 
 	private Interpreter createInterpreter(BrokerObserver<String> printObserver) {
-		InterpreterFactory factory = new InterpreterFactory();
-
-		factory.addObserver(printObserver);
-		return factory.create();
+		return new PrintScriptInterpreter(
+				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)), List.of());
 	}
 }

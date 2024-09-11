@@ -14,8 +14,4 @@ public interface ValidityRule {
 	default String noFollowingToken() {
 		return "No following token";
 	}
-
-	default String notAnError() {
-		return "Not an error";
-	}
 }

@@ -19,7 +19,7 @@ public class ScriptReader {
 
 	public static Scanner readCodeFromSourceByLine(String path) {
 		try {
-			return new Scanner(new File(path));
+			return new Scanner(new File(path)).useDelimiter("(?<=}|;)");
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not read file; got error: \n" + e);
 			return new Scanner("");

@@ -1,18 +1,18 @@
 package org.example.visitors;
 
-import org.example.EvaluationResult;
-import org.example.Function;
-import org.example.InterpreterState;
-import org.example.Variable;
+import org.example.*;
 import org.example.ast.*;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
+import org.example.function.Function;
+import org.example.state.PrintScriptState;
+import org.example.state.StatePriorityList;
 
 public class StatementVisitor implements org.example.ast.visitor.StatementVisitor<Void> {
-	private final InterpreterState state;
+	private final StatePriorityList statePriorityList;
 
-	public StatementVisitor(InterpreterState state) {
-		this.state = state;
+	public StatementVisitor(StatePriorityList statePriorityList) {
+		this.statePriorityList = statePriorityList;
 	}
 
 	@Override
@@ -21,7 +21,8 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 		String identifierName = identifier.getName();
 
 		EvaluableComponent evaluableComponent = statement.getEvaluableComponent();
-		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor = new EvaluatorVisitor(state);
+		EvaluableComponentVisitor<EvaluationResult> evaluatorVisitor =
+				new EvaluatorVisitor(statePriorityList);
 		EvaluationResult result = evaluableComponent.accept(evaluatorVisitor);
 
 		assignValueToIdentifier(identifierName, result);
@@ -35,13 +36,16 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 
 		switch (declarationType) {
 			case STRING ->
-					state.addStringVariable(
-							new Variable<>(declarationType, identifier.getName(), null));
+					statePriorityList.addStringVariable(
+							new Variable<>(declarationType, identifier.getName(), ""));
 			case NUMBER ->
-					state.addNumericVariable(
-							new Variable<>(declarationType, identifier.getName(), null));
-			default ->
-					throw new RuntimeException("Unexpected declaration type: " + declarationType);
+					statePriorityList.addNumericVariable(
+							new Variable<>(declarationType, identifier.getName(), 0.0));
+			case BOOLEAN ->
+					statePriorityList.addBooleanVariable(
+							new Variable<>(declarationType, identifier.getName(), false));
+			case FUNCTION -> throw new RuntimeException("Function declaration not implemented");
+			default -> throw new RuntimeException("Unknown declaration type: " + declarationType);
 		}
 		return null;
 	}
@@ -70,10 +74,14 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 	}
 
 	private void assignValueToIdentifier(String identifierName, EvaluationResult result) {
-		DeclarationType varType = state.getVariableType(identifierName);
+		DeclarationType varType = statePriorityList.getVariableType(identifierName);
 		switch (varType) {
-			case STRING -> state.setStringVariable(identifierName, result.getStringResult());
-			case NUMBER -> state.setNumericVariable(identifierName, result.getNumericResult());
+			case STRING ->
+					statePriorityList.setStringVariable(identifierName, result.getStringResult());
+			case NUMBER ->
+					statePriorityList.setNumericVariable(identifierName, result.getNumericResult());
+			case BOOLEAN ->
+					statePriorityList.setBooleanVariable(identifierName, result.getBoolResult());
 			default -> throw new RuntimeException("Implement variable type: " + varType);
 		}
 	}
@@ -88,17 +96,43 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 
 	@Override
 	public Void visit(IfStatement ifStatement) {
+		EvaluatorVisitor evaluatorVisitor = new EvaluatorVisitor(statePriorityList);
+		EvaluationResult conditionResult =
+				ifStatement.conditionalIdentifier().accept(evaluatorVisitor);
+		Boolean condition = conditionResult.getBoolResult();
+		if (condition) {
+			statePriorityList.addState(new PrintScriptState());
+			for (Statement statement : ifStatement.trueClause()) {
+				statement.accept(this);
+			}
+		}
 		return null;
 	}
 
 	private Function getFunction(FunctionCallStatement statement) {
 		Identifier identifier = statement.getIdentifier();
 		String functionName = identifier.getName();
-		return state.getFunction(functionName);
+		return statePriorityList.getFunction(functionName);
 	}
 
 	@Override
 	public Void visit(IfElseStatement ifElseStatement) {
+		EvaluatorVisitor evaluatorVisitor = new EvaluatorVisitor(statePriorityList);
+		EvaluationResult conditionResult =
+				ifElseStatement.conditionalIdentifier().accept(evaluatorVisitor);
+		Boolean condition = conditionResult.getBoolResult();
+
+		statePriorityList.addState(new PrintScriptState());
+		if (condition) {
+			for (Statement statement : ifElseStatement.trueClause()) {
+				statement.accept(this);
+			}
+		} else {
+			for (Statement statement : ifElseStatement.falseClause()) {
+				statement.accept(this);
+			}
+		}
+		statePriorityList.popState();
 		return null;
 	}
 }

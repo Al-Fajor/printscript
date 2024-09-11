@@ -1,0 +1,4 @@
+{
+  "code": "let input: string = readEnv(\"BEST_FOOTBALL_CLUB_IN_THE_WORLD\");\nprintln(input);",
+    "tokens": "LET(let) -> IDENTIFIER(input) -> COLON(:) -> TYPE(string) -> ASSIGNATION(=) -> READENV(readEnv) -> SEPARATOR(() -> LITERAL(\"BEST_FOOTBALL_CLUB_IN_THE_WORLD\") -> SEPARATOR()) -> SEMICOLON(;) -> PRINTLN(println) -> SEPARATOR(() -> IDENTIFIER(input) -> SEPARATOR()) -> SEMICOLON(;)"
+}

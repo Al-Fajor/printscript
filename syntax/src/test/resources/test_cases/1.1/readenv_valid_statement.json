@@ -1,0 +1,18 @@
+{"tokens": "READENV -> SEPARATOR(\"(\") -> LITERAL(\"GITHUB_USER\") -> SEPARATOR(\")\") -> SEMICOLON" ,
+  "ast_list":[
+    {
+      "functionCall": {
+        "identifier": {
+          "name": "readenv",
+          "identifierType": "function"
+        },
+        "params": [
+          {
+            "literal": {
+              "value": "GITHUB_USER"
+            }
+          }
+        ]
+      }
+    }
+  ]}
