@@ -27,7 +27,7 @@ public class InterpreterTester {
 
 	private Interpreter createInterpreter(BrokerObserver<String> printObserver) {
 		return new PrintScriptInterpreter(
-				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)));
+				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)), List.of());
 	}
 
 	private void interpretTree(Interpreter interpreter, String path) throws IOException {
