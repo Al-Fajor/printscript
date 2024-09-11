@@ -82,7 +82,7 @@ public class FormattingCommand implements Callable<Integer> {
 	}
 
 	private String runFormatter(Formatter formatter, Iterator<Statement> statements) {
-		String formattedCode = formatter.format(toAstList(statements));
+		String formattedCode = formatter.format(statements);
 		System.out.println(formattedCode);
 		return formattedCode;
 	}
