@@ -4,6 +4,9 @@ import org.example.*;
 import org.example.ast.*;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
+import org.example.function.Function;
+import org.example.state.PrintScriptState;
+import org.example.state.StatePriorityList;
 
 public class StatementVisitor implements org.example.ast.visitor.StatementVisitor<Void> {
 	private final StatePriorityList statePriorityList;
@@ -34,13 +37,13 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 		switch (declarationType) {
 			case STRING ->
 					statePriorityList.addStringVariable(
-							new Variable<>(declarationType, identifier.getName(), null));
+							new Variable<>(declarationType, identifier.getName(), ""));
 			case NUMBER ->
 					statePriorityList.addNumericVariable(
-							new Variable<>(declarationType, identifier.getName(), null));
+							new Variable<>(declarationType, identifier.getName(), 0.0));
 			case BOOLEAN ->
 					statePriorityList.addBooleanVariable(
-							new Variable<>(declarationType, identifier.getName(), null));
+							new Variable<>(declarationType, identifier.getName(), false));
 			case FUNCTION -> throw new RuntimeException("Function declaration not implemented");
 			default -> throw new RuntimeException("Unknown declaration type: " + declarationType);
 		}

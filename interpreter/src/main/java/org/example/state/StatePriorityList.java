@@ -1,9 +1,11 @@
-package org.example;
+package org.example.state;
 
 import java.util.LinkedList;
+import org.example.Variable;
 import org.example.ast.DeclarationType;
+import org.example.function.Function;
 
-public class StatePriorityList {
+public class StatePriorityList implements InterpreterState {
 	private final LinkedList<InterpreterState> states;
 
 	public StatePriorityList() {

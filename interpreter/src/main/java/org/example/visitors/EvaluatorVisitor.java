@@ -4,9 +4,9 @@ import static org.example.ast.DeclarationType.NUMBER;
 import static org.example.ast.DeclarationType.STRING;
 
 import org.example.EvaluationResult;
-import org.example.StatePriorityList;
 import org.example.ast.*;
 import org.example.ast.visitor.EvaluableComponentVisitor;
+import org.example.state.StatePriorityList;
 
 public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {
 	private final StatePriorityList statePriorityList;
