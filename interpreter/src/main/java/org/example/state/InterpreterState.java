@@ -1,6 +1,8 @@
-package org.example;
+package org.example.state;
 
+import org.example.Variable;
 import org.example.ast.DeclarationType;
+import org.example.function.Function;
 
 public interface InterpreterState {
 	void addNumericVariable(Variable<Double> numericVariable);

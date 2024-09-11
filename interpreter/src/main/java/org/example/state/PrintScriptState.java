@@ -1,8 +1,10 @@
-package org.example;
+package org.example.state;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.example.Variable;
 import org.example.ast.DeclarationType;
+import org.example.function.Function;
 
 public class PrintScriptState implements InterpreterState {
 	private final Map<String, Variable<Double>> numericVariables;

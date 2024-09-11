@@ -2,6 +2,7 @@ package org.example.commands;
 
 import static org.example.ObserverType.PRINTLN_OBSERVER;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -45,6 +46,6 @@ public class ExecutionCommand implements Callable<Integer> {
 
 	private Interpreter createInterpreter(BrokerObserver<String> printObserver) {
 		return new PrintScriptInterpreter(
-				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)));
+				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, printObserver)), List.of());
 	}
 }
