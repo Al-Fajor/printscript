@@ -1,25 +1,34 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import org.example.ast.AstComponent;
-import org.example.factories.RuleFactory;
+import java.util.Map;
+import org.example.ast.statement.Statement;
 
 public class PrintScriptFormatter implements Formatter {
-	private final RuleFactory ruleFactory;
+	private final Map<String, String> ruleMap;
 
-	public PrintScriptFormatter(RuleFactory ruleFactory) {
-		this.ruleFactory = ruleFactory;
+	public PrintScriptFormatter(Map<String, String> ruleMap) {
+		this.ruleMap = ruleMap;
 	}
 
 	@Override
-	public String format(List<AstComponent> asts) {
+	public String format(Iterator<Statement> asts) {
 		List<String> formattedCodes = new ArrayList<>();
-		FormatterVisitor visitor = new FormatterVisitor(ruleFactory);
-		for (AstComponent ast : asts) {
-			String formattedCode = ast.accept(visitor) + ";";
+		FormatterVisitor visitor = new FormatterVisitor(new RuleProvider(ruleMap));
+		while (asts.hasNext()) {
+			Statement ast = asts.next();
+			String formattedCode = ast.accept(visitor) + addSemicolon(ast.accept(visitor));
 			formattedCodes.add(formattedCode);
 		}
 		return String.join("\n", formattedCodes);
+	}
+
+	private String addSemicolon(String formattedCode) {
+		if (formattedCode.charAt(formattedCode.length() - 1) != '}') {
+			return ";";
+		}
+		return "";
 	}
 }

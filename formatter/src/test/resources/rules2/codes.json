@@ -4,5 +4,7 @@
   "string_assignation": "let a: string = \"Hi\";",
   "string_concatenation": "let numberString: string = 5 + \" Cars\";\nlet stringString: string = \"Hello \" + \"World\";",
   "variable_assignation": "let num: number;\nnum = 7;",
-  "variable_assignation2": "let a: number = 5 + 3;\nlet b: number = a;"
+  "variable_assignation2": "let a: number = 5 + 3;\nlet b: number = a;",
+  "if_else": "let a: boolean = true;\nif(a){\n\n\nprintln(\"hello\");\n}else{\n\n\nprintln(\"world\");\n}",
+    "if": "let a: boolean = true;\nif(a){\n\n\nprintln(\"hello\");\n}"
 }

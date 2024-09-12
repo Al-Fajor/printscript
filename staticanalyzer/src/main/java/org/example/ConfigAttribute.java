@@ -3,8 +3,9 @@ package org.example;
 import java.util.List;
 
 public enum ConfigAttribute {
-	IDENTIFIER_FORMAT("identifierFormat", List.of("camelCase", "snakeCase")),
-	PRINTLN_EXPRESSIONS("printlnExpressions", List.of("true", "false"));
+	IDENTIFIER_FORMAT("identifier_format", List.of("camel case", "snake case")),
+	PRINTLN_EXPRESSIONS("mandatory-variable-or-literal-in-println", List.of("true", "false")),
+	READ_INPUT_EXPRESSIONS("mandatory-variable-or-literal-in-readInput", List.of("true", "false"));
 
 	private final List<String> allowedValues;
 	private final String jsonKey;

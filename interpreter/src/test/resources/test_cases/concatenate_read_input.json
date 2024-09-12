@@ -1,0 +1,85 @@
+{
+  "expectedPrintLines": ["46"],
+  "input": ["4", "6"],
+  "ast_list": [
+	{
+	  "assignation": [
+		{
+		  "declaration": {
+			"declarationType": "String",
+			"name": "first"
+		  }
+		},
+		{
+		  "functionCall": {
+			"identifier": {
+			  "identifierType": "function",
+			  "name": "readInput"
+			},
+			"params": [
+			  {
+				"literal": {
+				  "value": "Input first number"
+				}
+			  }
+			]
+		  }
+		}
+	  ]
+	},
+	{
+	  "assignation": [
+		{
+		  "declaration": {
+			"declarationType": "String",
+			"name": "second"
+		  }
+		},
+		{
+		  "functionCall": {
+			"identifier": {
+			  "identifierType": "function",
+			  "name": "readInput"
+			},
+			"params": [
+			  {
+				"literal": {
+				  "value": "Input first number"
+				}
+			  }
+			]
+		  }
+		}
+	  ]
+	},
+	{
+	  "functionCall": {
+		"identifier": {
+		  "identifierType": "function",
+		  "name": "println"
+		},
+		"params": [
+		  {
+			"binaryExpression": [
+			  {
+				"op": "+"
+			  },
+			  {
+				"identifier": {
+				  "identifierType": "variable",
+				  "name": "first"
+				}
+			  },
+			  {
+				"identifier": {
+				  "identifierType": "variable",
+				  "name": "second"
+				}
+			  }
+			]
+		  }
+		]
+	  }
+	}
+  ]
+}

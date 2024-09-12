@@ -1,49 +1,68 @@
 package org.example;
 
-import static org.example.ast.DeclarationType.*;
-
-import org.example.ast.DeclarationType;
+import static org.example.ResultType.*;
 
 public class EvaluationResult {
-	private final DeclarationType variableType;
+	private final ResultType resultType;
 	private final String stringResult;
 	private final Double numericResult;
 	private final Boolean boolResult;
+	private final Object undefinedResult;
 
 	public EvaluationResult(String stringResult) {
 		this.stringResult = stringResult;
-		this.variableType = STRING;
+		this.undefinedResult = null;
+		this.resultType = STRING;
 		this.numericResult = null;
 		this.boolResult = null;
 	}
 
 	public EvaluationResult(Double numericResult) {
+		this.undefinedResult = null;
 		this.stringResult = null;
-		this.variableType = NUMBER;
+		this.resultType = NUMBER;
 		this.numericResult = numericResult;
 		this.boolResult = null;
 	}
 
 	public EvaluationResult(Boolean boolResult) {
+		this.undefinedResult = null;
 		this.stringResult = null;
-		this.variableType = BOOLEAN;
+		this.resultType = BOOLEAN;
 		this.numericResult = null;
 		this.boolResult = boolResult;
 	}
 
-	public DeclarationType getType() {
-		return variableType;
+	public EvaluationResult(Object undefinedTypeResult) {
+		this.undefinedResult = undefinedTypeResult;
+		this.stringResult = null;
+		this.resultType = UNDEFINED;
+		this.numericResult = null;
+		this.boolResult = null;
+	}
+
+	public ResultType getType() {
+		return resultType;
 	}
 
 	public String getStringResult() {
+		if (resultType == UNDEFINED) {
+			return undefinedResult.toString();
+		}
 		return stringResult;
 	}
 
 	public Double getNumericResult() {
+		if (resultType == UNDEFINED) {
+			return Double.parseDouble(undefinedResult.toString());
+		}
 		return numericResult;
 	}
 
 	public Boolean getBoolResult() {
+		if (resultType == UNDEFINED) {
+			return Boolean.getBoolean(undefinedResult.toString());
+		}
 		return boolResult;
 	}
 
@@ -68,6 +87,9 @@ public class EvaluationResult {
 			case BOOLEAN -> {
 				Boolean result = getBoolResult();
 				return result == null ? null : result.toString();
+			}
+			case UNDEFINED -> {
+				return undefinedResult.toString();
 			}
 			default -> throw new IllegalArgumentException("Implement " + getType() + " toString");
 		}

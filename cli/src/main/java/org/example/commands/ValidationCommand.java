@@ -1,7 +1,6 @@
 package org.example.commands;
 
 import static org.example.SemanticAnalyzerProvider.getStandardSemanticAnalyzer;
-import static org.example.utils.PrintUtils.printFailedStep;
 
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -34,17 +33,19 @@ public class ValidationCommand implements Callable<Integer> {
 		Scanner scanner = ScriptReader.readCodeFromSourceByLine(filePath);
 
 		var semanticAnalyzerIterator = getIterator(scanner, version);
-		semanticAnalyzerIterator.addObserver(new ParserObserver(filePath));
+		ParserObserver observer = new ParserObserver(filePath);
+		semanticAnalyzerIterator.addObserver(observer);
 		while (semanticAnalyzerIterator.hasNext()) {
 			Result result = semanticAnalyzer.analyze(semanticAnalyzerIterator);
-			if (!result.isSuccessful()) {
-				printFailedStep(filePath, result, "Semantic Analysis");
-				return 1;
-			}
+			observer.notifyChange(result);
 		}
 
-		Color.printGreen("Completed validation successfully. No errors found.");
-		return 0;
+		if (!observer.foundErrors()) {
+			Color.printGreen("\nCompleted validation successfully. No errors found.");
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 
 	private SemanticAnalyzerIterator getIterator(Scanner scanner, String version) {

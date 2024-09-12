@@ -1,0 +1,43 @@
+{
+  "config": "src/test/resources/test_configs/1-1/readInput-expression-disabled.json",
+  "cases": [
+	{
+	  "code": "let x: string = \"hello\";\nlet y: string = \"world\";\nreadInput(x + y);",
+	  "results": [
+		{
+		  "successful": false,
+		  "errorMessage": "Expressions in readInput function not allowed",
+		  "errorStart": "3 1",
+		  "errorEnd": "3 10"
+		}
+	  ]
+	},
+	{
+	  "code": "readInput(\"Hey\" + \"Man\");",
+	  "results":[
+		{
+		  "successful": false,
+		  "errorMessage": "Expressions in readInput function not allowed",
+		  "errorStart": "1 1",
+		  "errorEnd": "1 10"
+		}
+	  ]
+	},
+	{
+	  "code": "let x: string = \"two\";\nprintln(x);",
+	  "results": [
+		{
+		  "successful": true
+		}
+	  ]
+	},
+	{
+	  "code": "println(\"Hey\");",
+	  "results": [
+		{
+		  "successful": true
+		}
+	  ]
+	}
+  ]
+}
