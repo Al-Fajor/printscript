@@ -27,8 +27,9 @@ public class FormattingCommand implements Callable<Integer> {
 
 	@CommandLine.Option(
 			names = "--version",
-			description = "The PrintScript version of the code being validate")
-	private int version;
+			description = "The PrintScript version of the code being validate",
+			defaultValue = "1.0")
+	private String version;
 
 	@CommandLine.Option(
 			names = "--config",
@@ -46,7 +47,7 @@ public class FormattingCommand implements Callable<Integer> {
 		Scanner scanner;
 		scanner = ScriptReader.readCodeFromSourceByLine(filePath);
 		//        TODO change this
-		Iterator<Statement> statements = new InterpreterIterator(scanner, filePath, "1.0");
+		Iterator<Statement> statements = new InterpreterIterator(scanner, filePath, version);
 
 		String formattedCode = runFormatter(formatter, statements);
 
