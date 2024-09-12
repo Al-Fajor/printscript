@@ -37,19 +37,20 @@ public class ExpressionBuilder {
 				reader.consume();
 				yield mapper.mapToken(current);
 			}
-			case READINPUT -> {
+			case READINPUT, READENV -> {
+				String functionName = current.getType() == READENV ? "readEnv" : "readInput";
+
 				Pair<Integer, Integer> readInputStart = current.getStart();
 				Pair<Integer, Integer> readInputEnd = current.getStart();
 				reader.consume();
-				EvaluableComponent message = parsePrimaryExpression(reader);
-				if (message == null) yield null;
-				Pair<Integer, Integer> end = current.getStart();
+				EvaluableComponent parameter = parsePrimaryExpression(reader);
+				if (parameter == null) yield null;
 
 				yield new FunctionCallStatement(
-						new Identifier("readInput", readInputStart, readInputEnd),
-						new Parameters(List.of(message), message.start(), message.end()),
+						new Identifier(functionName, readInputStart, readInputEnd),
+						new Parameters(List.of(parameter), parameter.start(), parameter.end()),
 						readInputStart,
-						message.end());
+						parameter.end());
 			}
 			case SEPARATOR -> {
 				if (mapper.matchesSeparatorType(current, "opening parenthesis")) {
