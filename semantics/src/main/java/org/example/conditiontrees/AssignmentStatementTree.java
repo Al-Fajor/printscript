@@ -1,6 +1,7 @@
 package org.example.conditiontrees;
 
 import org.example.Environment;
+import org.example.ResolvedType;
 import org.example.ast.DeclarationType;
 import org.example.ast.Identifier;
 import org.example.ast.IdentifierType;
@@ -41,8 +42,9 @@ public class AssignmentStatementTree {
 			EvaluableResolution assignedValueResolution,
 			Environment env) {
 
-		DeclarationType identifierType = env.getDeclarationType(identifier.getName());
-		DeclarationType assignedValueType =
+		DeclarationType variableType = env.getVariableDeclarationType(identifier.getName());
+		ResolvedType identifierType = ResolvedType.from(variableType);
+		ResolvedType assignedValueType =
 				assignedValueResolution
 						.evaluatedType()
 						.orElseThrow(
@@ -57,7 +59,7 @@ public class AssignmentStatementTree {
 					"Cannot assign declarationType "
 							+ assignedValueResolution.evaluatedType().get()
 							+ " to "
-							+ env.getDeclarationType(identifier.getName()),
+							+ env.getVariableDeclarationType(identifier.getName()),
 					statement.start(),
 					statement.end());
 		}

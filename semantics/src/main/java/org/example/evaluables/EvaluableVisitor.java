@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.example.Environment;
+import org.example.ResolvedType;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
 import org.example.ast.DeclarationType;
@@ -30,7 +31,7 @@ import org.example.ast.visitor.AstComponentVisitor;
 import org.example.conditiontrees.DeclarationAssignmentStatementTree;
 import org.example.conditiontrees.FunctionCallStatementTree;
 import org.example.conditiontrees.LiteralTree;
-import org.example.externalization.Language;
+import org.example.languageconfig.Language;
 
 public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution> {
 	public static final SemanticSuccess SUCCESS = new SemanticSuccess();
@@ -56,9 +57,9 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		}
 
 		@SuppressWarnings({"OptionalGetWithoutIsPresent"}) // Safe because of anyTypeEmpty
-		DeclarationType leftType = leftResolution.evaluatedType().get();
+		ResolvedType leftType = leftResolution.evaluatedType().get();
 		@SuppressWarnings({"OptionalGetWithoutIsPresent"}) // Safe because of anyTypeEmpty
-		DeclarationType rightType = rightResolution.evaluatedType().get();
+		ResolvedType rightType = rightResolution.evaluatedType().get();
 
 		return getFirstFailedResolution(leftResolution, rightResolution)
 				.orElse(validateOperationTypes(expression, leftType, rightType, lang));
@@ -144,14 +145,11 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 
 		Optional<EvaluableResolution> firstInvalidParameterResolution =
 				getInvalidResolutionIfAny(resolvedParameters);
-
 		if (firstInvalidParameterResolution.isPresent())
 			return firstInvalidParameterResolution.get();
 
-		List<DeclarationType> types = getAllParameterTypes(resolvedParameters);
-
+		List<ResolvedType> types = getAllParameterTypes(resolvedParameters);
 		String functionName = statement.getIdentifier().getName();
-
 		return FunctionCallStatementTree.checkFunctionIsDeclared(
 				env, statement, types, functionName);
 	}

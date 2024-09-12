@@ -4,6 +4,7 @@ import static org.example.evaluables.EvaluableVisitor.SUCCESS;
 
 import java.util.Optional;
 import org.example.Environment;
+import org.example.ResolvedType;
 import org.example.SemanticFailure;
 import org.example.ast.Identifier;
 import org.example.evaluables.EvaluableResolution;
@@ -12,7 +13,7 @@ public class IdentifierTree {
 	public static EvaluableResolution existingIdentifier(Environment env, Identifier identifier) {
 		return new EvaluableResolution(
 				SUCCESS,
-				Optional.of(env.getDeclarationType(identifier.getName())),
+				Optional.of(ResolvedType.from(env.getVariableDeclarationType(identifier.getName()))),
 				Optional.of(env.getIdentifierType(identifier.getName())),
 				Optional.of(identifier.getName()));
 	}

@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,11 +11,13 @@ import org.example.ast.IdentifierType;
 
 public class MapEnvironment implements Environment {
 	private final Map<String, VarData> varDeclarations;
-	private final Set<Signature> funDeclarations;
+	private final Map<String, ResolvedType> funReturnTypes;
+	private final Set<Signature> funSignatures;
 
-	public MapEnvironment(Map<String, VarData> varDeclarations, Set<Signature> funDeclarations) {
+	public MapEnvironment(Map<String, VarData> varDeclarations, Map<String, ResolvedType> funReturnTypes, Set<Signature> funSignatures) {
 		this.varDeclarations = varDeclarations;
-		this.funDeclarations = funDeclarations;
+        this.funReturnTypes = funReturnTypes;
+        this.funSignatures = funSignatures;
 	}
 
 	@Override
@@ -28,12 +31,17 @@ public class MapEnvironment implements Environment {
 	}
 
 	@Override
-	public boolean isFunctionDeclared(String name, List<DeclarationType> parameters) {
-		return funDeclarations.contains(new Signature(name, parameters));
+	public ResolvedType getReturnType(String functionName) {
+		return funReturnTypes.get(functionName);
 	}
 
 	@Override
-	public DeclarationType getDeclarationType(String name) {
+	public boolean isFunctionDeclared(String functionName, List<ResolvedType> parameters) {
+		return funSignatures.contains(new Signature(functionName, parameters));
+	}
+
+	@Override
+	public DeclarationType getVariableDeclarationType(String name) {
 		return varDeclarations.get(name).declarationType;
 	}
 
@@ -43,20 +51,26 @@ public class MapEnvironment implements Environment {
 		Map<String, VarData> mapCopy = new HashMap<>(varDeclarations);
 		mapCopy.put(name, new VarData(declarationType, identifierType));
 
-		return new MapEnvironment(mapCopy, funDeclarations);
+		return new MapEnvironment(mapCopy, funReturnTypes, funSignatures);
 	}
 
 	@Override
 	public Environment declareFunction(String name, DeclarationType... parameters) {
-		Set<Signature> setCopy = new HashSet<>(funDeclarations);
-		setCopy.add(new Signature(name, List.of(parameters)));
+		Set<Signature> setCopy = new HashSet<>(funSignatures);
+		setCopy.add(new Signature(name, mapToResolvedTypes(parameters)));
 
-		return new MapEnvironment(varDeclarations, setCopy);
+		return new MapEnvironment(varDeclarations, funReturnTypes, setCopy);
+	}
+
+	private List<ResolvedType> mapToResolvedTypes(DeclarationType[] parameters) {
+		return Arrays.stream(parameters)
+				.map(ResolvedType::from)
+				.toList();
 	}
 
 	@Override
 	public Environment copy() {
-		return new MapEnvironment(new HashMap<>(varDeclarations), new HashSet<>(funDeclarations));
+		return new MapEnvironment(new HashMap<>(varDeclarations), new HashMap<>(funReturnTypes), new HashSet<>(funSignatures));
 	}
 
 	public record VarData(DeclarationType declarationType, IdentifierType identifierType) {}

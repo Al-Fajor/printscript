@@ -1,19 +1,18 @@
 package org.example.evaluables;
 
-import java.util.Arrays;
 import java.util.Optional;
 import org.example.Pair;
 import org.example.Resolution;
 import org.example.Result;
+import org.example.ResolvedType;
 import org.example.SemanticFailure;
 import org.example.SemanticSuccess;
-import org.example.ast.DeclarationType;
 import org.example.ast.IdentifierType;
 import org.example.utils.TripleOptional;
 
 public record EvaluableResolution(
 		Result result,
-		Optional<DeclarationType> evaluatedType,
+		Optional<ResolvedType> evaluatedType,
 		Optional<IdentifierType> identifierType,
 		Optional<String> identifierName)
 		implements Resolution {
@@ -28,7 +27,7 @@ public record EvaluableResolution(
 				Optional.empty());
 	}
 
-	public TripleOptional<DeclarationType, IdentifierType, String> asTripleOptional() {
+	public TripleOptional<ResolvedType, IdentifierType, String> asTripleOptional() {
 		return TripleOptional.from(evaluatedType, identifierType, identifierName);
 	}
 
@@ -37,8 +36,4 @@ public record EvaluableResolution(
 				new SemanticSuccess(), Optional.empty(), Optional.empty(), Optional.empty());
 	}
 
-	public static Optional<EvaluableResolution> returnFirstFailedResolution(
-			EvaluableResolution... resolutions) {
-		return Arrays.stream(resolutions).filter(resolution -> resolution.failed()).findFirst();
-	}
 }

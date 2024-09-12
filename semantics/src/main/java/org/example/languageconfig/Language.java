@@ -1,4 +1,4 @@
-package org.example.externalization;
+package org.example.languageconfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,8 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.example.ResolvedType;
 import org.example.ast.BinaryOperator;
-import org.example.ast.DeclarationType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +33,7 @@ public class Language {
 
 	JSONObject json = new JSONObject(content);
 
-	Map<OperationType, DeclarationType> binaryOperations;
+	Map<OperationType, ResolvedType> binaryOperations;
 
 	{
 		binaryOperations = new HashMap<>();
@@ -58,10 +59,13 @@ public class Language {
 		};
 	}
 
-	private DeclarationType parseType(String type) {
+	private ResolvedType parseType(String type) {
 		return switch (type) {
-			case "string" -> DeclarationType.STRING;
-			case "number" -> DeclarationType.NUMBER;
+			case "string" -> ResolvedType.STRING;
+			case "number" -> ResolvedType.NUMBER;
+				case "boolean" -> ResolvedType.BOOLEAN;
+			case "void" -> ResolvedType.VOID;
+			case "any" -> ResolvedType.WILDCARD;
 			default -> throw new IllegalStateException("Type not supported: " + type);
 		};
 	}
@@ -69,12 +73,12 @@ public class Language {
 	public Language() {}
 
 	public boolean isOperationSupported(
-			DeclarationType type1, BinaryOperator operator, DeclarationType type2) {
+			ResolvedType type1, BinaryOperator operator, ResolvedType type2) {
 		return binaryOperations.containsKey(new OperationType(type1, operator, type2));
 	}
 
-	public DeclarationType getResolvedType(
-			DeclarationType type1, BinaryOperator operator, DeclarationType type2) {
+	public ResolvedType getResolvedType(
+			ResolvedType type1, BinaryOperator operator, ResolvedType type2) {
 		return binaryOperations.get(new OperationType(type1, operator, type2));
 	}
 }

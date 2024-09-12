@@ -3,10 +3,17 @@ package org.example;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+
+import org.example.ast.DeclarationType;
+import org.example.ast.IdentifierType;
 import org.example.ast.statement.Statement;
 import org.example.evaluables.EvaluableResolution;
 import org.example.evaluables.EvaluableVisitor;
 import org.example.observer.Observer;
+import org.example.utils.TriFunction;
+
+import static org.example.ResolvedType.asDeclarationType;
 
 public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 	public static final int ESTIMATED_TOTAL = 100;
@@ -47,16 +54,21 @@ public class SemanticAnalyzerImpl implements SemanticAnalyzer {
 
 		return resolution
 				.asTripleOptional()
-				.map(
-						(evaluatedType, identifierType, identifierName) -> {
-							Environment newEnv =
-									currentEnv.declareVariable(
-											identifierName, evaluatedType, identifierType);
-
-							EvaluableVisitor newVisitor = currentVisitor.withEnv(newEnv);
-							return new Pair<>(newVisitor, newEnv);
-						})
+				.map(addVariableToEnvironment(currentVisitor, currentEnv))
 				.orElse(new Pair<>(currentVisitor, currentEnv));
+	}
+
+	private static TriFunction<ResolvedType, IdentifierType, String, Pair<EvaluableVisitor, Environment>> addVariableToEnvironment(EvaluableVisitor currentVisitor, Environment currentEnv) {
+		return (evaluatedType, identifierType, identifierName) -> {
+			Optional<DeclarationType> declarationType = asDeclarationType(evaluatedType);
+			if (declarationType.isEmpty()) return new Pair<>(currentVisitor, currentEnv);
+
+			Environment newEnv =
+					currentEnv.declareVariable(
+							identifierName, declarationType.get(), identifierType);
+			EvaluableVisitor newVisitor = currentVisitor.withEnv(newEnv);
+			return new Pair<>(newVisitor, newEnv);
+		};
 	}
 
 	@Override

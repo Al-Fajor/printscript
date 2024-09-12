@@ -3,11 +3,12 @@ package org.example.conditiontrees;
 import static org.example.evaluables.EvaluableVisitor.SUCCESS;
 
 import java.util.Optional;
+
+import org.example.ResolvedType;
 import org.example.ast.BinaryExpression;
 import org.example.ast.BinaryOperator;
-import org.example.ast.DeclarationType;
 import org.example.evaluables.EvaluableResolution;
-import org.example.externalization.Language;
+import org.example.languageconfig.Language;
 
 public class BinaryExpressionTree {
 	public static boolean anyTypeEmpty(
@@ -18,8 +19,8 @@ public class BinaryExpressionTree {
 
 	public static EvaluableResolution validateOperationTypes(
 			BinaryExpression expression,
-			DeclarationType leftType,
-			DeclarationType rightType,
+			ResolvedType leftType,
+			ResolvedType rightType,
 			Language lang) {
 
 		if (lang.isOperationSupported(leftType, expression.getOperator(), rightType)) {
@@ -31,8 +32,8 @@ public class BinaryExpressionTree {
 
 	private static EvaluableResolution successfulOperationResolution(
 			BinaryExpression expression,
-			DeclarationType leftType,
-			DeclarationType rightType,
+			ResolvedType leftType,
+			ResolvedType rightType,
 			Language lang) {
 		return new EvaluableResolution(
 				SUCCESS,
@@ -42,7 +43,7 @@ public class BinaryExpressionTree {
 	}
 
 	private static EvaluableResolution failedOperationResolution(
-			BinaryExpression expression, DeclarationType rightType, DeclarationType leftType) {
+			BinaryExpression expression, ResolvedType rightType, ResolvedType leftType) {
 		return EvaluableResolution.failure(
 				"Cannot perform operation because types are incompatible: "
 						+ rightType
