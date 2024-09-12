@@ -21,7 +21,7 @@ public class SyntaxAnalyzerIterator implements Iterator<Token>, Observable<Resul
 
 	public SyntaxAnalyzerIterator(Scanner src, String path, String version) {
 		this.lexer = new PrintScriptLexer(version);
-		this.scanner = src.useDelimiter("(?<=}|;)");
+		this.scanner = src.useDelimiter("(?<=\\}|(?<!\\{[^{}]);(?![^{}]*\\}))(?=(?!.*else).*)");
 	}
 
 	private static class EmptyIterator implements Iterator<Token> {
