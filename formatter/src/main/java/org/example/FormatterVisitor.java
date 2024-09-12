@@ -10,7 +10,6 @@ import org.example.ast.visitor.AstComponentVisitor;
 import org.example.ruleappliers.RuleApplier;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
-	//    TODO Create own class for rules. Verify rules immediately after getting parsed
 	private final RuleProvider ruleProvider;
 
 	public FormatterVisitor(RuleProvider ruleProvider) {
@@ -36,62 +35,66 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(IfStatement ifStatement) {
-        List<String> combinedResults = getCombinedResults(ruleProvider.getIfRuleAppliers(), ifStatement);
+		List<String> combinedResults =
+				getCombinedResults(ruleProvider.getIfRuleAppliers(), ifStatement);
 
-        return "if"
-                + combinedResults.get(0)
-                + "("
-                + combinedResults.get(1)
-                + ifStatement.conditionalIdentifier().accept(this)
-                + combinedResults.get(2)
-                + ")"
-                + combinedResults.get(3)
-                + "{"
-                + combinedResults.get(4)
-                + buildClauseStatements(ifStatement.trueClause().iterator(), combinedResults.get(5))
-                + combinedResults.get(6)
-                + "}";
+		return "if"
+				+ combinedResults.get(0)
+				+ "("
+				+ combinedResults.get(1)
+				+ ifStatement.conditionalIdentifier().accept(this)
+				+ combinedResults.get(2)
+				+ ")"
+				+ combinedResults.get(3)
+				+ "{"
+				+ combinedResults.get(4)
+				+ buildClauseStatements(ifStatement.trueClause().iterator(), combinedResults.get(5))
+				+ combinedResults.get(6)
+				+ "}";
 	}
 
-    private String buildClauseStatements(Iterator<Statement> statements, String spaces) {
-        StringBuilder trueClauseStatements = new StringBuilder();
-        trueClauseStatements.append("\n");
-        while (statements.hasNext()) {
-            Statement statement = statements.next();
-            trueClauseStatements.append(spaces).append(statement.accept(this));
-            if (trueClauseStatements.charAt(trueClauseStatements.length() - 1) != '}') {
-                trueClauseStatements.append(";");
-            }
-            trueClauseStatements.append("\n");
-        }
-        return trueClauseStatements.toString();
-    }
+	private String buildClauseStatements(Iterator<Statement> statements, String spaces) {
+		StringBuilder trueClauseStatements = new StringBuilder();
+		trueClauseStatements.append("\n");
+		while (statements.hasNext()) {
+			Statement statement = statements.next();
+			trueClauseStatements.append(spaces).append(statement.accept(this));
+			if (trueClauseStatements.charAt(trueClauseStatements.length() - 1) != '}') {
+				trueClauseStatements.append(";");
+			}
+			trueClauseStatements.append("\n");
+		}
+		return trueClauseStatements.toString();
+	}
 
 	@Override
 	public String visit(IfElseStatement ifElseStatement) {
-        List<String> combinedResults = getCombinedResults(ruleProvider.getIfElseRuleAppliers(), ifElseStatement);
+		List<String> combinedResults =
+				getCombinedResults(ruleProvider.getIfElseRuleAppliers(), ifElseStatement);
 
-        return "if"
-                + combinedResults.get(0)
-                + "("
-                + combinedResults.get(1)
-                + ifElseStatement.conditionalIdentifier().accept(this)
-                + combinedResults.get(2)
-                + ")"
-                + combinedResults.get(3)
-                + "{"
-                + combinedResults.get(4)
-                + buildClauseStatements(ifElseStatement.trueClause().iterator(), combinedResults.get(5))
-                + combinedResults.get(6)
-                + "}"
-                + combinedResults.get(7)
-                + "else"
-                + combinedResults.get(8)
-                + "{"
-                + combinedResults.get(9)
-                + buildClauseStatements(ifElseStatement.falseClause().iterator(), combinedResults.get(10))
-                + combinedResults.get(11)
-                + "}";
+		return "if"
+				+ combinedResults.get(0)
+				+ "("
+				+ combinedResults.get(1)
+				+ ifElseStatement.conditionalIdentifier().accept(this)
+				+ combinedResults.get(2)
+				+ ")"
+				+ combinedResults.get(3)
+				+ "{"
+				+ combinedResults.get(4)
+				+ buildClauseStatements(
+						ifElseStatement.trueClause().iterator(), combinedResults.get(5))
+				+ combinedResults.get(6)
+				+ "}"
+				+ combinedResults.get(7)
+				+ "else"
+				+ combinedResults.get(8)
+				+ "{"
+				+ combinedResults.get(9)
+				+ buildClauseStatements(
+						ifElseStatement.falseClause().iterator(), combinedResults.get(10))
+				+ combinedResults.get(11)
+				+ "}";
 	}
 
 	@Override
@@ -204,33 +207,33 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(ReadInput readInput) {
-        List<String> combinedResults =
-                getCombinedResults(ruleProvider.getReadInputRuleAppliers(), readInput);
+		List<String> combinedResults =
+				getCombinedResults(ruleProvider.getReadInputRuleAppliers(), readInput);
 
-        return combinedResults.get(0)
-                + "readInput"
-                + combinedResults.get(1)
-                + "("
-                + combinedResults.get(2)
-                + readInput.getMessage()
-                + combinedResults.get(3)
-                + ")"
-                + combinedResults.get(4);
+		return combinedResults.get(0)
+				+ "readInput"
+				+ combinedResults.get(1)
+				+ "("
+				+ combinedResults.get(2)
+				+ readInput.getMessage()
+				+ combinedResults.get(3)
+				+ ")"
+				+ combinedResults.get(4);
 	}
 
 	@Override
 	public String visit(ReadEnv readEnv) {
 		List<String> combinedResults =
-                getCombinedResults(ruleProvider.getReadEnvRuleAppliers(), readEnv);
-        return combinedResults.get(0)
-                + "readEnv"
-                + combinedResults.get(1)
-                + "("
-                + combinedResults.get(2)
-                + readEnv.getVariableName()
-                + combinedResults.get(3)
-                + ")"
-                + combinedResults.get(4);
+				getCombinedResults(ruleProvider.getReadEnvRuleAppliers(), readEnv);
+		return combinedResults.get(0)
+				+ "readEnv"
+				+ combinedResults.get(1)
+				+ "("
+				+ combinedResults.get(2)
+				+ readEnv.getVariableName()
+				+ combinedResults.get(3)
+				+ ")"
+				+ combinedResults.get(4);
 	}
 
 	private List<String> combineStringsLists(List<List<String>> listOfLists) {
@@ -257,9 +260,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	}
 
 	private void hasNoTwoOrMoreConsecutiveSpaces(List<String> strings) {
-		//        TODO Check this before
 		if (strings.stream().anyMatch(string -> string.equals("  "))) {
-			throw new RuntimeException("Two or more consecutive spaces found");
+			throw new IllegalArgumentException("Two or more consecutive spaces found");
 		}
 	}
 }

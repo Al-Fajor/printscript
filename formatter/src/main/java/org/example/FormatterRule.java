@@ -6,7 +6,7 @@ public enum FormatterRule {
 	SPACE_AROUND_EQUALS("spaceAroundEquals", "^(true|false)$"),
 	BREAKS_BEFORE_PRINTLN("breaksBeforePrintln", "^\\d+$"),
 	SPACE_AROUND_OPERATOR("spaceAroundOperator", "^(true|false)$"),
-    IF_BLOCK_INDENTATION("ifBlockIndentation", "^\\d+$");
+	IF_BLOCK_INDENTATION("ifBlockIndentation", "^\\d+$");
 
 	private final String allowedValues;
 	private final String mapKey;

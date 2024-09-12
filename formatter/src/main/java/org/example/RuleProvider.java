@@ -56,29 +56,29 @@ public class RuleProvider {
 		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.PARAMETERS);
 	}
 
-    public List<RuleApplier<IfStatement>> getIfRuleAppliers() {
-        List<RuleApplier<IfStatement>> ruleAppliersOfType = new ArrayList<>();
-        ruleAppliersOfType.add(new BaseIfRuleApplier());
-        return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.IF);
-    }
+	public List<RuleApplier<IfStatement>> getIfRuleAppliers() {
+		List<RuleApplier<IfStatement>> ruleAppliersOfType = new ArrayList<>();
+		ruleAppliersOfType.add(new BaseIfRuleApplier());
+		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.IF);
+	}
 
-    public List<RuleApplier<IfElseStatement>> getIfElseRuleAppliers() {
-        List<RuleApplier<IfElseStatement>> ruleAppliersOfType = new ArrayList<>();
-        ruleAppliersOfType.add(new BaseIfElseRuleApplier());
-        return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.IF_ELSE);
-    }
+	public List<RuleApplier<IfElseStatement>> getIfElseRuleAppliers() {
+		List<RuleApplier<IfElseStatement>> ruleAppliersOfType = new ArrayList<>();
+		ruleAppliersOfType.add(new BaseIfElseRuleApplier());
+		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.IF_ELSE);
+	}
 
-    public List<RuleApplier<ReadEnv>> getReadEnvRuleAppliers() {
-        List<RuleApplier<ReadEnv>> ruleAppliersOfType = new ArrayList<>();
-        ruleAppliersOfType.add(new BaseReadEnvRuleApplier());
-        return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.READENV);
-    }
+	public List<RuleApplier<ReadEnv>> getReadEnvRuleAppliers() {
+		List<RuleApplier<ReadEnv>> ruleAppliersOfType = new ArrayList<>();
+		ruleAppliersOfType.add(new BaseReadEnvRuleApplier());
+		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.READENV);
+	}
 
-    public List<RuleApplier<ReadInput>> getReadInputRuleAppliers() {
-        List<RuleApplier<ReadInput>> ruleAppliersOfType = new ArrayList<>();
-        ruleAppliersOfType.add(new BaseReadInputRuleApplier());
-        return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.READINPUT);
-    }
+	public List<RuleApplier<ReadInput>> getReadInputRuleAppliers() {
+		List<RuleApplier<ReadInput>> ruleAppliersOfType = new ArrayList<>();
+		ruleAppliersOfType.add(new BaseReadInputRuleApplier());
+		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.READINPUT);
+	}
 
 	private <T extends AstComponent> List<RuleApplier<T>> getRuleAppliersOfType(
 			List<RuleApplier<T>> ruleAppliersOfType, RuleApplierTypes type) {
