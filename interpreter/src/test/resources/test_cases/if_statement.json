@@ -1,0 +1,76 @@
+{
+  "expectedPrintLines": ["Miami, Amsterdam, Tokyo, Spain"],
+  "input": [],
+  "ast_list": [
+	{
+	  "assignation": [
+		{
+		  "declaration": {
+			"declarationType": "Boolean",
+			"name": "trueVariable"
+		  }
+		},
+		{
+		  "literal": {
+			"value" : true
+		  }
+		}
+	  ]
+	},
+	{
+	  "assignation": [
+		{
+		  "declaration": {
+			"declarationType": "Boolean",
+			"name": "falseVariable"
+		  }
+		},
+		{
+		  "literal": {
+			"value" : false
+		  }
+		}
+	  ]
+	},
+	{
+	  "if": {
+		"conditional":"falseVariable",
+		"trueClause": [
+		  {"functionCall": {
+			"identifier": {
+			  "name": "println",
+			  "identifierType": "function"
+			},
+			"params": [
+			  {
+				"literal": {
+				  "value": "DO NOT PRINT THIS"
+				}
+			  }
+			]
+		  }}
+		]
+	  }
+	},
+	{
+	  "if": {
+		"conditional":"trueVariable",
+		"trueClause": [
+		  {"functionCall": {
+			"identifier": {
+			  "name": "println",
+			  "identifierType": "function"
+			},
+			"params": [
+			  {
+				"literal": {
+				  "value": "Miami, Amsterdam, Tokyo, Spain"
+				}
+			  }
+			]
+		  }}
+		]
+	  }
+	}
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "expectedPrintLines": ["3.14", "I know that I'm stuck in this misery", "true"],
+  "input": [],
+  "ast_list": [
+	{
+	  "functionCall": {
+		"identifier": {
+		  "identifierType": "function",
+		  "name": "println"
+		},
+		"params": [
+		  {
+			"functionCall": {
+			  "identifier": {
+				"identifierType": "function",
+				"name": "readEnv"
+			  },
+			  "params": [
+				{
+				  "literal": {
+					"value": "aNumber"
+				  }
+				}
+			  ]
+			}
+		  }
+		]
+	  }
+	},
+	{
+	  "functionCall": {
+		"identifier": {
+		  "identifierType": "function",
+		  "name": "println"
+		},
+		"params": [
+		  {
+			"functionCall": {
+			  "identifier": {
+				"identifierType": "function",
+				"name": "readEnv"
+			  },
+			  "params": [
+				{
+				  "literal": {
+					"value": "aString"
+				  }
+				}
+			  ]
+			}
+		  }
+		]
+	  }
+	},
+	{
+	  "functionCall": {
+		"identifier": {
+		  "identifierType": "function",
+		  "name": "println"
+		},
+		"params": [
+		  {
+			"functionCall": {
+			  "identifier": {
+				"identifierType": "function",
+				"name": "readEnv"
+			  },
+			  "params": [
+				{
+				  "literal": {
+					"value": "aBoolean"
+				  }
+				}
+			  ]
+			}
+		  }
+		]
+	  }
+	}
+  ]
+}

@@ -1,8 +1,8 @@
-package org.example;
+package org.example.state;
 
-import java.util.List;
+import org.example.Variable;
 import org.example.ast.DeclarationType;
-import org.example.observer.BrokerObserver;
+import org.example.function.Function;
 
 public interface InterpreterState {
 	void addNumericVariable(Variable<Double> numericVariable);
@@ -17,11 +17,15 @@ public interface InterpreterState {
 
 	void setStringVariable(String name, String value);
 
+	void addBooleanVariable(Variable<Boolean> booleanVariable);
+
+	Variable<Boolean> getBooleanVariable(String name);
+
+	void setBooleanVariable(String name, Boolean value);
+
 	DeclarationType getVariableType(String name);
 
 	Function getFunction(String name);
 
 	void addFunction(Function function);
-
-	List<BrokerObserver<?>> getObservers();
 }

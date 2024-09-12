@@ -1,18 +1,20 @@
 package org.example.visitors;
 
-import static org.example.ast.DeclarationType.NUMBER;
-import static org.example.ast.DeclarationType.STRING;
+import static org.example.ResultType.*;
 
 import org.example.EvaluationResult;
-import org.example.InterpreterState;
+import org.example.ResultType;
 import org.example.ast.*;
+import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.visitor.EvaluableComponentVisitor;
+import org.example.function.Function;
+import org.example.state.StatePriorityList;
 
 public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationResult> {
-	private final InterpreterState state;
+	private final StatePriorityList statePriorityList;
 
-	public EvaluatorVisitor(InterpreterState state) {
-		this.state = state;
+	public EvaluatorVisitor(StatePriorityList statePriorityList) {
+		this.statePriorityList = statePriorityList;
 	}
 
 	@Override
@@ -34,14 +36,14 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	@Override
 	public EvaluationResult visit(Literal<?> literal) {
 		switch (literal.getValue()) {
-			case null -> {
-				return new EvaluationResult((String) null);
-			}
 			case String s -> {
 				return new EvaluationResult(s);
 			}
 			case Number n -> {
 				return new EvaluationResult(n.doubleValue());
+			}
+			case Boolean b -> {
+				return new EvaluationResult(b);
 			}
 			default -> throw new IllegalArgumentException("invalidComponent");
 		}
@@ -49,13 +51,16 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	@Override
 	public EvaluationResult visit(Identifier identifier) {
-		DeclarationType variableType = state.getVariableType(identifier.getName());
+		DeclarationType variableType = statePriorityList.getVariableType(identifier.getName());
 		switch (variableType) {
 			case NUMBER -> {
 				return new EvaluationResult(getNumericValue(identifier));
 			}
 			case STRING -> {
 				return new EvaluationResult(getStringValue(identifier));
+			}
+			case BOOLEAN -> {
+				return new EvaluationResult(getBooleanValue(identifier));
 			}
 			default -> throw new IllegalArgumentException("Invalid variable type");
 		}
@@ -71,17 +76,28 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 		throw new RuntimeException("Not implemented yet");
 	}
 
+	@Override
+	public EvaluationResult visit(FunctionCallStatement functionCall) {
+		Function function = statePriorityList.getFunction(functionCall.getIdentifier().getName());
+		Parameters parameters = functionCall.getParameters();
+		return function.executeFunction(parameters);
+	}
+
 	private String getStringValue(Identifier identifier) {
-		return state.getStringVariable(identifier.getName()).getValue();
+		return statePriorityList.getStringVariable(identifier.getName()).getValue();
 	}
 
 	private Double getNumericValue(Identifier identifier) {
-		return state.getNumericVariable(identifier.getName()).getValue();
+		return statePriorityList.getNumericVariable(identifier.getName()).getValue();
+	}
+
+	private Boolean getBooleanValue(Identifier identifier) {
+		return statePriorityList.getBooleanVariable(identifier.getName()).getValue();
 	}
 
 	private EvaluationResult addResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreConcatenable(leftTermType, rightTermType)) {
 			String leftString = getStringResult(leftTerm);
 			String rightString = getStringResult(rightTerm);
@@ -97,8 +113,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	private EvaluationResult subtractResults(
 			EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -109,8 +125,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	private EvaluationResult multiplyResults(
 			EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -120,8 +136,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	private EvaluationResult divideResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -142,11 +158,11 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 		}
 	}
 
-	private boolean termsAreNumeric(DeclarationType leftType, DeclarationType rightType) {
+	private boolean termsAreNumeric(ResultType leftType, ResultType rightType) {
 		return leftType == NUMBER && rightType == NUMBER;
 	}
 
-	private boolean termsAreConcatenable(DeclarationType leftType, DeclarationType rightType) {
+	private boolean termsAreConcatenable(ResultType leftType, ResultType rightType) {
 		if (leftType == rightType) {
 			return leftType == STRING;
 		}

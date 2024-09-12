@@ -15,6 +15,10 @@ import org.example.token.Token;
 
 public class IfStatementBuilder extends StatementBuilder {
 
+	public IfStatementBuilder() {
+		super();
+	}
+
 	@Override
 	public Pair<Statement, String> buildStatement(List<Token> tokens) {
 		if (!tokens.get(1).getValue().equals("(")) {

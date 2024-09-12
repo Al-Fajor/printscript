@@ -1,6 +1,7 @@
 package org.example.ast.visitor;
 
 import org.example.ast.*;
+import org.example.ast.statement.FunctionCallStatement;
 
 public interface EvaluableComponentVisitor<T> {
 	T visit(BinaryExpression expression);
@@ -11,5 +12,7 @@ public interface EvaluableComponentVisitor<T> {
 
 	T visit(ReadInput readInput);
 
-	T visit(ReadEnv readEnv);
+	T visit(ReadEnv readEnv); // TODO aprender a programar/diseñar
+
+	T visit(FunctionCallStatement functionCall);
 }

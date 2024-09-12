@@ -1,17 +1,6 @@
 {
-  "expectedVariables": [
-    {
-      "name": "numberString",
-      "type": "String",
-      "value": "5 Cars"
-    },
-    {
-      "name": "stringString",
-      "type": "String",
-      "value": "Hello World"
-    }
-  ],
   "expectedPrintLines": ["5 Cars", "Hello World"],
+  "input": [""],
   "ast_list": [
     {
       "assignation": [

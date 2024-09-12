@@ -15,7 +15,12 @@ public class LexerTestBuilder {
 		Lexer lexer = new PrintScriptLexer(version);
 		FileParser fp = new FileParser();
 		Iterator<Token> expectedList = fp.getTokens(filePath).iterator();
-		Iterator<String> input = List.of(fp.getCode(filePath).split("(?<=\\R)")).iterator();
+		Iterator<String> input =
+				List.of(
+								fp.getCode(filePath)
+										.split(
+												"(?<=\\}|(?<!\\{[^{}]);(?![^{}]*\\}))(?=(?!.*else).*)"))
+						.iterator();
 		while (input.hasNext()) {
 			Result result = lexer.lex(input);
 			if (result.isSuccessful()) {
@@ -25,7 +30,7 @@ public class LexerTestBuilder {
 			} else {
 				fail("Lexer failed to parse the file");
 			}
-			System.out.println(input.hasNext());
+			//			System.out.println(input.hasNext());
 		}
 		assertFalse(expectedList.hasNext());
 	}
@@ -43,8 +48,14 @@ public class LexerTestBuilder {
 	public void testLexicalErrorDetection(String filePath, String version) throws IOException {
 		Lexer lexer = new PrintScriptLexer(version);
 		FileParser fp = new FileParser();
-		Result result = lexer.lex(List.of(fp.getCode(filePath).split("\\n")).iterator());
+		Result result =
+				lexer.lex(
+						List.of(
+										fp.getCode(filePath)
+												.split(
+														"(?<=\\}|(?<!\\{[^{}]);(?![^{}]*\\}))(?=(?!.*else).*)"))
+								.iterator());
 		assertFalse(result.isSuccessful());
-		System.out.println(result.errorMessage());
+		//		System.out.println(result.errorMessage());
 	}
 }
