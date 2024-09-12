@@ -44,12 +44,12 @@ public class PrintScriptInterpreter implements Interpreter {
 			List<Variable<?>> envVariables,
 			StatePriorityList statePriorityList,
 			InputListener inputListener) {
-		statePriorityList.addFunction(
-				new PrintlnFunction(
-						statePriorityList,
-						(BrokerObserver<String>) observers.get(PRINTLN_OBSERVER)));
+		BrokerObserver<String> printObserver =
+				(BrokerObserver<String>) observers.get(PRINTLN_OBSERVER);
+		statePriorityList.addFunction(new PrintlnFunction(statePriorityList, printObserver));
 		statePriorityList.addFunction(
 				new ReadEnvFunction(statePriorityList, new EnvironmentState(envVariables)));
-		statePriorityList.addFunction(new ReadInputFunction(inputListener, statePriorityList));
+		statePriorityList.addFunction(
+				new ReadInputFunction(inputListener, statePriorityList, printObserver));
 	}
 }
