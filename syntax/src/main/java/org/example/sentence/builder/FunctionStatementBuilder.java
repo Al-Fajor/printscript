@@ -10,13 +10,11 @@ import org.example.ast.Identifier;
 import org.example.ast.Parameters;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.statement.Statement;
-import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.validator.SentenceValidator;
 import org.example.sentence.validator.validity.Validity;
 import org.example.token.Token;
 
 public class FunctionStatementBuilder extends StatementBuilder {
-	private final TokenMapper mapper = new TokenMapper();
 
 	public FunctionStatementBuilder(SentenceValidator validator) {
 		super(validator);

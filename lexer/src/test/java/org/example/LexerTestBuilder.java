@@ -25,7 +25,7 @@ public class LexerTestBuilder {
 			} else {
 				fail("Lexer failed to parse the file");
 			}
-			System.out.println(input.hasNext());
+			//			System.out.println(input.hasNext());
 		}
 		assertFalse(expectedList.hasNext());
 	}
@@ -45,6 +45,6 @@ public class LexerTestBuilder {
 		FileParser fp = new FileParser();
 		Result result = lexer.lex(List.of(fp.getCode(filePath).split("\\n")).iterator());
 		assertFalse(result.isSuccessful());
-		System.out.println(result.errorMessage());
+		//		System.out.println(result.errorMessage());
 	}
 }
