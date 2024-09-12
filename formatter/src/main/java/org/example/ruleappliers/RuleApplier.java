@@ -7,7 +7,5 @@ import org.example.ast.AstComponent;
 public interface RuleApplier<T extends AstComponent> {
 	RuleApplierTypes getType();
 
-	boolean isApplicable(AstComponent component);
-
 	List<String> applyRules(FormatterVisitor visitor, T statement);
 }

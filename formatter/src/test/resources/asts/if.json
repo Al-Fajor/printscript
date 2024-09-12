@@ -1,6 +1,6 @@
 {
-  "code": "let a : boolean = true;\nif(a){\nprintln(\"hello\");\n}else{\nprintln(\"world\");\n}",
-  "ast_list": [
+  "code": "let a : boolean = true;\nif  ( a ){ \nreadInput(\"hello\");\n}",
+  "ast_list":[
     {
       "assignation": [
         {
@@ -11,49 +11,30 @@
         },
         {
           "literal": {
-            "value": true
+            "value" : true
           }
         }
       ]
     },
     {
       "if": {
-        "conditional": "a",
+        "conditional":"a",
         "trueClause": [
-          {
-            "functionCall": {
-              "identifier": {
-                "name": "println",
-                "identifierType": "function"
-              },
-              "params": [
-                {
-                  "literal": {
-                    "value": "hello"
-                  }
+          {"functionCall": {
+            "identifier": {
+              "name": "println",
+              "identifierType": "function"
+            },
+            "params": [
+              {
+                "literal": {
+                  "value": "hello"
                 }
-              ]
-            }
-          }
-        ],
-        "falseClause": [
-          {
-            "functionCall": {
-              "identifier": {
-                "name": "println",
-                "identifierType": "function"
-              },
-              "params": [
-                {
-                  "literal": {
-                    "value": "world"
-                  }
-                }
-              ]
-            }
-          }
+              }
+            ]
+          }}
         ]
       }
     }
-  ]
+  ]}
 }

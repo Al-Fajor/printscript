@@ -37,7 +37,6 @@ public class Rules {
 					ruleAppliers.add(new IfBlockIndentation(getIntValue(ruleName)));
 					ruleAppliers.add(new IfElseBlockIndentation(getIntValue(ruleName)));
 				}
-					//                Add new rules here
 				default -> throw new IllegalArgumentException("Unknown rule: " + ruleName);
 			}
 		}

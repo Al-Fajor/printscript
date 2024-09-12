@@ -26,5 +26,4 @@ public class RulesFromFile {
 			throw new RuntimeException(e);
 		}
 	}
-	;
 }
