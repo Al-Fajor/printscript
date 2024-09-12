@@ -1,5 +1,5 @@
 {
-  "config": "src/test/resources/test_configs/camel-case.json",
+  "config": "src/test/resources/test_configs/1-0/camel-case.json",
   "cases": [
 	{
 	  "code": "let camelCase: string;",
@@ -14,7 +14,7 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel_case\" is not in camelCase",
+		  "errorMessage": "Identifier \"not_camel_case\" is not in camel case",
 		  "errorStart": "1 5",
 		  "errorEnd": "1 19"
 	    }

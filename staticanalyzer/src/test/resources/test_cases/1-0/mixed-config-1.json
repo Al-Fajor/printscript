@@ -1,5 +1,5 @@
 {
-  "config": "src/test/resources/test_configs/mixed-config-1.json",
+  "config": "src/test/resources/test_configs/1-0/mixed-config-1.json",
   "cases": [
 	{
 	  "code": "let camel: number = 3;\nprintln(camel);",
@@ -14,13 +14,13 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
+		  "errorMessage": "Identifier \"not_camel\" is not in camel case",
 		  "errorStart": "1 5",
 		  "errorEnd": "1 14"
 		},
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
+		  "errorMessage": "Identifier \"not_camel\" is not in camel case",
 		  "errorStart": "2 9",
 		  "errorEnd": "2 18"
 		}
@@ -31,13 +31,13 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
+		  "errorMessage": "Identifier \"not_camel\" is not in camel case",
 		  "errorStart": "1 5",
 		  "errorEnd": "1 14"
 		},
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"not_camel\" is not in camelCase",
+		  "errorMessage": "Identifier \"not_camel\" is not in camel case",
 		  "errorStart": "2 9",
 		  "errorEnd": "2 18"
 		},

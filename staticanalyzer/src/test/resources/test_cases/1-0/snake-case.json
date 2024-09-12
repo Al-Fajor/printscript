@@ -1,5 +1,5 @@
 {
-  "config": "src/test/resources/test_configs/snake-case.json",
+  "config": "src/test/resources/test_configs/1-0/snake-case.json",
   "cases": [
 	{
 	  "code": "let snake_case: string;",
@@ -14,7 +14,7 @@
 	  "results": [
 		{
 		  "successful": false,
-		  "errorMessage": "Identifier \"notSnakeCase\" is not in snakeCase",
+		  "errorMessage": "Identifier \"notSnakeCase\" is not in snake case",
 		  "errorStart": "1 5",
 		  "errorEnd": "1 17"
 		}

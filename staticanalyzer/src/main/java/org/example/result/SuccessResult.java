@@ -1,6 +1,8 @@
-package org.example;
+package org.example.result;
 
 import java.util.Optional;
+import org.example.Pair;
+import org.example.Result;
 
 public class SuccessResult implements Result {
 	@Override
