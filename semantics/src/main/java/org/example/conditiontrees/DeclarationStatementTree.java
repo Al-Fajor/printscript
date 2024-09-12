@@ -4,6 +4,7 @@ import static org.example.evaluables.EvaluableVisitor.SUCCESS;
 
 import java.util.Optional;
 import org.example.Environment;
+import org.example.ResolvedType;
 import org.example.ast.statement.DeclarationStatement;
 import org.example.evaluables.EvaluableResolution;
 
@@ -17,7 +18,7 @@ public class DeclarationStatementTree {
 		} else {
 			return new EvaluableResolution(
 					SUCCESS,
-					Optional.of(statement.getDeclarationType()),
+					Optional.of(ResolvedType.from(statement.getDeclarationType())),
 					Optional.of(statement.getIdentifierType()),
 					Optional.of(name));
 		}

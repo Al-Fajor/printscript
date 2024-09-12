@@ -130,11 +130,26 @@ public class AstBuilder {
 			}
 			case "readEnv" -> {
 				String variable = astComponentJson.getString("variable");
-				yield new ReadEnv(variable, PLACEHOLDER, PLACEHOLDER);
+
+				yield new FunctionCallStatement(
+						new Identifier("readEnv", PLACEHOLDER, PLACEHOLDER),
+						new Parameters(
+								List.of(new Literal<>(variable, PLACEHOLDER, PLACEHOLDER)),
+								PLACEHOLDER,
+								PLACEHOLDER),
+						PLACEHOLDER,
+						PLACEHOLDER);
 			}
 			case "readInput" -> {
 				String message = astComponentJson.getString("message");
-				yield new ReadInput(message, PLACEHOLDER, PLACEHOLDER);
+				yield new FunctionCallStatement(
+						new Identifier("readInput", PLACEHOLDER, PLACEHOLDER),
+						new Parameters(
+								List.of(new Literal<>(message, PLACEHOLDER, PLACEHOLDER)),
+								PLACEHOLDER,
+								PLACEHOLDER),
+						PLACEHOLDER,
+						PLACEHOLDER);
 			}
 
 			case "conditional", "if", "ifClauses", "statementBlock" ->

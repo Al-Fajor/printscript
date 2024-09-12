@@ -12,7 +12,7 @@ import org.example.evaluables.EvaluableVisitor;
 public class IfStatementTree {
 	public static EvaluableResolution checkIsBooleanIdentifier(
 			Identifier identifier, Environment env) {
-		if (env.getDeclarationType(identifier.getName()) == DeclarationType.BOOLEAN) {
+		if (env.getVariableDeclarationType(identifier.getName()) == DeclarationType.BOOLEAN) {
 			return EvaluableResolution.emptySuccess();
 		} else {
 			return EvaluableResolution.failure(

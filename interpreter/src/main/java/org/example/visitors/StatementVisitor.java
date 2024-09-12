@@ -36,14 +36,12 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 
 		switch (declarationType) {
 			case STRING ->
-					statePriorityList.addStringVariable(
-							new Variable<>(declarationType, identifier.getName(), ""));
+					statePriorityList.addStringVariable(new Variable<>(identifier.getName(), ""));
 			case NUMBER ->
-					statePriorityList.addNumericVariable(
-							new Variable<>(declarationType, identifier.getName(), 0.0));
+					statePriorityList.addNumericVariable(new Variable<>(identifier.getName(), 0.0));
 			case BOOLEAN ->
 					statePriorityList.addBooleanVariable(
-							new Variable<>(declarationType, identifier.getName(), false));
+							new Variable<>(identifier.getName(), false));
 			case FUNCTION -> throw new RuntimeException("Function declaration not implemented");
 			default -> throw new RuntimeException("Unknown declaration type: " + declarationType);
 		}
