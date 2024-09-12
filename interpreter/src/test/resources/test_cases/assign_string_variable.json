@@ -1,5 +1,6 @@
 {
   "expectedPrintLines": ["This is a string"],
+  "input": [],
   "ast_list": [
     {
       "assignation": [

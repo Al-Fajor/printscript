@@ -1,5 +1,6 @@
 {
   "expectedPrintLines": ["Wanna se nirvana but don't want to die yet", "Wanna se nirvana but don't want to die yet"],
+  "input": [],
   "ast_list": [
 	{
 	  "assignation": [

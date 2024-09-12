@@ -1,9 +1,9 @@
 package org.example.visitors;
 
-import static org.example.ast.DeclarationType.NUMBER;
-import static org.example.ast.DeclarationType.STRING;
+import static org.example.ResultType.*;
 
 import org.example.EvaluationResult;
+import org.example.ResultType;
 import org.example.ast.*;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.ast.visitor.EvaluableComponentVisitor;
@@ -36,9 +36,6 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	@Override
 	public EvaluationResult visit(Literal<?> literal) {
 		switch (literal.getValue()) {
-			case null -> {
-				return new EvaluationResult((String) null);
-			}
 			case String s -> {
 				return new EvaluationResult(s);
 			}
@@ -99,8 +96,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	private EvaluationResult addResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreConcatenable(leftTermType, rightTermType)) {
 			String leftString = getStringResult(leftTerm);
 			String rightString = getStringResult(rightTerm);
@@ -116,8 +113,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	private EvaluationResult subtractResults(
 			EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -128,8 +125,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 
 	private EvaluationResult multiplyResults(
 			EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -139,8 +136,8 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	private EvaluationResult divideResults(EvaluationResult leftTerm, EvaluationResult rightTerm) {
-		DeclarationType leftTermType = leftTerm.getType();
-		DeclarationType rightTermType = rightTerm.getType();
+		ResultType leftTermType = leftTerm.getType();
+		ResultType rightTermType = rightTerm.getType();
 		if (termsAreNumeric(leftTermType, rightTermType)) {
 			Double leftNumber = leftTerm.getNumericResult();
 			Double rightNumber = rightTerm.getNumericResult();
@@ -161,11 +158,11 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 		}
 	}
 
-	private boolean termsAreNumeric(DeclarationType leftType, DeclarationType rightType) {
+	private boolean termsAreNumeric(ResultType leftType, ResultType rightType) {
 		return leftType == NUMBER && rightType == NUMBER;
 	}
 
-	private boolean termsAreConcatenable(DeclarationType leftType, DeclarationType rightType) {
+	private boolean termsAreConcatenable(ResultType leftType, ResultType rightType) {
 		if (leftType == rightType) {
 			return leftType == STRING;
 		}

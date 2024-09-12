@@ -26,6 +26,9 @@ public class ReadEnvFunction implements Function {
 		EvaluationResult component = components.getFirst().accept(evaluatorVisitor);
 		String envVariableName = component.getStringResult();
 		DeclarationType type = envState.getVariableType(envVariableName);
+		if (type == null) {
+			throw new RuntimeException("Variable " + envVariableName + " not found");
+		}
 		return switch (type) {
 			case STRING ->
 					new EvaluationResult(envState.getStringVariable(envVariableName).getValue());
