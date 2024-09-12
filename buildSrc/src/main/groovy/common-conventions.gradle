@@ -61,7 +61,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            version = "1.0.5-SNAPSHOT"
+            version = "1.0.6-SNAPSHOT"
             url = uri("https://maven.pkg.github.com/Al-Fajor/printscript")
             credentials {
                 username = System.getenv("USERNAME")
