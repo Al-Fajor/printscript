@@ -23,7 +23,7 @@ public class TokenRegex {
 		Map<BaseTokenTypes, String> regexMap = new LinkedHashMap<>();
 		regexMap.put(LET, "\\blet\\b");
 		regexMap.put(TYPE, "\\bnumber\\b|\\bstring\\b");
-		regexMap.put(PRINTLN, "\\bprintln\\b");
+		regexMap.put(PRINTLN, "\\bprintln\\b(?=\\s*\\()");
 		regexMap.put(FUNCTION, "\\bfunction\\b");
 		regexMap.put(SEMICOLON, ";");
 		regexMap.put(COLON, ":");
@@ -45,7 +45,7 @@ public class TokenRegex {
 		regexMap.put(READINPUT, "\\breadInput\\b");
 		regexMap.put(IF, "\\bif\\b");
 		regexMap.put(ELSE, "\\belse\\b");
-		regexMap.put(PRINTLN, "\\bprintln\\b");
+		regexMap.put(PRINTLN, "\\bprintln\\b(?=\\s*\\()");
 		regexMap.put(FUNCTION, "\\bfunction\\b");
 		regexMap.put(SEMICOLON, ";");
 		regexMap.put(COLON, ":");
