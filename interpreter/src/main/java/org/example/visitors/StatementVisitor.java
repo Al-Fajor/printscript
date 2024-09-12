@@ -103,6 +103,7 @@ public class StatementVisitor implements org.example.ast.visitor.StatementVisito
 			for (Statement statement : ifStatement.trueClause()) {
 				statement.accept(this);
 			}
+			statePriorityList.popState();
 		}
 		return null;
 	}
