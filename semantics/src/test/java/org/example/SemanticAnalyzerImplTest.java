@@ -5,12 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
-import org.example.ast.*;
 import org.example.ast.statement.Statement;
 import org.example.io.AstBuilder;
 import org.example.test.TestBuilder;
@@ -23,12 +20,6 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 	public static final String TEST_CASE_DIRECTORY = "src/test/resources/test_cases";
 	AstBuilder builder = new AstBuilder();
 	AstValidityChecker checker = new AstValidityChecker();
-	MapEnvironment env =
-			new MapEnvironment(
-					new HashMap<>(),
-					Set.of(
-							new Signature("println", List.of(DeclarationType.NUMBER)),
-							new Signature("println", List.of(DeclarationType.STRING))));
 
 	public SemanticAnalyzerImplTest() {
 		super(RUN_ONLY);
@@ -43,7 +34,8 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 	protected Executable getTestExecutable(File testFile) {
 		return () -> {
 			try {
-				SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzerImpl(env);
+				SemanticAnalyzer semanticAnalyzer =
+						SemanticAnalyzerProvider.getStandardSemanticAnalyzer();
 				List<Statement> astList = builder.buildFromJson(testFile.getAbsolutePath());
 
 				Result analyticResult = new SemanticSuccess();

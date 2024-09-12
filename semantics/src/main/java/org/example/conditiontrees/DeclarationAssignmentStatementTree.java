@@ -4,7 +4,7 @@ import static org.example.evaluables.EvaluableVisitor.SUCCESS;
 
 import java.util.Optional;
 import org.example.Environment;
-import org.example.ast.DeclarationType;
+import org.example.ResolvedType;
 import org.example.ast.statement.DeclarationAssignmentStatement;
 import org.example.evaluables.EvaluableResolution;
 
@@ -24,8 +24,8 @@ public class DeclarationAssignmentStatementTree {
 	private static EvaluableResolution checkDeclaringWithValidValue(
 			DeclarationAssignmentStatement statement, EvaluableResolution assignedValueResolution) {
 
-		DeclarationType identifierType = statement.getDeclarationType();
-		Optional<DeclarationType> assignedType = assignedValueResolution.evaluatedType();
+		ResolvedType identifierType = ResolvedType.from(statement.getDeclarationType());
+		Optional<ResolvedType> assignedType = assignedValueResolution.evaluatedType();
 
 		if (typesMatch(identifierType, assignedType)) {
 			String name = statement.getIdentifier().getName();
@@ -48,9 +48,9 @@ public class DeclarationAssignmentStatementTree {
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	// Need to pass the optional because it's necessary for the boolean logic
 	private static boolean typesMatch(
-			DeclarationType identifierType, Optional<DeclarationType> assignedType) {
+			ResolvedType identifierType, Optional<ResolvedType> assignedType) {
 		// e.g. declarationType is determined at runtime for readEnv
-		boolean isRuntimeType = assignedType.isEmpty();
+		boolean isRuntimeType = assignedType.get() == ResolvedType.WILDCARD;
 		return isRuntimeType || identifierType == assignedType.get();
 	}
 }
