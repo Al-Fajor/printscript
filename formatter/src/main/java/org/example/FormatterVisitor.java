@@ -1,26 +1,25 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.*;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
-import org.example.factories.RuleFactory;
 import org.example.ruleappliers.RuleApplier;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
-	//    TODO Create own class for rules. Verify rules immediately after getting parsed
-	private final FormatterRules formatterRules;
+	private final RuleProvider ruleProvider;
 
-	public FormatterVisitor(RuleFactory ruleFactory) {
-		this.formatterRules = ruleFactory.getRules();
+	public FormatterVisitor(RuleProvider ruleProvider) {
+		this.ruleProvider = ruleProvider;
 	}
 
 	@Override
 	public String visit(BinaryExpression expression) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getBinaryExpressionRuleAppliers(), expression);
+				getCombinedResults(ruleProvider.getBinaryExpressionRuleAppliers(), expression);
 
 		String left = expression.getLeftComponent().accept(this);
 		String right = expression.getRightComponent().accept(this);
@@ -36,13 +35,66 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(IfStatement ifStatement) {
-		return "";
+		List<String> combinedResults =
+				getCombinedResults(ruleProvider.getIfRuleAppliers(), ifStatement);
+
+		return "if"
+				+ combinedResults.get(0)
+				+ "("
+				+ combinedResults.get(1)
+				+ ifStatement.conditionalIdentifier().accept(this)
+				+ combinedResults.get(2)
+				+ ")"
+				+ combinedResults.get(3)
+				+ "{"
+				+ combinedResults.get(4)
+				+ buildClauseStatements(ifStatement.trueClause().iterator(), combinedResults.get(5))
+				+ combinedResults.get(6)
+				+ "}";
+	}
+
+	private String buildClauseStatements(Iterator<Statement> statements, String spaces) {
+		StringBuilder trueClauseStatements = new StringBuilder();
+		trueClauseStatements.append("\n");
+		while (statements.hasNext()) {
+			Statement statement = statements.next();
+			trueClauseStatements.append(spaces).append(statement.accept(this));
+			if (trueClauseStatements.charAt(trueClauseStatements.length() - 1) != '}') {
+				trueClauseStatements.append(";");
+			}
+			trueClauseStatements.append("\n");
+		}
+		return trueClauseStatements.toString();
 	}
 
 	@Override
 	public String visit(IfElseStatement ifElseStatement) {
-		//        TODO implement
-		return "";
+		List<String> combinedResults =
+				getCombinedResults(ruleProvider.getIfElseRuleAppliers(), ifElseStatement);
+
+		return "if"
+				+ combinedResults.get(0)
+				+ "("
+				+ combinedResults.get(1)
+				+ ifElseStatement.conditionalIdentifier().accept(this)
+				+ combinedResults.get(2)
+				+ ")"
+				+ combinedResults.get(3)
+				+ "{"
+				+ combinedResults.get(4)
+				+ buildClauseStatements(
+						ifElseStatement.trueClause().iterator(), combinedResults.get(5))
+				+ combinedResults.get(6)
+				+ "}"
+				+ combinedResults.get(7)
+				+ "else"
+				+ combinedResults.get(8)
+				+ "{"
+				+ combinedResults.get(9)
+				+ buildClauseStatements(
+						ifElseStatement.falseClause().iterator(), combinedResults.get(10))
+				+ combinedResults.get(11)
+				+ "}";
 	}
 
 	@Override
@@ -50,7 +102,6 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 		if (literal.getValue() == null) {
 			return "";
 		}
-		//        TODO remove instanceof
 		if (literal.getValue() instanceof String) {
 			return "\"" + literal.getValue() + "\"";
 		}
@@ -60,7 +111,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(Parameters parameters) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getParameterRuleAppliers(), parameters);
+				getCombinedResults(ruleProvider.getParameterRuleAppliers(), parameters);
 
 		return parameters.getParameters().stream()
 				.map(parameter -> parameter.accept(this))
@@ -70,7 +121,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(AssignmentStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), statement);
+				getCombinedResults(ruleProvider.getAssignmentRuleAppliers(), statement);
 
 		String right = statement.getEvaluableComponent().accept(this);
 		String left = statement.getIdentifier().accept(this);
@@ -95,7 +146,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 						statement.start(),
 						statement.end());
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getAssignmentRuleAppliers(), assignmentStatement);
+				getCombinedResults(ruleProvider.getAssignmentRuleAppliers(), assignmentStatement);
 
 		String right = statement.getEvaluableComponent().accept(this);
 		DeclarationStatement declaration =
@@ -121,7 +172,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(DeclarationStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getDeclarationRuleAppliers(), statement);
+				getCombinedResults(ruleProvider.getDeclarationRuleAppliers(), statement);
 
 		return "let "
 				+ combinedResults.get(0)
@@ -136,7 +187,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(FunctionCallStatement statement) {
 		List<String> combinedResults =
-				getCombinedResults(formatterRules.getFunctionRuleAppliers(), statement);
+				getCombinedResults(ruleProvider.getFunctionRuleAppliers(), statement);
 
 		return combinedResults.get(0)
 				+ statement.getIdentifier().accept(this)
@@ -156,12 +207,33 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(ReadInput readInput) {
-		throw new RuntimeException("Not implemented yet");
+		List<String> combinedResults =
+				getCombinedResults(ruleProvider.getReadInputRuleAppliers(), readInput);
+
+		return combinedResults.get(0)
+				+ "readInput"
+				+ combinedResults.get(1)
+				+ "("
+				+ combinedResults.get(2)
+				+ readInput.getMessage()
+				+ combinedResults.get(3)
+				+ ")"
+				+ combinedResults.get(4);
 	}
 
 	@Override
 	public String visit(ReadEnv readEnv) {
-		throw new RuntimeException("Not implemented yet");
+		List<String> combinedResults =
+				getCombinedResults(ruleProvider.getReadEnvRuleAppliers(), readEnv);
+		return combinedResults.get(0)
+				+ "readEnv"
+				+ combinedResults.get(1)
+				+ "("
+				+ combinedResults.get(2)
+				+ readEnv.getVariableName()
+				+ combinedResults.get(3)
+				+ ")"
+				+ combinedResults.get(4);
 	}
 
 	private List<String> combineStringsLists(List<List<String>> listOfLists) {
@@ -189,7 +261,7 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	private void hasNoTwoOrMoreConsecutiveSpaces(List<String> strings) {
 		if (strings.stream().anyMatch(string -> string.equals("  "))) {
-			throw new RuntimeException("Two or more consecutive spaces found");
+			throw new IllegalArgumentException("Two or more consecutive spaces found");
 		}
 	}
 }

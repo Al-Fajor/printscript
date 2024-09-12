@@ -1,0 +1,40 @@
+{
+  "code": "let a : boolean = true;\nif  ( a ){ \nreadInput(\"hello\");\n}",
+  "ast_list":[
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "declarationType": "Boolean",
+            "name": "a"
+          }
+        },
+        {
+          "literal": {
+            "value" : true
+          }
+        }
+      ]
+    },
+    {
+      "if": {
+        "conditional":"a",
+        "trueClause": [
+          {"functionCall": {
+            "identifier": {
+              "name": "println",
+              "identifierType": "function"
+            },
+            "params": [
+              {
+                "literal": {
+                  "value": "hello"
+                }
+              }
+            ]
+          }}
+        ]
+      }
+    }
+  ]}
+}

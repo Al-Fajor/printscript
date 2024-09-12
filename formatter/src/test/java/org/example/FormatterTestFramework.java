@@ -14,24 +14,21 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.example.ast.AstComponent;
 import org.example.ast.statement.Statement;
-import org.example.factories.RuleFactoryWithCustomPath;
 import org.example.io.AstBuilder;
+import org.example.io.RulesFromFile;
 import org.json.JSONObject;
 
 public class FormatterTestFramework {
 
 	public void testRules(String path) throws IOException {
 		AstBuilder astBuilder = new AstBuilder();
-		RuleFactoryWithCustomPath ruleFactoryWithCustomPath =
-				new RuleFactoryWithCustomPath(path + "/rules.json");
-		Formatter formatter = new PrintScriptFormatter(ruleFactoryWithCustomPath);
+		RulesFromFile rulesFromFile = new RulesFromFile(path + "/rules.json");
+		Formatter formatter = new PrintScriptFormatter(rulesFromFile.getRuleMap());
 		Map<String, String> codes = getMapFromFile(path + "/codes.json");
 		List<Path> cases = getAllFiles("src/test/resources/asts");
 		for (Path testCase : cases) {
 			String jsonPath = testCase.toString();
-			//			System.out.println(jsonPath);
-			// TODO: delete casting once formatter uses statements
-			String code = formatter.format(castToAstComponents(astBuilder.buildFromJson(jsonPath)));
+			String code = formatter.format(astBuilder.buildFromJson(jsonPath).iterator());
 			assertEquals(codes.get(extractFileNameWithoutExtension(testCase)), code);
 		}
 	}
