@@ -56,7 +56,9 @@ public class ReadInputExpressionsStrategy implements AnalyzerStrategy {
 						}
 					}
 					case IDENTIFIER, LITERAL -> expressionCounter++;
-					default -> {}
+					default -> {
+						continue;
+					}
 				}
 			}
 		}

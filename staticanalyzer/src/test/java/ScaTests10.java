@@ -5,12 +5,12 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
-public class ScaTests1_0 extends TestBuilder {
+public class ScaTests10 extends TestBuilder {
 	ScaTester tester = new ScaTester();
 	String version = "1.0";
 	String testCases = "src/test/resources/test_cases/1-0";
 
-	public ScaTests1_0() {
+	public ScaTests10() {
 		super();
 	}
 
