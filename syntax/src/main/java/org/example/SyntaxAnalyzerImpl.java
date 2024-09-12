@@ -55,6 +55,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 		Token current;
 		if (next != null && next.getType() != ELSE) {
 			current = next;
+			next = null;
 		} else {
 			current = tokens.next();
 		}
@@ -73,13 +74,11 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 						braceCount--;
 						if (braceCount == 0) {
 							if (tokens.hasNext()) {
-								Token temp = next;
 								next = tokens.next();
 								if (next.getType() == ELSE) {
 									sentences.add(next);
 									continue;
 								}
-								next = temp;
 							}
 							break;
 						}
