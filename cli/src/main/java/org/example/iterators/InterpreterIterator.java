@@ -44,7 +44,7 @@ public class InterpreterIterator implements Iterator<Statement>, Observable<Resu
 
 	@Override
 	public Statement next() {
-		return semanticIterator.next();
+        return semanticIterator.next();
 	}
 
 	@Override

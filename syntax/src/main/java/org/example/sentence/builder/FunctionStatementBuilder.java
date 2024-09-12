@@ -4,6 +4,8 @@ import static org.example.sentence.builder.SentenceBuilder.errorPair;
 import static org.example.token.BaseTokenTypes.FUNCTION;
 
 import java.util.List;
+import java.util.Objects;
+
 import org.example.Pair;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Identifier;
@@ -34,6 +36,9 @@ public class FunctionStatementBuilder extends StatementBuilder {
 				function.getType() == FUNCTION
 						? function.getValue()
 						: function.getType().toString().toLowerCase();
+
+		//TODO: de-hardcode
+		if (Objects.equals(name, "readinput")) name = "readInput";
 
 		Identifier id = new Identifier(name, functionStart, functionEnd);
 

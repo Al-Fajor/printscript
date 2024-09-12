@@ -13,7 +13,10 @@ import org.example.observers.ParserObserver;
 public class PullInterpreter {
 
 	private final PrintBrokerObserver observer = new PrintBrokerObserver();
-	private final InputListener inputListener = message -> ""; // TODO implement inputListener
+	private final InputListener inputListener = message -> {
+		Scanner scanner = new Scanner(System.in);
+		return scanner.nextLine();
+	}; // TODO implement inputListener
 	private final org.example.Interpreter interpreter = createInterpreter(observer, inputListener);
 
 	private org.example.Interpreter createInterpreter(
