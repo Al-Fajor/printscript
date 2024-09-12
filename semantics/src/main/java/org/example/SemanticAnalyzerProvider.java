@@ -10,11 +10,11 @@ public class SemanticAnalyzerProvider {
 		final MapEnvironment env =
 				new MapEnvironment(
 						new HashMap<>(),
-						new HashMap<>(Map.of(
-								"println", ResolvedType.VOID,
-								"readEnv", ResolvedType.WILDCARD,
-								"readInput", ResolvedType.WILDCARD
-						)),
+						new HashMap<>(
+								Map.of(
+										"println", ResolvedType.VOID,
+										"readEnv", ResolvedType.WILDCARD,
+										"readInput", ResolvedType.WILDCARD)),
 						Set.of(
 								new Signature("println", List.of(ResolvedType.NUMBER)),
 								new Signature("println", List.of(ResolvedType.STRING)),

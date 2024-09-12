@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.example.ResolvedType;
 import org.example.ast.BinaryOperator;
 import org.json.JSONArray;
@@ -63,7 +62,7 @@ public class Language {
 		return switch (type) {
 			case "string" -> ResolvedType.STRING;
 			case "number" -> ResolvedType.NUMBER;
-				case "boolean" -> ResolvedType.BOOLEAN;
+			case "boolean" -> ResolvedType.BOOLEAN;
 			case "void" -> ResolvedType.VOID;
 			case "any" -> ResolvedType.WILDCARD;
 			default -> throw new IllegalStateException("Type not supported: " + type);

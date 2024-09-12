@@ -14,10 +14,13 @@ public class MapEnvironment implements Environment {
 	private final Map<String, ResolvedType> funReturnTypes;
 	private final Set<Signature> funSignatures;
 
-	public MapEnvironment(Map<String, VarData> varDeclarations, Map<String, ResolvedType> funReturnTypes, Set<Signature> funSignatures) {
+	public MapEnvironment(
+			Map<String, VarData> varDeclarations,
+			Map<String, ResolvedType> funReturnTypes,
+			Set<Signature> funSignatures) {
 		this.varDeclarations = varDeclarations;
-        this.funReturnTypes = funReturnTypes;
-        this.funSignatures = funSignatures;
+		this.funReturnTypes = funReturnTypes;
+		this.funSignatures = funSignatures;
 	}
 
 	@Override
@@ -63,14 +66,15 @@ public class MapEnvironment implements Environment {
 	}
 
 	private List<ResolvedType> mapToResolvedTypes(DeclarationType[] parameters) {
-		return Arrays.stream(parameters)
-				.map(ResolvedType::from)
-				.toList();
+		return Arrays.stream(parameters).map(ResolvedType::from).toList();
 	}
 
 	@Override
 	public Environment copy() {
-		return new MapEnvironment(new HashMap<>(varDeclarations), new HashMap<>(funReturnTypes), new HashSet<>(funSignatures));
+		return new MapEnvironment(
+				new HashMap<>(varDeclarations),
+				new HashMap<>(funReturnTypes),
+				new HashSet<>(funSignatures));
 	}
 
 	public record VarData(DeclarationType declarationType, IdentifierType identifierType) {}

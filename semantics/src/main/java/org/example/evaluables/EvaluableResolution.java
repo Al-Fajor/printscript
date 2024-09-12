@@ -3,8 +3,8 @@ package org.example.evaluables;
 import java.util.Optional;
 import org.example.Pair;
 import org.example.Resolution;
-import org.example.Result;
 import org.example.ResolvedType;
+import org.example.Result;
 import org.example.SemanticFailure;
 import org.example.SemanticSuccess;
 import org.example.ast.IdentifierType;
@@ -35,5 +35,4 @@ public record EvaluableResolution(
 		return new EvaluableResolution(
 				new SemanticSuccess(), Optional.empty(), Optional.empty(), Optional.empty());
 	}
-
 }

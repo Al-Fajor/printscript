@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.List;
-
 import org.example.ast.DeclarationType;
 import org.example.ast.IdentifierType;
 

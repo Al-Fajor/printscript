@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.example.ast.statement.Statement;
 import org.example.io.AstBuilder;
 import org.example.test.TestBuilder;
@@ -35,7 +34,8 @@ class SemanticAnalyzerImplTest extends TestBuilder {
 	protected Executable getTestExecutable(File testFile) {
 		return () -> {
 			try {
-				SemanticAnalyzer semanticAnalyzer = SemanticAnalyzerProvider.getStandardSemanticAnalyzer();
+				SemanticAnalyzer semanticAnalyzer =
+						SemanticAnalyzerProvider.getStandardSemanticAnalyzer();
 				List<Statement> astList = builder.buildFromJson(testFile.getAbsolutePath());
 
 				Result analyticResult = new SemanticSuccess();

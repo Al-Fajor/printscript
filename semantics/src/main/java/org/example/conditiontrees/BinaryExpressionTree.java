@@ -3,7 +3,6 @@ package org.example.conditiontrees;
 import static org.example.evaluables.EvaluableVisitor.SUCCESS;
 
 import java.util.Optional;
-
 import org.example.ResolvedType;
 import org.example.ast.BinaryExpression;
 import org.example.ast.BinaryOperator;

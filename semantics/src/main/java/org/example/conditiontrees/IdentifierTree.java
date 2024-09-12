@@ -13,7 +13,8 @@ public class IdentifierTree {
 	public static EvaluableResolution existingIdentifier(Environment env, Identifier identifier) {
 		return new EvaluableResolution(
 				SUCCESS,
-				Optional.of(ResolvedType.from(env.getVariableDeclarationType(identifier.getName()))),
+				Optional.of(
+						ResolvedType.from(env.getVariableDeclarationType(identifier.getName()))),
 				Optional.of(env.getIdentifierType(identifier.getName())),
 				Optional.of(identifier.getName()));
 	}

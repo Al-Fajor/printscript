@@ -20,7 +20,6 @@ import org.example.Environment;
 import org.example.ResolvedType;
 import org.example.SemanticSuccess;
 import org.example.ast.BinaryExpression;
-import org.example.ast.DeclarationType;
 import org.example.ast.Identifier;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
