@@ -106,11 +106,6 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	}
 
 	@Override
-	public EvaluableResolution visit(Parameters parameters) {
-		return null;
-	}
-
-	@Override
 	public EvaluableResolution visit(AssignmentStatement statement) {
 		Identifier identifier = statement.getIdentifier();
 		EvaluableResolution assignedValueResolution =
@@ -170,5 +165,10 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 	@Override
 	public EvaluableResolution visit(ReadEnv readEnv) {
 		return EvaluableResolution.emptySuccess();
+	}
+
+	@Override
+	public EvaluableResolution visit(Parameters parameters) {
+		return null;
 	}
 }
