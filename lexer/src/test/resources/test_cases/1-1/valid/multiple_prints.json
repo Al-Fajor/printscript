@@ -1,0 +1,4 @@
+{
+  "code": "println(\"first print\");\nprintln(\"second print\");\nif (true) {\nprintln(\"third print\");\n}",
+    "tokens": "PRINTLN(println) -> SEPARATOR(() -> LITERAL(\"first print\") -> SEPARATOR()) -> SEMICOLON(;) -> PRINTLN(println) -> SEPARATOR(() -> LITERAL(\"second print\") -> SEPARATOR()) -> SEMICOLON(;) -> IF(if) -> SEPARATOR(() -> LITERAL(true) -> SEPARATOR()) -> SEPARATOR({) -> PRINTLN(println) -> SEPARATOR(() -> LITERAL(\"third print\") -> SEPARATOR()) -> SEMICOLON(;) -> SEPARATOR(})"
+}

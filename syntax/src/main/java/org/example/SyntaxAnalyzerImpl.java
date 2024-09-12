@@ -2,10 +2,7 @@ package org.example;
 
 import static org.example.token.BaseTokenTypes.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import org.example.ast.statement.Statement;
 import org.example.observer.Observer;
 import org.example.result.SyntaxError;
@@ -17,6 +14,7 @@ import org.example.token.Token;
 public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 	List<Observer<Pair<Integer, Integer>>> observers = new ArrayList<>();
 	private static final Integer LIMIT = 100;
+	private Token next;
 
 	@Override
 	public SyntaxResult analyze(Iterator<Token> tokens) {
@@ -54,9 +52,13 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 
 	private List<Token> getStatementTokens(Iterator<Token> tokens) {
 		List<Token> sentences = new ArrayList<>();
-		Token current = tokens.next();
+		Token current;
+		if (next != null && next.getType() != ELSE) {
+			current = next;
+		} else {
+			current = tokens.next();
+		}
 		sentences.add(current);
-
 		if (current.getType() == IF || current.getType() == ELSE) {
 			int braceCount =
 					0; // start with 0 because we don't even know if the sentence is correctly
@@ -70,7 +72,15 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 					} else if (toAdd.getValue().equals("}")) {
 						braceCount--;
 						if (braceCount == 0) {
-							if (tokens.hasNext()) continue;
+							if (tokens.hasNext()) {
+								Token temp = next;
+								next = tokens.next();
+								if (next.getType() == ELSE) {
+									sentences.add(next);
+									continue;
+								}
+								next = temp;
+							}
 							break;
 						}
 					}
