@@ -33,7 +33,7 @@ public class SyntaxTest extends TestBuilder {
 
 	@Test
 	public void debug() throws IOException {
-		test(TEST_CASES_1_1 + "/" + "readenv_valid_statement.json");
+		test(TEST_CASES_1_1 + "/" + "nesting_two_ifs.json");
 	}
 
 	@Override
