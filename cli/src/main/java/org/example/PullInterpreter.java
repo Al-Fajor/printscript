@@ -1,6 +1,6 @@
 package org.example;
 
-import static org.example.ObserverType.PRINTLN_OBSERVER;
+import static org.example.observer.ObserverType.PRINTLN_OBSERVER;
 
 import java.util.List;
 import java.util.Map;
@@ -13,11 +13,15 @@ import org.example.observers.ParserObserver;
 public class PullInterpreter {
 
 	private final PrintBrokerObserver observer = new PrintBrokerObserver();
-	private final org.example.Interpreter interpreter = createInterpreter(observer);
+	private final InputListener inputListener = message -> ""; // TODO implement inputListener
+	private final org.example.Interpreter interpreter = createInterpreter(observer, inputListener);
 
-	private org.example.Interpreter createInterpreter(BrokerObserver<String> observer) {
+	private org.example.Interpreter createInterpreter(
+			BrokerObserver<String> observer, InputListener inputListener) {
 		return new PrintScriptInterpreter(
-				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, observer)), List.of());
+				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, observer)),
+				List.of(),
+				inputListener); // TODO handle env variables (the empty list)
 	}
 
 	public void execute(Scanner src, String version, String path) {

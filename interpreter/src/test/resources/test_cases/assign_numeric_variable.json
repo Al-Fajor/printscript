@@ -1,5 +1,6 @@
 {
   "expectedPrintLines": ["7"],
+  "input": [],
   "ast_list": [
     {
       "assignation": [

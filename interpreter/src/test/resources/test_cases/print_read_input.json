@@ -1,0 +1,31 @@
+{
+  "expectedPrintLines": ["This is an input"],
+  "input": ["This is an input"],
+  "ast_list": [
+    {
+      "functionCall": {
+        "identifier": {
+          "identifierType": "function",
+          "name": "println"
+        },
+        "params": [
+          {
+            "functionCall": {
+              "identifier": {
+                "identifierType": "function",
+                "name": "readInput"
+              },
+              "params": [
+                {
+                  "literal": {
+                    "value": "type something:"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
