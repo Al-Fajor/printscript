@@ -2,18 +2,16 @@ package org.example.sentence.builder;
 
 import static org.example.token.BaseTokenTypes.*;
 
+import java.util.List;
 import org.example.Pair;
 import org.example.ast.BinaryExpression;
 import org.example.ast.EvaluableComponent;
 import org.example.ast.Identifier;
 import org.example.ast.Parameters;
-import org.example.ast.ReadInput;
 import org.example.ast.statement.FunctionCallStatement;
 import org.example.sentence.mapper.TokenMapper;
 import org.example.sentence.reader.TokenReader;
 import org.example.token.Token;
-
-import java.util.List;
 
 public class ExpressionBuilder {
 
@@ -51,8 +49,7 @@ public class ExpressionBuilder {
 						new Identifier("readInput", readInputStart, readInputEnd),
 						new Parameters(List.of(message), message.start(), message.end()),
 						readInputStart,
-						message.end()
-				);
+						message.end());
 			}
 			case SEPARATOR -> {
 				if (mapper.matchesSeparatorType(current, "opening parenthesis")) {

@@ -1,2 +1,2 @@
-readInput("Please enter sth");
-println("Hi!");
+let greetings: string = readInput("Please enter sth");
+println(greetings);

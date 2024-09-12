@@ -10,7 +10,6 @@ public class TokenRegex {
 
 	public static Map<BaseTokenTypes, String> getRegexMap(String version) {
 
-		System.out.println(version);
 		if (version.equals("1.0")) {
 			return getRegexMapV1Point0();
 		} else if (version.equals("1.1")) {

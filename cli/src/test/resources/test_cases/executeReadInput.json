@@ -1,9 +1,0 @@
-{
-  "command": "execute src/test/resources/pts/readInput.pts",
-  "expectedOutput": [
-    "asdadsasd"
-  ],
-  "unexpectedOutput": [
-    "failed with error"
-  ]
-}
