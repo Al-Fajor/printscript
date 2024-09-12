@@ -5,10 +5,17 @@ import org.example.ast.AstComponent;
 import org.example.ast.statement.IfElseStatement;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
+import org.example.ruleappliers.ifconditional.IfBlockIndentation;
 
 import java.util.List;
 
-public class BaseIfElseRuleApplier implements RuleApplier<IfElseStatement> {
+public class IfElseBlockIndentation implements RuleApplier<IfElseStatement>{
+    private int spaces;
+
+    public IfElseBlockIndentation (int spaces) {
+        this.spaces = spaces;
+    }
+
     @Override
     public RuleApplierTypes getType() {
         return RuleApplierTypes.IF_ELSE;
@@ -27,12 +34,12 @@ public class BaseIfElseRuleApplier implements RuleApplier<IfElseStatement> {
                 "",
                 "",
                 "",
+                " ".repeat(spaces),
                 "",
                 "",
                 "",
                 "",
-                "",
-                "",
+                " ".repeat(spaces),
                 ""
         );
     }

@@ -8,7 +8,12 @@ import org.example.ruleappliers.RuleApplierTypes;
 
 import java.util.List;
 
-public class BaseIfRuleApplier implements RuleApplier<IfStatement> {
+public class IfBlockIndentation implements RuleApplier<IfStatement> {
+    private final int spaces;
+
+    public IfBlockIndentation (int spaces) {
+        this.spaces = spaces;
+    }
 
     @Override
     public RuleApplierTypes getType() {
@@ -22,6 +27,6 @@ public class BaseIfRuleApplier implements RuleApplier<IfStatement> {
 
     @Override
     public List<String> applyRules(FormatterVisitor visitor, IfStatement statement) {
-        return List.of("", "", "", "", "", "", "");
+        return List.of("", "", "", "", "", " ".repeat(spaces), "");
     }
 }

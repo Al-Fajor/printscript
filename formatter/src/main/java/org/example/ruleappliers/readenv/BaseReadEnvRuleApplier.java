@@ -21,6 +21,6 @@ public class BaseReadEnvRuleApplier implements RuleApplier<ReadEnv> {
 
     @Override
     public List<String> applyRules(FormatterVisitor visitor, ReadEnv statement) {
-        return List.of();
+        return List.of("", "", "", "", "");
     }
 }

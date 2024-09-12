@@ -55,9 +55,14 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
     private String buildClauseStatements(Iterator<Statement> statements, String spaces) {
         StringBuilder trueClauseStatements = new StringBuilder();
+        trueClauseStatements.append("\n");
         while (statements.hasNext()) {
             Statement statement = statements.next();
-            trueClauseStatements.append("\n").append(spaces).append(statement.accept(this));
+            trueClauseStatements.append(spaces).append(statement.accept(this));
+            if (trueClauseStatements.charAt(trueClauseStatements.length() - 1) != '}') {
+                trueClauseStatements.append(";");
+            }
+            trueClauseStatements.append("\n");
         }
         return trueClauseStatements.toString();
     }
@@ -94,7 +99,6 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 		if (literal.getValue() == null) {
 			return "";
 		}
-		//        TODO remove instanceof
 		if (literal.getValue() instanceof String) {
 			return "\"" + literal.getValue() + "\"";
 		}

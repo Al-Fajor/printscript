@@ -21,6 +21,6 @@ public class BaseReadInputRuleApplier implements RuleApplier<ReadInput> {
 
     @Override
     public List<String> applyRules(FormatterVisitor visitor, ReadInput statement) {
-        return List.of();
+        return List.of("", "", "", "", "", "");
     }
 }

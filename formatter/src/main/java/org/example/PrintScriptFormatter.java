@@ -19,9 +19,16 @@ public class PrintScriptFormatter implements Formatter {
 		FormatterVisitor visitor = new FormatterVisitor(new RuleProvider(ruleMap));
 		while (asts.hasNext()) {
 			Statement ast = asts.next();
-			String formattedCode = ast.accept(visitor) + ";";
-			formattedCodes.add(formattedCode);
+			String formattedCode = ast.accept(visitor) + addSemicolon(ast.accept(visitor));
+            formattedCodes.add(formattedCode);
 		}
 		return String.join("\n", formattedCodes);
 	}
+
+    private String addSemicolon(String formattedCode) {
+        if (formattedCode.charAt(formattedCode.length() - 1) != '}') {
+            return ";";
+        }
+        return "";
+    }
 }

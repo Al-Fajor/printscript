@@ -9,6 +9,8 @@ import org.example.ruleappliers.declaration.SpaceAfterColon;
 import org.example.ruleappliers.declaration.SpaceBeforeColon;
 import org.example.ruleappliers.expression.SpaceAroundOperator;
 import org.example.ruleappliers.function.BreaksBeforePrintln;
+import org.example.ruleappliers.ifconditional.IfBlockIndentation;
+import org.example.ruleappliers.ifelse.IfElseBlockIndentation;
 
 public class Rules {
 	private final Map<String, String> ruleMap;
@@ -31,6 +33,10 @@ public class Rules {
 						ruleAppliers.add(new SpaceAroundEquals(getBooleanValue(ruleName)));
 				case BREAKS_BEFORE_PRINTLN ->
 						ruleAppliers.add(new BreaksBeforePrintln(getIntValue(ruleName)));
+                case IF_BLOCK_INDENTATION -> {
+                    ruleAppliers.add(new IfBlockIndentation(getIntValue(ruleName)));
+                    ruleAppliers.add(new IfElseBlockIndentation(getIntValue(ruleName)));
+                }
 					//                Add new rules here
 				default -> throw new IllegalArgumentException("Unknown rule: " + ruleName);
 			}
