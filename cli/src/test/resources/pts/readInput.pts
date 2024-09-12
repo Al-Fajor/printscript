@@ -1,0 +1,2 @@
+readInput("Please enter sth");
+println("Hi!");

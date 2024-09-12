@@ -1,0 +1,29 @@
+{"tokens": "CONST -> IDENTIFIER(a) -> COLON -> TYPE(string) -> ASSIGNATION -> READINPUT -> SEPARATOR(\"(\") -> LITERAL(\"Hi Johnny!\") -> SEPARATOR(\")\") -> SEMICOLON" ,
+  "ast_list":[
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "identifierType": "const",
+            "declarationType": "String",
+            "name": "a"
+          }
+        },
+        {
+          "functionCall": {
+            "identifier": {
+              "name": "readInput",
+              "identifierType": "function"
+            },
+            "params": [
+              {
+                "literal": {
+                  "value": "Hi Johnny!"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]}

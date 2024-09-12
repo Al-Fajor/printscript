@@ -34,7 +34,8 @@ public class PrintScriptInterpreter implements Interpreter {
 	@Override
 	public void interpret(Iterator<Statement> statements) {
 		while (statements.hasNext()) {
-			(statements.next()).accept(statementVisitor);
+			Statement next = statements.next();
+			next.accept(statementVisitor);
 		}
 	}
 
