@@ -174,7 +174,8 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 		List<String> combinedResults =
 				getCombinedResults(ruleProvider.getDeclarationRuleAppliers(), statement);
 
-		return statement.getIdentifierType().toString().toLowerCase() + " "
+		return statement.getIdentifierType().toString().toLowerCase()
+				+ " "
 				+ combinedResults.get(0)
 				+ statement.getIdentifier().getName()
 				+ combinedResults.get(1)
