@@ -34,7 +34,7 @@ public class ExecutionCommand implements Callable<Integer> {
 	@CommandLine.Option(
 			names = "--version",
 			description = "The PrintScript version of the code being executed",
-			defaultValue = "1.0")
+			defaultValue = "1.1")
 	private String version;
 
 	@Override

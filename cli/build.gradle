@@ -32,3 +32,7 @@ test {
 application {
     mainClass = 'org.example.Cli'
 }
+
+run{
+    standardInput = System.in
+}
