@@ -53,7 +53,7 @@ public class SyntaxAnalyzerIterator implements Iterator<Token>, Observable<Resul
 			case LexerFailure ignoredFailure -> false;
 			case LexerSuccess success -> {
 				tokenBufferIterator = success.getTokens();
-				yield true;
+				yield tokenBufferIterator.hasNext();
 			}
 			default -> throw new IllegalStateException("Unexpected result for lexer: " + result);
 		};
