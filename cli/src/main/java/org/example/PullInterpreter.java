@@ -17,7 +17,7 @@ public class PullInterpreter {
 			message -> {
 				Scanner scanner = new Scanner(System.in);
 				return scanner.nextLine();
-			}; // TODO implement inputListener
+			};
 	private final org.example.Interpreter interpreter = createInterpreter(observer, inputListener);
 
 	private org.example.Interpreter createInterpreter(
