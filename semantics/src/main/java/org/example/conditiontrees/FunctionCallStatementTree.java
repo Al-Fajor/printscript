@@ -2,10 +2,12 @@ package org.example.conditiontrees;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import org.example.Environment;
 import org.example.Resolution;
 import org.example.ResolvedType;
 import org.example.SemanticSuccess;
+import org.example.ast.EvaluableComponent;
 import org.example.ast.IdentifierType;
 import org.example.ast.Parameters;
 import org.example.ast.statement.FunctionCallStatement;
@@ -23,8 +25,7 @@ public class FunctionCallStatementTree {
 					new SemanticSuccess(),
 					Optional.of(env.getReturnType(functionName)),
 					Optional.of(IdentifierType.FUNCTION),
-					Optional.of(functionName)
-			);
+					Optional.of(functionName));
 		} else {
 			return EvaluableResolution.failure(
 					"Cannot resolve function signature " + functionName + "(" + types + ").",
@@ -44,35 +45,30 @@ public class FunctionCallStatementTree {
 
 	public static Optional<EvaluableResolution> getInvalidResolutionIfAny(
 			List<EvaluableResolution> resolvedParameters) {
-		return resolvedParameters.stream()
-				.map(resolution -> getFailureIfTypeIsInvalid(resolution))
-				.filter(Resolution::failed)
-				.findFirst();
-	}
-
-	private static EvaluableResolution getFailureIfTypeIsInvalid(EvaluableResolution resolution) {
-		if (!resolution.result().isSuccessful()) return resolution;
-
-		// Safe.get() because resolution is successful
-		@SuppressWarnings("OptionalGetWithoutIsPresent")
-		ResolvedType resolvedType = resolution.evaluatedType().get();
-
-		return switch (resolvedType) {
-			// Safe .get() because failures always contain an error
-			case WILDCARD, VOID -> //noinspection OptionalGetWithoutIsPresent
-                    EvaluableResolution.failure(
-					"Cannot pass an argument of type " + resolvedType,
-					resolution.result().getErrorStart().get(),
-					resolution.result().getErrorEnd().get()
-			);
-			default -> resolution;
-		};
+		return resolvedParameters.stream().filter(Resolution::failed).findFirst();
 	}
 
 	public static List<EvaluableResolution> resolveEachParameter(
 			Parameters parameters, EvaluableVisitor evaluableVisitor) {
 		return parameters.getParameters().stream()
-				.map(astComponent -> astComponent.accept(evaluableVisitor))
+				.map(acceptAndCheckNotVoid(evaluableVisitor))
 				.toList();
+	}
+
+	private static Function<EvaluableComponent, EvaluableResolution> acceptAndCheckNotVoid(
+			EvaluableVisitor evaluableVisitor) {
+		return astComponent -> {
+			EvaluableResolution resolution = astComponent.accept(evaluableVisitor);
+			Optional<ResolvedType> resolvedType = resolution.evaluatedType();
+
+			if (resolvedType.isPresent() && resolvedType.get() == ResolvedType.VOID) {
+				return EvaluableResolution.failure(
+						"Cannot pass as argument a void function",
+						astComponent.start(),
+						astComponent.end());
+			}
+
+			return resolution;
+		};
 	}
 }
