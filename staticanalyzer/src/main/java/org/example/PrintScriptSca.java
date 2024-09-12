@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.example.result.SuccessResult;
 import org.example.strategy.IdentifierStrategy;
-import org.example.strategy.PrintlnExpressionsStrategy;
-import org.example.strategy.ReadInputExpressionsStrategy;
+import org.example.strategy.NoExpressionsInFunctionStrategy;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
@@ -55,11 +54,13 @@ public class PrintScriptSca implements StaticCodeAnalyzer {
 										.analyze(tokens.iterator()));
 				case PRINTLN_EXPRESSIONS ->
 						results.addAll(
-								new PrintlnExpressionsStrategy(configMap.get(entry))
+								new NoExpressionsInFunctionStrategy(
+												configMap.get(entry), BaseTokenTypes.PRINTLN)
 										.analyze(tokens.iterator()));
 				case READ_INPUT_EXPRESSIONS ->
 						results.addAll(
-								new ReadInputExpressionsStrategy(configMap.get(entry))
+								new NoExpressionsInFunctionStrategy(
+												configMap.get(entry), BaseTokenTypes.READINPUT)
 										.analyze(tokens.iterator()));
 				default -> throw new IllegalStateException("Unexpected value: " + entry);
 			}

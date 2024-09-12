@@ -1,18 +1,25 @@
 package org.example.strategy;
 
 import static org.example.token.BaseTokenTypes.*;
+import static org.example.token.BaseTokenTypes.LITERAL;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
 import org.example.Pair;
 import org.example.Result;
 import org.example.result.FailResult;
+import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
-public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
+public class NoExpressionsInFunctionStrategy implements AnalyzerStrategy {
 	private final String value;
+	private final BaseTokenTypes tokenType;
 
-	public PrintlnExpressionsStrategy(String value) {
+	public NoExpressionsInFunctionStrategy(String value, BaseTokenTypes tokenType) {
 		this.value = value;
+		this.tokenType = tokenType;
 	}
 
 	@Override
@@ -20,11 +27,11 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 		if (value.equals("false")) {
 			return List.of();
 		} else {
-			return analyzePrintln(input);
+			return analyzeFunction(input);
 		}
 	}
 
-	private List<Result> analyzePrintln(Iterator<Token> tokens) {
+	private List<Result> analyzeFunction(Iterator<Token> tokens) {
 		List<Result> results = new ArrayList<>();
 		Stack<Boolean> stack = new Stack<>();
 		int expressionCounter = 0;
@@ -34,7 +41,7 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 
 		while (tokens.hasNext()) {
 			Token token = tokens.next();
-			if (token.getType() == PRINTLN) {
+			if (token.getType() == tokenType) {
 				insidePrintln = true;
 				expressionCounter = 0;
 				stack.clear();
@@ -69,9 +76,21 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 			Stack<Boolean> stack) {
 		if (stack.isEmpty()) {
 			if (expressionCounter != 1) {
+				String functionName = getFunctionName(tokenType);
 				results.add(
-						new FailResult("Expressions in println function not allowed", start, end));
+						new FailResult(
+								"Expressions in " + functionName + " function not allowed",
+								start,
+								end));
 			}
 		}
+	}
+
+	private String getFunctionName(BaseTokenTypes tokenType) {
+		return switch (tokenType) {
+			case PRINTLN -> "println";
+			case READINPUT -> "readInput";
+			default -> tokenType.name();
+		};
 	}
 }
