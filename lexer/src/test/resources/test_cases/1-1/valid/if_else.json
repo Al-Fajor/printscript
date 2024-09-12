@@ -1,4 +1,0 @@
-{
-  "code": "const booleanValue: boolean = true;\nif(booleanValue) {\n    println(\"if statement working correctly\");\n}\nprintln(\"outside of conditional\");",
-    "tokens": "CONST(const) -> IDENTIFIER(booleanValue) -> COLON(:) -> TYPE(boolean) -> ASSIGNATION(=) -> LITERAL(true) -> SEMICOLON(;) -> IF(if) -> SEPARATOR(() -> IDENTIFIER(booleanValue) -> SEPARATOR()) -> SEPARATOR({) -> PRINTLN(println) -> SEPARATOR(() -> LITERAL(\"if statement working correctly\") -> SEPARATOR()) -> SEMICOLON(;) -> SEPARATOR(}) -> PRINTLN(println) -> SEPARATOR(() -> LITERAL(outside of conditional) -> SEPARATOR()) -> SEMICOLON(;)"
-}
