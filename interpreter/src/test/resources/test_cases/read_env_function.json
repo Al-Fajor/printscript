@@ -1,5 +1,6 @@
 {
   "expectedPrintLines": ["3.14", "I know that I'm stuck in this misery", "true"],
+  "input": [],
   "ast_list": [
 	{
 	  "functionCall": {
