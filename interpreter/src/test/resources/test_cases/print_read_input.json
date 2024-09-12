@@ -1,5 +1,5 @@
 {
-  "expectedPrintLines": ["This is an input"],
+  "expectedPrintLines": ["type something:", "This is an input"],
   "input": ["This is an input"],
   "ast_list": [
     {

@@ -1,5 +1,5 @@
 {
-  "expectedPrintLines": ["46"],
+  "expectedPrintLines": ["Input first number", "Input first number", "46"],
   "input": ["4", "6"],
   "ast_list": [
 	{
