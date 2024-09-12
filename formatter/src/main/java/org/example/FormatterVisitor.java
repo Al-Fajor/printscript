@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.ast.*;
@@ -35,13 +36,57 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(IfStatement ifStatement) {
-		List<String> combinedResults = getCombinedResults(ruleProvider.getIfRuleAppliers(), ifStatement);
+        List<String> combinedResults = getCombinedResults(ruleProvider.getIfRuleAppliers(), ifStatement);
+
+        return "if"
+                + combinedResults.get(0)
+                + "("
+                + combinedResults.get(1)
+                + ifStatement.conditionalIdentifier().accept(this)
+                + combinedResults.get(2)
+                + ")"
+                + combinedResults.get(3)
+                + "{"
+                + combinedResults.get(4)
+                + buildClauseStatements(ifStatement.trueClause().iterator(), combinedResults.get(5))
+                + combinedResults.get(6)
+                + "}";
 	}
+
+    private String buildClauseStatements(Iterator<Statement> statements, String spaces) {
+        StringBuilder trueClauseStatements = new StringBuilder();
+        while (statements.hasNext()) {
+            Statement statement = statements.next();
+            trueClauseStatements.append("\n").append(spaces).append(statement.accept(this));
+        }
+        return trueClauseStatements.toString();
+    }
 
 	@Override
 	public String visit(IfElseStatement ifElseStatement) {
-		//        TODO implement
-		return "";
+        List<String> combinedResults = getCombinedResults(ruleProvider.getIfElseRuleAppliers(), ifElseStatement);
+
+        return "if"
+                + combinedResults.get(0)
+                + "("
+                + combinedResults.get(1)
+                + ifElseStatement.conditionalIdentifier().accept(this)
+                + combinedResults.get(2)
+                + ")"
+                + combinedResults.get(3)
+                + "{"
+                + combinedResults.get(4)
+                + buildClauseStatements(ifElseStatement.trueClause().iterator(), combinedResults.get(5))
+                + combinedResults.get(6)
+                + "}"
+                + combinedResults.get(7)
+                + "else"
+                + combinedResults.get(8)
+                + "{"
+                + combinedResults.get(9)
+                + buildClauseStatements(ifElseStatement.falseClause().iterator(), combinedResults.get(10))
+                + combinedResults.get(11)
+                + "}";
 	}
 
 	@Override
@@ -155,12 +200,33 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 
 	@Override
 	public String visit(ReadInput readInput) {
-		throw new RuntimeException("Not implemented yet");
+        List<String> combinedResults =
+                getCombinedResults(ruleProvider.getReadInputRuleAppliers(), readInput);
+
+        return combinedResults.get(0)
+                + "readInput"
+                + combinedResults.get(1)
+                + "("
+                + combinedResults.get(2)
+                + readInput.getMessage()
+                + combinedResults.get(3)
+                + ")"
+                + combinedResults.get(4);
 	}
 
 	@Override
 	public String visit(ReadEnv readEnv) {
-		throw new RuntimeException("Not implemented yet");
+		List<String> combinedResults =
+                getCombinedResults(ruleProvider.getReadEnvRuleAppliers(), readEnv);
+        return combinedResults.get(0)
+                + "readEnv"
+                + combinedResults.get(1)
+                + "("
+                + combinedResults.get(2)
+                + readEnv.getVariableName()
+                + combinedResults.get(3)
+                + ")"
+                + combinedResults.get(4);
 	}
 
 	private List<String> combineStringsLists(List<List<String>> listOfLists) {

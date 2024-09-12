@@ -22,6 +22,6 @@ public class BaseIfRuleApplier implements RuleApplier<IfStatement> {
 
     @Override
     public List<String> applyRules(FormatterVisitor visitor, IfStatement statement) {
-        return List.of();
+        return List.of(" ", " ", " ", " ", " ", " ", " ");
     }
 }

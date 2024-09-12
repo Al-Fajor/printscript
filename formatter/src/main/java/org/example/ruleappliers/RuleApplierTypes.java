@@ -7,5 +7,7 @@ public enum RuleApplierTypes {
 	BINARY_EXPRESSION,
 	PARAMETERS,
     IF,
-    IF_ELSE
+    IF_ELSE,
+    READENV,
+    READINPUT
 }
