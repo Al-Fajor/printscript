@@ -5,11 +5,12 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
-public class ScaTests extends TestBuilder {
+public class ScaTests1_1 extends TestBuilder {
 	ScaTester tester = new ScaTester();
-	String testCases = "src/test/resources/test_cases";
+	String version = "1.1";
+	String testCases = "src/test/resources/test_cases/1-1";
 
-	public ScaTests() {
+	public ScaTests1_1() {
 		super();
 	}
 
@@ -20,6 +21,6 @@ public class ScaTests extends TestBuilder {
 
 	@Override
 	protected Executable getTestExecutable(File testFile) {
-		return () -> tester.test(testFile.getPath());
+		return () -> tester.test(testFile.getPath(), version);
 	}
 }

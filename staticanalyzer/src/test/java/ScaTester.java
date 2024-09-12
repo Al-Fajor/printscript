@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import org.example.*;
 import org.example.lexerresult.LexerSuccess;
+import org.example.result.FailResult;
+import org.example.result.SuccessResult;
 import org.example.token.Token;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,15 +21,14 @@ import org.json.JSONObject;
 public class ScaTester {
 	public ScaTester() {}
 
-	public void test(String path) throws IOException {
+	public void test(String path, String version) throws IOException {
 		JSONObject json = getJsonObject(path);
 
 		String configPath = json.getString("config");
 		JSONArray cases = json.getJSONArray("cases");
 
 		for (int i = 0; i < cases.length(); i++) {
-			//            TODO test different versions
-			Lexer lexer = new PrintScriptLexer("1.0");
+			Lexer lexer = new PrintScriptLexer(version);
 			PrintScriptSca analyzer = new PrintScriptSca(getStream(configPath));
 			JSONObject testCase = cases.getJSONObject(i);
 			String code = testCase.getString("code");
@@ -83,8 +84,8 @@ public class ScaTester {
 	}
 
 	private void compareResults(List<Result> expectedResults, List<Result> results) {
-		//		System.out.println("Expected results: " + expectedResults);
-		//		System.out.println("Actual results: " + results);
+		System.out.println("Expected results: " + expectedResults);
+		System.out.println("Actual results: " + results);
 		assertTrue(expectedResults.containsAll(results));
 	}
 

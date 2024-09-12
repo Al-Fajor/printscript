@@ -1,8 +1,11 @@
-package org.example;
+package org.example.strategy;
 
 import static org.example.token.BaseTokenTypes.*;
 
 import java.util.*;
+import org.example.Pair;
+import org.example.Result;
+import org.example.result.FailResult;
 import org.example.token.Token;
 
 public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
@@ -14,7 +17,7 @@ public class PrintlnExpressionsStrategy implements AnalyzerStrategy {
 
 	@Override
 	public List<Result> analyze(Iterator<Token> input) {
-		if (value.equals("true")) {
+		if (value.equals("false")) {
 			return List.of();
 		} else {
 			return analyzePrintln(input);

@@ -6,14 +6,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.example.result.SuccessResult;
+import org.example.strategy.IdentifierStrategy;
+import org.example.strategy.PrintlnExpressionsStrategy;
+import org.example.strategy.ReadInputExpressionsStrategy;
 import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
 public class PrintScriptSca implements StaticCodeAnalyzer {
-	private final ConfigReader configReader = new ConfigReader();
 	private final Map<ConfigAttribute, String> configMap;
 
 	public PrintScriptSca(InputStream config) throws IOException {
+		ConfigReader configReader = new ConfigReader();
 		this.configMap = configReader.read(config);
 	}
 
@@ -52,6 +56,10 @@ public class PrintScriptSca implements StaticCodeAnalyzer {
 				case PRINTLN_EXPRESSIONS ->
 						results.addAll(
 								new PrintlnExpressionsStrategy(configMap.get(entry))
+										.analyze(tokens.iterator()));
+				case READ_INPUT_EXPRESSIONS ->
+						results.addAll(
+								new ReadInputExpressionsStrategy(configMap.get(entry))
 										.analyze(tokens.iterator()));
 				default -> throw new IllegalStateException("Unexpected value: " + entry);
 			}

@@ -1,8 +1,10 @@
-package org.example;
+package org.example.strategy;
 
 import static org.example.token.BaseTokenTypes.IDENTIFIER;
 
 import java.util.*;
+import org.example.Result;
+import org.example.result.FailResult;
 import org.example.token.Token;
 
 public class IdentifierStrategy implements AnalyzerStrategy {
@@ -12,8 +14,8 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 	public IdentifierStrategy(String value) {
 		this.identifierFormat = value;
 		regexMap = new HashMap<>();
-		regexMap.put("camelCase", "_*[a-z]+([A-Z]+[a-z]*)*");
-		regexMap.put("snakeCase", "_*[a-z]+(_+[a-z]*)*");
+		regexMap.put("camel case", "_*[a-z]+([A-Z]+[a-z]*)*");
+		regexMap.put("snake case", "_*[a-z]+(_+[a-z]*)*");
 	}
 
 	@Override
