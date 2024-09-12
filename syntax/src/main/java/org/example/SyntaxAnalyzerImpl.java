@@ -60,6 +60,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 			current = tokens.next();
 		}
 		sentences.add(current);
+
 		if (current.getType() == IF || current.getType() == ELSE) {
 			int braceCount =
 					0; // start with 0 because we don't even know if the sentence is correctly
