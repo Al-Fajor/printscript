@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.example.ast.AstComponent;
-import org.example.ast.statement.Statement;
 import org.example.io.AstBuilder;
 import org.example.io.RulesFromFile;
 import org.json.JSONObject;
@@ -31,10 +29,6 @@ public class FormatterTestFramework {
 			String code = formatter.format(astBuilder.buildFromJson(jsonPath).iterator());
 			assertEquals(codes.get(extractFileNameWithoutExtension(testCase)), code);
 		}
-	}
-
-	private List<AstComponent> castToAstComponents(List<Statement> statements) {
-		return statements.stream().map(statement -> (AstComponent) statement).toList();
 	}
 
 	private List<Path> getAllFiles(String directoryPath) throws IOException {

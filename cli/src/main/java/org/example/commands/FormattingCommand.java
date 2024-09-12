@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import org.example.Formatter;
 import org.example.PrintScriptFormatter;
-import org.example.ast.AstComponent;
 import org.example.ast.statement.Statement;
 import org.example.io.RulesFromFile;
 import org.example.io.ScriptReader;
@@ -43,10 +42,8 @@ public class FormattingCommand implements Callable<Integer> {
 
 		Formatter formatter = getFormatter(configPathOrDefault);
 
-		//        TODO change this later
 		Scanner scanner;
 		scanner = ScriptReader.readCodeFromSourceByLine(filePath);
-		//        TODO change this
 		Iterator<Statement> statements = new InterpreterIterator(scanner, filePath, version);
 
 		String formattedCode = runFormatter(formatter, statements);
@@ -54,14 +51,6 @@ public class FormattingCommand implements Callable<Integer> {
 		overwriteOriginalFile(formattedCode);
 
 		return 0;
-	}
-
-	private List<AstComponent> toAstList(Iterator<Statement> statementIterator) {
-		List<AstComponent> statementList = new ArrayList<>();
-		while (statementIterator.hasNext()) {
-			statementList.add(statementIterator.next());
-		}
-		return statementList;
 	}
 
 	private void overwriteOriginalFile(String formattedCode) {

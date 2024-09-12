@@ -5,6 +5,7 @@ import static org.example.observer.ObserverType.PRINTLN_OBSERVER;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import org.example.iterators.InterpreterIterator;
 import org.example.observer.BrokerObserver;
 import org.example.observer.PrintBrokerObserver;
@@ -24,13 +25,19 @@ public class PullInterpreter {
 			BrokerObserver<String> observer, InputListener inputListener) {
 		return new PrintScriptInterpreter(
 				Map.ofEntries(Map.entry(PRINTLN_OBSERVER, observer)),
-				List.of(),
-				inputListener); // TODO handle env variables (the empty list)
+				getEnvVariables(System.getenv()),
+				inputListener);
 	}
 
 	public void execute(Scanner src, String version, String path) {
 		InterpreterIterator iterator = new InterpreterIterator(src, path, version);
 		iterator.addObserver(new ParserObserver(path));
 		interpreter.interpret(iterator);
+	}
+
+	private List<Variable<?>> getEnvVariables(Map<String, ?> envMap) {
+		return envMap.entrySet().stream()
+				.map(entry -> new Variable<>(entry.getKey(), entry.getValue()))
+				.collect(Collectors.toList());
 	}
 }
