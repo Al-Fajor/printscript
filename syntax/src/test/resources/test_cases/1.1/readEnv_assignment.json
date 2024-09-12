@@ -1,0 +1,29 @@
+{"tokens": "CONST -> IDENTIFIER(password) -> COLON -> TYPE(string) -> ASSIGNATION -> READENV -> SEPARATOR(\"(\") -> LITERAL(\"Hi Johnny!\") -> SEPARATOR(\")\") -> SEMICOLON" ,
+  "ast_list":[
+    {
+      "assignation": [
+        {
+          "declaration": {
+            "identifierType": "const",
+            "declarationType": "String",
+            "name": "password"
+          }
+        },
+        {
+          "functionCall": {
+            "identifier": {
+              "name": "readEnv",
+              "identifierType": "function"
+            },
+            "params": [
+              {
+                "literal": {
+                  "value": "PASSWORD"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]}
