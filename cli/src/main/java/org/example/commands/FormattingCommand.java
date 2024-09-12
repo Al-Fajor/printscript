@@ -9,7 +9,7 @@ import org.example.Formatter;
 import org.example.PrintScriptFormatter;
 import org.example.ast.AstComponent;
 import org.example.ast.statement.Statement;
-import org.example.factories.RuleFactoryWithCustomPath;
+import org.example.io.RulesFromFile;
 import org.example.io.ScriptReader;
 import org.example.iterators.InterpreterIterator;
 import picocli.CommandLine;
@@ -77,12 +77,12 @@ public class FormattingCommand implements Callable<Integer> {
 	}
 
 	private Formatter getFormatter(String configPathOrDefault) {
-		var ruleFactoryWithCustomPath = new RuleFactoryWithCustomPath(configPathOrDefault);
-		return new PrintScriptFormatter(ruleFactoryWithCustomPath);
+		RulesFromFile rulesFromFile = new RulesFromFile(configPathOrDefault);
+		return new PrintScriptFormatter(rulesFromFile.getRuleMap());
 	}
 
 	private String runFormatter(Formatter formatter, Iterator<Statement> statements) {
-		String formattedCode = formatter.format(toAstList(statements));
+		String formattedCode = formatter.format(statements);
 		System.out.println(formattedCode);
 		return formattedCode;
 	}
