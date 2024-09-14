@@ -8,26 +8,23 @@ import org.example.result.FailResult;
 import org.example.token.Token;
 
 public class IdentifierStrategy implements AnalyzerStrategy {
-	private final String identifierFormat;
 	private final Map<String, String> regexMap;
 
-	public IdentifierStrategy(String value) {
-		this.identifierFormat = value;
-		regexMap = new HashMap<>();
-		regexMap.put("camel case", "_*[a-z]+([A-Z]+[a-z]*)*");
-		regexMap.put("snake case", "_*[a-z]+(_+[a-z]*)*");
+	public IdentifierStrategy(Map<String, String> regexMap) {
+		this.regexMap = regexMap;
 	}
 
 	@Override
-	public List<Result> analyze(Iterator<Token> input) {
-		String identifierRegex = regexMap.get(identifierFormat);
+	public List<Result> analyze(Iterator<Token> input, String value) {
+		String identifierRegex = regexMap.get(value);
 		if (identifierRegex != null) {
-			return analyzeWithRegex(input, identifierRegex);
+			return analyzeWithRegex(input, identifierRegex, value);
 		}
-		throw new RuntimeException("Unknown identifier format: " + identifierFormat);
+		throw new RuntimeException("Unknown identifier format: " + value);
 	}
 
-	private List<Result> analyzeWithRegex(Iterator<Token> input, String identifierRegex) {
+	private List<Result> analyzeWithRegex(
+			Iterator<Token> input, String identifierRegex, String value) {
 		List<Result> results = new ArrayList<>();
 		while (input.hasNext()) {
 			Token token = input.next();
@@ -36,10 +33,7 @@ public class IdentifierStrategy implements AnalyzerStrategy {
 				if (!identifierName.matches(identifierRegex)) {
 					results.add(
 							new FailResult(
-									"Identifier \""
-											+ token.getValue()
-											+ "\" is not in "
-											+ identifierFormat,
+									"Identifier \"" + token.getValue() + "\" is not in " + value,
 									token.getStart(),
 									token.getEnd()));
 				}
