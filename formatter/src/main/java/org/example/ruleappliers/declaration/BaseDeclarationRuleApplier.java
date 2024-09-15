@@ -1,8 +1,11 @@
 package org.example.ruleappliers.declaration;
 
-import java.util.List;
+import static org.example.ruleappliers.declaration.DeclarationSpaces.*;
+
+import java.util.Map;
 import org.example.FormatterVisitor;
 import org.example.ast.statement.DeclarationStatement;
+import org.example.ruleappliers.ApplicableSpaces;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
 
@@ -13,7 +16,13 @@ public class BaseDeclarationRuleApplier implements RuleApplier<DeclarationStatem
 	}
 
 	@Override
-	public List<String> applyRules(FormatterVisitor visitor, DeclarationStatement statement) {
-		return List.of("", "", "", "");
+	public Map<ApplicableSpaces, String> applyRules(
+			FormatterVisitor visitor, DeclarationStatement statement) {
+		return Map.of(
+				SPACE_BEFORE_IDENTIFIER_TYPE, "",
+				SPACE_AFTER_IDENTIFIER_TYPE, " ",
+				SPACE_BEFORE_COLON, "",
+				SPACE_AFTER_COLON, "",
+				SPACE_AFTER_DECLARATION, "");
 	}
 }
