@@ -1,8 +1,9 @@
 package org.example.ruleappliers.function;
 
-import java.util.List;
+import java.util.Map;
 import org.example.FormatterVisitor;
 import org.example.ast.statement.FunctionCallStatement;
+import org.example.ruleappliers.ApplicableSpaces;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
 
@@ -13,7 +14,13 @@ public class BaseFunctionRuleApplier implements RuleApplier<FunctionCallStatemen
 	}
 
 	@Override
-	public List<String> applyRules(FormatterVisitor visitor, FunctionCallStatement statement) {
-		return List.of("", "", "", "", "");
+	public Map<ApplicableSpaces, String> applyRules(
+			FormatterVisitor visitor, FunctionCallStatement statement) {
+		return Map.of(
+				FunctionSpaces.SPACE_BEFORE_FUNCTION_IDENTIFIER, "",
+				FunctionSpaces.SPACE_AFTER_FUNCTION_IDENTIFIER, "",
+				FunctionSpaces.SPACE_BEFORE_FUNCTION_PARAMETERS, "",
+				FunctionSpaces.SPACE_AFTER_FUNCTION_PARAMETERS, "",
+				FunctionSpaces.SPACE_AFTER_FUNCTION_CALL, "");
 	}
 }

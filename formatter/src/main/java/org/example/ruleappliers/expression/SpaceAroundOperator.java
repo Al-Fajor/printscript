@@ -1,8 +1,12 @@
 package org.example.ruleappliers.expression;
 
-import java.util.List;
+import static org.example.ruleappliers.expression.ExpressionSpaces.*;
+import static org.example.ruleappliers.expression.ExpressionSpaces.SPACE_AFTER_EXPRESSION;
+
+import java.util.Map;
 import org.example.FormatterVisitor;
 import org.example.ast.BinaryExpression;
+import org.example.ruleappliers.ApplicableSpaces;
 import org.example.ruleappliers.RuleApplier;
 import org.example.ruleappliers.RuleApplierTypes;
 
@@ -19,7 +23,16 @@ public class SpaceAroundOperator implements RuleApplier<BinaryExpression> {
 	}
 
 	@Override
-	public List<String> applyRules(FormatterVisitor visitor, BinaryExpression statement) {
-		return List.of("", (spaceAroundOperator ? " " : ""), (spaceAroundOperator ? " " : ""), "");
+	public Map<ApplicableSpaces, String> applyRules(
+			FormatterVisitor visitor, BinaryExpression statement) {
+		return Map.of(
+				SPACE_BEFORE_EXPRESSION,
+				"",
+				SPACE_BEFORE_OPERATOR,
+				(spaceAroundOperator ? " " : ""),
+				SPACE_AFTER_OPERATOR,
+				(spaceAroundOperator ? " " : ""),
+				SPACE_AFTER_EXPRESSION,
+				"");
 	}
 }
