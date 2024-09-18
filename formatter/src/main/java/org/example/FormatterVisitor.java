@@ -14,8 +14,6 @@ import org.example.ruleappliers.function.FunctionSpaces;
 import org.example.ruleappliers.ifconditional.IfSpaces;
 import org.example.ruleappliers.ifelse.IfElseSpaces;
 import org.example.ruleappliers.parameters.ParametersSpaces;
-import org.example.ruleappliers.readenv.ReadEnvSpaces;
-import org.example.ruleappliers.readinput.ReadInputSpaces;
 
 public class FormatterVisitor implements AstComponentVisitor<String> {
 	private final RuleProvider ruleProvider;
@@ -206,52 +204,6 @@ public class FormatterVisitor implements AstComponentVisitor<String> {
 	@Override
 	public String visit(Identifier identifier) {
 		return identifier.getName();
-	}
-
-	@Override
-	public String visit(ReadInput readInput) {
-		Map<ApplicableSpaces, String> combinedResults =
-				getCombinedResults(ruleProvider.getReadInputRuleAppliers(), readInput);
-
-		return combinedResults.get(ReadInputSpaces.SPACE_BEFORE_READINPUT_IDENTIFIER)
-				+ "readInput"
-				+ combinedResults.get(ReadInputSpaces.SPACE_AFTER_READINPUT_IDENTIFIER)
-				+ "("
-				+ combinedResults.get(ReadInputSpaces.SPACE_BEFORE_READINPUT_PARAMETERS)
-				+ readInput.getMessage()
-				+ combinedResults.get(ReadInputSpaces.SPACE_AFTER_READINPUT_PARAMETERS)
-				+ ")"
-				+ combinedResults.get(ReadInputSpaces.SPACE_AFTER_READINPUT_CALL);
-	}
-
-	@Override
-	public String visit(ReadEnv readEnv) {
-		Map<ApplicableSpaces, String> combinedResults =
-				getCombinedResults(ruleProvider.getReadEnvRuleAppliers(), readEnv);
-		return combinedResults.get(ReadEnvSpaces.SPACE_BEFORE_READENV_IDENTIFIER)
-				+ "readEnv"
-				+ combinedResults.get(ReadEnvSpaces.SPACE_AFTER_READENV_IDENTIFIER)
-				+ "("
-				+ combinedResults.get(ReadEnvSpaces.SPACE_BEFORE_READENV_PARAMETERS)
-				+ readEnv.getVariableName()
-				+ combinedResults.get(ReadEnvSpaces.SPACE_AFTER_READENV_PARAMETERS)
-				+ ")"
-				+ combinedResults.get(ReadEnvSpaces.SPACE_AFTER_READENV_CALL);
-	}
-
-	private List<String> combineStringsLists(List<List<String>> listOfLists) {
-		List<String> result = new ArrayList<>();
-		if (listOfLists.isEmpty()) {
-			return result;
-		}
-		for (int i = 0; i < listOfLists.getFirst().size(); i++) {
-			result.add(addAllNthElements(listOfLists, i));
-		}
-		return result;
-	}
-
-	private String addAllNthElements(List<List<String>> listOfLists, int n) {
-		return listOfLists.stream().map(list -> list.get(n)).collect(Collectors.joining());
 	}
 
 	private <T extends AstComponent> Map<ApplicableSpaces, String> getCombinedResults(

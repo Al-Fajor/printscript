@@ -23,8 +23,6 @@ import org.example.ast.BinaryExpression;
 import org.example.ast.Identifier;
 import org.example.ast.Literal;
 import org.example.ast.Parameters;
-import org.example.ast.ReadEnv;
-import org.example.ast.ReadInput;
 import org.example.ast.statement.*;
 import org.example.ast.visitor.AstComponentVisitor;
 import org.example.conditiontrees.DeclarationAssignmentStatementTree;
@@ -155,16 +153,6 @@ public class EvaluableVisitor implements AstComponentVisitor<EvaluableResolution
 		} else {
 			return identifierNotFound(identifier);
 		}
-	}
-
-	@Override
-	public EvaluableResolution visit(ReadInput readInput) {
-		return EvaluableResolution.emptySuccess();
-	}
-
-	@Override
-	public EvaluableResolution visit(ReadEnv readEnv) {
-		return EvaluableResolution.emptySuccess();
 	}
 
 	@Override

@@ -67,16 +67,6 @@ public class EvaluatorVisitor implements EvaluableComponentVisitor<EvaluationRes
 	}
 
 	@Override
-	public EvaluationResult visit(ReadInput readInput) {
-		throw new RuntimeException("Not implemented yet");
-	}
-
-	@Override
-	public EvaluationResult visit(ReadEnv readEnv) {
-		throw new RuntimeException("Not implemented yet");
-	}
-
-	@Override
 	public EvaluationResult visit(FunctionCallStatement functionCall) {
 		Function function = statePriorityList.getFunction(functionCall.getIdentifier().getName());
 		Parameters parameters = functionCall.getParameters();

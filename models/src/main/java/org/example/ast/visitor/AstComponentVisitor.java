@@ -23,8 +23,4 @@ public interface AstComponentVisitor<T> {
 	T visit(FunctionCallStatement statement);
 
 	T visit(Identifier identifier);
-
-	T visit(ReadInput readInput);
-
-	T visit(ReadEnv readEnv);
 }
