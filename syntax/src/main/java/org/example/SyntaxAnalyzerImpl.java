@@ -75,7 +75,7 @@ public class SyntaxAnalyzerImpl implements SyntaxAnalyzer {
 						braceCount--;
 						if (braceCount == 0) {
 							if (tokens.hasNext()) {
-								next = tokens.next();
+								next = tokens.next(); // <- Eureka moment
 								if (next.getType() == ELSE) {
 									sentences.add(next);
 									continue;
