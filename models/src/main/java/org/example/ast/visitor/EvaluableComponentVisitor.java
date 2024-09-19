@@ -10,9 +10,5 @@ public interface EvaluableComponentVisitor<T> {
 
 	T visit(Identifier identifier);
 
-	T visit(ReadInput readInput);
-
-	T visit(ReadEnv readEnv); // TODO aprender a programar/diseñar
-
 	T visit(FunctionCallStatement functionCall);
 }

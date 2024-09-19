@@ -14,16 +14,14 @@ import org.example.token.BaseTokenTypes;
 import org.example.token.Token;
 
 public class NoExpressionsInFunctionStrategy implements AnalyzerStrategy {
-	private final String value;
 	private final BaseTokenTypes tokenType;
 
-	public NoExpressionsInFunctionStrategy(String value, BaseTokenTypes tokenType) {
-		this.value = value;
+	public NoExpressionsInFunctionStrategy(BaseTokenTypes tokenType) {
 		this.tokenType = tokenType;
 	}
 
 	@Override
-	public List<Result> analyze(Iterator<Token> input) {
+	public List<Result> analyze(Iterator<Token> input, String value) {
 		if (value.equals("false")) {
 			return List.of();
 		} else {

@@ -30,4 +30,9 @@ class PrintScriptFormatterTest {
 	void twoRules() throws IOException {
 		formatterTestFramework.testRules("src/test/resources/two_rules");
 	}
+
+	@Test
+	void rulesv11() throws IOException {
+		formatterTestFramework.testRules("src/test/resources/rulesv1-1");
+	}
 }

@@ -40,7 +40,6 @@ public class SyntaxAnalyzerIterator implements Iterator<Token>, Observable<Resul
 	public boolean hasNext() {
 		if (tokenBufferIterator.hasNext()) return true;
 		else if (!scanner.hasNext()) {
-			scanner.close();
 			return false;
 		} else return loadBufferAndEvaluateResult();
 	}

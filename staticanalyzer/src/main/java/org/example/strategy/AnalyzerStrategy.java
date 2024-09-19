@@ -6,5 +6,5 @@ import org.example.Result;
 import org.example.token.Token;
 
 public interface AnalyzerStrategy {
-	List<Result> analyze(Iterator<Token> input);
+	List<Result> analyze(Iterator<Token> input, String value);
 }

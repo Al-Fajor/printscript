@@ -1,9 +1,11 @@
 package org.example;
 
+import static org.example.Scanner.scan;
+import static org.example.utils.PositionServices.getLines;
+
 import java.util.Iterator;
 import org.example.lexerresult.LexerFailure;
 import org.example.lexerresult.LexerSuccess;
-import org.example.utils.PositionServices;
 
 public class PrintScriptLexer implements Lexer {
 	private int lines = 1;
@@ -22,15 +24,13 @@ public class PrintScriptLexer implements Lexer {
 	@Override
 	public Result lex(Iterator<String> input) {
 		String line = input.next();
-		Scanner scanner = new Scanner();
-
-		Result scanResult = scanner.scan(line, lines, version);
+		Result scanResult = scan(line, lines, version);
 		if (!scanResult.isSuccessful()) {
 			return new LexerFailure(scanResult);
 		}
 		TokenIterator tokenIterator = new TokenIterator(line, lines, version);
 
-		this.lines += PositionServices.getLines(line);
+		this.lines += getLines(line);
 		return new LexerSuccess(tokenIterator);
 	}
 }

@@ -14,8 +14,6 @@ import org.example.ruleappliers.function.BaseFunctionRuleApplier;
 import org.example.ruleappliers.ifconditional.BaseIfRuleApplier;
 import org.example.ruleappliers.ifelse.BaseIfElseRuleApplier;
 import org.example.ruleappliers.parameters.BaseParametersRuleApplier;
-import org.example.ruleappliers.readenv.BaseReadEnvRuleApplier;
-import org.example.ruleappliers.readinput.BaseReadInputRuleApplier;
 
 public class RuleProvider {
 	private final Rules rules;
@@ -66,18 +64,6 @@ public class RuleProvider {
 		List<RuleApplier<IfElseStatement>> ruleAppliersOfType = new ArrayList<>();
 		ruleAppliersOfType.add(new BaseIfElseRuleApplier());
 		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.IF_ELSE);
-	}
-
-	public List<RuleApplier<ReadEnv>> getReadEnvRuleAppliers() {
-		List<RuleApplier<ReadEnv>> ruleAppliersOfType = new ArrayList<>();
-		ruleAppliersOfType.add(new BaseReadEnvRuleApplier());
-		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.READENV);
-	}
-
-	public List<RuleApplier<ReadInput>> getReadInputRuleAppliers() {
-		List<RuleApplier<ReadInput>> ruleAppliersOfType = new ArrayList<>();
-		ruleAppliersOfType.add(new BaseReadInputRuleApplier());
-		return getRuleAppliersOfType(ruleAppliersOfType, RuleApplierTypes.READINPUT);
 	}
 
 	private <T extends AstComponent> List<RuleApplier<T>> getRuleAppliersOfType(

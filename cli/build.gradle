@@ -34,5 +34,6 @@ application {
 }
 
 run{
+    environment "TUKI", "Kuchau"
     standardInput = System.in
 }

@@ -14,7 +14,7 @@ import org.example.token.Token;
 public class SentenceBuilder {
 
 	public Pair<Optional<Statement>, String> buildSentence(List<Token> tokens) {
-		var sentence = getStatementPair(tokens);
+		Pair<Statement, String> sentence = getStatementPair(tokens);
 
 		Optional<Statement> statementOptional =
 				sentence.first() == null ? Optional.empty() : Optional.of(sentence.first());
